@@ -110,7 +110,7 @@ target_include_directories(
     extractor
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
-    "${EXTRACTOR_SRC_INC_DIR}"
+    "${EXTRACTOR_SRC_DIR}"
 )
 set_target_properties(
     extractor
