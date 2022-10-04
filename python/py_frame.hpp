@@ -29,8 +29,8 @@ extern "C" {
 #include "comp_graph.h"
 }
 
-#include "python/py_utils.hpp"
-#include "python/py_wrapper.hpp"
+#include "py_utils.hpp"
+#include "py_wrapper.hpp"
 #include <Python.h>
 
 using namespace fm;

@@ -24,13 +24,13 @@
 #include <Python.h>
 
 extern "C" {
-#include "py_side.h"
-#include "python/book/py_book.h"
+#include "extractor/py_side.h"
+#include "book/py_book.h"
 #include "book/book.h"
 }
 
 #include "extractor/decimal64.hpp"
-#include "python/py_wrapper.hpp"
+#include "py_wrapper.hpp"
 #include "extractor/side.hpp"
 #include <datetime.h>
 

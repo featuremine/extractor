@@ -22,27 +22,27 @@
  */
 
 extern "C" {
-#include "py_extractor.h"
-#include "py_side.h"
-#include "python/book/py_book.h"
+#include "extractor/py_extractor.h"
+#include "extractor/py_side.h"
+#include "book/py_book.h"
 #include "ytp.h"
 }
 
-#include "python/custom.hpp"
-#include "python/live_batch.hpp"
-#include "python/live_poll.hpp"
-#include "python/pandas_play.hpp"
-#include "python/py_comp.hpp"
-#include "python/py_comp_sys.hpp"
-#include "python/py_frame.hpp"
-#include "python/py_graph.hpp"
-#include "python/py_module.hpp"
-#include "python/py_play.hpp"
-#include "python/py_side.hpp"
-#include "python/py_utils.hpp"
-#include "python/sim_poll.hpp"
-#include "python/tuple_msg.hpp"
-#include "python/tuple_split.hpp"
+#include "custom.hpp"
+#include "live_batch.hpp"
+#include "live_poll.hpp"
+#include "pandas_play.hpp"
+#include "py_comp.hpp"
+#include "py_comp_sys.hpp"
+#include "py_frame.hpp"
+#include "py_graph.hpp"
+#include "py_module.hpp"
+#include "py_play.hpp"
+#include "py_side.hpp"
+#include "py_utils.hpp"
+#include "sim_poll.hpp"
+#include "tuple_msg.hpp"
+#include "tuple_split.hpp"
 
 #include "fmc/files.h"
 #include "fmc/platform.h"
@@ -52,7 +52,7 @@ extern "C" {
 
 #include <Python.h>
 #include <numpy/arrayobject.h>
-#include <python/py_wrapper.hpp>
+#include <py_wrapper.hpp>
 
 static PyObject *Extractor_fflush(PyObject *self, PyObject *args) {
   fmc_fflush();

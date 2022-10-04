@@ -1,5 +1,6 @@
 find_package(PkgConfig)
 pkg_check_modules(GTEST REQUIRED IMPORTED_TARGET gtest)
+pkg_check_modules(PYTHON REQUIRED IMPORTED_TARGET python3-embed)
 
 macro(extr_unit_test)
     set(oneValueArgs NAME)
@@ -28,6 +29,7 @@ macro(extr_unit_test)
         ytp
         rlm
         PkgConfig::GTEST
+        PkgConfig::PYTHON
     )
     add_test(NAME ${ARG_NAME} COMMAND ${ARG_NAME} ${CMAKE_CURRENT_SOURCE_DIR})
 endmacro()
@@ -106,4 +108,11 @@ extr_unit_test(
     "${EXTRACTOR_SRC_DIR}/type_error.cpp"
     "${EXTRACTOR_SRC_DIR}/type_decl.cpp"
     "${EXTRACTOR_SRC_DIR}/rational64.cpp"
+)
+extr_unit_test(
+    NAME
+    tests
+    FILES
+    $<TARGET_OBJECTS:extractor_obj>
+    $<TARGET_OBJECTS:py_extractor_obj>
 )

@@ -21,6 +21,12 @@ add_subproject(
     TARGETS fmc++ ytp
 )
 add_subproject(
+    NAME yamal-python
+    GIT_REVISION "v7.2.19"
+    GIT_URL "https://github.com/featuremine/yamal-python.git"
+    VARIABLES yamal-python-incdir yamal-python-source
+)
+add_subproject(
     NAME rlm
     VERSION "1.0.0"
     GIT_REVISION "v1.0.0"
@@ -50,6 +56,7 @@ find_package(FmConfig REQUIRED)
 fm_config()
 
 add_subdirectory(src)
+add_subdirectory(python)
 
 enable_testing()
 add_subdirectory(test)

@@ -23,11 +23,11 @@
 
 extern "C" {
 #include "py_book.h"
-#include "py_side.h"
+#include "extractor/py_side.h"
 #include "book/book.h"
 }
 
-#include "python/book/py_level.hpp"
+#include "book/py_level.hpp"
 #include "extractor/side.hpp"
 
 struct BookStruct {

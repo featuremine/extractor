@@ -28,9 +28,9 @@ extern "C" {
 #include "extractor/std_comp.h"
 }
 
-#include "python/custom.hpp"
-#include "python/pandas_play.hpp"
-#include "python/py_module.hpp"
+#include "custom.hpp"
+#include "pandas_play.hpp"
+#include "py_module.hpp"
 #include <Python.h>
 #include <memory>
 #include <string>

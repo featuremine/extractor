@@ -32,8 +32,8 @@ extern "C" {
 #include "extractor/time64.h"
 }
 
-#include "python/py_utils.hpp"
-#include "python/py_wrapper.hpp"
+#include "py_utils.hpp"
+#include "py_wrapper.hpp"
 #include "extractor/type_sys.h"
 #include "fmc++/mpl.hpp"
 
@@ -362,7 +362,7 @@ fm_ctx_def_t *fm_comp_tuple_msg_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   vector<fm_type_decl_cp> types(size);
   int dims[1] = {1};
 
-  auto field_error = [sys, error](size_t field_idx, const char *str) {
+  auto field_error = [sys](size_t field_idx, const char *str) {
     string errstr = str;
     errstr.append(" for field ");
     errstr.append(to_string(field_idx));

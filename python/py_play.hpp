@@ -32,8 +32,8 @@ extern "C" {
 #include "extractor/time64.h"
 }
 
-#include "python/py_utils.hpp"
-#include "python/py_wrapper.hpp"
+#include "py_utils.hpp"
+#include "py_wrapper.hpp"
 #include "extractor/type_sys.h"
 #include "fmc++/mpl.hpp"
 

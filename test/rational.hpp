@@ -23,6 +23,7 @@
 
 #pragma once
 
+#include "extractor/rational64.hpp"
 #include "extractor/decimal64.hpp"
 #include "extractor/comp_def.hpp"
 

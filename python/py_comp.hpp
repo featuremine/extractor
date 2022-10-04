@@ -28,9 +28,9 @@ extern "C" {
 #include "comp.h"
 }
 
-#include "python/py_comp_base.hpp"
-#include "python/py_types.hpp"
-#include "python/py_wrapper.hpp"
+#include "py_comp_base.hpp"
+#include "py_types.hpp"
+#include "py_wrapper.hpp"
 
 #include <Python.h>
 

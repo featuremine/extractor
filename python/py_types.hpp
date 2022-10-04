@@ -24,6 +24,7 @@
 extern "C" {
 #include "extractor/type_decl.h"
 }
+#include "extractor/rational64.hpp"
 #include "extractor/decimal64.hpp"
 #include "extractor/comp_def.hpp"
 #include "extractor/time64.hpp"
@@ -31,8 +32,8 @@ extern "C" {
 #include <Python.h>
 #include <datetime.h>
 #include <limits>
-#include <python/py_comp_base.hpp>
-#include <python/py_wrapper.hpp>
+#include <py_comp_base.hpp>
+#include <py_wrapper.hpp>
 #include <type_traits>
 
 fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj);

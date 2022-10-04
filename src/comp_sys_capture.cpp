@@ -1,5 +1,6 @@
 
 extern "C" {
+#include "extractor/comp_sys_capture.h"
 #include "extractor/comp_def.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_sys.h"

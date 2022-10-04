@@ -4,7 +4,7 @@
 #include <sstream>
 
 extern "C" {
-#include "py_side.h"
+#include "extractor/py_side.h"
 }
 
 struct TradeSideStruct {
