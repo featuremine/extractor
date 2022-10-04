@@ -1,6 +1,6 @@
 add_library(
-    extractor
-    SHARED
+    extractor_obj
+    STATIC
     "book_build.cpp"
 	"call_obj.cpp"
 	"call_stack.cpp"
@@ -100,17 +100,45 @@ add_library(
     "round.cpp"
 )
 target_link_libraries(
-    extractor
+    extractor_obj
     PUBLIC
     fmc++
     ytp
     rlm
 )
 target_include_directories(
-    extractor
+    extractor_obj
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
     "${EXTRACTOR_SRC_DIR}"
+)
+
+add_library(
+    extractor_dep
+    INTERFACE
+)
+target_link_libraries(
+    extractor_dep
+    INTERFACE
+    fmc++
+    ytp
+    rlm
+)
+target_include_directories(
+    extractor_dep
+    INTERFACE
+    "${EXTRACTOR_INC_DIR}"
+)
+
+add_library(
+    extractor
+    SHARED
+    $<TARGET_OBJECTS:extractor_obj>
+)
+target_link_libraries(
+    extractor
+    PRIVATE
+    extractor_dep
 )
 set_target_properties(
     extractor
