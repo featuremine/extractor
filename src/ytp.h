@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include <ytp/sequence.h>
+#include "ytp/sequence.h"
 
 struct ytp_msg_decoded {
   uint64_t time;
