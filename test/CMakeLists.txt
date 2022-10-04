@@ -12,7 +12,7 @@ macro(extr_unit_test)
     )
     add_executable(
         ${ARG_NAME}
-        "${ARG_NAME}.cpp"
+        "${CMAKE_CURRENT_SOURCE_DIR}/${ARG_NAME}.cpp"
         ${ARG_FILES}
     )
     target_include_directories(
@@ -29,7 +29,7 @@ macro(extr_unit_test)
         rlm
         PkgConfig::GTEST
     )
-    add_test(NAME ${ARG_NAME} COMMAND ${ARG_NAME})
+    add_test(NAME ${ARG_NAME} COMMAND ${ARG_NAME} ${CMAKE_CURRENT_SOURCE_DIR})
 endmacro()
 
 extr_unit_test(
@@ -48,6 +48,59 @@ extr_unit_test(
     FILES
     "${EXTRACTOR_SRC_DIR}/arg_stack.cpp"
     "${EXTRACTOR_SRC_DIR}/arg_serial.cpp"
+    "${EXTRACTOR_SRC_DIR}/type_sys.cpp"
+    "${EXTRACTOR_SRC_DIR}/type_space.cpp"
+    "${EXTRACTOR_SRC_DIR}/type_error.cpp"
+    "${EXTRACTOR_SRC_DIR}/type_decl.cpp"
+    "${EXTRACTOR_SRC_DIR}/rational64.cpp"
+)
+extr_unit_test(
+    NAME
+    call_stack
+    FILES
+    "${EXTRACTOR_SRC_DIR}/call_stack.cpp"
+)
+extr_unit_test(
+    NAME
+    comp_graph
+    FILES
+    "${EXTRACTOR_SRC_DIR}/comp_graph.cpp"
+)
+extr_unit_test(
+    NAME
+    exec_ctx
+    FILES
+    "${EXTRACTOR_SRC_DIR}/call_obj.cpp"
+    "${EXTRACTOR_SRC_DIR}/comp_graph.cpp"
+    "${EXTRACTOR_SRC_DIR}/call_stack.cpp"
+    "${EXTRACTOR_SRC_DIR}/stream_ctx.cpp"
+    "${EXTRACTOR_SRC_DIR}/exec_ctx.cpp"
+)
+extr_unit_test(
+    NAME
+    comp_sys
+    FILES
+    "${EXTRACTOR_SRC_DIR}/arg_stack.cpp"
+    "${EXTRACTOR_SRC_DIR}/arg_serial.cpp"
+    "${EXTRACTOR_SRC_DIR}/comp.cpp"
+    "${EXTRACTOR_SRC_DIR}/call_obj.cpp"
+    "${EXTRACTOR_SRC_DIR}/comp_graph.cpp"
+    "${EXTRACTOR_SRC_DIR}/call_stack.cpp"
+    "${EXTRACTOR_SRC_DIR}/stream_ctx.cpp"
+    "${EXTRACTOR_SRC_DIR}/comp_sys.cpp"
+    "${EXTRACTOR_SRC_DIR}/comp_def_simp.cpp"
+    "${EXTRACTOR_SRC_DIR}/comp_def.cpp"
+    "${EXTRACTOR_SRC_DIR}/type_sys.cpp"
+    "${EXTRACTOR_SRC_DIR}/type_space.cpp"
+    "${EXTRACTOR_SRC_DIR}/type_error.cpp"
+    "${EXTRACTOR_SRC_DIR}/type_decl.cpp"
+    "${EXTRACTOR_SRC_DIR}/exec_ctx.cpp"
+    "${EXTRACTOR_SRC_DIR}/rational64.cpp"
+)
+extr_unit_test(
+    NAME
+    type_sys
+    FILES
     "${EXTRACTOR_SRC_DIR}/type_sys.cpp"
     "${EXTRACTOR_SRC_DIR}/type_space.cpp"
     "${EXTRACTOR_SRC_DIR}/type_error.cpp"
