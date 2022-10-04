@@ -29,7 +29,8 @@ macro(extr_unit_test)
         rlm
         PkgConfig::GTEST
     )
-    add_test(NAME ${ARG_NAME} COMMAND tests_extractor_${ARG_NAME})
+    add_test(NAME ${ARG_NAME} COMMAND ${ARG_NAME})
 endmacro()
 
 extr_unit_test(NAME time64_serial)
+extr_unit_test(NAME arg_stack FILES "${EXTRACTOR_SRC_DIR}/arg_stack.cpp")
