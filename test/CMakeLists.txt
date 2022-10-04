@@ -32,5 +32,25 @@ macro(extr_unit_test)
     add_test(NAME ${ARG_NAME} COMMAND ${ARG_NAME})
 endmacro()
 
-extr_unit_test(NAME time64_serial)
-extr_unit_test(NAME arg_stack FILES "${EXTRACTOR_SRC_DIR}/arg_stack.cpp")
+extr_unit_test(
+    NAME
+    time64_serial
+)
+extr_unit_test(
+    NAME
+    arg_stack
+    FILES
+    "${EXTRACTOR_SRC_DIR}/arg_stack.cpp"
+)
+extr_unit_test(
+    NAME
+    arg_serial
+    FILES
+    "${EXTRACTOR_SRC_DIR}/arg_stack.cpp"
+    "${EXTRACTOR_SRC_DIR}/arg_serial.cpp"
+    "${EXTRACTOR_SRC_DIR}/type_sys.cpp"
+    "${EXTRACTOR_SRC_DIR}/type_space.cpp"
+    "${EXTRACTOR_SRC_DIR}/type_error.cpp"
+    "${EXTRACTOR_SRC_DIR}/type_decl.cpp"
+    "${EXTRACTOR_SRC_DIR}/rational64.cpp"
+)
