@@ -1,0 +1,5 @@
+ask_ord_0,ask_prx_0,ask_shr_0,bid_ord_0,bid_prx_0,bid_shr_0,ticker
+0,0,0,1,2.5,1.25,ETH-USD
+0,0,0,1,1.25,125,BTC-USD
+1,4,2,1,2.5,1.25,ETH-USD
+1,2,200,1,1.25,125,BTC-USD

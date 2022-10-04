@@ -1,0 +1,637 @@
+[
+  {
+    "namespace": "com.featuremine.ore.symbology", 
+    "type": "record", 
+    "name": "symbol", 
+    "fields": [
+      {
+        "type": "string", 
+        "name": "symbol"
+      }, 
+      {
+        "type": "int", 
+        "name": "price_tick"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "header", 
+    "fields": [
+      {
+        "type": {
+          "items": "int", 
+          "type": "array"
+        }, 
+        "name": "version"
+      }, 
+      {
+        "type": {
+          "items": "com.featuremine.ore.symbology.symbol", 
+          "type": "array"
+        }, 
+        "name": "symbology"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "time", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "add", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "order_id"
+      }, 
+      {
+        "type": "int", 
+        "name": "price"
+      }, 
+      {
+        "type": "int", 
+        "name": "qty"
+      }, 
+      {
+        "type": "boolean", 
+        "name": "is_bid"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "insert", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "order_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "priority"
+      }, 
+      {
+        "type": "int", 
+        "name": "price"
+      }, 
+      {
+        "type": "int", 
+        "name": "qty"
+      }, 
+      {
+        "type": "boolean", 
+        "name": "is_bid"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "position", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "order_id"
+      }, 
+      {
+        "type": "int", 
+        "name": "position"
+      }, 
+      {
+        "type": "int", 
+        "name": "price"
+      }, 
+      {
+        "type": "int", 
+        "name": "qty"
+      }, 
+      {
+        "type": "boolean", 
+        "name": "is_bid"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "cancel", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "order_id"
+      }, 
+      {
+        "type": "int", 
+        "name": "qty"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "delete", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "deleted_order_id"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "modify", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "order_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "new_order_id"
+      }, 
+      {
+        "type": "int", 
+        "name": "price"
+      }, 
+      {
+        "type": "int", 
+        "name": "qty"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "execute", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "order_id"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "execute_at", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "order_id"
+      }, 
+      {
+        "type": "int", 
+        "name": "trade_price"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "fill", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "order_id"
+      }, 
+      {
+        "type": "int", 
+        "name": "qty"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "fill_at", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "order_id"
+      }, 
+      {
+        "type": "int", 
+        "name": "trade_price"
+      }, 
+      {
+        "type": "int", 
+        "name": "qty"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "trade", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "int", 
+        "name": "trade_price"
+      }, 
+      {
+        "type": "int", 
+        "name": "qty"
+      }, 
+      {
+        "type": [
+          "null", 
+          {
+            "type": "fixed", 
+            "namespace": "com.featuremine.ore.message", 
+            "name": "decoration", 
+            "size": 8
+          }
+        ], 
+        "name": "decoration"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "status", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "long", 
+        "name": "passive_order_id"
+      }, 
+      {
+        "type": "int", 
+        "name": "price"
+      }, 
+      {
+        "type": "int", 
+        "name": "state"
+      }, 
+      {
+        "type": "boolean", 
+        "name": "passive_is_bid"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "control", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "int", 
+        "name": "uncross"
+      }, 
+      {
+        "type": "char", 
+        "name": "command"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore.message", 
+    "type": "record", 
+    "name": "set", 
+    "fields": [
+      {
+        "type": "long", 
+        "name": "receive"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_offset"
+      }, 
+      {
+        "type": "long", 
+        "name": "vendor_seqno"
+      }, 
+      {
+        "type": "int", 
+        "name": "batch"
+      }, 
+      {
+        "type": "int", 
+        "name": "imnt_id"
+      }, 
+      {
+        "type": "int", 
+        "name": "price"
+      }, 
+      {
+        "type": "int", 
+        "name": "qty"
+      }, 
+      {
+        "type": "boolean", 
+        "name": "is_bid"
+      }
+    ]
+  }, 
+  {
+    "namespace": "com.featuremine.ore", 
+    "type": "record", 
+    "name": "record", 
+    "fields": [
+      {
+        "type": "com.featuremine.ore.message.header", 
+        "name": "header"
+      }, 
+      {
+        "type": "com.featuremine.ore.message.time", 
+        "name": "time"
+      }, 
+      {
+        "type": {
+          "items": [
+            "com.featuremine.ore.message.time", 
+            "com.featuremine.ore.message.add",
+            "com.featuremine.ore.message.insert", 
+            "com.featuremine.ore.message.position", 
+            "com.featuremine.ore.message.cancel", 
+            "com.featuremine.ore.message.delete", 
+            "com.featuremine.ore.message.modify", 
+            "com.featuremine.ore.message.execute", 
+            "com.featuremine.ore.message.execute_at", 
+            "com.featuremine.ore.message.fill", 
+            "com.featuremine.ore.message.fill_at", 
+            "com.featuremine.ore.message.trade", 
+            "com.featuremine.ore.message.status", 
+            "com.featuremine.ore.message.control", 
+            "com.featuremine.ore.message.set"
+          ], 
+          "type": "array"
+        }, 
+        "name": "messages"
+      }
+    ]
+  }
+]
