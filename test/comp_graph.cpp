@@ -25,7 +25,7 @@ extern "C" {
 #include "comp_graph.h"
 }
 
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 
 #include <string>
 

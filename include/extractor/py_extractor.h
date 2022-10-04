@@ -31,7 +31,7 @@
 
 #include "extractor/comp_sys.h"
 #include "extractor/frame_base.h"
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 /**
  * @brief creates extractor frame object

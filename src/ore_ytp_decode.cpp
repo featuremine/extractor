@@ -34,7 +34,7 @@ extern "C" {
 #include "extractor/book/ore.hpp"     // parser
 #include "extractor/book/updates.hpp" // fm::book::updates::announce
 #include "ytp.h"        // ytp_channel_wrapper
-#include <fmc++/serialization.hpp>
+#include "fmc++/serialization.hpp"
 #include <ytp/sequence.h> // ytp_sequence_t
 
 #include <deque>

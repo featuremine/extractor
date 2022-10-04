@@ -44,9 +44,9 @@ extern "C" {
 #include "python/tuple_msg.hpp"
 #include "python/tuple_split.hpp"
 
-#include <fmc/files.h>
-#include <fmc/platform.h>
-#include <fmc/test.h>
+#include "fmc/files.h"
+#include "fmc/platform.h"
+#include "fmc/test.h"
 
 #include <ytp/py_wrapper.h>
 

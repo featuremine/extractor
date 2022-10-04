@@ -34,7 +34,7 @@ extern "C" {
 
 #include "comp_sys.hpp"
 #include "serial_util.hpp"
-#include <fmc++/strings.hpp>
+#include "fmc++/strings.hpp"
 
 #include <algorithm>
 #include <cstdio>
@@ -46,8 +46,8 @@ extern "C" {
 #include <unordered_map>
 #include <vector>
 
-#include <fmc/extension.h>
-#include <fmc/platform.h>
+#include "fmc/extension.h"
+#include "fmc/platform.h"
 #ifdef FMC_LICENSE
 #include <license.h>
 #include <license.hpp>

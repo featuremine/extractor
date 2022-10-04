@@ -23,7 +23,7 @@
 #ifndef __FM_SERIAL_H__
 #define __FM_SERIAL_H__
 
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 #include <stdint.h>
 
 typedef bool (*fm_reader)(void *data, size_t limit, void *closure);

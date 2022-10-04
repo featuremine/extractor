@@ -23,8 +23,8 @@
 
 #include <cstring>
 #include <fcntl.h>
-#include <fmc++/counters.hpp>
-#include <fmc/platform.h>
+#include "fmc++/counters.hpp"
+#include "fmc/platform.h"
 #include <iostream>
 #include <stdint.h>
 #include <stdio.h>
@@ -36,7 +36,7 @@ extern "C" {
 #include "mm_file.h"
 }
 
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 
 using namespace fmc;
 

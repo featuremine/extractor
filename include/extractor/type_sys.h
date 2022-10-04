@@ -28,7 +28,7 @@
 
 #include "extractor/arg_stack.h"
 #include "extractor/type_decl.h"
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 #include <stddef.h>
 #include <stdint.h>
 

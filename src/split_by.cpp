@@ -39,7 +39,7 @@ extern "C" {
 #include "extractor/time64.hpp"
 #include "unique_pq.hpp"
 
-#include <fmc++/metatable.hpp>
+#include "fmc++/metatable.hpp"
 
 #include <condition_variable>
 #include <deque>

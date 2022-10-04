@@ -31,7 +31,7 @@ extern "C" {
 #include "extractor/time64.h"
 }
 
-#include <fmc/time.h>
+#include "fmc/time.h"
 #include <ytp/sequence.h>
 
 #include <array>
@@ -51,7 +51,6 @@ struct delayed_cl {
 bool fm_comp_delayed_call_stream_init(fm_frame_t *result, size_t args,
                                       const fm_frame_t *const argv[],
                                       fm_call_ctx_t *ctx, fm_call_exec_cl *cl) {
-  auto &exec_cl = *(delayed_cl *)ctx->comp;
   auto dest_f = fm_frame_get_ptr1(result, 0, 0);
   BOOL initial_value = false;
   memcpy(dest_f, &initial_value, sizeof(BOOL));

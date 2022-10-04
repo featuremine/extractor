@@ -28,7 +28,7 @@
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 FMMODFUNC fm_ctx_def_t *fm_comp_perf_timer_start_gen(fm_comp_sys_t *sys,
                                                      fm_comp_def_cl, unsigned,

@@ -25,7 +25,7 @@ extern "C" {
 #include "extractor/frame.h"
 #include "extractor/type_decl.h"
 #include "extractor/type_sys.h"
-#include <fmc/alignment.h>
+#include "fmc/extension.h"
 }
 
 #include <iostream>

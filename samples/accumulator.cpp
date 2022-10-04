@@ -17,7 +17,7 @@ extern "C" {
 #define ASSERT_NE(a, b) assert((a) != (b))
 #define ASSERT_EQ(a, b) assert((a) == (b))
 
-#include <fmc/test.h>
+#include "fmc/test.h"
 
 using namespace std;
 

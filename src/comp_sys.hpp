@@ -40,14 +40,14 @@ extern "C" {
 #include "serial_util.hpp"
 
 #include <dlfcn.h>
-#include <fmc++/counters.hpp>
+#include "fmc++/counters.hpp"
 #include <functional>
 #include <string.h>
 #include <string>
 #include <unordered_map>
 #include <vector>
 
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 #ifdef FMC_LICENSE
 #include <license.h>
 #endif // FMC_LICENSE

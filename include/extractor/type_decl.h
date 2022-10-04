@@ -26,7 +26,7 @@
 #ifndef __FM_TYPE_DECL_H__
 #define __FM_TYPE_DECL_H__
 
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>

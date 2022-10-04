@@ -31,8 +31,8 @@ extern "C" {
 #include "extractor/type_sys.h"
 }
 
-#include <fmc++/gtestwrap.hpp>
-#include <fmc/platform.h>
+#include "fmc++/gtestwrap.hpp"
+#include "fmc/platform.h"
 #include <fstream>
 #include <iostream>
 #include <vector>

@@ -25,8 +25,8 @@
 #ifndef __FM_DECIMAL64_H__
 #define __FM_DECIMAL64_H__
 
-#include <fmc/math.h>
-#include <fmc/platform.h>
+#include "fmc/math.h"
+#include "fmc/platform.h"
 #include <stddef.h>
 #include <stdint.h>
 

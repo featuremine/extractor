@@ -36,7 +36,7 @@
 
 extern "C" {
 #include "extractor/type_decl.h"
-#include <fmc/alignment.h>
+#include "fmc/extension.h"
 }
 
 struct fm_type_decl;

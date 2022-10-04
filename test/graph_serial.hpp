@@ -33,8 +33,8 @@ extern "C" {
 }
 
 #include "test_util.hpp"
-#include <fmc++/gtestwrap.hpp>
-#include <fmc/platform.h>
+#include "fmc++/gtestwrap.hpp"
+#include "fmc/platform.h"
 #include <iostream>
 
 using namespace fmc;

@@ -26,8 +26,8 @@ extern "C" {
 }
 
 #include "unique_pq.hpp"
-#include <fmc++/gtestwrap.hpp>
-#include <fmc/alignment.h>
+#include "fmc++/gtestwrap.hpp"
+#include "fmc/extension.h"
 
 #include <stdio.h>
 #include <string.h>

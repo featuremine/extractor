@@ -30,8 +30,8 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <fmc/alignment.h>
-#include <fmc/platform.h>
+#include "fmc/alignment.h"
+#include "fmc/platform.h"
 
 typedef struct {
   size_t size;

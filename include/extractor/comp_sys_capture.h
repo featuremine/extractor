@@ -27,7 +27,7 @@
 
 #include "extractor/comp_sys.h"
 #include "extractor/serial.h"
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 /**
  * @brief Record enabled context

@@ -25,7 +25,7 @@
 #ifndef __FM_HANDLE_H__
 #define __FM_HANDLE_H__
 
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 #include <stddef.h>
 
 /**

@@ -27,7 +27,7 @@
 
 #include "extractor/handle.h"
 #include "extractor/time64.h"
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 /**
  * @brief defines stream execution context object

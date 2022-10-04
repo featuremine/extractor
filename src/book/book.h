@@ -25,7 +25,7 @@
 #ifndef __FM_BOOK_H__
 #define __FM_BOOK_H__
 
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 #include "extractor/decimal64.h"
 #include "extractor/time64.h"

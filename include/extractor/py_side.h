@@ -27,7 +27,7 @@
 
 #include <Python.h>
 
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 typedef struct TradeSideStruct TradeSideS;
 

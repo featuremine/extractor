@@ -25,7 +25,7 @@
 #ifndef __FM_TIME64_H__
 #define __FM_TIME64_H__
 
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 #include <stddef.h>
 #include <stdint.h>
 

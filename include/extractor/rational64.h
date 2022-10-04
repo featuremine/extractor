@@ -30,7 +30,7 @@
 #include <stdint.h>
 
 #include "extractor/decimal64.h"
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 typedef struct {
   int32_t num;

@@ -32,7 +32,7 @@
 #include "extractor/stream_ctx.h"
 #include "extractor/time64.h"
 #include "extractor/type_decl.h"
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 typedef struct fm_comp_graph fm_comp_graph_t;
 

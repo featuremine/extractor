@@ -26,7 +26,7 @@ extern "C" {
 #include "extractor/arg_stack.h"
 }
 
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 #include <string_view>
 
 using namespace std;

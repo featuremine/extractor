@@ -21,9 +21,9 @@
  * This file contains test for counters mechanism
  */
 
-#include <fmc++/counters.hpp>
-#include <fmc++/gtestwrap.hpp>
-#include <fmc++/mpl.hpp>
+#include "fmc++/counters.hpp"
+#include "fmc++/gtestwrap.hpp"
+#include "fmc++/mpl.hpp"
 
 #include <algorithm>
 #include <list>

@@ -25,7 +25,7 @@
 #ifndef __FM_CALL_CTX_BASE_H__
 #define __FM_CALL_CTX_BASE_H__
 
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 /**
  * @brief defines context structure for a call

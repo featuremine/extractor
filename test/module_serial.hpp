@@ -29,7 +29,7 @@ extern "C" {
 }
 
 #include "test_util.hpp"
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 #include <iostream>
 
 TEST(module_serial, serialize) {

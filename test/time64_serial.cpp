@@ -22,7 +22,7 @@
  */
 
 #include "extractor/time64.hpp"
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 
 #include <chrono>
 #include <iostream>

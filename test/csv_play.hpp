@@ -34,7 +34,7 @@ extern "C" {
 #include "extractor/type_sys.h"
 }
 
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 
 using namespace fmc;
 

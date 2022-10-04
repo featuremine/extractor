@@ -27,7 +27,7 @@
 
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 typedef struct fm_module fm_module_t;
 

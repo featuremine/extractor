@@ -34,7 +34,8 @@
 #include <vector>
 
 #include "type_space.hpp"
-#include <fmc++/mpl.hpp>
+#include "fmc++/mpl.hpp"
+#include "fmc/alignment.h"
 
 using namespace fm;
 using namespace std;

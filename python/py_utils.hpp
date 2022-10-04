@@ -33,7 +33,7 @@ extern "C" {
 
 #include "python/py_wrapper.hpp"
 #include "extractor/type_sys.h"
-#include <fmc++/mpl.hpp>
+#include "fmc++/mpl.hpp"
 
 #include <cassert>
 #include <errno.h>
@@ -43,8 +43,8 @@ extern "C" {
 #include <utility>
 #include <vector>
 
-#include <fmc++/memory.hpp>
-#include <fmc++/strings.hpp>
+#include "fmc++/memory.hpp"
+#include "fmc++/strings.hpp"
 #include <numpy/arrayobject.h>
 
 #include "extractor/time64.hpp"

@@ -34,8 +34,8 @@ extern "C" {
 
 #include "errno.h"
 #include <cassert>
-#include <fmc++/counters.hpp>
-#include <fmc++/mpl.hpp>
+#include "fmc++/counters.hpp"
+#include "fmc++/mpl.hpp"
 #include <functional>
 #include <stdlib.h>
 #include <string>
@@ -44,7 +44,7 @@ extern "C" {
 
 #include <iostream>
 
-#include <fmc++/strings.hpp>
+#include "fmc++/strings.hpp"
 #include <numpy/arrayobject.h>
 #include <python/py_wrapper.hpp>
 

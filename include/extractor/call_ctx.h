@@ -29,7 +29,7 @@
 #include "extractor/exec_ctx.h"
 #include "extractor/frame.h"
 #include "extractor/handle.h"
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 /**
  * @brief type definition of the context provided by computation generator

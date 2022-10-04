@@ -26,7 +26,7 @@
 #define __FM_EXEC_CTX_H__
 
 #include "extractor/frame.h"
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 /**
  * @brief defines execution context object

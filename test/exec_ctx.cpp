@@ -30,7 +30,7 @@ extern "C" {
 #include "stream_ctx.h"
 }
 
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 #include <string>
 
 // @note implement test frame base interface

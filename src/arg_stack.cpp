@@ -25,7 +25,7 @@
 
 extern "C" {
 #include "extractor/arg_stack.h"
-#include <fmc/alignment.h>
+#include "fmc/extension.h"
 }
 
 fm_arg_stack_t *fm_arg_stack_alloc(size_t tsize) {

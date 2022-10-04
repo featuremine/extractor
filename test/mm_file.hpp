@@ -21,7 +21,7 @@
  * This file contains test for mm_file
  */
 
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 
 extern "C" {
 #include "mm_file.h"
