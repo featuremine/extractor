@@ -22,8 +22,8 @@
  */
 
 extern "C" {
-#include "src/arg_serial.h"
-#include "arg_stack.h"
+#include "arg_serial.h"
+#include "extractor/arg_stack.h"
 }
 
 #include <fmc++/gtestwrap.hpp>

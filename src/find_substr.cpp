@@ -22,18 +22,18 @@
  */
 
 extern "C" {
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
 #include "substr.h"
-#include "time64.h"
+#include "extractor/time64.h"
 }
 
-#include "decimal64.hpp"
-#include "frame.hpp"
+#include "extractor/decimal64.hpp"
+#include "extractor/frame.hpp"
 #include "op_util.hpp"
-#include "time64.hpp"
+#include "extractor/time64.hpp"
 #include <fmc++/mpl.hpp>
 
 #include <memory>

@@ -24,11 +24,11 @@
 
 extern "C" {
 #include "csv_play.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/time64.h"
 }
 #include "csv_utils.hpp"
 #include "errno.h"
@@ -88,7 +88,7 @@ int csv_parse_one(fm_call_ctx *ctx, csv_play_exec_cl *cl, fm_frame_t *frame) {
   auto *exec_ctx = (fm_exec_ctx *)ctx->exec;
   auto *info = (csv_play_info *)ctx->comp;
 
-  auto error = [frame, exec_ctx, info](const char *err = nullptr) {
+  auto error = [exec_ctx, info](const char *err = nullptr) {
     string errstr;
     errstr.append(err);
     csv_play_error_set(exec_ctx, info, errstr.c_str());

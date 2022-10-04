@@ -24,13 +24,13 @@
 #pragma once
 
 extern "C" {
-#include "comp_sys.h"
-#include "time64.h"
-#include "type_sys.h"
+#include "extractor/comp_sys.h"
+#include "extractor/time64.h"
+#include "extractor/type_sys.h"
 }
 
-#include "frame.hpp"
-#include "time64.hpp"
+#include "extractor/frame.hpp"
+#include "extractor/time64.hpp"
 #include <fmc++/mpl.hpp>
 
 #include <tuple>

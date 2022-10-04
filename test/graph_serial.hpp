@@ -24,12 +24,12 @@
  */
 
 extern "C" {
-#include "comp_sys.h"
-#include "frame.h"
-#include "src/comp_graph.h"
-#include "std_comp.h"
-#include "stream_ctx.h"
-#include "type_sys.h"
+#include "extractor/comp_sys.h"
+#include "extractor/frame.h"
+#include "comp_graph.h"
+#include "extractor/std_comp.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/type_sys.h"
 }
 
 #include "test_util.hpp"

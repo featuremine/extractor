@@ -23,7 +23,7 @@
  */
 
 extern "C" {
-#include "src/mm_file.h"
+#include "mm_file.h"
 }
 
 #include <fcntl.h>

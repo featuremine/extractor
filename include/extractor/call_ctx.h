@@ -26,9 +26,9 @@
 #define __FM_CALL_CTX_H__
 
 #include "call_ctx_base.h"
-#include "exec_ctx.h"
-#include "frame.h"
-#include "handle.h"
+#include "extractor/exec_ctx.h"
+#include "extractor/frame.h"
+#include "extractor/handle.h"
 #include <fmc/platform.h>
 
 /**

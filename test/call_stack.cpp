@@ -22,10 +22,10 @@
  */
 
 extern "C" {
-#include "src/call_stack.h"
+#include "call_stack.h"
 }
 
-#include "src/unique_pq.hpp"
+#include "unique_pq.hpp"
 #include <fmc++/gtestwrap.hpp>
 #include <fmc/alignment.h>
 

@@ -24,15 +24,15 @@
 
 extern "C" {
 #include "frame_ytp_encode.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/time64.h"
 }
 
-#include "src/mp_util.hpp"
-#include "src/ytp.h"
+#include "mp_util.hpp"
+#include "ytp.h"
 
 #include <fmc++/memory.hpp>
 #include <fmc/time.h>

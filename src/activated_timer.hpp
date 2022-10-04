@@ -23,14 +23,14 @@
  */
 
 extern "C" {
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/time64.h"
 }
 
-#include "time64.hpp"
+#include "extractor/time64.hpp"
 
 struct act_timer_closure {
   bool updated = 0;

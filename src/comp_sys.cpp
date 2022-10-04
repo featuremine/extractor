@@ -23,17 +23,17 @@
  */
 
 extern "C" {
-#include "comp_sys.h"
-#include "arg_stack.h"
-#include "frame.h"
-#include "src/comp.h"
-#include "src/comp_graph.h"
-#include "src/stream_ctx.h"
-#include "type_sys.h"
+#include "extractor/comp_sys.h"
+#include "extractor/arg_stack.h"
+#include "extractor/frame.h"
+#include "comp.h"
+#include "comp_graph.h"
+#include "stream_ctx.h"
+#include "extractor/type_sys.h"
 }
 
-#include "src/comp_sys.hpp"
-#include "src/serial_util.hpp"
+#include "comp_sys.hpp"
+#include "serial_util.hpp"
 #include <fmc++/strings.hpp>
 
 #include <algorithm>
@@ -279,17 +279,26 @@ bool fm_comp_sys_ext_load(fm_comp_sys_t *s, const char *name,
                           const char *path) {
   fmc_error_t *error;
   string mainfunc_sym = string("FmInit_") + name;
-  auto *handler = fmc_ext_load(mainfunc_sym.c_str(), path, &error);
-  if (handler == nullptr) {
+  // TODO: Review this code, the old fmc_ext load would cause
+  // a leak because we never call dlclose
+  auto handle = fmc_ext_open(path, &error);
+  if (error) {
     fm_comp_sys_error_set(s,
                           "[ERROR]\t(comp_sys) failed to load "
                           "extension library %s from %s;\n\t%s",
                           name, path, fmc_error_msg(error));
     return false;
-  } else {
-    auto mainfunc = (void (*)(fm_comp_sys_t *))handler;
-    mainfunc(s);
   }
+  auto *handler = fmc_ext_sym(handle, mainfunc_sym.c_str(), &error);
+  if (error) {
+    fm_comp_sys_error_set(s,
+                          "[ERROR]\t(comp_sys) failed to load "
+                          "extension library %s from %s;\n\t%s",
+                          name, path, fmc_error_msg(error));
+    return false;
+  }
+  auto mainfunc = (void (*)(fm_comp_sys_t *))handler;
+  mainfunc(s);
   return true;
 }
 

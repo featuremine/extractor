@@ -21,12 +21,12 @@
  * @see http://www.featuremine.com
  */
 
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "type_decl.h"
-#include "type_sys.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/type_decl.h"
+#include "extractor/type_sys.h"
 
 typedef struct {
   double alpha;

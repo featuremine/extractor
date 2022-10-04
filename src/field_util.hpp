@@ -24,10 +24,10 @@
 #pragma once
 
 extern "C" {
-#include "type_decl.h"
+#include "extractor/type_decl.h"
 }
 
-#include "frame.hpp"
+#include "extractor/frame.hpp"
 #include <fmc++/mpl.hpp>
 
 template <class T, template <class> class C, class... Ts, class... Args>

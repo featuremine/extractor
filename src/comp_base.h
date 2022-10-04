@@ -25,9 +25,9 @@
 #ifndef __FM_COMP_BASE_H__
 #define __FM_COMP_BASE_H__
 
-#include "call_ctx.h"
-#include "frame_base.h"
-#include "src/call_obj.h"
+#include "extractor/call_ctx.h"
+#include "extractor/frame_base.h"
+#include "call_obj.h"
 
 typedef struct fm_comp fm_comp_t;
 

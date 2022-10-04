@@ -24,16 +24,17 @@
  */
 
 extern "C" {
-#include "src/arg_serial.h"
-#include "arg_stack.h"
-#include "type_decl.h"
-#include "type_sys.h"
+#include "arg_serial.h"
+#include "extractor/arg_stack.h"
+#include "extractor/type_decl.h"
+#include "extractor/type_sys.h"
 }
 
-#include "rational64.hpp"
-#include "rprice.hpp"
-#include "src/serial_util.hpp"
-#include "time64.hpp"
+#include "extractor/comp_def.hpp"
+#include "extractor/rprice.hpp"
+#include "serial_util.hpp"
+#include "extractor/rational64.hpp"
+#include "extractor/time64.hpp"
 #include "type_space.hpp"
 #include <fmc++/mpl.hpp>
 

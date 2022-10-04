@@ -24,7 +24,7 @@
 #include <fmc++/gtestwrap.hpp>
 
 extern "C" {
-#include "src/mm_file.h"
+#include "mm_file.h"
 }
 
 //@TODO improve test to properly test rewind + close and data integrity

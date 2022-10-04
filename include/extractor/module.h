@@ -25,8 +25,8 @@
 #ifndef __FM_MODULE_H__
 #define __FM_MODULE_H__
 
-#include "comp_def.h"
-#include "comp_sys.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
 #include <fmc/platform.h>
 
 typedef struct fm_module fm_module_t;

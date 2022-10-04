@@ -1,6 +1,6 @@
-#include "comp_sys.h"
-#include "src/comp_graph.h"
-#include "src/frame_serial.h"
+#include "extractor/comp_sys.h"
+#include "comp_graph.h"
+#include "frame_serial.h"
 
 /**
  * @brief Serializes the graph

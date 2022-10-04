@@ -23,8 +23,8 @@
 
 #pragma once
 
-#include "decimal64.hpp"
-#include "rational64.hpp"
+#include "extractor/decimal64.hpp"
+#include "extractor/comp_def.hpp"
 
 #include <fmc++/gtestwrap.hpp>
 #include <sstream>

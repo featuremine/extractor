@@ -22,11 +22,11 @@
 #pragma once
 
 extern "C" {
-#include "type_decl.h"
+#include "extractor/type_decl.h"
 }
-#include "decimal64.hpp"
-#include "rational64.hpp"
-#include "time64.hpp"
+#include "extractor/decimal64.hpp"
+#include "extractor/comp_def.hpp"
+#include "extractor/time64.hpp"
 
 #include <Python.h>
 #include <datetime.h>

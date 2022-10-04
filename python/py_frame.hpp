@@ -24,9 +24,9 @@
 #pragma once
 
 extern "C" {
-#include "comp_sys.h"
-#include "src/comp.h"
-#include "src/comp_graph.h"
+#include "extractor/comp_sys.h"
+#include "comp.h"
+#include "comp_graph.h"
 }
 
 #include "python/py_utils.hpp"

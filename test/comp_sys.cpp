@@ -22,12 +22,12 @@
  */
 
 extern "C" {
-#include "comp_sys.h"
-#include "comp_def_simp.h"
-#include "frame.h"
-#include "src/comp.h"
-#include "stream_ctx.h"
-#include "type_sys.h"
+#include "extractor/comp_sys.h"
+#include "extractor/comp_def_simp.h"
+#include "extractor/frame.h"
+#include "comp.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/type_sys.h"
 }
 
 #include <fmc++/gtestwrap.hpp>

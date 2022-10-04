@@ -21,12 +21,12 @@
 
 #pragma once
 
-#include "common.hpp"
-#include "rprice.hpp"
+#include "extractor/common.hpp"
+#include "extractor/rprice.hpp"
 
-#include <comp_def.hpp>
+#include "extractor/comp_def.hpp"
 #include <fmc++/mpl.hpp>
-#include <frame.hpp>
+#include "extractor/frame.hpp"
 
 namespace fm {
 

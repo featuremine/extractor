@@ -25,7 +25,7 @@
 #define __FM_FRAME_BASE_H__
 
 #include "call_ctx_base.h"
-#include "type_decl.h"
+#include "extractor/type_decl.h"
 #include <fmc/platform.h>
 
 typedef struct fm_frame fm_frame_t;

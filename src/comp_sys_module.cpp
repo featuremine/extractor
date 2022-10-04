@@ -13,10 +13,10 @@
  *****************************************************************************/
 
 extern "C" {
-#include "src/comp_sys_module.h"
+#include "comp_sys_module.h"
 }
 
-#include "src/comp_sys.hpp"
+#include "comp_sys.hpp"
 #include <fmc++/mpl.hpp>
 #include <string>
 

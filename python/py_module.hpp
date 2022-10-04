@@ -24,7 +24,7 @@
 #pragma once
 
 extern "C" {
-#include "module.h"
+#include "extractor/module.h"
 }
 
 #include "python/py_utils.hpp"

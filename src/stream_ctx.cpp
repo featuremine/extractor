@@ -22,16 +22,16 @@
  */
 
 extern "C" {
-#include "src/stream_ctx.h"
-#include "frame_base.h"
-#include "src/call_obj.h"
-#include "src/call_stack.h"
-#include "src/comp_base.h"
-#include "src/comp_graph.h"
-#include "time64.h"
+#include "stream_ctx.h"
+#include "extractor/frame_base.h"
+#include "call_obj.h"
+#include "call_stack.h"
+#include "comp_base.h"
+#include "comp_graph.h"
+#include "extractor/time64.h"
 }
 
-#include "src/exec_ctx.hpp"
+#include "exec_ctx.hpp"
 #include <chrono>
 #include <queue>
 #include <signal.h>

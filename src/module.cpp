@@ -23,11 +23,11 @@
  */
 
 extern "C" {
-#include "module.h"
-#include "arg_stack.h"
-#include "src/arg_serial.h"
-#include "src/comp_graph.h"
-#include "src/comp_sys_module.h"
+#include "extractor/module.h"
+#include "extractor/arg_stack.h"
+#include "arg_serial.h"
+#include "comp_graph.h"
+#include "comp_sys_module.h"
 }
 
 #include "serial_util.hpp"
@@ -206,7 +206,7 @@ bool fm_module_inst(fm_comp_sys_t *sys, fm_comp_graph_t *g, fm_module_t *m,
     fm_comp_t *comp = nullptr;
 
     if (!node->params_) {
-      fm_arg_stack_t t = {0, nullptr};
+      fm_arg_stack_t t = {{0, nullptr}};
       comp = fm_comp_decl4(sys, g, node->comp_.c_str(), comp_name.c_str(),
                            nargs, c_inputs.data(), nullptr, t);
     } else {

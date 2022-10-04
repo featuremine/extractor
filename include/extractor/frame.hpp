@@ -24,9 +24,9 @@
 #pragma once
 
 extern "C" {
-#include "comp_sys.h"
-#include "frame.h"
-#include "type_sys.h"
+#include "extractor/comp_sys.h"
+#include "extractor/frame.h"
+#include "extractor/type_sys.h"
 }
 
 #include <array>

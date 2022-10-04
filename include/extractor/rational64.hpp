@@ -25,7 +25,7 @@
 #pragma once
 
 extern "C" {
-#include "rational64.h"
+#include "extractor/rational64.h"
 }
 
 #include <cstdlib>

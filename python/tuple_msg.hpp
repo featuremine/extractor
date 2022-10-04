@@ -25,16 +25,16 @@
 #pragma once
 
 extern "C" {
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/time64.h"
 }
 
 #include "python/py_utils.hpp"
 #include "python/py_wrapper.hpp"
-#include "type_sys.h"
+#include "extractor/type_sys.h"
 #include <fmc++/mpl.hpp>
 
 #include <cassert>

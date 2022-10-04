@@ -22,8 +22,8 @@
  */
 
 extern "C" {
-#include "comp_sys.h"
-#include "std_comp.h"
+#include "extractor/comp_sys.h"
+#include "extractor/std_comp.h"
 }
 
 #ifdef __clang__
@@ -35,7 +35,7 @@ extern "C" {
 #pragma clang diagnostic pop
 #endif
 
-#include "time64.hpp"
+#include "extractor/time64.hpp"
 #include <string>
 
 std::string src_dir;

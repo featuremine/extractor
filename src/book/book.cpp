@@ -23,13 +23,13 @@
  */
 
 extern "C" {
-#include "src/book/book.h"
-#include "decimal64.h"
-#include "time64.h"
+#include "book/book.h"
+#include "extractor/decimal64.h"
+#include "extractor/time64.h"
 }
 
-#include "decimal64.hpp"
-#include "time64.hpp"
+#include "extractor/decimal64.hpp"
+#include "extractor/time64.hpp"
 
 #include <algorithm>
 #include <array>
@@ -109,7 +109,7 @@ template <class Pool>
 vector_levels::iterator create_level(vector_levels &lvls, Pool &pool,
                                      vector_levels::iterator it,
                                      fm_decimal64_t price) {
-  auto where = lvls.insert(it, {price, 0});
+  auto where = lvls.insert(it, {price, {0}});
   source_pool(pool, where->orders);
   return where;
 }

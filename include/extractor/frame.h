@@ -26,8 +26,8 @@
 
 #include <stddef.h>
 
-#include "frame_base.h"
-#include "type_decl.h"
+#include "extractor/frame_base.h"
+#include "extractor/type_decl.h"
 #include <fmc/platform.h>
 
 typedef int fm_field_t;

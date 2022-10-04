@@ -26,7 +26,7 @@
 #pragma once
 
 extern "C" {
-#include "serial.h"
+#include "extractor/serial.h"
 }
 
 #include <iomanip>

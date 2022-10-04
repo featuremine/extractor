@@ -25,10 +25,10 @@
 #ifndef __FM_CALL_OBJ_H__
 #define __FM_CALL_OBJ_H__
 
-#include "call_ctx.h"
-#include "frame_base.h"
-#include "handle.h"
-#include "src/call_stack.h"
+#include "extractor/call_ctx.h"
+#include "extractor/frame_base.h"
+#include "extractor/handle.h"
+#include "call_stack.h"
 
 #include <stddef.h>
 

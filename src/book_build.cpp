@@ -25,17 +25,17 @@
 
 extern "C" {
 #include "book_build.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "src/book/book.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "book/book.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/time64.h"
 }
 
-#include "book/updates.hpp"
-#include "decimal64.hpp"
-#include "time64.hpp"
+#include "extractor/book/updates.hpp"
+#include "extractor/decimal64.hpp"
+#include "extractor/time64.hpp"
 #include <fmc++/mpl.hpp>
 
 #include <memory>

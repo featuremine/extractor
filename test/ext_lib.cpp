@@ -21,9 +21,9 @@
  * @see http://www.featuremine.com
  */
 
-#include "common.hpp"
-#include "comp_def.hpp"
-#include "time64.hpp"
+#include "extractor/common.hpp"
+#include "extractor/comp_def.hpp"
+#include "extractor/time64.hpp"
 
 #include <tuple>
 #include <vector>

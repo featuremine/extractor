@@ -24,8 +24,8 @@
 #pragma once
 
 extern "C" {
-#include "comp_def.h"
-#include "std_comp.h"
+#include "extractor/comp_def.h"
+#include "extractor/std_comp.h"
 }
 
 #include "python/custom.hpp"

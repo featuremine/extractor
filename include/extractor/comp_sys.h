@@ -25,13 +25,13 @@
 #ifndef __FM_COMP_SYS_H__
 #define __FM_COMP_SYS_H__
 
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "frame_base.h"
-#include "serial.h"
-#include "stream_ctx.h"
-#include "time64.h"
-#include "type_decl.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/frame_base.h"
+#include "extractor/serial.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/time64.h"
+#include "extractor/type_decl.h"
 #include <fmc/platform.h>
 
 typedef struct fm_comp_graph fm_comp_graph_t;

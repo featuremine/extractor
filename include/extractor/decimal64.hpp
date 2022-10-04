@@ -25,7 +25,7 @@
 #pragma once
 
 extern "C" {
-#include "decimal64.h"
+#include "extractor/decimal64.h"
 }
 
 inline double operator/(fm_decimal64_t a, fm_decimal64_t b) {

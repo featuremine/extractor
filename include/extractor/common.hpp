@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include <frame.hpp>
+#include "extractor/frame.hpp"
 #include <string_view>
 
 namespace fm {

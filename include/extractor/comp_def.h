@@ -25,11 +25,11 @@
 #ifndef __FM_COMP_DEF_H__
 #define __FM_COMP_DEF_H__
 
-#include "arg_stack.h"
-#include "call_ctx.h"
-#include "frame_base.h"
-#include "time64.h"
-#include "type_sys.h"
+#include "extractor/arg_stack.h"
+#include "extractor/call_ctx.h"
+#include "extractor/frame_base.h"
+#include "extractor/time64.h"
+#include "extractor/type_sys.h"
 #include <fmc/platform.h>
 
 #include <stdarg.h>

@@ -29,7 +29,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "decimal64.h"
+#include "extractor/decimal64.h"
 #include <fmc/platform.h>
 
 typedef struct {

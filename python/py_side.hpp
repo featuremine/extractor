@@ -1,6 +1,6 @@
 #pragma once
 
-#include "side.hpp"
+#include "extractor/side.hpp"
 #include <sstream>
 
 extern "C" {

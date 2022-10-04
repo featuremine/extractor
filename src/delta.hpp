@@ -22,7 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#include "src/sample.hpp"
+#include "sample.hpp"
 
 struct delta_field_exec {
   virtual ~delta_field_exec() {}

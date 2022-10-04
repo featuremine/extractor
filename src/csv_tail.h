@@ -25,8 +25,8 @@
 
 #pragma once
 
-#include "arg_stack.h"
-#include "comp_def.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
 
 fm_ctx_def_t *fm_comp_csv_tail_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
                                    unsigned argc, fm_type_decl_cp argv[],

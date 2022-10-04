@@ -25,9 +25,9 @@
 #pragma once
 
 extern "C" {
-#include "stream_ctx.h"
-#include "time64.h"
-#include "type_sys.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/time64.h"
+#include "extractor/type_sys.h"
 }
 
 #include "field_util.hpp"

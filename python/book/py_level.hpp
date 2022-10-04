@@ -26,12 +26,12 @@
 extern "C" {
 #include "py_side.h"
 #include "python/book/py_book.h"
-#include "src/book/book.h"
+#include "book/book.h"
 }
 
-#include "decimal64.hpp"
+#include "extractor/decimal64.hpp"
 #include "python/py_wrapper.hpp"
-#include "side.hpp"
+#include "extractor/side.hpp"
 #include <datetime.h>
 
 typedef struct {

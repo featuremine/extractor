@@ -25,7 +25,7 @@
 #ifndef __FM_EXEC_CTX_H__
 #define __FM_EXEC_CTX_H__
 
-#include "frame.h"
+#include "extractor/frame.h"
 #include <fmc/platform.h>
 
 /**

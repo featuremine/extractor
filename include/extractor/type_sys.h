@@ -26,14 +26,14 @@
 #ifndef __FM_TYPE_SYS_H__
 #define __FM_TYPE_SYS_H__
 
-#include "arg_stack.h"
-#include "type_decl.h"
+#include "extractor/arg_stack.h"
+#include "extractor/type_decl.h"
 #include <fmc/platform.h>
 #include <stddef.h>
 #include <stdint.h>
 
-#include "arg_stack.h"
-#include "type_decl.h"
+#include "extractor/arg_stack.h"
+#include "extractor/type_decl.h"
 
 /**
  * @brief type system object

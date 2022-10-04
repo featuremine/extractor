@@ -44,7 +44,7 @@ typedef struct {
 } fm_arg_stack_t;
 
 #define STACK_ARGS(stack)                                                      \
-  (fm_arg_stack_t{stack.header.size, &(stack).buffer[0] + stack.header.size})
+  (fm_arg_stack_t{{stack.header.size, &(stack).buffer[0] + stack.header.size}})
 
 #define STACK_FWD(stack) ((fm_arg_stack_t *)&(stack))
 
@@ -55,7 +55,7 @@ typedef struct {
       char *cursor;                                                            \
     } header;                                                                  \
     char buffer[SIZE];                                                         \
-  } var = {SIZE, &var.buffer[0] + SIZE}
+  } var = {{SIZE, &var.buffer[0] + SIZE}}
 
 FMMODFUNC fm_arg_stack_t *fm_arg_stack_alloc(size_t tsize);
 FMMODFUNC fm_arg_stack_t *fm_arg_stack_copy(fm_arg_stack_t *ptr);

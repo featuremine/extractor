@@ -23,21 +23,21 @@
  */
 
 extern "C" {
-#include "src/ore_live_split.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "ore_live_split.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/time64.h"
 #include <ytp/peer.h>
 #include <ytp/yamal.h>
 }
 
-#include "book/ore.hpp"
-#include "book/updates.hpp"
-#include "decimal64.hpp"
-#include "time64.hpp"
-#include <fmc/cmp/serialization.hpp>
+#include "extractor/book/ore.hpp"
+#include "extractor/book/updates.hpp"
+#include "extractor/decimal64.hpp"
+#include "extractor/time64.hpp"
+#include <fmc++/serialization.hpp>
 
 #include <fcntl.h>
 #include <fmc/platform.h>

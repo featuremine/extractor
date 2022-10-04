@@ -22,9 +22,9 @@
  */
 
 extern "C" {
-#include "frame.h"
-#include "type_decl.h"
-#include "type_sys.h"
+#include "extractor/frame.h"
+#include "extractor/type_decl.h"
+#include "extractor/type_sys.h"
 #include <fmc/alignment.h>
 }
 
@@ -35,8 +35,6 @@ extern "C" {
 #include <vector>
 
 using namespace std;
-
-const int DEFAULT_ALIGNMENT = 64;
 
 // @note
 // * row or column alignment

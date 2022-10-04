@@ -29,8 +29,8 @@
 
 #include <Python.h>
 
-#include "comp_sys.h"
-#include "frame_base.h"
+#include "extractor/comp_sys.h"
+#include "extractor/frame_base.h"
 #include <fmc/platform.h>
 
 /**

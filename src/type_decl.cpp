@@ -24,8 +24,8 @@
  */
 
 extern "C" {
-#include "type_decl.h"
-#include "time64.h"
+#include "extractor/type_decl.h"
+#include "extractor/time64.h"
 }
 
 #include <algorithm>

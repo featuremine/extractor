@@ -24,7 +24,7 @@
  */
 
 extern "C" {
-#include "arg_stack.h"
+#include "extractor/arg_stack.h"
 #include <fmc/alignment.h>
 }
 
@@ -83,8 +83,8 @@ bool fm_arg_stack_double(fm_arg_stack_t **ptr) {
 }
 
 fm_arg_stack_t fm_arg_stack_args(fm_arg_stack_t *stack) {
-  return fm_arg_stack_t{stack->header.size,
-                        &(stack->buffer[stack->header.size])};
+  return fm_arg_stack_t{{stack->header.size,
+                        &(stack->buffer[stack->header.size])}};
 }
 
 void fm_arg_stack_free(fm_arg_stack_t *ptr) { free((void *)ptr); }

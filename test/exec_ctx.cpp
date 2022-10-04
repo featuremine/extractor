@@ -22,12 +22,12 @@
  */
 
 extern "C" {
-#include "frame_base.h"
-#include "src/call_obj.h"
-#include "src/comp.h"
-#include "src/comp_base.h"
-#include "src/comp_graph.h"
-#include "src/stream_ctx.h"
+#include "extractor/frame_base.h"
+#include "call_obj.h"
+#include "comp.h"
+#include "comp_base.h"
+#include "comp_graph.h"
+#include "stream_ctx.h"
 }
 
 #include <fmc++/gtestwrap.hpp>

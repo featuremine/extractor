@@ -24,11 +24,11 @@
 extern "C" {
 #include "py_book.h"
 #include "py_side.h"
-#include "src/book/book.h"
+#include "book/book.h"
 }
 
 #include "python/book/py_level.hpp"
-#include "side.hpp"
+#include "extractor/side.hpp"
 
 struct BookStruct {
   PyObject_HEAD fm_book_shared_t *book_;

@@ -24,15 +24,15 @@
 #pragma once
 
 extern "C" {
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "module.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/module.h"
 }
 
 #include "py_types.hpp"
 
 #include "python/py_wrapper.hpp"
-#include "type_sys.h"
+#include "extractor/type_sys.h"
 #include <fmc++/mpl.hpp>
 
 #include <cassert>
@@ -47,7 +47,7 @@ extern "C" {
 #include <fmc++/strings.hpp>
 #include <numpy/arrayobject.h>
 
-#include "time64.hpp"
+#include "extractor/time64.hpp"
 #include <Python.h>
 #include <datetime.h>
 #include <variant>

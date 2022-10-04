@@ -32,10 +32,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "time64.h"
+#include "extractor/time64.h"
 //#include "time32.h"
-#include "decimal64.h"
-#include "rational64.h"
+#include "extractor/decimal64.h"
+#include "extractor/rational64.h"
 
 /**
  * @brief type declaration object

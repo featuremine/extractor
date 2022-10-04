@@ -25,7 +25,7 @@ extern "C" {
 #include "py_extractor.h"
 #include "py_side.h"
 #include "python/book/py_book.h"
-#include "src/ytp.h"
+#include "ytp.h"
 }
 
 #include "python/custom.hpp"

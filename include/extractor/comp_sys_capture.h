@@ -25,8 +25,8 @@
 #ifndef __FM_COMP_SYS_CAPTURE_H__
 #define __FM_COMP_SYS_CAPTURE_H__
 
-#include "comp_sys.h"
-#include "serial.h"
+#include "extractor/comp_sys.h"
+#include "extractor/serial.h"
 #include <fmc/platform.h>
 
 /**

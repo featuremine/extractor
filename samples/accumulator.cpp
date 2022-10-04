@@ -1,9 +1,9 @@
 extern "C" {
-#include "comp_sys.h"
-#include "frame.h"
-#include "std_comp.h"
-#include "stream_ctx.h"
-#include "type_sys.h"
+#include "extractor/comp_sys.h"
+#include "extractor/frame.h"
+#include "extractor/std_comp.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/type_sys.h"
 }
 
 #include <cassert>

@@ -33,7 +33,7 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 extern "C" {
-#include "src/mm_file.h"
+#include "mm_file.h"
 }
 
 #include <fmc++/gtestwrap.hpp>

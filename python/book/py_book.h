@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "src/book/book.h"
+#include "book/book.h"
 #include <Python.h>
 
 typedef struct BookStruct Book;

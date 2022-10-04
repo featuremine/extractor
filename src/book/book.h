@@ -27,8 +27,8 @@
 
 #include <fmc/platform.h>
 
-#include "decimal64.h"
-#include "time64.h"
+#include "extractor/decimal64.h"
+#include "extractor/time64.h"
 
 typedef struct fm_book_pos fm_book_pos_t;
 typedef struct fm_book fm_book_t;

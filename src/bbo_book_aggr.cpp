@@ -23,18 +23,18 @@
  */
 
 extern "C" {
-#include "arg_stack.h"
+#include "extractor/arg_stack.h"
 #include "bbo_aggr.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "decimal64.h"
-#include "src/book/book.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/decimal64.h"
+#include "book/book.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/time64.h"
 }
 
-#include "include/rprice.hpp"
-#include "include/side.hpp"
+#include "extractor/rprice.hpp"
+#include "extractor/side.hpp"
 
 #include <utility>
 #include <vector>

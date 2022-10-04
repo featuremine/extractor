@@ -24,8 +24,8 @@
  */
 
 extern "C" {
-#include "type_sys.h"
-#include "module.h"
+#include "extractor/type_sys.h"
+#include "extractor/module.h"
 }
 
 #include "type_error.hpp"

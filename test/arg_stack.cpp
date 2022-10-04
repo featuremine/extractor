@@ -22,7 +22,7 @@
  */
 
 extern "C" {
-#include "arg_stack.h"
+#include "extractor/arg_stack.h"
 }
 
 #include <fmc++/gtestwrap.hpp>

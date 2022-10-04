@@ -23,12 +23,12 @@
 
 extern "C" {
 #include "csv_tail.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
 #include "csv_play.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/time64.h"
 }
 #include "csv_utils.hpp"
 #include "errno.h"
@@ -39,7 +39,7 @@ extern "C" {
 #include <utility>
 #include <vector>
 
-#include "time64.hpp"
+#include "extractor/time64.hpp"
 #include <fmc++/strings.hpp>
 
 struct csv_tail_exec_cl {
@@ -60,7 +60,6 @@ struct csv_tail_info {
 
 int process_row(fm_frame_t *frame, fm_call_ctx_t *ctx,
                 csv_tail_exec_cl *exec_cl) {
-  auto *s_ctx = (fm_stream_ctx *)ctx->exec;
   auto *exec_ctx = (fm_exec_ctx *)ctx->exec;
 
   auto error = [exec_ctx](auto &&... args) {

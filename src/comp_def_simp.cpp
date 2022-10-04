@@ -23,10 +23,10 @@
  */
 
 extern "C" {
-#include "comp_def_simp.h"
-#include "call_ctx.h"
-#include "comp_sys.h"
-#include "time64.h"
+#include "extractor/comp_def_simp.h"
+#include "extractor/call_ctx.h"
+#include "extractor/comp_sys.h"
+#include "extractor/time64.h"
 }
 
 fm_call_def *fm_comp_def_simp_stream_call(fm_comp_def_cl comp_cl,

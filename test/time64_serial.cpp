@@ -21,7 +21,7 @@
  * @see http://www.featuremine.com
  */
 
-#include "time64.hpp"
+#include "extractor/time64.hpp"
 #include <fmc++/gtestwrap.hpp>
 
 #include <chrono>

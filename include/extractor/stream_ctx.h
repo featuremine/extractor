@@ -25,8 +25,8 @@
 #ifndef __FM_STREAM_CTX_H__
 #define __FM_STREAM_CTX_H__
 
-#include "handle.h"
-#include "time64.h"
+#include "extractor/handle.h"
+#include "extractor/time64.h"
 #include <fmc/platform.h>
 
 /**

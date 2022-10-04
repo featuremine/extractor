@@ -24,15 +24,15 @@
 
 extern "C" {
 #include "mp_record.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
-#include <fmc/cmp/cmp.h>
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/time64.h"
+#include <cmp/cmp.h>
 }
 
-#include "src/mp_util.hpp"
+#include "mp_util.hpp"
 #include <fmc/files.h>
 #include <iostream>
 
@@ -78,7 +78,6 @@ bool fm_comp_mp_record_call_stream_init(fm_frame_t *result, size_t args,
                                         fm_call_exec_cl *cl) {
   using namespace std;
   auto *info = (mp_record_comp_cl *)ctx->comp;
-  auto *tsys = info->tsys;
 
   FILE *file = nullptr;
   auto pipe = fmc::begins_with_pipe(info->file);
@@ -114,7 +113,6 @@ bool fm_comp_mp_record_call_stream_init(fm_frame_t *result, size_t args,
   auto *exec_cl = new mp_record_exec_cl();
   auto &cmp = exec_cl->cmp;
   auto &writers = exec_cl->writers;
-  auto is_pipe = pipe.first;
 
   cmp_init(&cmp, file, nullptr, nullptr, file_writer);
 

@@ -35,7 +35,7 @@
 #include <vector>
 
 extern "C" {
-#include "type_decl.h"
+#include "extractor/type_decl.h"
 #include <fmc/alignment.h>
 }
 
@@ -144,7 +144,7 @@ using type_def = std::variant<base_type_def, record_type_def, array_type_def,
 struct fm_type_decl {
   template <class T> fm_type_decl(size_t i, size_t h, T &&t);
   std::string str() const {
-    return visit([this](auto &t) { return t.str(); }, def);
+    return visit([](auto &t) { return t.str(); }, def);
   }
   size_t index;
   size_t hash;
