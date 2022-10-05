@@ -24,8 +24,6 @@
 
 #pragma once
 
-#include "ytp/sequence.h" // DO NOT INCLUDE THIS
-
 #include "ytp/api.h"
 
 struct ytp_msg_decoded {
