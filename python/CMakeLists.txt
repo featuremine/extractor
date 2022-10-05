@@ -1,5 +1,5 @@
 find_package(PkgConfig)
-pkg_check_modules(PYTHON REQUIRED IMPORTED_TARGET python3-embed)
+pkg_check_modules(PYTHON IMPORTED_TARGET python3-embed)
 if (NOT PYTHON_FOUND)
     pkg_check_modules(PYTHON REQUIRED IMPORTED_TARGET python3)
 endif (NOT PYTHON_FOUND)
