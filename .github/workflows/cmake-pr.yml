@@ -1,0 +1,54 @@
+name: CMake PR
+
+on:
+  pull_request:
+
+permissions: write-all
+
+jobs:
+  utility:
+    runs-on: ubuntu-20.04
+    outputs:
+      release-check: ${{ steps.release-check.outputs.release-check }}
+    
+    steps:
+    - name: Utility tasks
+      id: release-check
+      uses: featuremine/actions/utility@main
+      with:
+        gh_token: ${{ secrets.GITHUB_TOKEN }}
+        utility_token: ${{ secrets.UTILITY_COMMIT_TOKEN }}
+
+  build-manylinux:
+    needs: utility
+    runs-on: ubuntu-20.04
+    container:
+      image: public.ecr.aws/p0w8t0l8/ci-hosted-gh-centos7-gcc10.2.0
+    
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+        token: ${{ secrets.CIBOT_TOKEN }}
+
+    - name: Build ${{ github.event.repository.name }} with fm gcc
+      uses: featuremine/actions/package/build@main
+      with:
+        gh_token: ${{ secrets.GITHUB_TOKEN }}
+        git_credentials_url: 'https://fm-ci-bot:${{secrets.CIBOT_TOKEN}}@github.com/'
+        yamal_version: '7.2.19'
+        upload: ${{ needs.utility.outputs.release-check == 'release' }}
+
+  test-centos:
+    needs: [utility, build-manylinux]
+    if: needs.utility.outputs.release-check == 'release'
+    runs-on: ubuntu-20.04
+    container:
+      image: public.ecr.aws/p0w8t0l8/ci-hosted-gh-centos7-gcc10.2.0
+    
+    steps:
+    - name: Test ${{ github.event.repository.name }} release
+      uses: featuremine/actions/package/test@main
+      with:
+        gh_token: ${{ secrets.GITHUB_TOKEN }}
+        yamal_version: '7.2.19'

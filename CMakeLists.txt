@@ -15,14 +15,13 @@ find_package(Subproject REQUIRED)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subproject(
     NAME yamal
-    VERSION "7.2.19"
-    GIT_REVISION "v7.2.19"
+    GIT_REVISION "cmp_improvement_string_view"
     GIT_URL "https://github.com/featuremine/yamal.git"
     TARGETS fmc++ ytp
 )
 add_subproject(
     NAME yamal-python
-    GIT_REVISION "v7.2.19"
+    GIT_REVISION "expose_targets"
     GIT_URL "https://github.com/featuremine/yamal-python.git"
     VARIABLES yamal-python-incdir yamal-python-source
 )
