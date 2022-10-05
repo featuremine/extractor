@@ -48,10 +48,6 @@ extern "C" {
 
 #include "fmc/extension.h"
 #include "fmc/platform.h"
-#ifdef FMC_LICENSE
-#include <license.h>
-#include <license.hpp>
-#endif
 
 using namespace std;
 
@@ -73,9 +69,6 @@ void fm_comp_sys_cleanup(fm_comp_sys_t *s) {
 }
 
 void fm_comp_sys_del(fm_comp_sys_t *s) {
-#ifdef FMC_LICENSE
-  fm::rlm_checkout(s->lic, s->rh);
-#endif
   fm_type_sys_del(s->types);
   fm_comp_sys_cleanup(s);
   delete s;

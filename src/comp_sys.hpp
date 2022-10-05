@@ -48,9 +48,6 @@ extern "C" {
 #include <vector>
 
 #include "fmc/platform.h"
-#ifdef FMC_LICENSE
-#include <license.h>
-#endif // FMC_LICENSE
 using namespace std;
 
 /**
@@ -65,9 +62,5 @@ struct fm_comp_sys {
   std::string errmsg;
   unordered_map<string, fm_module_t *> modules_;
   unsigned modules_suff_;
-#ifdef FMC_LICENSE
-  RLM_HANDLE rh;
-  RLM_LICENSE lic = (RLM_LICENSE)NULL;
-#endif // FMC_LICENSE
   fmc::counter::samples samples_;
 };
