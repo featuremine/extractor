@@ -236,29 +236,29 @@ static int python_to_stack_arg(fm_type_sys_t *tsys, PyObject *obj,
                                sizeof(fm_book_shared_t *));
   } else if (ytp_->sequence_check(obj)) {
     ytp_sequence_wrapper stream;
-    stream.sequence = PyYTPSequence_Shared(obj);
+    stream.sequence = ytp_->sequence_shared(obj);
     HEAP_STACK_PUSH(s, stream);
     *type = fm_record_type_get(tsys, "ytp_sequence_wrapper",
                                sizeof(ytp_sequence_wrapper));
   } else if (ytp_->stream_check(obj)) {
     ytp_stream_wrapper stream;
-    stream.sequence = ytp_->stream_shared(obj) //PyYTPStream_Shared(obj);
-    stream.peer = ytp_->stream_peer_id(obj) //PyYTPStream_PeerId(obj);
-    stream.channel = ytp_->stream_channel_id(obj) //PyYTPStream_ChannelId(obj);
+    stream.sequence = ytp_->stream_shared(obj);
+    stream.peer = ytp_->stream_peer_id(obj);
+    stream.channel = ytp_->stream_channel_id(obj);
     HEAP_STACK_PUSH(s, stream);
     *type = fm_record_type_get(tsys, "ytp_stream_wrapper",
                                sizeof(ytp_stream_wrapper));
   } else if (ytp_->peer_check(obj)) {
     ytp_peer_wrapper peer;
-    peer.sequence = PyYTPPeer_Shared(obj);
-    peer.peer = PyYTPPeer_Id(obj);
+    peer.sequence = ytp_->peer_shared(obj);
+    peer.peer = ytp_->peer_id(obj);
     HEAP_STACK_PUSH(s, peer);
     *type =
         fm_record_type_get(tsys, "ytp_peer_wrapper", sizeof(ytp_peer_wrapper));
   } else if (ytp_->channel_check(obj)) {
     ytp_channel_wrapper channel;
-    channel.sequence = PyYTPChannel_Shared(obj);
-    channel.channel = PyYTPChannel_Id(obj);
+    channel.sequence = ytp_->channel_shared(obj);
+    channel.channel = ytp_->channel_id(obj);
     HEAP_STACK_PUSH(s, channel);
     *type = fm_record_type_get(tsys, "ytp_channel_wrapper",
                                sizeof(ytp_channel_wrapper));
