@@ -31,6 +31,12 @@ jobs:
         submodules: recursive
         token: ${{ secrets.CIBOT_TOKEN }}
 
+    - name: Install numpy
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+      run: pip3 install numpy
+      shell: bash
+
     - name: Build ${{ github.event.repository.name }} with fm gcc
       uses: featuremine/actions/package/build@main
       with:
@@ -46,6 +52,12 @@ jobs:
     container:
       image: public.ecr.aws/p0w8t0l8/ci-hosted-gh-centos7-gcc10.2.0
     
+    - name: Install numpy
+      env:
+        GH_TOKEN: ${{ inputs.gh_token }}
+      run: pip3 install numpy
+      shell: bash
+
     steps:
     - name: Test ${{ github.event.repository.name }} release
       uses: featuremine/actions/package/test@main
