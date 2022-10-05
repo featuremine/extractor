@@ -43,7 +43,7 @@ TEST(split_sample, main) {
   string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(std::getenv("LICENSE_PATH"), &errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
