@@ -30,9 +30,9 @@ extern "C" {
 }
 
 #include "extractor/comp_def.hpp"
-#include "sample_gen.hpp"
 #include "extractor/time64.hpp"
 #include "fmc++/mpl.hpp"
+#include "sample_gen.hpp"
 
 #pragma once
 

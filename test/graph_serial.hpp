@@ -24,17 +24,17 @@
  */
 
 extern "C" {
+#include "comp_graph.h"
 #include "extractor/comp_sys.h"
 #include "extractor/frame.h"
-#include "comp_graph.h"
 #include "extractor/std_comp.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/type_sys.h"
 }
 
-#include "test_util.hpp"
 #include "fmc++/gtestwrap.hpp"
 #include "fmc/platform.h"
+#include "test_util.hpp"
 #include <iostream>
 
 using namespace fmc;

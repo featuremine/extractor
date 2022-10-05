@@ -23,11 +23,11 @@
 
 extern "C" {
 #include "stream_ctx.h"
-#include "extractor/frame_base.h"
 #include "call_obj.h"
 #include "call_stack.h"
 #include "comp_base.h"
 #include "comp_graph.h"
+#include "extractor/frame_base.h"
 #include "extractor/time64.h"
 }
 

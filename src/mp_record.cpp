@@ -32,8 +32,8 @@ extern "C" {
 #include <cmp/cmp.h>
 }
 
-#include "mp_util.hpp"
 #include "fmc/files.h"
+#include "mp_util.hpp"
 #include <iostream>
 
 #include <cassert>

@@ -31,8 +31,8 @@ extern "C" {
 #include "extractor/time64.h"
 }
 
-#include "frame_pool.hpp"
 #include "extractor/time64.hpp"
+#include "frame_pool.hpp"
 
 #include "extractor/time64.h"
 #include <deque>

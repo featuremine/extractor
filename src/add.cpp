@@ -31,9 +31,9 @@ extern "C" {
 #include "extractor/time64.h"
 }
 
+#include "extractor/comp_def.hpp"
 #include "extractor/decimal64.hpp"
 #include "extractor/frame.hpp"
-#include "extractor/comp_def.hpp"
 #include "extractor/rational64.hpp"
 #include "extractor/time64.hpp"
 #include "fmc++/mpl.hpp"

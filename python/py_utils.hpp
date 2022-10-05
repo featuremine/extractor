@@ -31,9 +31,9 @@ extern "C" {
 
 #include "py_types.hpp"
 
-#include "py_wrapper.hpp"
 #include "extractor/type_sys.h"
 #include "fmc++/mpl.hpp"
+#include "py_wrapper.hpp"
 
 #include <cassert>
 #include <errno.h>

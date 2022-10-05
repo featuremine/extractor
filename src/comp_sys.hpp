@@ -23,24 +23,24 @@
  */
 
 extern "C" {
+#include "comp.h"
+#include "comp_graph.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_sys.h"
 #include "extractor/frame.h"
 #include "extractor/module.h"
-#include "comp.h"
-#include "comp_graph.h"
-#include "frame_serial.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/time64.h"
 #include "extractor/type_sys.h"
+#include "frame_serial.h"
 #include <cmp/cmp.h>
 }
 
 #include "mp_util.hpp"
 #include "serial_util.hpp"
 
-#include <dlfcn.h>
 #include "fmc++/counters.hpp"
+#include <dlfcn.h>
 #include <functional>
 #include <string.h>
 #include <string>

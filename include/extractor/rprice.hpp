@@ -22,8 +22,8 @@
 #pragma once
 
 #include "extractor/decimal64.hpp"
-#include "fmc++/convert.hpp"
 #include "extractor/side.hpp"
+#include "fmc++/convert.hpp"
 
 #include <iomanip>
 #include <iostream>

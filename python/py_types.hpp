@@ -24,9 +24,9 @@
 extern "C" {
 #include "extractor/type_decl.h"
 }
-#include "extractor/rational64.hpp"
-#include "extractor/decimal64.hpp"
 #include "extractor/comp_def.hpp"
+#include "extractor/decimal64.hpp"
+#include "extractor/rational64.hpp"
 #include "extractor/time64.hpp"
 
 #include <Python.h>

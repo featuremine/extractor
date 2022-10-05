@@ -28,8 +28,8 @@ extern "C" {
 #include "extractor/type_sys.h"
 }
 
-#include "test_util.hpp"
 #include "fmc++/gtestwrap.hpp"
+#include "test_util.hpp"
 #include <iostream>
 
 TEST(module_serial, serialize) {

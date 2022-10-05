@@ -32,7 +32,7 @@ extern "C" {
 
 template <class T, template <class> class C, class... Ts, class... Args>
 T *get_field_exec_cl(fmc::type_list<Ts...>, fm_type_decl_cp f_type,
-                     Args &&... args) {
+                     Args &&...args) {
   T *result = nullptr;
   auto create = [&](auto t) {
     using Tt = decltype(t);

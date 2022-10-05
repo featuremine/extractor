@@ -1,5 +1,5 @@
-#include "extractor/comp_sys.h"
 #include "comp_graph.h"
+#include "extractor/comp_sys.h"
 #include "frame_serial.h"
 
 /**

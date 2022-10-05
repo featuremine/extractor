@@ -32,9 +32,9 @@ extern "C" {
 
 #include "extractor/decimal64.hpp"
 #include "extractor/frame.hpp"
-#include "op_util.hpp"
 #include "extractor/time64.hpp"
 #include "fmc++/mpl.hpp"
+#include "op_util.hpp"
 
 #include <memory>
 #include <stdlib.h>

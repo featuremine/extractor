@@ -24,17 +24,17 @@
 
 extern "C" {
 #include "extractor/comp_sys.h"
-#include "extractor/arg_stack.h"
-#include "extractor/frame.h"
 #include "comp.h"
 #include "comp_graph.h"
-#include "stream_ctx.h"
+#include "extractor/arg_stack.h"
+#include "extractor/frame.h"
 #include "extractor/type_sys.h"
+#include "stream_ctx.h"
 }
 
 #include "comp_sys.hpp"
-#include "serial_util.hpp"
 #include "fmc++/strings.hpp"
+#include "serial_util.hpp"
 
 #include <algorithm>
 #include <cstdio>

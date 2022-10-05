@@ -28,9 +28,9 @@ extern "C" {
 #include "extractor/module.h"
 }
 
+#include "fmc++/mpl.hpp"
 #include "type_error.hpp"
 #include "type_space.hpp"
-#include "fmc++/mpl.hpp"
 
 #include <algorithm>
 #include <exception>

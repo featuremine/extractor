@@ -25,10 +25,10 @@
 extern "C" {
 #include "extractor/comp_sys.h"
 #include "extractor/frame.h"
-#include "frame_serial.h"
 #include "extractor/std_comp.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/type_sys.h"
+#include "frame_serial.h"
 }
 
 #include "fmc++/gtestwrap.hpp"

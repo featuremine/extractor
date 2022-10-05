@@ -23,8 +23,8 @@
 
 extern "C" {
 #include "extractor/py_extractor.h"
-#include "extractor/py_side.h"
 #include "book/py_book.h"
+#include "extractor/py_side.h"
 #include "ytp.h"
 }
 
@@ -215,18 +215,17 @@ static int python_to_stack_arg(fm_type_sys_t *tsys, PyObject *obj,
     *type = fm_tuple_type_get1(tsys, count, types.data());
   } else if (PyObject_TypeCheck(obj, &ExtractorComputationType) ||
              PyObject_TypeCheck(obj, &ExtractorModuleComputationType)) {
-    visit(
-        fmc::overloaded{
-            [obj, type](vector<fm_comp_t *> &inps) {
-              inps.push_back(((ExtractorComputation *)obj)->comp_);
-              *type = nullptr;
-            },
-            [obj, type](vector<fm_module_comp_t *> &inps) {
-              inps.push_back(((ExtractorModuleComputation *)obj)->comp_);
-              *type = nullptr;
-            },
-        },
-        inputs);
+    visit(fmc::overloaded{
+              [obj, type](vector<fm_comp_t *> &inps) {
+                inps.push_back(((ExtractorComputation *)obj)->comp_);
+                *type = nullptr;
+              },
+              [obj, type](vector<fm_module_comp_t *> &inps) {
+                inps.push_back(((ExtractorModuleComputation *)obj)->comp_);
+                *type = nullptr;
+              },
+          },
+          inputs);
   } else if (PyBook_Check(obj)) {
     auto *shared_book = PyBook_SharedBook(obj);
     HEAP_STACK_PUSH(s, shared_book);

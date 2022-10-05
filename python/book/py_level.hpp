@@ -24,14 +24,14 @@
 #include <Python.h>
 
 extern "C" {
-#include "extractor/py_side.h"
-#include "book/py_book.h"
 #include "book/book.h"
+#include "book/py_book.h"
+#include "extractor/py_side.h"
 }
 
 #include "extractor/decimal64.hpp"
-#include "py_wrapper.hpp"
 #include "extractor/side.hpp"
+#include "py_wrapper.hpp"
 #include <datetime.h>
 
 typedef struct {

@@ -23,10 +23,10 @@
 
 extern "C" {
 #include "csv_tail.h"
+#include "csv_play.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
-#include "csv_play.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/time64.h"
 }
@@ -62,7 +62,7 @@ int process_row(fm_frame_t *frame, fm_call_ctx_t *ctx,
                 csv_tail_exec_cl *exec_cl) {
   auto *exec_ctx = (fm_exec_ctx *)ctx->exec;
 
-  auto error = [exec_ctx](auto &&... args) {
+  auto error = [exec_ctx](auto &&...args) {
     fm_exec_ctx_error_set(exec_ctx, args...);
     return -1;
   };

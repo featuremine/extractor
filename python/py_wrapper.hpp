@@ -25,10 +25,10 @@
 
 #include "extractor/time64.h"
 #include "extractor/time64.hpp"
+#include "fmc++/mpl.hpp"
 #include <Python.h>
 #include <chrono>
 #include <datetime.h>
-#include "fmc++/mpl.hpp"
 
 namespace fm {
 namespace python {
@@ -70,7 +70,7 @@ public:
     auto obj = PyTuple_GetItem(obj_, pos);
     return object::from_borrowed(obj);
   }
-  template <class... Args> object operator()(Args &&... args) const {
+  template <class... Args> object operator()(Args &&...args) const {
     const size_t n = std::tuple_size<std::tuple<Args...>>::value;
     auto *obj = PyTuple_New(n);
     if constexpr (n > 0) {
@@ -120,7 +120,7 @@ private:
 
 class module : public object {
 public:
-  module() : object() {}
+  module() :object() {}
   explicit module(const char *name)
       : object(object::from_new(PyImport_ImportModule(name))) {}
 };

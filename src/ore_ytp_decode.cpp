@@ -27,14 +27,14 @@ extern "C" {
 #include "extractor/arg_stack.h"  // fm_arg_stack_t
 #include "extractor/comp_def.h"   // fm_ctx_def_cl
 #include "extractor/comp_sys.h"   // fm_type_sys_get
-#include "fmc/error.h"  // fmc_error_t
 #include "extractor/stream_ctx.h" // fm_stream_ctx_queue
+#include "fmc/error.h"            // fmc_error_t
 }
 
 #include "extractor/book/ore.hpp"     // parser
 #include "extractor/book/updates.hpp" // fm::book::updates::announce
-#include "ytp.h"        // ytp_channel_wrapper
 #include "fmc++/serialization.hpp"
+#include "ytp.h"          // ytp_channel_wrapper
 #include "ytp/sequence.h" // ytp_sequence_t
 
 #include <deque>

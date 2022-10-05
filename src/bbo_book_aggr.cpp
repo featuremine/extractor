@@ -23,12 +23,12 @@
  */
 
 extern "C" {
-#include "extractor/arg_stack.h"
 #include "bbo_aggr.h"
+#include "book/book.h"
+#include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/decimal64.h"
-#include "book/book.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/time64.h"
 }
