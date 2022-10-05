@@ -21,10 +21,10 @@
  * This file contains test for mm_file
  */
 
-#include <cstring>
-#include <fcntl.h>
 #include "fmc++/counters.hpp"
 #include "fmc/platform.h"
+#include <cstring>
+#include <fcntl.h>
 #include <iostream>
 #include <stdint.h>
 #include <stdio.h>

@@ -1,17 +1,17 @@
 
 extern "C" {
 #include "extractor/comp_sys_capture.h"
-#include "extractor/comp_def.h"
-#include "extractor/arg_stack.h"
-#include "extractor/comp_sys.h"
-#include "extractor/frame.h"
 #include "comp.h"
 #include "comp_graph.h"
 #include "comp_sys_serialize.h"
-#include "frame_serial.h"
-#include "stream_ctx.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/frame.h"
 #include "extractor/time64.h"
 #include "extractor/type_sys.h"
+#include "frame_serial.h"
+#include "stream_ctx.h"
 #include <cmp/cmp.h>
 }
 
@@ -119,11 +119,12 @@ fm_stream_ctx_t *fm_stream_ctx_recorded(fm_comp_sys_t *s, fm_comp_graph_t *g,
         });
     s->destructors.emplace_back([comp_writer]() { delete comp_writer; });
 
-    fm_comp_clbck_set(comp,
-                      [](const fm_frame *frame, void *cl, fm_call_ctx_t *) {
-                        (*(reinterpret_cast<decltype(comp_writer)>(cl)))(frame);
-                      },
-                      (void *)comp_writer);
+    fm_comp_clbck_set(
+        comp,
+        [](const fm_frame *frame, void *cl, fm_call_ctx_t *) {
+          (*(reinterpret_cast<decltype(comp_writer)>(cl)))(frame);
+        },
+        (void *)comp_writer);
 
     ++index;
   }

@@ -31,12 +31,12 @@ extern "C" {
 }
 
 #include "extractor/comp_def.hpp"
-#include "extractor/rprice.hpp"
-#include "serial_util.hpp"
 #include "extractor/rational64.hpp"
+#include "extractor/rprice.hpp"
 #include "extractor/time64.hpp"
-#include "type_space.hpp"
 #include "fmc++/mpl.hpp"
+#include "serial_util.hpp"
+#include "type_space.hpp"
 
 #include <iomanip>
 #include <iostream>
@@ -56,84 +56,83 @@ bool fm_arg_buffer_build(ostringstream &os, fm_type_decl_cp td,
                          fm_arg_stack_t &args) {
   if (td == nullptr)
     return false;
-  return std::visit(
-      overloaded{
-          [&](auto arg) { return false; },
-          [&](const fm::base_type_def &arg) {
-            switch (arg.type) {
-            case FM_TYPE_INT8:
-              os << STACK_POP(args, INT8) << endl;
-              break;
-            case FM_TYPE_INT16:
-              os << STACK_POP(args, INT16) << endl;
-              break;
-            case FM_TYPE_INT32:
-              os << STACK_POP(args, INT32) << endl;
-              break;
-            case FM_TYPE_INT64:
-              os << STACK_POP(args, INT64) << endl;
-              break;
-            case FM_TYPE_UINT8:
-              os << STACK_POP(args, UINT8) << endl;
-              break;
-            case FM_TYPE_UINT16:
-              os << STACK_POP(args, UINT16) << endl;
-              break;
-            case FM_TYPE_UINT32:
-              os << STACK_POP(args, UINT32) << endl;
-              break;
-            case FM_TYPE_UINT64:
-              os << STACK_POP(args, UINT64) << endl;
-              break;
-            case FM_TYPE_FLOAT32:
-              os << STACK_POP(args, FLOAT32) << endl;
-              break;
-            case FM_TYPE_FLOAT64:
-              os << STACK_POP(args, FLOAT64) << endl;
-              break;
-            case FM_TYPE_RATIONAL64:
-              os << STACK_POP(args, RATIONAL64) << endl;
-              break;
-            case FM_TYPE_DECIMAL64:
-              os << STACK_POP(args, DECIMAL64) << endl;
-              break;
-            case FM_TYPE_TIME64:
-              os << STACK_POP(args, TIME64) << endl;
-              break;
-            case FM_TYPE_CHAR:
-              os << STACK_POP(args, CHAR) << endl;
-              break;
-            case FM_TYPE_WCHAR:
-              os << STACK_POP(args, WCHAR) << endl;
-              break;
-            case FM_TYPE_BOOL:
-              os << STACK_POP(args, bool) << endl;
-              break;
-            case FM_TYPE_LAST:
-              return false;
-              break;
-            }
-            return true;
-          },
-          [&](const fm::tuple_type_def &arg) {
-            for (auto *type : arg.items) {
-              if (!fm_arg_buffer_build(os, type, args)) {
-                return false;
-              }
-            }
-            return true;
-          },
-          [&](const fm::cstring_type_def &arg) {
-            const char *str = STACK_POP(args, const char *);
-            os << strlen(str) << '\0' << str << endl;
-            return true;
-          },
-          [&](const fm::type_type_def &arg) {
-            os << STACK_POP(args, fm_type_decl_cp)->str() << endl;
-            return true;
-          },
-      },
-      td->def);
+  return std::visit(overloaded{
+                        [&](auto arg) { return false; },
+                        [&](const fm::base_type_def &arg) {
+                          switch (arg.type) {
+                          case FM_TYPE_INT8:
+                            os << STACK_POP(args, INT8) << endl;
+                            break;
+                          case FM_TYPE_INT16:
+                            os << STACK_POP(args, INT16) << endl;
+                            break;
+                          case FM_TYPE_INT32:
+                            os << STACK_POP(args, INT32) << endl;
+                            break;
+                          case FM_TYPE_INT64:
+                            os << STACK_POP(args, INT64) << endl;
+                            break;
+                          case FM_TYPE_UINT8:
+                            os << STACK_POP(args, UINT8) << endl;
+                            break;
+                          case FM_TYPE_UINT16:
+                            os << STACK_POP(args, UINT16) << endl;
+                            break;
+                          case FM_TYPE_UINT32:
+                            os << STACK_POP(args, UINT32) << endl;
+                            break;
+                          case FM_TYPE_UINT64:
+                            os << STACK_POP(args, UINT64) << endl;
+                            break;
+                          case FM_TYPE_FLOAT32:
+                            os << STACK_POP(args, FLOAT32) << endl;
+                            break;
+                          case FM_TYPE_FLOAT64:
+                            os << STACK_POP(args, FLOAT64) << endl;
+                            break;
+                          case FM_TYPE_RATIONAL64:
+                            os << STACK_POP(args, RATIONAL64) << endl;
+                            break;
+                          case FM_TYPE_DECIMAL64:
+                            os << STACK_POP(args, DECIMAL64) << endl;
+                            break;
+                          case FM_TYPE_TIME64:
+                            os << STACK_POP(args, TIME64) << endl;
+                            break;
+                          case FM_TYPE_CHAR:
+                            os << STACK_POP(args, CHAR) << endl;
+                            break;
+                          case FM_TYPE_WCHAR:
+                            os << STACK_POP(args, WCHAR) << endl;
+                            break;
+                          case FM_TYPE_BOOL:
+                            os << STACK_POP(args, bool) << endl;
+                            break;
+                          case FM_TYPE_LAST:
+                            return false;
+                            break;
+                          }
+                          return true;
+                        },
+                        [&](const fm::tuple_type_def &arg) {
+                          for (auto *type : arg.items) {
+                            if (!fm_arg_buffer_build(os, type, args)) {
+                              return false;
+                            }
+                          }
+                          return true;
+                        },
+                        [&](const fm::cstring_type_def &arg) {
+                          const char *str = STACK_POP(args, const char *);
+                          os << strlen(str) << '\0' << str << endl;
+                          return true;
+                        },
+                        [&](const fm::type_type_def &arg) {
+                          os << STACK_POP(args, fm_type_decl_cp)->str() << endl;
+                          return true;
+                        },
+                    },
+                    td->def);
 }
 
 fm_arg_buffer_t *fm_arg_buffer_new(fm_type_decl_cp type, fm_arg_stack_t args) {

@@ -22,9 +22,9 @@
 #include <Python.h>
 
 extern "C" {
-#include "py_book.h"
-#include "extractor/py_side.h"
 #include "book/book.h"
+#include "extractor/py_side.h"
+#include "py_book.h"
 }
 
 #include "book/py_level.hpp"

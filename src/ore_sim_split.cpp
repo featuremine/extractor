@@ -39,8 +39,8 @@ extern "C" {
 #include "extractor/time64.hpp"
 #include "fmc++/serialization.hpp"
 
-#include <fcntl.h>
 #include "fmc/platform.h"
+#include <fcntl.h>
 #include <memory>
 #include <stdlib.h>
 #include <string.h>

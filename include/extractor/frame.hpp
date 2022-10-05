@@ -29,8 +29,8 @@ extern "C" {
 #include "extractor/type_sys.h"
 }
 
-#include <array>
 #include "fmc++/mpl.hpp"
+#include <array>
 
 namespace fm {
 using namespace std;

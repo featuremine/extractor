@@ -24,19 +24,19 @@
 
 extern "C" {
 #include "split_by.h"
+#include "comp.h"
+#include "comp_graph.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/module.h"
-#include "comp.h"
-#include "comp_graph.h"
-#include "stream_ctx.h"
 #include "extractor/time64.h"
+#include "stream_ctx.h"
 }
 #include "comp_sys.hpp"
 
-#include "frame_pool.hpp"
 #include "extractor/time64.hpp"
+#include "frame_pool.hpp"
 #include "unique_pq.hpp"
 
 #include "fmc++/metatable.hpp"

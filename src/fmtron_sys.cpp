@@ -25,9 +25,9 @@ extern "C" {
 #include "fmtron_sys.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
-#include "fmtron.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/time64.h"
+#include "fmtron.h"
 }
 #include "extractor/time64.hpp"
 

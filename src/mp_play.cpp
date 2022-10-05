@@ -33,10 +33,10 @@ extern "C" {
 }
 
 #include "errno.h"
-#include "mp_util.hpp"
-#include <cassert>
 #include "fmc++/counters.hpp"
 #include "fmc++/mpl.hpp"
+#include "mp_util.hpp"
+#include <cassert>
 #include <functional>
 #include <stdlib.h>
 #include <string>

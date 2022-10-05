@@ -25,8 +25,8 @@
 #include "extractor/rprice.hpp"
 
 #include "extractor/comp_def.hpp"
-#include "fmc++/mpl.hpp"
 #include "extractor/frame.hpp"
+#include "fmc++/mpl.hpp"
 
 namespace fm {
 

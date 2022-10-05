@@ -26,8 +26,8 @@ extern "C" {
 #include "mm_file.h"
 }
 
-#include <fcntl.h>
 #include "fmc/platform.h"
+#include <fcntl.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -38,9 +38,9 @@ extern "C" {
 #include <sys/stat.h>
 #include <sys/types.h>
 
-#include <cstring>
 #include "fmc++/counters.hpp"
 #include "fmc/files.h"
+#include <cstring>
 #include <iostream>
 #include <string_view>
 

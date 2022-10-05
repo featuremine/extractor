@@ -174,12 +174,12 @@ struct type_space {
   fm_type_decl_cp get_type_type();
   const fm_type_decl *get_type_from_str(string_view &view);
   template <class T, class... Args>
-  fm_type_decl_cp get_type_decl(Args &&... args);
+  fm_type_decl_cp get_type_decl(Args &&...args);
   std::unordered_multimap<size_t, fm_type_decl_cp> decls;
 };
 
 template <class T, class... Args>
-fm_type_decl_cp type_space::get_type_decl(Args &&... args) {
+fm_type_decl_cp type_space::get_type_decl(Args &&...args) {
   auto hash = T::hash(std::forward<Args>(args)...);
   auto range = decls.equal_range(hash);
   for (auto it = range.first; it != range.second; ++it) {
