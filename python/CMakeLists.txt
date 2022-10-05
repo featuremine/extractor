@@ -15,7 +15,6 @@ add_library(
     STATIC
     "book/py_book.cpp"
     "py_extractor.cpp"
-    ${yamal-python-source}
 )
 target_link_libraries(
     py_extractor_obj

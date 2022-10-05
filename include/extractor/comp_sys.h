@@ -33,6 +33,7 @@
 #include "extractor/time64.h"
 #include "extractor/type_decl.h"
 #include "fmc/platform.h"
+#include "ytp/api.h"
 
 typedef struct fm_comp_graph fm_comp_graph_t;
 
@@ -161,7 +162,7 @@ FMMODFUNC fm_comp_graph_t *fm_comp_graph_read(fm_comp_sys_t *, fm_reader reader,
 FMMODFUNC bool fm_comp_sys_sample_value(fm_comp_sys_t *sys,
                                         const char *sample_name, double *value);
 
-void set_ytp_api_v1(ytp_sequence_api_v1*);
-ytp_sequence_api_v1* get_ytp_api_v1();
+FMMODFUNC void set_ytp_api_v1(ytp_sequence_api_v1*);
+FMMODFUNC ytp_sequence_api_v1* get_ytp_api_v1();
 
 #endif // __FM_COMP_SYS_H__

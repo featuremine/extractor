@@ -36,7 +36,7 @@ extern "C" {
 
 #include "fmc++/memory.hpp"
 #include "fmc/time.h"
-#include "ytp/sequence.h"
+#include "ytp/api.h"
 
 #include <optional>
 #include <stdlib.h>
@@ -45,23 +45,25 @@ extern "C" {
 #include <unordered_map>
 #include <vector>
 
+static ytp_sequence_api_v1 *ytp_; // ytp_api
+
 struct frame_ytp_encode_cl {
   std::vector<fm_frame_writer_p> writers;
-  ytp_sequence_shared_t *seq;
+  shared_sequence *seq;
   ytp_peer_t peer;
   ytp_channel_t channel;
   cmp_str_t buffer;
 
   frame_ytp_encode_cl(std::vector<fm_frame_writer_p> writers,
-                      ytp_sequence_shared_t *seq, ytp_peer_t peer,
+                      shared_sequence *seq, ytp_peer_t peer,
                       ytp_channel_t channel)
       : writers(std::move(writers)), seq(seq), peer(peer), channel(channel) {
-    ytp_sequence_shared_inc(seq);
+    ytp_->sequence_shared_inc(seq);
   }
 
   ~frame_ytp_encode_cl() {
     fmc_error_t *error;
-    ytp_sequence_shared_dec(seq, &error);
+    ytp_->sequence_shared_dec(seq, &error);
   }
 };
 
@@ -91,10 +93,8 @@ bool fm_comp_frame_ytp_encode_stream_exec(fm_frame_t *result, size_t,
   std::string_view buffer{(char *)cmp_str_data(&exec_cl.buffer),
                           cmp_str_size(&exec_cl.buffer)};
 
-  auto *seq = ytp_sequence_shared_get(exec_cl.seq);
-
   fmc_error_t *error;
-  auto *ptr = ytp_sequence_reserve(seq, buffer.size() + 1, &error);
+  auto *ptr = ytp_->sequence_reserve(exec_cl.seq, buffer.size() + 1, &error);
   if (error) {
     auto errstr = std::string("unable to reserve in the sequence: ") +
                   fmc_error_msg(error);
@@ -105,7 +105,7 @@ bool fm_comp_frame_ytp_encode_stream_exec(fm_frame_t *result, size_t,
   memcpy(ptr, buffer.data(), buffer.size());
   ptr[buffer.size()] = 'D';
 
-  ytp_sequence_commit(seq, exec_cl.peer, exec_cl.channel, fmc_cur_time_ns(),
+  ytp_->sequence_commit(exec_cl.seq, exec_cl.peer, exec_cl.channel, fmc_cur_time_ns(),
                       ptr, &error);
   if (error) {
     auto errstr = std::string("unable to commit in the sequence: ") +
@@ -129,6 +129,8 @@ fm_ctx_def_t *
 fm_comp_frame_ytp_encode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
                              unsigned argc, fm_type_decl_cp argv[],
                              fm_type_decl_cp ptype, fm_arg_stack_t plist) {
+  ytp_ = get_ytp_api_v1();
+
   auto *sys = fm_type_sys_get(csys);
   if (argc != 1) {
     auto *errstr = "expected one operator";
@@ -161,8 +163,6 @@ fm_comp_frame_ytp_encode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   }
 
   auto stream = STACK_POP(plist, ytp_stream_wrapper);
-  auto *shared_seq = stream.sequence;
-  auto *seq = ytp_sequence_shared_get(shared_seq);
 
   std::vector<fm_frame_writer_p> writers;
   auto frame = argv[0];
@@ -186,25 +186,25 @@ fm_comp_frame_ytp_encode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   struct find_header_cl_t {
     fmc_error_t *&error;
-    ytp_sequence_t *seq;
+    shared_sequence *seq;
     ytp_peer_t peer;
     ytp_channel_t channel;
     std::optional<std::string_view> &header;
     ytp_iterator_t current_it;
 
-    find_header_cl_t(fmc_error_t *&error, ytp_sequence_t *seq, ytp_peer_t peer,
+    find_header_cl_t(fmc_error_t *&error, shared_sequence *seq, ytp_peer_t peer,
                      ytp_channel_t channel,
                      std::optional<std::string_view> &header)
         : error(error), seq(seq), peer(peer), channel(channel), header(header) {
-      current_it = ytp_sequence_get_it(seq);
-      ytp_sequence_indx_cb(seq, channel, &find_header_cl_t::cb_static, this,
+      current_it = ytp_->sequence_get_it(seq);
+      ytp_->sequence_indx_cb(seq, channel, &find_header_cl_t::cb_static, this,
                            &error);
     }
 
     ~find_header_cl_t() {
-      ytp_sequence_indx_cb_rm(seq, channel, &find_header_cl_t::cb_static, this,
+      ytp_->sequence_indx_cb_rm(seq, channel, &find_header_cl_t::cb_static, this,
                               &error);
-      ytp_sequence_set_it(seq, current_it);
+      ytp_->sequence_set_it(seq, current_it);
     }
 
     static void cb_static(void *closure, ytp_peer_t peer, ytp_channel_t channel,
@@ -216,11 +216,11 @@ fm_comp_frame_ytp_encode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     void cb(uint64_t time, std::string_view data) { header = data; }
 
   } find_header_cl{
-      error, seq, stream.peer, stream.channel, header,
+      error, stream.sequence, stream.peer, stream.channel, header,
   };
 
   while (true) {
-    while (!error && !header.has_value() && ytp_sequence_poll(seq, &error))
+    while (!error && !header.has_value() && ytp_->sequence_poll(stream.sequence, &error))
       ;
     if (error) {
       auto errstr =
@@ -242,7 +242,7 @@ fm_comp_frame_ytp_encode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       break;
     }
 
-    auto *ptr = ytp_sequence_reserve(seq, type.size() + 1, &error);
+    auto *ptr = ytp_->sequence_reserve(stream.sequence, type.size() + 1, &error);
     if (error) {
       auto errstr =
           std::string("unable to reserve to sequence: ") + fmc_error_msg(error);
@@ -253,8 +253,8 @@ fm_comp_frame_ytp_encode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     memcpy(ptr, type.data(), type.size());
     ptr[type.size()] = 'H';
 
-    ytp_sequence_commit(seq, stream.peer, stream.channel, fmc_cur_time_ns(),
-                        ptr, &error);
+    ytp_->sequence_commit(stream.sequence, stream.peer, stream.channel, fmc_cur_time_ns(),
+                          ptr, &error);
     if (error) {
       auto errstr =
           std::string("unable to commit to sequence: ") + fmc_error_msg(error);
@@ -263,7 +263,7 @@ fm_comp_frame_ytp_encode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     }
   }
 
-  auto *cl = new frame_ytp_encode_cl(std::move(writers), shared_seq,
+  auto *cl = new frame_ytp_encode_cl(std::move(writers), stream.sequence,
                                      stream.peer, stream.channel);
 
   auto *def = fm_ctx_def_new();

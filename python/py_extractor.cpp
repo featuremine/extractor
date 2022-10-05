@@ -49,10 +49,13 @@ extern "C" {
 #include "fmc/test.h"
 
 #include "ytp/py_wrapper.h"
+#include "ytp/py_api.h"
 
 #include <Python.h>
 #include <numpy/arrayobject.h>
 #include <py_wrapper.hpp>
+
+static py_ytp_sequence_api_v1 *ytp_; // py_ytp_api
 
 static PyObject *Extractor_fflush(PyObject *self, PyObject *args) {
   fmc_fflush();
@@ -231,28 +234,28 @@ static int python_to_stack_arg(fm_type_sys_t *tsys, PyObject *obj,
     HEAP_STACK_PUSH(s, shared_book);
     *type = fm_record_type_get(tsys, "fm_book_shared_t*",
                                sizeof(fm_book_shared_t *));
-  } else if (PyYTPSequence_Check(obj)) {
+  } else if (ytp_->sequence_check(obj)) {
     ytp_sequence_wrapper stream;
     stream.sequence = PyYTPSequence_Shared(obj);
     HEAP_STACK_PUSH(s, stream);
     *type = fm_record_type_get(tsys, "ytp_sequence_wrapper",
                                sizeof(ytp_sequence_wrapper));
-  } else if (PyYTPStream_Check(obj)) {
+  } else if (ytp_->stream_check(obj)) {
     ytp_stream_wrapper stream;
-    stream.sequence = PyYTPStream_Shared(obj);
-    stream.peer = PyYTPStream_PeerId(obj);
-    stream.channel = PyYTPStream_ChannelId(obj);
+    stream.sequence = ytp_->stream_shared(obj) //PyYTPStream_Shared(obj);
+    stream.peer = ytp_->stream_peer_id(obj) //PyYTPStream_PeerId(obj);
+    stream.channel = ytp_->stream_channel_id(obj) //PyYTPStream_ChannelId(obj);
     HEAP_STACK_PUSH(s, stream);
     *type = fm_record_type_get(tsys, "ytp_stream_wrapper",
                                sizeof(ytp_stream_wrapper));
-  } else if (PyYTPPeer_Check(obj)) {
+  } else if (ytp_->peer_check(obj)) {
     ytp_peer_wrapper peer;
     peer.sequence = PyYTPPeer_Shared(obj);
     peer.peer = PyYTPPeer_Id(obj);
     HEAP_STACK_PUSH(s, peer);
     *type =
         fm_record_type_get(tsys, "ytp_peer_wrapper", sizeof(ytp_peer_wrapper));
-  } else if (PyYTPChannel_Check(obj)) {
+  } else if (ytp_->channel_check(obj)) {
     ytp_channel_wrapper channel;
     channel.sequence = PyYTPChannel_Shared(obj);
     channel.channel = PyYTPChannel_Id(obj);
@@ -301,10 +304,24 @@ PyMODINIT_FUNC fm_extractor_py_init(void) {
     numpy_init_ = true;
   }
 
-  // importing here ytp
-  // function expected to have in ytp, would return a python object that we can cast to the python
-  // wrapper of the object we can cast to ytp_api_v1
-  // make sure the version is high enough on the ytp module to make sure it has the functions we need
+  PyObject *ytp_str = PyUnicode_FromString("ytp");
+  if (!ytp_str) {
+    return NULL;
+  }
+  PyObject *ytp_mod = PyImport_Import(ytp_str);
+  Py_XDECREF(ytp_str);
+  if (!ytp_mod) {
+    return NULL;
+  }
+
+  auto typed_ytp_ = (PyAPIWrapper *) PyObject_CallMethod(ytp_mod, "api_v1", "");
+  if (!typed_ytp_) {
+    Py_XDECREF(ytp_mod);
+    return NULL;
+  }
+
+  set_ytp_api_v1(typed_ytp_->api);
+  ytp_ = typed_ytp_->py_api;
 
   PyDateTime_IMPORT;
 
@@ -319,6 +336,11 @@ PyMODINIT_FUNC fm_extractor_py_init(void) {
 
   if (!init_type_wrappers(m))
     return NULL;
+
+  // Keep it in extractor module to ensure module is not offloaded
+  // No need to increment the reference count because PyImport_Import returns a new reference
+  // https://docs.python.org/3/c-api/import.html#c.PyImport_Import
+  PyModule_AddObject(m, "ytp", ytp_mod);
 
   if (PyType_Ready(&ExtractorStreamContextType) < 0)
     return NULL;
