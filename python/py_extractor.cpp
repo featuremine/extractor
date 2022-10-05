@@ -301,6 +301,11 @@ PyMODINIT_FUNC fm_extractor_py_init(void) {
     numpy_init_ = true;
   }
 
+  // importing here ytp
+  // function expected to have in ytp, would return a python object that we can cast to the python
+  // wrapper of the object we can cast to ytp_api_v1
+  // make sure the version is high enough on the ytp module to make sure it has the functions we need
+
   PyDateTime_IMPORT;
 
   PyObject *m;
