@@ -49,7 +49,7 @@ TEST(graph_serial, dep_sort) {
                    "identity_2\n";
 
   char *errstring;
-  auto *sys = fm_comp_sys_new(std::getenv("LICENSE_PATH"), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -131,7 +131,7 @@ TEST(graph_serial, serialize) {
                    "identity_2\n";
 
   char *errstring;
-  auto *sys = fm_comp_sys_new(std::getenv("LICENSE_PATH"), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);

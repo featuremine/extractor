@@ -25,7 +25,7 @@ void accumulate_data(const string &licence_filename) {
   string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new(licence_filename.c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);

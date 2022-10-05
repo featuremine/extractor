@@ -37,7 +37,7 @@ TEST(constant_comp, single_field) {
   using namespace std;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new(std::getenv("LICENSE_PATH"), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -143,7 +143,7 @@ TEST(constant_comp, multiple_field) {
   using namespace std;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new(std::getenv("LICENSE_PATH"), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -226,7 +226,7 @@ TEST(constant_comp, string) {
   using namespace std;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new(std::getenv("LICENSE_PATH"), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);

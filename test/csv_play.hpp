@@ -47,7 +47,7 @@ TEST(csv_plays, check) {
   string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new(std::getenv("LICENSE_PATH"), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -98,7 +98,7 @@ TEST(csv_plays, stream) {
   string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new(std::getenv("LICENSE_PATH"), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -172,7 +172,7 @@ TEST(csv_plays, identity) {
   string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new(std::getenv("LICENSE_PATH"), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);

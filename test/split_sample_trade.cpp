@@ -43,7 +43,7 @@ TEST(csv_plays, identity) {
   string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new("../test/test.lic", &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);

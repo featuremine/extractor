@@ -121,7 +121,7 @@ TEST(split_sample_capture, record) {
   string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new(std::getenv("LICENSE_PATH"), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -161,7 +161,7 @@ TEST(split_sample_capture, replay) {
   string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new(std::getenv("LICENSE_PATH"), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);

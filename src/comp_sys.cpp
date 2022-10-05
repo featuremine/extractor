@@ -55,25 +55,9 @@ extern "C" {
 
 using namespace std;
 
-fm_comp_sys_t *fm_comp_sys_new(const char *license_file, char **errmsg) {
-
-  static mutex m;
-
-  lock_guard<mutex> guard(m);
-
-#ifdef FMC_LICENSE
-  RLM_HANDLE rh;
-  RLM_LICENSE lic = (RLM_LICENSE)NULL;
-  if (!fm::rlm_checkin(&lic, &rh, license_file, errmsg)) {
-    return nullptr;
-  }
-#endif
+fm_comp_sys_t *fm_comp_sys_new(char **errmsg) {
   auto *s = new fm_comp_sys();
   s->types = fm_type_sys_new();
-#ifdef FMC_LICENSE
-  s->rh = rh;
-  s->lic = lic;
-#endif
   return s;
 }
 

@@ -25,19 +25,6 @@ add_subproject(
     GIT_URL "https://github.com/featuremine/yamal-python.git"
     VARIABLES yamal-python-incdir yamal-python-source
 )
-add_subproject(
-    NAME rlm
-    VERSION "1.0.0"
-    GIT_REVISION "v1.0.0"
-    GIT_URL "https://github.com/featuremine/rlm.git"
-    TARGETS rlm
-)
-add_subproject(
-    NAME license
-    GIT_REVISION "main"
-    GIT_URL "https://github.com/featuremine/license"
-    VARIABLES LICENSE_PATH
-)
 
 option (BUILD_TESTING "Enable build of the unit tests and their execution." ON)
 option (BUILD_TOOLS "Enable build of command line tools." ON)

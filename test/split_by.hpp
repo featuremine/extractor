@@ -63,7 +63,7 @@ fm_module_t *mod_with_delay(fm_type_sys_t *tsys) {
 
 void timer_test() {
   char *errstring;
-  auto *sys = fm_comp_sys_new("../test/test.lic", &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);

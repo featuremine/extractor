@@ -22,7 +22,6 @@ target_link_libraries(
     PUBLIC
     fmc++
     ytp
-    rlm
     PkgConfig::PYTHON
     extractor
 )
@@ -51,7 +50,6 @@ target_link_libraries(
     INTERFACE
     fmc++
     ytp
-    rlm
     PkgConfig::PYTHON
     extractor
 )

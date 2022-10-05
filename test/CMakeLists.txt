@@ -30,7 +30,6 @@ macro(extr_unit_test)
         PUBLIC
         fmc++
         ytp
-        rlm
         PkgConfig::GTEST
         PkgConfig::PYTHON
     )

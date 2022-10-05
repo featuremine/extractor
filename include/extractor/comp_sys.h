@@ -43,8 +43,7 @@ typedef struct fm_result_ref fm_result_ref_t;
 /**
  * @brief
  */
-FMMODFUNC fm_comp_sys_t *fm_comp_sys_new(const char *license_file,
-                                         char **errmsg);
+FMMODFUNC fm_comp_sys_t *fm_comp_sys_new(char **errmsg);
 
 FMMODFUNC void fm_comp_sys_cleanup(fm_comp_sys_t *);
 
