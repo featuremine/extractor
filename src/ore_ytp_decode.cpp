@@ -175,6 +175,11 @@ fm_ctx_def_t *fm_comp_ore_ytp_decode_gen(fm_comp_sys_t *csys,
                                          fm_type_decl_cp ptype,
                                          fm_arg_stack_t plist) {
   ytp_ = get_ytp_api_v1();
+  if (!ytp_) {
+    auto *errstr = "ytp api is not set";
+    fm_comp_sys_error_set(csys, errstr);
+    return nullptr;
+  }
 
   auto *sys = fm_type_sys_get(csys);
   if (argc != 0) {

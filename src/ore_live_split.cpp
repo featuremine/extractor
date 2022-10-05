@@ -29,8 +29,7 @@ extern "C" {
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/time64.h"
-#include "ytp/peer.h"
-#include "ytp/yamal.h"
+#include "ytp/api.h"
 }
 
 #include "extractor/book/ore.hpp"
@@ -55,6 +54,8 @@ using namespace std;
 using namespace fm;
 using namespace book;
 
+static ytp_sequence_api_v1* ytp_;
+
 struct ols_op_cl {
   string fname;
   vector<string> symbols;
@@ -66,7 +67,7 @@ struct ols_exe_cl {
   ~ols_exe_cl() {
     if (mml) {
       fmc_error_t *err;
-      ytp_yamal_del(mml, &err);
+      ytp_->yamal_del(mml, &err);
       // TODO: handle error
     }
     if (fmc_fvalid(fd)) {
@@ -74,7 +75,7 @@ struct ols_exe_cl {
       fmc_fclose(fd, &err);
     }
   }
-  ytp_yamal_t *mml = nullptr;
+  mml *mml = nullptr;
   ytp_iterator_t it;
   cmp_mem_t cmp;
   ore::imnt_infos_t imnts;
@@ -106,7 +107,7 @@ bool fm_comp_ore_live_split_call_stream_init(fm_frame_t *result, size_t args,
     fm_exec_ctx_error_set(ctx->exec, "cannot open file %s", fname);
     return false;
   }
-  exe_cl->mml = ytp_yamal_new(exe_cl->fd, &err);
+  exe_cl->mml = ytp_->yamal_new(exe_cl->fd, &err);
   if (err) {
     fm_exec_ctx_error_set(
         ctx->exec,
@@ -119,7 +120,7 @@ bool fm_comp_ore_live_split_call_stream_init(fm_frame_t *result, size_t args,
     return false;
   }
 
-  exe_cl->it = ytp_yamal_begin(exe_cl->mml, &err);
+  exe_cl->it = ytp_->yamal_begin(exe_cl->mml, &err);
   if (err) {
     fm_exec_ctx_error_set(ctx->exec,
                           "cannot obtain yamal iterator, failed with error: %s",
@@ -168,16 +169,16 @@ bool fm_comp_ore_live_split_stream_exec(fm_frame_t *fres, size_t args,
     commit_msg();
   } else {
     fmc_error_t *err = nullptr;
-    while (!ytp_yamal_term(exe_cl->it)) {
+    while (!ytp_->yamal_term(exe_cl->it)) {
       ytp_peer_t peer;
       size_t size;
       const char *buf;
-      ytp_peer_read(exe_cl->mml, exe_cl->it, &peer, &size, &buf, &err);
+      ytp_->peer_read(exe_cl->mml, exe_cl->it, &peer, &size, &buf, &err);
       if (err)
         break;
       cmp_mem_set(&cmp, size, (void *)buf);
       result res = parser.parse(&cmp.ctx);
-      exe_cl->it = ytp_yamal_next(exe_cl->mml, exe_cl->it, &err);
+      exe_cl->it = ytp_->yamal_next(exe_cl->mml, exe_cl->it, &err);
       if (res.is_success()) {
         commit_msg();
         break;
@@ -240,6 +241,13 @@ fm_ctx_def_t *fm_comp_ore_live_split_gen(fm_comp_sys_t *csys,
                                          fm_type_decl_cp argv[],
                                          fm_type_decl_cp ptype,
                                          fm_arg_stack_t plist) {
+  ytp_ = get_ytp_api_v1();
+  if (!ytp_) {
+    auto *errstr = "ytp api is not set";
+    fm_comp_sys_error_set(csys, errstr);
+    return nullptr;
+  }
+
   auto *sys = fm_type_sys_get(csys);
   if (argc != 0) {
     auto *errstr = "expect no operator arguments";
