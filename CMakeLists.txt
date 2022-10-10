@@ -44,5 +44,36 @@ fm_config()
 add_subdirectory(src)
 add_subdirectory(python)
 
-enable_testing()
-add_subdirectory(test)
+if(BUILD_WHEEL)
+    set(WheelPackage_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+    find_package(WheelPackage REQUIRED)
+
+    python_package(
+        NAME extractor
+        SHORT_DESCRIPTION "Featuremine extractor tests"
+        LONG_DESCRIPTION "Featuremine extractor tests"
+        PACKAGES extractor
+        TESTS_PACKAGE "extractor.tests"
+        SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/python"
+        BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/python"
+        INSTALL_REQUIRES "yamal"
+    )
+endif()
+
+if(BUILD_TESTING)
+    enable_testing()
+    add_subdirectory(test)
+    if(TEST_EXTENSIONS)
+        if(BUILD_WHEEL)
+            test_python_package(
+                NAME extractor_py
+                PACKAGE extractor
+                TIMEOUT 45
+                TEST test-extractor-python
+
+                ENVIRONMENT
+                "YAMALCOMPPATH=${MODULES_DIR}"
+            )
+        endif()
+    endif()
+endif()
