@@ -44,36 +44,54 @@ fm_config()
 add_subdirectory(src)
 add_subdirectory(python)
 
-if(BUILD_WHEEL)
-    set(WheelPackage_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-    find_package(WheelPackage REQUIRED)
+add_custom_target(
+    extractor-whl ALL
 
-    python_package(
-        NAME extractor
-        SHORT_DESCRIPTION "Featuremine extractor tests"
-        LONG_DESCRIPTION "Featuremine extractor tests"
-        PACKAGES extractor
-        TESTS_PACKAGE "extractor.tests"
-        SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/python"
-        BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/python"
-        INSTALL_REQUIRES "yamal"
-    )
-endif()
+    COMMAND
+    "${PYTHON3_BIN}" "setup.py"
+
+    "build"
+    "--build-base=${CMAKE_CURRENT_BINARY_DIR}/python/build"
+    ${DEBUG_FLAG}
+
+    "egg_info"
+    "--egg-base" "${CMAKE_CURRENT_BINARY_DIR}/python"
+
+    "bdist_wheel"
+    "--bdist-dir=${CMAKE_CURRENT_BINARY_DIR}/python/bdist"
+    "--dist-dir=${CMAKE_BINARY_DIR}/output"
+
+    COMMAND
+    "${PYTHON3_BIN}" "setup.py"
+
+    "build"
+    "--build-base=${CMAKE_CURRENT_BINARY_DIR}/python/build"
+    ${DEBUG_FLAG}
+
+    "build_scripts"
+    "--executable=${PYTHON3_BIN}"
+    "-f"
+
+    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+)
 
 if(BUILD_TESTING)
     enable_testing()
     add_subdirectory(test)
-    if(TEST_EXTENSIONS)
-        if(BUILD_WHEEL)
-            test_python_package(
-                NAME extractor_py
-                PACKAGE extractor
-                TIMEOUT 45
-                TEST test-extractor-python
+    find_program(PYTHON3_BIN "python3" REQUIRED)
+    add_test(
+        NAME extractor_py COMMAND
 
-                ENVIRONMENT
-                "YAMALCOMPPATH=${MODULES_DIR}"
-            )
-        endif()
-    endif()
+        "/bin/sh"
+        "-c"
+        "test-extractor-python"
+
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python
+    )
+    set_tests_properties(
+        extractor_py
+        PROPERTIES
+        ENVIRONMENT "YAMALCOMPPATH=${CMAKE_CURRENT_BINARY_DIR}/python/build/${PYTHON3_LIB_DIR}/extractor;PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python/build/${PYTHON3_LIB_DIR}:$ENV{PYTHONPATH}:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_CURRENT_BINARY_DIR}/python/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+        TIMEOUT 100
+    )
 endif()
