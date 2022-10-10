@@ -41,7 +41,7 @@ set(FmConfig_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(FmConfig REQUIRED)
 fm_config()
 execute_process(COMMAND ${PYTHON3_BIN} -c "import sys;sys.stdout.write('scripts-%d.%d' % sys.version_info[:2])" OUTPUT_VARIABLE PYTHON3_SCRIPTS_DIR)
-execute_process(COMMAND ${PYTHON3_BIN} -c "import sys;import platform;sys.stdout.write('lib.%s-%s-%d.%d' % ((sys.platform,platform.machine()) + sys.version_info[:2]))" OUTPUT_VARIABLE PYTHON3_LIB_DIR)
+execute_process(COMMAND ${PYTHON3_BIN} -c "import sysconfig;import sys;sys.stdout.write('lib.%s-%d.%d' % ((sysconfig.get_platform(),) + sys.version_info[:2]))" OUTPUT_VARIABLE PYTHON3_LIB_DIR)
 include(GNUInstallDirs)
 
 add_subdirectory(src)
@@ -94,7 +94,7 @@ if(BUILD_TESTING)
     set_tests_properties(
         extractor_py
         PROPERTIES
-        ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python/build/${PYTHON3_LIB_DIR}:$ENV{PYTHONPATH}:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_CURRENT_BINARY_DIR}/python/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+        ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python/build/${PYTHON3_LIB_DIR}:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_CURRENT_BINARY_DIR}/python/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
         TIMEOUT 100
     )
 endif()

@@ -196,6 +196,7 @@ setuptools.setup (
             language='c++',
         ),
     ],
+    packages=['extractor', 'extractor.tests'],
     scripts=['scripts/test-extractor-python'],
     cmdclass = {
         'build_ext': build_extractor_ext
