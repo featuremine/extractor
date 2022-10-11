@@ -48,7 +48,7 @@ extern "C" {
 #include "fmc/platform.h"
 #include "fmc/test.h"
 
-#include "ytp/py_api.h"
+#include "ytp/python/py_api.h"
 
 #include <Python.h>
 #include <numpy/arrayobject.h>
