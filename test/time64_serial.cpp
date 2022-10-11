@@ -21,8 +21,8 @@
  * @see http://www.featuremine.com
  */
 
-#include "fmc++/time.hpp"
 #include "fmc++/gtestwrap.hpp"
+#include "fmc++/time.hpp"
 
 #include <chrono>
 #include <iostream>

@@ -28,9 +28,9 @@
 #include "extractor/arg_stack.h"
 #include "extractor/call_ctx.h"
 #include "extractor/frame_base.h"
-#include "fmc/time.h"
 #include "extractor/type_sys.h"
 #include "fmc/platform.h"
+#include "fmc/time.h"
 
 #include <stdarg.h>
 
@@ -47,7 +47,7 @@ typedef bool (*fm_call_init_p)(fm_frame_t *, size_t,
 typedef void (*fm_call_destroy_p)(fm_call_exec_cl);
 
 typedef fmc_time64_range_t (*fm_call_range_p)(const fm_call_ctx_t *,
-                                             fm_call_exec_cl);
+                                              fm_call_exec_cl);
 
 typedef struct fm_call_def fm_call_def_t;
 

@@ -39,8 +39,8 @@ extern "C" {
 #include <utility>
 #include <vector>
 
-#include "fmc++/time.hpp"
 #include "fmc++/strings.hpp"
+#include "fmc++/time.hpp"
 
 struct csv_tail_exec_cl {
   explicit csv_tail_exec_cl(FILE *file, bool is_pipe) : reader(file, is_pipe) {}

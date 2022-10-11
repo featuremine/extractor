@@ -26,8 +26,8 @@
 #define __FM_STREAM_CTX_H__
 
 #include "extractor/handle.h"
-#include "fmc/time.h"
 #include "fmc/platform.h"
+#include "fmc/time.h"
 
 /**
  * @brief defines stream execution context object

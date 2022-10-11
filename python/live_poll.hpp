@@ -56,7 +56,8 @@ using namespace std;
 
 struct live_poll {
   enum status { ERR = 0, IDLE, DATA, DONE };
-  live_poll(object iter, fmc_time64_t pp) : frm_it_(iter), polling_period_(pp) {}
+  live_poll(object iter, fmc_time64_t pp)
+      : frm_it_(iter), polling_period_(pp) {}
   status iter_process_next(fm_call_ctx_t *ctx, bool repeat = true) {
     auto py_error_check = [&](status s) {
       if (PyErr_Occurred()) {

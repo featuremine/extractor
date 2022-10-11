@@ -30,9 +30,9 @@
 #include "extractor/frame_base.h"
 #include "extractor/serial.h"
 #include "extractor/stream_ctx.h"
-#include "fmc/time.h"
 #include "extractor/type_decl.h"
 #include "fmc/platform.h"
+#include "fmc/time.h"
 #include "ytp/api.h"
 
 typedef struct fm_comp_graph fm_comp_graph_t;

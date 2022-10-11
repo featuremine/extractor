@@ -23,9 +23,9 @@
 
 #pragma once
 
-#include "fmc/time.h"
-#include "fmc++/time.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/time.hpp"
+#include "fmc/time.h"
 #include <Python.h>
 #include <chrono>
 #include <datetime.h>

@@ -30,8 +30,8 @@ extern "C" {
 #include "extractor/frame.h"
 #include "extractor/module.h"
 #include "extractor/stream_ctx.h"
-#include "fmc/time.h"
 #include "extractor/type_sys.h"
+#include "fmc/time.h"
 #include "frame_serial.h"
 #include <cmp/cmp.h>
 }

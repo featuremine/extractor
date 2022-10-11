@@ -26,8 +26,8 @@ extern "C" {
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/stream_ctx.h"
-#include "fmc/time.h"
 #include "extractor/type_sys.h"
+#include "fmc/time.h"
 }
 
 #include "extractor/comp_def.hpp"

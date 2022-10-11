@@ -22,8 +22,8 @@
 #pragma once
 
 #include "extractor/decimal64.hpp"
-#include "fmc++/side.hpp"
 #include "fmc++/convert.hpp"
+#include "fmc++/side.hpp"
 
 #include <iomanip>
 #include <iostream>
@@ -38,7 +38,7 @@ template <> struct sided_initializer<rprice> {
   static constexpr rprice min() noexcept { return FM_DECIMAL64_MIN; }
   static constexpr rprice max() noexcept { return FM_DECIMAL64_MAX; }
 };
-} // namespace fm
+} // namespace fmc
 
 namespace fmc {
 template <> struct conversion<fmc::rprice, double> {
@@ -64,6 +64,8 @@ inline istream &operator>>(istream &s, fmc::rprice &x) {
   return s;
 }
 
-inline string to_string(fmc::rprice &x) { return to_string(fmc::to<double>(x)); }
+inline string to_string(fmc::rprice &x) {
+  return to_string(fmc::to<double>(x));
+}
 
 } // namespace std

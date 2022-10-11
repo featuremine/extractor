@@ -26,8 +26,8 @@
 
 extern "C" {
 #include "extractor/stream_ctx.h"
-#include "fmc/time.h"
 #include "extractor/type_sys.h"
+#include "fmc/time.h"
 }
 
 #include "field_util.hpp"

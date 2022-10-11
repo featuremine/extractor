@@ -279,7 +279,7 @@ bool fm_comp_split_by_stream_exec(fm_frame_t *result, size_t,
   if (!comp_cl->queue.empty()) {
     auto desired_next_scheduled_time = comp_cl->queue.top().first;
     if (fmc_time64_less(desired_next_scheduled_time,
-                       comp_cl->next_scheduled_time)) {
+                        comp_cl->next_scheduled_time)) {
       fm_stream_ctx_schedule(stream_ctx, ctx->handle,
                              desired_next_scheduled_time);
       comp_cl->next_scheduled_time = desired_next_scheduled_time;
