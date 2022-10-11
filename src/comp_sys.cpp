@@ -261,7 +261,7 @@ bool fm_comp_sys_ext_load(fm_comp_sys_t *s, const char *name,
   auto handle = fmc_ext_open(path, &error);
   if (error) {
     fm_comp_sys_error_set(s,
-                          "[ERROR]\t(comp_sys) failed to load "
+                          "[ERROR]\t(comp_sys) failed to open "
                           "extension library %s from %s;\n\t%s",
                           name, path, fmc_error_msg(error));
     return false;
