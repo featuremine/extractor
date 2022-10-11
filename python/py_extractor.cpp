@@ -303,7 +303,7 @@ PyMODINIT_FUNC fm_extractor_py_init(void) {
     numpy_init_ = true;
   }
 
-  PyObject *ytp_str = PyUnicode_FromString("ytp");
+  PyObject *ytp_str = PyUnicode_FromString("yamal.ytp");
   if (!ytp_str) {
     return NULL;
   }
