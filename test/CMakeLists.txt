@@ -118,3 +118,278 @@ extr_unit_test(
     $<TARGET_OBJECTS:extractor_obj>
     $<TARGET_OBJECTS:py_extractor_obj>
 )
+
+find_program(PYTHON3_BIN "python3" REQUIRED)
+
+macro(extr_py_unit_test)
+    add_test(
+        NAME py_${ARGV0} COMMAND
+    
+        "${PYTHON3_BIN}"
+        "${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}.py"
+    
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+    )
+    set_tests_properties(
+        py_${ARGV0}
+        PROPERTIES
+        ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+        TIMEOUT 100
+    )
+endmacro()
+
+extr_py_unit_test(
+    perf_ident
+)
+extr_py_unit_test(
+    bars
+)
+extr_py_unit_test(
+    btec_bars
+)
+extr_py_unit_test(
+    csv_play
+)
+extr_py_unit_test(
+    csv_play_wrong
+)
+extr_py_unit_test(
+    csv_play_empty_strings
+)
+extr_py_unit_test(
+    csv_play_empty_fail
+)
+extr_py_unit_test(
+    csv_play_pipe
+)
+extr_py_unit_test(
+    csv_play_pipe_fail
+)
+extr_py_unit_test(
+    csv_play_pipe_empty_fail
+)
+extr_py_unit_test(
+    csv_tail
+)
+extr_py_unit_test(
+    csv_tail_pipe
+)
+extr_py_unit_test(
+    vwap
+)
+extr_py_unit_test(
+    vwap_reverse
+)
+extr_py_unit_test(
+    proto_vwap
+)
+extr_py_unit_test(
+    lag
+)
+extr_py_unit_test(
+    csv_mkt_data
+)
+extr_py_unit_test(
+    mp_mkt_data_play
+)
+extr_py_unit_test(
+    mp_mkt_data_play_pipe
+)
+extr_py_unit_test(
+    mp_mkt_data_play_pipe_fail
+)
+extr_py_unit_test(
+    mp_mkt_data_perf
+)
+extr_py_unit_test(
+    mp_mkt_data_record
+)
+extr_py_unit_test(
+    csv_mkt_data_perf
+)
+extr_py_unit_test(
+    convert
+)
+extr_py_unit_test(
+    add
+)
+extr_py_unit_test(
+    mult
+)
+extr_py_unit_test(
+    ln
+)
+extr_py_unit_test(
+    log
+)
+extr_py_unit_test(
+    exp
+)
+extr_py_unit_test(
+    pow
+)
+extr_py_unit_test(
+    max_min
+)
+extr_py_unit_test(
+    count
+)
+extr_py_unit_test(
+    nano
+)
+extr_py_unit_test(
+    result
+)
+extr_py_unit_test(
+    fields
+)
+extr_py_unit_test(
+    average_tw
+)
+extr_py_unit_test(
+    nan
+)
+extr_py_unit_test(
+    zero
+)
+extr_py_unit_test(
+    is_zero
+)
+extr_py_unit_test(
+    is_nan
+)
+extr_py_unit_test(
+    is_inf
+)
+extr_py_unit_test(
+    mp_skip_data
+)
+extr_py_unit_test(
+    op_tests
+)
+extr_py_unit_test(
+    sum
+)
+extr_py_unit_test(
+    book_build
+)
+extr_py_unit_test(
+    book_msg
+)
+extr_py_unit_test(
+    book_update
+)
+extr_py_unit_test(
+    rational64
+)
+extr_py_unit_test(
+    perf_timer
+)
+extr_py_unit_test(
+    divide
+)
+extr_py_unit_test(
+    op_overload
+)
+extr_py_unit_test(
+    module
+)
+extr_py_unit_test(
+    split_by
+)
+extr_py_unit_test(
+    split_by_bars
+)
+extr_py_unit_test(
+    pandas_play
+)
+extr_py_unit_test(
+    sim_poll
+)
+extr_py_unit_test(
+    tuple_split
+)
+extr_py_unit_test(
+    callbacks
+)
+extr_py_unit_test(
+    round
+)
+extr_py_unit_test(
+    custom
+)
+extr_py_unit_test(
+    substr
+)
+extr_py_unit_test(
+    unicode
+)
+extr_py_unit_test(
+    frame
+)
+extr_py_unit_test(
+    join
+)
+extr_py_unit_test(
+    py_book
+)
+extr_py_unit_test(
+    book_montage
+)
+extr_py_unit_test(
+    top_book_update
+)
+extr_py_unit_test(
+    api_test
+)
+extr_py_unit_test(
+    accumulate
+)
+extr_py_unit_test(
+    live_batch
+)
+extr_py_unit_test(
+    datetime64
+)
+extr_py_unit_test(
+    join_growing_frames
+)
+extr_py_unit_test(
+    frame_iters
+)
+extr_py_unit_test(
+    find
+)
+extr_py_unit_test(
+    time_lag
+)
+extr_py_unit_test(
+    ore_sim_split
+)
+extr_py_unit_test(
+    book_play_split
+)
+extr_py_unit_test(
+    announcements_book_build
+)
+extr_py_unit_test(
+    ytp_sequence
+)
+extr_py_unit_test(
+    timeout
+)
+extr_py_unit_test(
+    heartbeat
+)
+extr_py_unit_test(
+    delayed
+)
+extr_py_unit_test(
+    book_stats
+)
+extr_py_unit_test(
+    ore_ytp_decode
+)
+extr_py_unit_test(
+    coinbase
+)
