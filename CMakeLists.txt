@@ -41,41 +41,64 @@ set(FmConfig_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(FmConfig REQUIRED)
 fm_config()
 execute_process(COMMAND ${PYTHON3_BIN} -c "import sys;sys.stdout.write('scripts-%d.%d' % sys.version_info[:2])" OUTPUT_VARIABLE PYTHON3_SCRIPTS_DIR)
-execute_process(COMMAND ${PYTHON3_BIN} -c "import sysconfig;import sys;sys.stdout.write('lib.%s-%d.%d' % ((sysconfig.get_platform(),) + sys.version_info[:2]))" OUTPUT_VARIABLE PYTHON3_LIB_DIR)
 include(GNUInstallDirs)
 
 add_subdirectory(src)
 add_subdirectory(python)
 
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/__init__.py"
+    "${CMAKE_BINARY_DIR}/python_dist/extractor/__init__.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/__init__.py"
+    "${CMAKE_BINARY_DIR}/python_dist/extractor/tests/__init__.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/component.py"
+    "${CMAKE_BINARY_DIR}/python_dist/extractor/tests/component.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/scripts/test-extractor-python"
+    "${CMAKE_BINARY_DIR}/python_dist/scripts/test-extractor-python"
+    COPYONLY
+)
+
 add_custom_target(
     extractor-whl ALL
 
     COMMAND
-    "${PYTHON3_BIN}" "setup.py"
+    "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
 
     "build"
-    "--build-base=${CMAKE_CURRENT_BINARY_DIR}/python/build"
+    "--build-base=${CMAKE_CURRENT_BINARY_DIR}/python_dist/build"
     ${DEBUG_FLAG}
 
     "egg_info"
-    "--egg-base" "${CMAKE_CURRENT_BINARY_DIR}/python"
+    "--egg-base" "${CMAKE_CURRENT_BINARY_DIR}/python_dist"
 
     "bdist_wheel"
-    "--bdist-dir=${CMAKE_CURRENT_BINARY_DIR}/python/bdist"
+    "--bdist-dir=${CMAKE_CURRENT_BINARY_DIR}/python_dist/bdist"
     "--dist-dir=${CMAKE_BINARY_DIR}/output"
 
     COMMAND
-    "${PYTHON3_BIN}" "setup.py"
+    "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
 
     "build"
-    "--build-base=${CMAKE_CURRENT_BINARY_DIR}/python/build"
+    "--build-base=${CMAKE_CURRENT_BINARY_DIR}/python_dist/build"
     ${DEBUG_FLAG}
 
     "build_scripts"
     "--executable=${PYTHON3_BIN}"
     "-f"
 
-    WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python_dist
 )
 
 if(BUILD_TESTING)
@@ -94,7 +117,7 @@ if(BUILD_TESTING)
     set_tests_properties(
         extractor_py
         PROPERTIES
-        ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python/build/${PYTHON3_LIB_DIR}:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_CURRENT_BINARY_DIR}/python/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+        ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_CURRENT_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
         TIMEOUT 100
     )
 endif()

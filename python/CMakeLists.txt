@@ -95,6 +95,7 @@ set_target_properties(
     OUTPUT_NAME "extractor"
     PREFIX ""
     SUFFIX ".so"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/python_dist/extractor"
 )
 target_include_directories(
     extractor_module
