@@ -102,7 +102,7 @@ public:
   bool exec(fm::query_context &ctx) { return false; }
 };
 
-FmMODINIT_FUNC FmInit_ext_lib(fm_comp_sys_t *sys) {
+extern "C" FMMODFUNC void FmInit_ext_lib(fm_comp_sys_t *sys) {
   fm::fm_cpp_comp_type_add<timer_count>(sys, "timer_count");
   fm::fm_cpp_comp_type_add<timer_count_avg>(sys, "timer_count_avg");
 }
