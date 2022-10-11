@@ -99,6 +99,8 @@ add_custom_target(
     "-f"
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python_dist
+
+    DEPENDS extractor_module
 )
 
 if(BUILD_TESTING)
