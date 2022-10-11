@@ -22,7 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-//TODO: Delete this file, we should be using the common time
+// TODO: Delete this file, we should be using the common time
 
 #ifndef __FM_TIME64_H__
 #define __FM_TIME64_H__

@@ -74,7 +74,8 @@ struct frame_ytp_decode_cl {
   ~frame_ytp_decode_cl() {
     fm_frame_alloc_del(alloc);
     fmc_error_t *error;
-    ytp_->sequence_indx_cb_rm(shared_seq, channel, static_data_cb, this, &error);
+    ytp_->sequence_indx_cb_rm(shared_seq, channel, static_data_cb, this,
+                              &error);
     ytp_->sequence_shared_dec(shared_seq, &error);
   }
 
@@ -209,12 +210,12 @@ fm_comp_frame_ytp_decode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
           : error(error), seq(seq), channel(channel), header_opt(header_opt) {
         current_it = ytp_->sequence_get_it(seq);
         ytp_->sequence_indx_cb(seq, channel, &find_header_cl_t::cb_static, this,
-                             &error);
+                               &error);
       }
 
       ~find_header_cl_t() {
         ytp_->sequence_indx_cb_rm(seq, channel, &find_header_cl_t::cb_static,
-                                this, &error);
+                                  this, &error);
         ytp_->sequence_set_it(seq, current_it);
       }
 
