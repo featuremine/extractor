@@ -105,8 +105,8 @@ bool fm_comp_frame_ytp_encode_stream_exec(fm_frame_t *result, size_t,
   memcpy(ptr, buffer.data(), buffer.size());
   ptr[buffer.size()] = 'D';
 
-  ytp_->sequence_commit(exec_cl.seq, exec_cl.peer, exec_cl.channel, fmc_cur_time_ns(),
-                      ptr, &error);
+  ytp_->sequence_commit(exec_cl.seq, exec_cl.peer, exec_cl.channel,
+                        fmc_cur_time_ns(), ptr, &error);
   if (error) {
     auto errstr = std::string("unable to commit in the sequence: ") +
                   fmc_error_msg(error);
@@ -203,12 +203,12 @@ fm_comp_frame_ytp_encode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
         : error(error), seq(seq), peer(peer), channel(channel), header(header) {
       current_it = ytp_->sequence_get_it(seq);
       ytp_->sequence_indx_cb(seq, channel, &find_header_cl_t::cb_static, this,
-                           &error);
+                             &error);
     }
 
     ~find_header_cl_t() {
-      ytp_->sequence_indx_cb_rm(seq, channel, &find_header_cl_t::cb_static, this,
-                              &error);
+      ytp_->sequence_indx_cb_rm(seq, channel, &find_header_cl_t::cb_static,
+                                this, &error);
       ytp_->sequence_set_it(seq, current_it);
     }
 
@@ -225,7 +225,8 @@ fm_comp_frame_ytp_encode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   };
 
   while (true) {
-    while (!error && !header.has_value() && ytp_->sequence_poll(stream.sequence, &error))
+    while (!error && !header.has_value() &&
+           ytp_->sequence_poll(stream.sequence, &error))
       ;
     if (error) {
       auto errstr =
@@ -247,7 +248,8 @@ fm_comp_frame_ytp_encode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       break;
     }
 
-    auto *ptr = ytp_->sequence_reserve(stream.sequence, type.size() + 1, &error);
+    auto *ptr =
+        ytp_->sequence_reserve(stream.sequence, type.size() + 1, &error);
     if (error) {
       auto errstr =
           std::string("unable to reserve to sequence: ") + fmc_error_msg(error);
@@ -258,8 +260,8 @@ fm_comp_frame_ytp_encode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     memcpy(ptr, type.data(), type.size());
     ptr[type.size()] = 'H';
 
-    ytp_->sequence_commit(stream.sequence, stream.peer, stream.channel, fmc_cur_time_ns(),
-                          ptr, &error);
+    ytp_->sequence_commit(stream.sequence, stream.peer, stream.channel,
+                          fmc_cur_time_ns(), ptr, &error);
     if (error) {
       auto errstr =
           std::string("unable to commit to sequence: ") + fmc_error_msg(error);

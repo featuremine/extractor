@@ -313,7 +313,7 @@ PyMODINIT_FUNC fm_extractor_py_init(void) {
     return NULL;
   }
 
-  auto typed_ytp_ = (PyAPIWrapper *) PyObject_CallMethod(ytp_mod, "api_v1", "");
+  auto typed_ytp_ = (PyAPIWrapper *)PyObject_CallMethod(ytp_mod, "api_v1", "");
   if (!typed_ytp_) {
     Py_XDECREF(ytp_mod);
     return NULL;
@@ -337,8 +337,8 @@ PyMODINIT_FUNC fm_extractor_py_init(void) {
     return NULL;
 
   // Keep it in extractor module to ensure module is not offloaded
-  // No need to increment the reference count because PyImport_Import returns a new reference
-  // https://docs.python.org/3/c-api/import.html#c.PyImport_Import
+  // No need to increment the reference count because PyImport_Import returns a
+  // new reference https://docs.python.org/3/c-api/import.html#c.PyImport_Import
   PyModule_AddObject(m, "ytp", ytp_mod);
 
   if (PyType_Ready(&ExtractorStreamContextType) < 0)

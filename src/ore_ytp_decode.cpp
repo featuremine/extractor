@@ -34,7 +34,7 @@ extern "C" {
 #include "extractor/book/ore.hpp"     // parser
 #include "extractor/book/updates.hpp" // fm::book::updates::announce
 #include "fmc++/serialization.hpp"
-#include "ytp.h"          // ytp_channel_wrapper
+#include "ytp.h"     // ytp_channel_wrapper
 #include "ytp/api.h" // ytp_sequence_t
 
 #include <deque>
@@ -71,7 +71,8 @@ struct ore_ytp_decode_cl {
   ~ore_ytp_decode_cl() {
     fm_frame_alloc_del(alloc);
     fmc_error_t *error;
-    ytp_->sequence_indx_cb_rm(shared_seq, channel, static_data_cb, this, &error);
+    ytp_->sequence_indx_cb_rm(shared_seq, channel, static_data_cb, this,
+                              &error);
     ytp_->sequence_shared_dec(shared_seq, &error);
   }
 

@@ -355,4 +355,6 @@ fm_comp_def_t ema_comp_def = {
  *
  * @param sys computing system
  */
-FMMODFUNC void FmInit_ema(fm_comp_sys_t *sys) { fm_comp_type_add(sys, &ema_comp_def); }
+FMMODFUNC void FmInit_ema(fm_comp_sys_t *sys) {
+  fm_comp_type_add(sys, &ema_comp_def);
+}
