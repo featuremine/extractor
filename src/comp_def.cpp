@@ -26,7 +26,7 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/call_ctx.h"
 #include "extractor/frame_base.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include <stdarg.h>

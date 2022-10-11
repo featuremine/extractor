@@ -30,7 +30,7 @@
 #include "extractor/frame_base.h"
 #include "extractor/serial.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 #include "extractor/type_decl.h"
 #include "fmc/platform.h"
 #include "ytp/api.h"

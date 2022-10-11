@@ -28,7 +28,7 @@ extern "C" {
 }
 
 #include "book/py_level.hpp"
-#include "extractor/side.hpp"
+#include "fmc++/side.hpp"
 
 struct BookStruct {
   PyObject_HEAD fm_book_shared_t *book_;

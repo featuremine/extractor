@@ -31,7 +31,7 @@
 #endif
 
 extern "C" {
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "fmc++/time.hpp"
@@ -41,64 +41,64 @@ extern "C" {
 #include <iostream>
 #include <time.h>
 
-inline int64_t operator/(fm_time64_t a, fm_time64_t b) {
-  return fm_time64_div(a, b);
+inline int64_t operator/(fmc_time64_t a, fmc_time64_t b) {
+  return fmc_time64_div(a, b);
 }
 
-inline bool operator==(fm_time64_t a, fm_time64_t b) {
-  return fm_time64_equal(a, b);
+inline bool operator==(fmc_time64_t a, fmc_time64_t b) {
+  return fmc_time64_equal(a, b);
 }
 
-inline bool operator!=(fm_time64_t a, fm_time64_t b) {
-  return !fm_time64_equal(a, b);
+inline bool operator!=(fmc_time64_t a, fmc_time64_t b) {
+  return !fmc_time64_equal(a, b);
 }
 
-inline fm_time64_t operator+(fm_time64_t a, fm_time64_t b) {
-  return fm_time64_add(a, b);
+inline fmc_time64_t operator+(fmc_time64_t a, fmc_time64_t b) {
+  return fmc_time64_add(a, b);
 }
 
-inline fm_time64_t &operator+=(fm_time64_t &a, const fm_time64_t &b) {
-  fm_time64_inc(&a, b);
+inline fmc_time64_t &operator+=(fmc_time64_t &a, const fmc_time64_t &b) {
+  fmc_time64_inc(&a, b);
   return a;
 }
 
-inline fm_time64_t operator-(fm_time64_t a, fm_time64_t b) {
-  return fm_time64_sub(a, b);
+inline fmc_time64_t operator-(fmc_time64_t a, fmc_time64_t b) {
+  return fmc_time64_sub(a, b);
 }
 
-inline bool operator<(fm_time64_t a, fm_time64_t b) {
-  return fm_time64_less(a, b);
+inline bool operator<(fmc_time64_t a, fmc_time64_t b) {
+  return fmc_time64_less(a, b);
 }
 
-inline bool operator>(fm_time64_t a, fm_time64_t b) {
-  return fm_time64_less(b, a);
+inline bool operator>(fmc_time64_t a, fmc_time64_t b) {
+  return fmc_time64_less(b, a);
 }
 
-inline bool operator<=(fm_time64_t a, fm_time64_t b) {
-  return !fm_time64_less(b, a);
+inline bool operator<=(fmc_time64_t a, fmc_time64_t b) {
+  return !fmc_time64_less(b, a);
 }
 
-inline bool operator>=(fm_time64_t a, fm_time64_t b) {
-  return !fm_time64_less(a, b);
+inline bool operator>=(fmc_time64_t a, fmc_time64_t b) {
+  return !fmc_time64_less(a, b);
 }
 
-inline fm_time64_t operator*(fm_time64_t a, int64_t b) {
-  return fm_time64_mul(a, b);
+inline fmc_time64_t operator*(fmc_time64_t a, int64_t b) {
+  return fmc_time64_mul(a, b);
 }
 
-inline fm_time64_t operator*(int64_t a, fm_time64_t b) {
-  return fm_time64_mul(b, a);
+inline fmc_time64_t operator*(int64_t a, fmc_time64_t b) {
+  return fmc_time64_mul(b, a);
 }
 
-inline fm_time64_t operator/(fm_time64_t a, int64_t b) {
-  return fm_time64_int_div(a, b);
+inline fmc_time64_t operator/(fmc_time64_t a, int64_t b) {
+  return fmc_time64_int_div(a, b);
 }
 
 namespace std {
-inline ostream &operator<<(ostream &s, const fm_time64_t &x) {
+inline ostream &operator<<(ostream &s, const fmc_time64_t &x) {
   using namespace std;
   using namespace chrono;
-  auto nanos = nanoseconds(fm_time64_to_nanos(x));
+  auto nanos = nanoseconds(fmc_time64_to_nanos(x));
   auto epoch = time_point<system_clock>(
       duration_cast<time_point<system_clock>::duration>(nanos));
   auto t = system_clock::to_time_t(epoch);
@@ -106,7 +106,7 @@ inline ostream &operator<<(ostream &s, const fm_time64_t &x) {
   return s << put_time(&tm, "%F %T") << '.' << setw(9) << setfill('0')
            << (nanos % seconds(1)).count();
 }
-inline istream &operator>>(istream &s, fm_time64_t &x) {
+inline istream &operator>>(istream &s, fmc_time64_t &x) {
   using namespace std;
   using namespace chrono;
   std::tm t = {};
@@ -114,81 +114,81 @@ inline istream &operator>>(istream &s, fm_time64_t &x) {
   s >> get_time(&t, "%Y-%m-%d %H:%M:%S.") >> setw(9) >> nanos;
   auto epoch_sec = system_clock::from_time_t(timegm(&t)).time_since_epoch();
   auto dur = duration_cast<nanoseconds>(epoch_sec) + nanoseconds(nanos);
-  x = fm_time64_from_nanos(dur.count());
+  x = fmc_time64_from_nanos(dur.count());
   return s;
 }
 
 /**
- * @brief Smaller than operator overload for fmc time and fm_time64_t
+ * @brief Smaller than operator overload for fmc time and fmc_time64_t
  * objects
  *
  * @param jt Platform time object.
- * @param et fm_time64_t object.
+ * @param et fmc_time64_t object.
  *
  * @return result of comparison.
  */
-inline bool operator<(const fmc::time &jt, const fm_time64_t &et) {
-  return jt < std::chrono::nanoseconds(fm_time64_to_nanos(et));
+inline bool operator<(const fmc::time &jt, const fmc_time64_t &et) {
+  return jt < std::chrono::nanoseconds(fmc_time64_to_nanos(et));
 }
 
 /**
- * @brief Smaller than operator overload for fm_time64_t and fmc time
+ * @brief Smaller than operator overload for fmc_time64_t and fmc time
  * objects
  *
- * @param et fm_time64_t object.
+ * @param et fmc_time64_t object.
  * @param jt Platform time object.
  *
  * @return Result of comparison.
  */
-inline bool operator<(const fm_time64_t &et, const fmc::time &jt) {
-  return std::chrono::nanoseconds(fm_time64_to_nanos(et)) < jt;
+inline bool operator<(const fmc_time64_t &et, const fmc::time &jt) {
+  return std::chrono::nanoseconds(fmc_time64_to_nanos(et)) < jt;
 }
 
 /**
- * @brief Greater than operator overload for fmc time and fm_time64_t
+ * @brief Greater than operator overload for fmc time and fmc_time64_t
  * objects
  *
  * @param jt Platform time object.
- * @param et fm_time64_t object.
+ * @param et fmc_time64_t object.
  *
  * @return Result of comparison.
  */
-inline bool operator>(const fmc::time &jt, const fm_time64_t &et) {
-  return jt > std::chrono::nanoseconds(fm_time64_to_nanos(et));
+inline bool operator>(const fmc::time &jt, const fmc_time64_t &et) {
+  return jt > std::chrono::nanoseconds(fmc_time64_to_nanos(et));
 }
 
 /**
- * @brief Greater than operator overload for fm_time64_t and fmc time
+ * @brief Greater than operator overload for fmc_time64_t and fmc time
  * objects
  *
  * @param jt Platform time object.
- * @param et fm_time64_t object.
+ * @param et fmc_time64_t object.
  *
  * @return Result of comparison.
  */
-inline bool operator>(const fm_time64_t &et, const fmc::time &jt) {
-  return std::chrono::nanoseconds(fm_time64_to_nanos(et)) > jt;
+inline bool operator>(const fmc_time64_t &et, const fmc::time &jt) {
+  return std::chrono::nanoseconds(fmc_time64_to_nanos(et)) > jt;
 }
 
 } // namespace std
 
 namespace fmc {
-template <> struct conversion<fm_time64_t, fmc::time> {
-  fmc::time operator()(fm_time64_t x) {
-    return std::chrono::nanoseconds(fm_time64_to_nanos(x));
+template <> struct conversion<fmc_time64_t, fmc::time> {
+  fmc::time operator()(fmc_time64_t x) {
+    return std::chrono::nanoseconds(fmc_time64_to_nanos(x));
   }
 };
 
-template <> struct conversion<fmc::time, fm_time64_t> {
-  fm_time64_t operator()(fmc::time x) {
-    return fm_time64_from_nanos(std::chrono::nanoseconds(x).count());
+template <> struct conversion<fmc::time, fmc_time64_t> {
+  fmc_time64_t operator()(fmc::time x) {
+    return fmc_time64_from_nanos(std::chrono::nanoseconds(x).count());
   }
 };
 } // namespace fmc
 
 namespace std {
-template <> struct hash<fm_time64_t> {
-  using argument_type = fm_time64_t;
+template <> struct hash<fmc_time64_t> {
+  using argument_type = fmc_time64_t;
   using result_type = std::size_t;
   result_type operator()(argument_type const &obj) const {
     return std::hash<decltype(obj.value)>{}(obj.value);

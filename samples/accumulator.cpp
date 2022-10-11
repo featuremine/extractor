@@ -68,11 +68,11 @@ void accumulate_data(const string &licence_filename) {
 
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   auto *result = fm_data_get(fm_result_ref_get(comp_B));
 
@@ -98,8 +98,8 @@ void accumulate_data(const string &licence_filename) {
   for (int i = 0; i < fm_frame_dim(result, 0); ++i) {
     fprintf(
         f, "%ld,%s,%s,%c,%g,%g,%d,%d\n",
-        fm_time64_to_nanos(
-            *(fm_time64_t *)fm_frame_get_cptr1(result, r_field, i)),
+        fmc_time64_to_nanos(
+            *(fmc_time64_t *)fm_frame_get_cptr1(result, r_field, i)),
         string((char *)fm_frame_get_cptr1(result, tick_field, i), 16).c_str(),
         string((char *)fm_frame_get_cptr1(result, m_field, i), 16).c_str(),
         *(char *)fm_frame_get_cptr1(result, t_field, i),

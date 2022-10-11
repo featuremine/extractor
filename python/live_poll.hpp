@@ -30,7 +30,7 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "extractor/type_sys.h"
@@ -56,7 +56,7 @@ using namespace std;
 
 struct live_poll {
   enum status { ERR = 0, IDLE, DATA, DONE };
-  live_poll(object iter, fm_time64_t pp) : frm_it_(iter), polling_period_(pp) {}
+  live_poll(object iter, fmc_time64_t pp) : frm_it_(iter), polling_period_(pp) {}
   status iter_process_next(fm_call_ctx_t *ctx, bool repeat = true) {
     auto py_error_check = [&](status s) {
       if (PyErr_Occurred()) {
@@ -158,7 +158,7 @@ struct live_poll {
   object frm_it_;
   object row_it_;
   object row_ob_;
-  fm_time64_t polling_period_;
+  fmc_time64_t polling_period_;
 };
 
 bool fm_comp_live_poll_stream_init(fm_frame_t *result, size_t args,
@@ -215,7 +215,7 @@ fm_ctx_def_t *fm_comp_live_poll_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   if (!PyIter_Check(clbl.get_ref()))
     return error();
 
-  fm_time64_t polling_period{0};
+  fmc_time64_t polling_period{0};
   if (!fm_arg_try_time64(fm_type_tuple_arg(ptype, 1), &plist,
                          &polling_period)) {
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS,

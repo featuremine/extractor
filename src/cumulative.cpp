@@ -28,12 +28,12 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "extractor/decimal64.hpp"
 #include "extractor/frame.hpp"
-#include "extractor/time64.hpp"
+#include "fmc++/time.hpp"
 #include "fmc++/mpl.hpp"
 
 #include <memory>
@@ -89,16 +89,16 @@ struct the_cumulative_field_exec_2_0<fm_decimal64_t> : cumulative_field_exec {
 };
 
 template <>
-struct the_cumulative_field_exec_2_0<fm_time64_t> : cumulative_field_exec {
+struct the_cumulative_field_exec_2_0<fmc_time64_t> : cumulative_field_exec {
   the_cumulative_field_exec_2_0(fm_field_t field) : field_(field) {}
   void init(fm_frame_t *result, const fm_frame_t *const argv[]) override {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, field_, 0) =
-        *(const fm_time64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, field_, 0) =
+        *(const fmc_time64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
   }
   void exec(fm_frame_t *result, const fm_frame_t *const argv[]) override {
-    auto val0 = *(const fm_time64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    auto val1 = *(const fm_time64_t *)fm_frame_get_cptr1(result, field_, 0);
-    *(fm_time64_t *)fm_frame_get_ptr1(result, field_, 0) = val0 + val1;
+    auto val0 = *(const fmc_time64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
+    auto val1 = *(const fmc_time64_t *)fm_frame_get_cptr1(result, field_, 0);
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, field_, 0) = val0 + val1;
   }
   fm_field_t field_;
 };

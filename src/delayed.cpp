@@ -28,7 +28,7 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "fmc/time.h"
@@ -43,7 +43,7 @@ extern "C" {
 #include <unordered_map>
 
 struct delayed_cl {
-  fm_time64_t delayed_period;
+  fmc_time64_t delayed_period;
   fm_field_t receive_field;
 };
 
@@ -65,10 +65,10 @@ bool fm_comp_delayed_stream_exec(fm_frame_t *result, size_t,
   auto now = fm_stream_ctx_now(s_ctx);
 
   auto *ptr =
-      (fm_time64_t *)fm_frame_get_cptr1(argv[0], exec_cl.receive_field, 0);
-  auto new_timeout = fm_time64_add(*ptr, exec_cl.delayed_period);
+      (fmc_time64_t *)fm_frame_get_cptr1(argv[0], exec_cl.receive_field, 0);
+  auto new_timeout = fmc_time64_add(*ptr, exec_cl.delayed_period);
 
-  auto new_value = !fm_time64_less(now, new_timeout);
+  auto new_value = !fmc_time64_less(now, new_timeout);
 
   auto dest_f = fm_frame_get_ptr1(result, 0, 0);
   memcpy(dest_f, &new_value, sizeof(BOOL));
@@ -106,7 +106,7 @@ fm_ctx_def_t *fm_comp_delayed_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   auto stream_arg = fm_type_tuple_arg(ptype, 0);
 
-  fm_time64_t delayed;
+  fmc_time64_t delayed;
   if (!fm_arg_try_time64(stream_arg, &plist, &delayed)) {
     param_error();
     return nullptr;

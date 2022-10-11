@@ -772,7 +772,7 @@ static PyObject *ExtractorStreamContext_run_to(ExtractorStreamContext *ctx_obj,
   auto sec = PyLong_AsLong(PyObject_GetAttrString(obj, "seconds"));
   auto us = PyLong_AsLong(PyObject_GetAttrString(obj, "microseconds"));
   auto tm =
-      fm_time64_from_nanos(us * 1000) + fm_time64_from_seconds(h * 3600 + sec);
+      fmc_time64_from_nanos(us * 1000) + fmc_time64_from_seconds(h * 3600 + sec);
 
   if (!fm_stream_ctx_run_to(ctx_obj->ctx, tm)) {
     PyErr_SetString(PyExc_RuntimeError,

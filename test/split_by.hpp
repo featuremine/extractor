@@ -52,7 +52,7 @@ fm_module_t *mod_with_delay(fm_type_sys_t *tsys) {
 
   auto *m_comp_TL = fm_module_comp_add(
       m, "time_lag", nullptr, 1, inps_TL, time_lag_params_t,
-      fm_time64_from_nanos(500000), fm_time64_from_nanos(5000));
+      fmc_time64_from_nanos(500000), fmc_time64_from_nanos(5000));
 
   fm_module_comp_t *outs[1] = {m_comp_TL};
 
@@ -135,12 +135,12 @@ void timer_test() {
 
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   auto *result = fm_data_get(fm_result_ref_get(comp_acc));
 

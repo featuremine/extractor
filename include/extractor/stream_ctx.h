@@ -26,7 +26,7 @@
 #define __FM_STREAM_CTX_H__
 
 #include "extractor/handle.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 #include "fmc/platform.h"
 
 /**
@@ -58,7 +58,7 @@ FMMODFUNC void fm_stream_ctx_queue(fm_stream_ctx_t *ctx,
  */
 FMMODFUNC void fm_stream_ctx_schedule(fm_stream_ctx_t *ctx,
                                       fm_call_handle_t handle,
-                                      fm_time64_t time);
+                                      fmc_time64_t time);
 
 /**
  * @brief schedules a given call for processing
@@ -78,24 +78,24 @@ FMMODFUNC bool fm_stream_ctx_idle(fm_stream_ctx_t *ctx);
 /**
  * @brief processes the streaming context onces
  */
-FMMODFUNC bool fm_stream_ctx_proc_one(fm_stream_ctx_t *ctx, fm_time64_t now);
+FMMODFUNC bool fm_stream_ctx_proc_one(fm_stream_ctx_t *ctx, fmc_time64_t now);
 
 /**
  * @brief returns the next time for which there is a scheduled event
  */
-FMMODFUNC fm_time64_t fm_stream_ctx_next_time(fm_stream_ctx_t *ctx);
+FMMODFUNC fmc_time64_t fm_stream_ctx_next_time(fm_stream_ctx_t *ctx);
 
 /**
  * @brief returns the now for the stream execution context
  */
-FMMODFUNC fm_time64_t fm_stream_ctx_now(fm_stream_ctx_t *ctx);
+FMMODFUNC fmc_time64_t fm_stream_ctx_now(fm_stream_ctx_t *ctx);
 
 /**
  * @brief runs the context to end time
  *
  * @return returns true if the run is successful
  */
-FMMODFUNC bool fm_stream_ctx_run_to(fm_stream_ctx_t *ctx, fm_time64_t e);
+FMMODFUNC bool fm_stream_ctx_run_to(fm_stream_ctx_t *ctx, fmc_time64_t e);
 
 /**
  * @brief runs the context from a zero time to the end of time

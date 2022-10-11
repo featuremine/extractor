@@ -28,17 +28,17 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "extractor/comp_def.hpp"
 #include "extractor/decimal64.hpp"
 #include "extractor/frame.hpp"
 #include "extractor/rational64.hpp"
-#include "extractor/time64.hpp"
+#include "fmc++/time.hpp"
 #include "fmc++/mpl.hpp"
 
-#include "extractor/time64.h"
+#include "fmc/time.h"
 #include <deque>
 #include <stdlib.h>
 #include <string.h>
@@ -135,7 +135,7 @@ struct min_comp_cl {
     }
   }
   vector<exec_cl *> calls;
-  int64_t t = fm_time64_end().value;
+  int64_t t = fmc_time64_end().value;
 };
 
 bool fm_comp_min_call_stream_init(fm_frame_t *result, size_t args,
@@ -154,7 +154,7 @@ bool fm_comp_min_stream_exec(fm_frame_t *result, size_t args,
 
   auto *closure = (min_comp_cl *)ctx->comp;
 
-  fm_time64_t scheduled;
+  fmc_time64_t scheduled;
   scheduled.value = closure->t;
 
   if (scheduled == now) {
@@ -180,7 +180,7 @@ fm_call_def *fm_comp_min_stream_call(fm_comp_def_cl comp_cl,
 
 void fm_comp_min_queuer(size_t idx, fm_call_ctx_t *ctx) {
   int64_t &value = ((min_comp_cl *)(ctx->comp))->t;
-  fm_time64_t prev;
+  fmc_time64_t prev;
   prev.value = value;
   auto now = fm_stream_ctx_now((fm_stream_ctx_t *)ctx->exec);
   auto next = idx == 1 ? now : prev;

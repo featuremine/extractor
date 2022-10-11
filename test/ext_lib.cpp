@@ -23,7 +23,7 @@
 
 #include "extractor/common.hpp"
 #include "extractor/comp_def.hpp"
-#include "extractor/time64.hpp"
+#include "fmc++/time.hpp"
 
 #include <tuple>
 #include <vector>
@@ -46,8 +46,8 @@ public:
     result().resize(1);
     auto res = result()[0];
     res.count() = 0;
-    res.period() = fm_time64_from_raw(0);
-    prev_ = fm_time64_end();
+    res.period() = fmc_time64_from_raw(0);
+    prev_ = fmc_time64_end();
     return true;
   }
   bool exec(fm::stream_context &ctx) {
@@ -55,7 +55,7 @@ public:
     auto res = result()[0];
     auto count = res.count();
     res.count() += 1;
-    if (!fm_time64_is_end(prev_)) {
+    if (!fmc_time64_is_end(prev_)) {
       auto period = res.period();
       res.period() = (count * period + (now - prev_)) / (count + 1);
     }
@@ -66,7 +66,7 @@ public:
   bool exec(fm::query_context &ctx) { return false; }
 
 private:
-  fm_time64_t prev_;
+  fmc_time64_t prev_;
 };
 
 class timer_count_avg
@@ -79,14 +79,14 @@ public:
     result().resize(1);
     auto res = result()[0];
     res.count() = 0;
-    res.period() = fm_time64_from_raw(0);
+    res.period() = fmc_time64_from_raw(0);
     return true;
   }
   bool exec(fm::stream_context &ctx) {
     auto res = result()[0];
     int num = 0;
     int64_t total_count = 0;
-    fm_time64_t total_period = fm_time64_from_raw(0);
+    fmc_time64_t total_period = fmc_time64_from_raw(0);
     for (auto &in : input()) {
       ++num;
       total_count += in[0].count();

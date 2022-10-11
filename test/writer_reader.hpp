@@ -97,12 +97,12 @@ TEST(writer_reader, check) {
   auto *ctx = fm_stream_ctx_get(sys, g);
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   auto *f = fm_data_get(fm_result_ref_get(comp_A));
   std::cout << "f obtained" << std::endl;

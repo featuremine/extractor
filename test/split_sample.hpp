@@ -108,12 +108,12 @@ TEST(split_sample, main) {
   auto *ctx = fm_stream_ctx_get(sys, g);
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fmc_fflush();
 

@@ -28,7 +28,7 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "mp_util.hpp"
@@ -59,7 +59,7 @@ bool fm_comp_decode_receive_stream_exec(fm_frame_t *result, size_t,
                                         fm_call_exec_cl cl) {
   auto &d = *(ytp_msg_decoded *)fm_frame_get_cptr1(argv[0], 0, 0);
   auto dest_f = fm_frame_get_ptr1(result, 0, 0);
-  memcpy(dest_f, &d.time, sizeof(fm_time64_t));
+  memcpy(dest_f, &d.time, sizeof(fmc_time64_t));
   return true;
 }
 

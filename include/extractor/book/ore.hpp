@@ -25,7 +25,7 @@
 
 #include "extractor/book/updates.hpp"
 #include "extractor/decimal64.hpp"
-#include "extractor/time64.hpp"
+#include "fmc++/time.hpp"
 #include "fmc++/serialization.hpp"
 
 #include <string>
@@ -80,8 +80,8 @@ struct imnt_info {
 using imnt_infos_t = unordered_map<int32_t, imnt_info>;
 struct parser {
   parser(imnt_infos_t &infos) : imnts(infos) {}
-  fm_time64_t seconds = {0};
-  fm_time64_t time = {0};
+  fmc_time64_t seconds = {0};
+  fmc_time64_t time = {0};
   imnt_info *imnt = nullptr;
   imnt_infos_t &imnts;
   book::message msg;
@@ -133,7 +133,7 @@ inline result parser::parse_tme(cmp_ctx_t *ctx, uint32_t &left) {
   if (!cmp_read_many(ctx, &left, &sec)) {
     return result::ERR;
   }
-  seconds = fm_time64_from_seconds(sec);
+  seconds = fmc_time64_from_seconds(sec);
 
   book::updates::time msg{seconds};
   this->msg = msg;
@@ -149,8 +149,8 @@ int32_t parser::parse_hdr0(cmp_ctx_t *ctx, Msg &msg, uint32_t &left) {
                      &msg.batch, &imnt_idx)) {
     return -1;
   }
-  time = seconds + fm_time64_from_nanos(nanoseconds);
-  msg.vendor = time - fm_time64_from_nanos(vendoroff);
+  time = seconds + fmc_time64_from_nanos(nanoseconds);
+  msg.vendor = time - fmc_time64_from_nanos(vendoroff);
   return imnt_idx;
 }
 
@@ -171,7 +171,7 @@ inline result parser::parse_hdr(cmp_ctx_t *ctx, Msg &msg, uint32_t &left) {
 
 inline result parser::skip_msg(cmp_ctx_t *ctx, uint32_t &left) {
   struct {
-    fm_time64_t vendor;
+    fmc_time64_t vendor;
     uint64_t seqn;
     uint64_t id;
     uint16_t batch;
@@ -492,7 +492,7 @@ inline result parser::parse_set(cmp_ctx_t *ctx, uint32_t &left) {
 
 inline result parser::parse_ann(cmp_ctx_t *ctx, uint32_t &left) {
   struct {
-    fm_time64_t vendor;
+    fmc_time64_t vendor;
     uint64_t seqn;
     uint64_t id;
     uint16_t batch;

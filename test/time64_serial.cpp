@@ -21,7 +21,7 @@
  * @see http://www.featuremine.com
  */
 
-#include "extractor/time64.hpp"
+#include "fmc++/time.hpp"
 #include "fmc++/gtestwrap.hpp"
 
 #include <chrono>
@@ -33,9 +33,9 @@ TEST(time64, serial) {
   using namespace chrono;
   stringstream str;
   auto epoch = system_clock::now().time_since_epoch();
-  auto now = fm_time64_from_nanos(duration_cast<nanoseconds>(epoch).count());
+  auto now = fmc_time64_from_nanos(duration_cast<nanoseconds>(epoch).count());
   str << now;
-  fm_time64_t test = {};
+  fmc_time64_t test = {};
   str >> test;
   EXPECT_EQ(now, test);
 }

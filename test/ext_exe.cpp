@@ -35,7 +35,7 @@ extern "C" {
 #pragma clang diagnostic pop
 #endif
 
-#include "extractor/time64.hpp"
+#include "fmc++/time.hpp"
 #include <string>
 
 std::string src_dir;
@@ -86,7 +86,7 @@ TEST(ext_lib, stream) {
   auto *argtype =
       fm_tuple_type_get(tsys, 1, fm_base_type_get(tsys, FM_TYPE_TIME64));
 
-  auto period = fm_time64_from_seconds(5);
+  auto period = fmc_time64_from_seconds(5);
   auto *comp_A = fm_comp_decl(sys, g, "timer", 0, argtype, period);
   ASSERT_NE(comp_A, nullptr);
   auto *comp_B = fm_comp_decl(sys, g, "timer_count", 1, NULL, comp_A);
@@ -101,14 +101,14 @@ TEST(ext_lib, stream) {
   ASSERT_NE(ctx, nullptr);
 
   int counter = 0;
-  fm_time64_t now = fm_time64_from_seconds(1400000001);
+  fmc_time64_t now = fmc_time64_from_seconds(1400000001);
   do {
     fm_stream_ctx_proc_one(ctx, now);
     now = fm_stream_ctx_next_time(ctx);
     ++counter;
-  } while (now < fm_time64_from_seconds(1400000102));
+  } while (now < fmc_time64_from_seconds(1400000102));
 
-  ASSERT_EQ(fm_time64_to_nanos(now), 1400000105000000000L);
+  ASSERT_EQ(fmc_time64_to_nanos(now), 1400000105000000000L);
   ASSERT_EQ(counter, 21);
   fm_comp_sys_del(sys);
 }

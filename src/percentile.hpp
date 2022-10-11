@@ -26,7 +26,7 @@
 
 extern "C" {
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 #include "extractor/type_sys.h"
 }
 
@@ -261,7 +261,7 @@ template <template <class> class Comp> struct fm_percentile_time_window {
   }
   bool exec(fm_frame_t *result, size_t args, const fm_frame_t *const argv[],
             fm_call_ctx_t *ctx, bool interval, bool updated) {
-    const fm_time64_t now = fm_stream_ctx_now((fm_stream_ctx_t *)ctx->exec);
+    const fmc_time64_t now = fm_stream_ctx_now((fm_stream_ctx_t *)ctx->exec);
     while (!queue_.empty() && now >= queue_.front() + window_size_) {
       for (auto *call : calls) {
         call->pop();
@@ -287,9 +287,9 @@ template <template <class> class Comp> struct fm_percentile_time_window {
 
     return true;
   }
-  fm_time64_t window_size_;
+  fmc_time64_t window_size_;
   vector<percentile_exec_cl *> calls;
-  std::deque<fm_time64_t> queue_;
+  std::deque<fmc_time64_t> queue_;
   fm_type_decl_cp ret_type_;
   std::vector<uint64_t> vals_;
 };
