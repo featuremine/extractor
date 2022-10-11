@@ -74,6 +74,11 @@ def add_numpy(dest):
     import numpy
     dest.include_dirs += [numpy.get_include()]
 
+def add_extractor(dest, build_temp):
+    rootdir = os.path.split(os.path.abspath(os.path.split(os.path.abspath(os.path.split(os.path.abspath(build_temp))[0]))[0]))[0]
+    dest.library_dirs += [os.path.join(rootdir, 'package', 'lib')]
+    dest.libraries += ["extractor"]
+
 def install_library(build_temp, install_dir, libname, reponame, version=None, force_repo=False, force_system=False):
     if force_repo:
         need_build = True
@@ -142,6 +147,7 @@ class build_extractor_ext(build_ext):
         install_library(self.build_temp, self.install_dir, 'pyytp', 'yamal-python', 'api_additions')
         add_library(self, 'pyytp')
         add_numpy(self)
+        add_extractor(self, self.build_temp)
         return super().run()
 
     def build_extension(self, ext):

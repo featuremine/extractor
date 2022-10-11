@@ -22,6 +22,8 @@
  * @see http://www.featuremine.com
  */
 
+//TODO: Move to fmc++, delete this file from extractor
+
 #pragma once
 #include "fmc/platform.h"
 #if defined(FMC_SYS_WIN)
