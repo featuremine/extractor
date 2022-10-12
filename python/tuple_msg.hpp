@@ -29,13 +29,13 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
-#include "py_utils.hpp"
-#include "py_wrapper.hpp"
 #include "extractor/type_sys.h"
 #include "fmc++/mpl.hpp"
+#include "py_utils.hpp"
+#include "py_wrapper.hpp"
 
 #include <cassert>
 #include <errno.h>
@@ -158,7 +158,7 @@ py_field_conv get_py_field_checked_converter(fm_type_decl_cp decl) {
     case FM_TYPE_TIME64:
       return [](void *ptr, PyObject *obj) {
         if (PyLong_Check(obj)) {
-          *(TIME64 *)ptr = fm_time64_from_nanos(PyLong_AsLongLong(obj));
+          *(TIME64 *)ptr = fmc_time64_from_nanos(PyLong_AsLongLong(obj));
           if (PyErr_Occurred()) {
             return false;
           }
@@ -169,7 +169,7 @@ py_field_conv get_py_field_checked_converter(fm_type_decl_cp decl) {
           return false;
         }
         *(TIME64 *)ptr =
-            fm_time64_from_nanos(PyLong_AsLongLong(dt_ob.get_ref()));
+            fmc_time64_from_nanos(PyLong_AsLongLong(dt_ob.get_ref()));
         return true;
       };
       break;

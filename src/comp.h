@@ -26,8 +26,8 @@
 #define __FM_COMP_H__
 
 #include "arg_serial.h"
-#include "extractor/call_ctx.h"
 #include "comp_base.h"
+#include "extractor/call_ctx.h"
 #include "extractor/comp_def.h"
 
 typedef struct fm_result_ref fm_result_ref_t;

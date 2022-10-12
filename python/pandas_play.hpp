@@ -29,13 +29,13 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "errno.h"
-#include <cassert>
 #include "fmc++/counters.hpp"
 #include "fmc++/mpl.hpp"
+#include <cassert>
 #include <functional>
 #include <stdlib.h>
 #include <string>
@@ -340,7 +340,7 @@ bool pandas_parse_one(fm_exec_ctx_t *ctx, pandas_play_exec_cl *cl,
       if (!bool(val))
         return error("unable to obtain timestamp value");
       *(TIME64 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row) =
-          fm_time64_from_nanos(PyLong_AsLongLong(val.get_ref()));
+          fmc_time64_from_nanos(PyLong_AsLongLong(val.get_ref()));
       p_off += 3;
     } break;
     case 13: {
@@ -540,7 +540,7 @@ bool fm_comp_pandas_play_call_stream_init(fm_frame_t *result, size_t args,
     return false;
   }
 
-  auto next = fm_time64_from_nanos(PyLong_AsLongLong(val.get_ref()));
+  auto next = fmc_time64_from_nanos(PyLong_AsLongLong(val.get_ref()));
   fm_stream_ctx_schedule(exec_ctx, ctx->handle, next);
 
   return true;
@@ -576,7 +576,7 @@ bool fm_comp_pandas_play_stream_exec(fm_frame_t *result, size_t,
         return false;
       }
 
-      auto next = fm_time64_from_nanos(PyLong_AsLongLong(val.get_ref()));
+      auto next = fmc_time64_from_nanos(PyLong_AsLongLong(val.get_ref()));
       fm_stream_ctx_schedule(exec_ctx, ctx->handle, next);
     } else {
       return false;

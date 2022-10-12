@@ -23,24 +23,24 @@
  */
 
 extern "C" {
+#include "comp.h"
+#include "comp_graph.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_sys.h"
 #include "extractor/frame.h"
 #include "extractor/module.h"
-#include "comp.h"
-#include "comp_graph.h"
-#include "frame_serial.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
 #include "extractor/type_sys.h"
+#include "fmc/time.h"
+#include "frame_serial.h"
 #include <cmp/cmp.h>
 }
 
 #include "mp_util.hpp"
 #include "serial_util.hpp"
 
-#include <dlfcn.h>
 #include "fmc++/counters.hpp"
+#include <dlfcn.h>
 #include <functional>
 #include <string.h>
 #include <string>
@@ -48,9 +48,6 @@ extern "C" {
 #include <vector>
 
 #include "fmc/platform.h"
-#ifdef FMC_LICENSE
-#include <license.h>
-#endif // FMC_LICENSE
 using namespace std;
 
 /**
@@ -65,9 +62,5 @@ struct fm_comp_sys {
   std::string errmsg;
   unordered_map<string, fm_module_t *> modules_;
   unsigned modules_suff_;
-#ifdef FMC_LICENSE
-  RLM_HANDLE rh;
-  RLM_LICENSE lic = (RLM_LICENSE)NULL;
-#endif // FMC_LICENSE
   fmc::counter::samples samples_;
 };

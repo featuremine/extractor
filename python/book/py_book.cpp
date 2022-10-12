@@ -22,13 +22,13 @@
 #include <Python.h>
 
 extern "C" {
-#include "py_book.h"
-#include "extractor/py_side.h"
 #include "book/book.h"
+#include "extractor/python/py_side.h"
+#include "py_book.h"
 }
 
 #include "book/py_level.hpp"
-#include "extractor/side.hpp"
+#include "fmc++/side.hpp"
 
 struct BookStruct {
   PyObject_HEAD fm_book_shared_t *book_;

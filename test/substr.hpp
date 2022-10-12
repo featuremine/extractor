@@ -39,7 +39,7 @@ TEST(substr_comp, multiple_field) {
   string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -93,12 +93,12 @@ TEST(substr_comp, multiple_field) {
   auto *ctx = fm_stream_ctx_get(sys, g);
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fm_comp_sys_del(sys);
 
@@ -112,7 +112,7 @@ TEST(substr_comp, single_field) {
   string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -163,12 +163,12 @@ TEST(substr_comp, single_field) {
   auto *ctx = fm_stream_ctx_get(sys, g);
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fm_comp_sys_del(sys);
 

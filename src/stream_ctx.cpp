@@ -23,12 +23,12 @@
 
 extern "C" {
 #include "stream_ctx.h"
-#include "extractor/frame_base.h"
 #include "call_obj.h"
 #include "call_stack.h"
 #include "comp_base.h"
 #include "comp_graph.h"
-#include "extractor/time64.h"
+#include "extractor/frame_base.h"
+#include "fmc/time.h"
 }
 
 #include "exec_ctx.hpp"
@@ -38,18 +38,18 @@ extern "C" {
 #include <time.h>
 
 typedef struct {
-  using item = std::pair<fm_time64_t, fm_call_handle_t>;
+  using item = std::pair<fmc_time64_t, fm_call_handle_t>;
   using container = std::vector<item>;
   struct compare {
     bool operator()(const item &a, const item &b) {
-      return fm_time64_greater(a.first, b.first);
+      return fmc_time64_greater(a.first, b.first);
     }
   };
   std::priority_queue<item, container, compare> queue;
 } fm_call_timer_t;
 
 void fm_call_timer_schedule(fm_call_timer_t *timer, fm_call_handle_t handle,
-                            fm_time64_t t) {
+                            fmc_time64_t t) {
   timer->queue.emplace(t, handle);
 }
 
@@ -57,13 +57,13 @@ bool fm_call_timer_scheduled(fm_call_timer_t *timer) {
   return !timer->queue.empty();
 }
 
-fm_time64_t fm_call_timer_time(fm_call_timer_t *timer) {
-  return timer->queue.empty() ? fm_time64_end() : timer->queue.top().first;
+fmc_time64_t fm_call_timer_time(fm_call_timer_t *timer) {
+  return timer->queue.empty() ? fmc_time64_end() : timer->queue.top().first;
 }
 
-bool fm_call_timer_ready(fm_call_timer_t *timer, fm_time64_t t) {
+bool fm_call_timer_ready(fm_call_timer_t *timer, fmc_time64_t t) {
   return !(timer->queue.empty() ||
-           fm_time64_greater(timer->queue.top().first, t));
+           fmc_time64_greater(timer->queue.top().first, t));
 }
 
 fm_call_handle_t fm_call_timer_pop(fm_call_timer_t *timer) {
@@ -74,7 +74,7 @@ fm_call_handle_t fm_call_timer_pop(fm_call_timer_t *timer) {
 
 struct fm_stream_ctx : fm_exec_ctx_t {
   ~fm_stream_ctx();
-  fm_time64_t now;
+  fmc_time64_t now;
   fm_call_stack_t *stack = nullptr;
   fm_call_queue_t *queue = nullptr;
   fm_call_timer_t timer;
@@ -237,7 +237,7 @@ void fm_stream_ctx_queue(fm_stream_ctx_t *ctx, fm_call_handle_t handle) {
 }
 
 void fm_stream_ctx_schedule(fm_stream_ctx_t *ctx, fm_call_handle_t handle,
-                            fm_time64_t time) {
+                            fmc_time64_t time) {
   fm_call_timer_schedule(&ctx->timer, handle, time);
 }
 
@@ -254,7 +254,7 @@ bool fm_stream_ctx_idle(fm_stream_ctx_t *ctx) {
          fm_call_queue_empty(ctx->queue);
 }
 
-bool fm_stream_ctx_proc_one(fm_stream_ctx_t *ctx, fm_time64_t now) {
+bool fm_stream_ctx_proc_one(fm_stream_ctx_t *ctx, fmc_time64_t now) {
   auto *timer = &ctx->timer;
   while (fm_call_timer_ready(timer, now)) {
     fm_call_queue_push(ctx->queue, fm_call_timer_pop(timer));
@@ -271,34 +271,34 @@ bool fm_stream_ctx_proc_one(fm_stream_ctx_t *ctx, fm_time64_t now) {
   return false;
 }
 
-fm_time64_t fm_stream_ctx_now(fm_stream_ctx_t *ctx) { return ctx->now; }
+fmc_time64_t fm_stream_ctx_now(fm_stream_ctx_t *ctx) { return ctx->now; }
 
-fm_time64_t fm_stream_ctx_next_time(fm_stream_ctx_t *ctx) {
+fmc_time64_t fm_stream_ctx_next_time(fm_stream_ctx_t *ctx) {
   return fm_call_timer_time(&ctx->timer);
 }
 
-bool fm_stream_ctx_run_to(fm_stream_ctx_t *ctx, fm_time64_t e) {
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+bool fm_stream_ctx_run_to(fm_stream_ctx_t *ctx, fmc_time64_t e) {
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     if (!fm_stream_ctx_proc_one(ctx, now) && fm_exec_ctx_is_error(ctx)) {
       return false;
     }
     now.value = std::max(now.value, fm_stream_ctx_next_time(ctx).value);
-  } while (fm_time64_less(now, e));
+  } while (fmc_time64_less(now, e));
   return !fm_exec_ctx_is_error((fm_exec_ctx_t *)ctx);
 }
 
 bool fm_stream_ctx_run(fm_stream_ctx_t *ctx) {
-  return fm_stream_ctx_run_to(ctx, fm_time64_end());
+  return fm_stream_ctx_run_to(ctx, fmc_time64_end());
 }
 
-fm_time64_t fm_time64_now() {
+fmc_time64_t fmc_time64_now() {
   using namespace std::chrono;
   timespec ts;
   clock_gettime(CLOCK_REALTIME, &ts);
   auto nanos =
       duration_cast<nanoseconds>(seconds(ts.tv_sec)) + nanoseconds(ts.tv_nsec);
-  return fm_time64_from_nanos(nanos.count());
+  return fmc_time64_from_nanos(nanos.count());
 };
 
 static bool continue_event_loop = true;
@@ -316,7 +316,7 @@ bool fm_stream_ctx_run_live(fm_stream_ctx_t *ctx) {
     return false;
   }
   do {
-    auto now = fm_time64_now();
+    auto now = fmc_time64_now();
     fm_stream_ctx_proc_one(ctx, now);
     if (fm_exec_ctx_is_error((fm_exec_ctx_t *)ctx)) {
       signal(SIGINT, prev_sig_handler);

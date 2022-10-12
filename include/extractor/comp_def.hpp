@@ -25,13 +25,13 @@
 
 extern "C" {
 #include "extractor/comp_sys.h"
-#include "extractor/time64.h"
 #include "extractor/type_sys.h"
+#include "fmc/time.h"
 }
 
 #include "extractor/frame.hpp"
-#include "extractor/time64.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/time.hpp"
 
 #include <tuple>
 #include <utility>
@@ -63,12 +63,12 @@ public:
   void queue(abstract_computation *comp) {
     fm_stream_ctx_queue(ctx_, comp->handle());
   }
-  void schedule(abstract_computation *comp, fm_time64_t time) {
+  void schedule(abstract_computation *comp, fmc_time64_t time) {
     fm_stream_ctx_schedule(ctx_, comp->handle(), time);
   }
   bool scheduled() { return fm_stream_ctx_scheduled(ctx_); }
   bool idle() { return fm_stream_ctx_idle(ctx_); }
-  fm_time64_t now() { return fm_stream_ctx_now(ctx_); }
+  fmc_time64_t now() { return fm_stream_ctx_now(ctx_); }
 
 private:
   fm_stream_ctx_t *ctx_;
@@ -160,7 +160,7 @@ template <class T> bool fm_type_is(fm_type_decl_cp td) {
       [td](fmc::typify<double>) {
         return fm_type_is_base(td) && fm_type_base_enum(td) == FM_TYPE_FLOAT64;
       },
-      [td](fmc::typify<fm_time64_t>) {
+      [td](fmc::typify<fmc_time64_t>) {
         return fm_type_is_base(td) && fm_type_base_enum(td) == FM_TYPE_TIME64;
       },
       [td](fmc::typify<char>) {

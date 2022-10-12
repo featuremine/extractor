@@ -24,10 +24,10 @@
 extern "C" {
 #include "extractor/type_decl.h"
 }
-#include "extractor/rational64.hpp"
-#include "extractor/decimal64.hpp"
 #include "extractor/comp_def.hpp"
-#include "extractor/time64.hpp"
+#include "extractor/decimal64.hpp"
+#include "extractor/rational64.hpp"
+#include "fmc++/time.hpp"
 
 #include <Python.h>
 #include <datetime.h>
@@ -236,12 +236,12 @@ template <class T> struct py_type_convert {
 // for now we need to declare the type separately
 struct ExtractorBaseTypeTime64 {
   PyObject_HEAD;
-  fm_time64_t val;
+  fmc_time64_t val;
   static void py_dealloc(ExtractorBaseTypeTime64 *self) {
     Py_TYPE(self)->tp_free((PyObject *)self);
   }
   static PyObject *py_richcmp(PyObject *obj1, PyObject *obj2, int op);
-  static PyObject *py_new(fm_time64_t t);
+  static PyObject *py_new(fmc_time64_t t);
   static bool init(PyObject *m);
   static PyObject *tp_new(PyTypeObject *type, PyObject *args, PyObject *kwds);
 };
@@ -254,7 +254,7 @@ static PyObject *ExtractorBaseTypeTime64_from_seconds(PyObject *type,
                                      "seconds");
     return nullptr;
   }
-  return ExtractorBaseTypeTime64::py_new(fm_time64_from_seconds(sec));
+  return ExtractorBaseTypeTime64::py_new(fmc_time64_from_seconds(sec));
 }
 
 static PyObject *ExtractorBaseTypeTime64_from_timedelta(PyObject *self,
@@ -272,17 +272,17 @@ static PyObject *ExtractorBaseTypeTime64_from_timedelta(PyObject *self,
   int64_t secs = days * 24 * 3600 + PyDateTime_DELTA_GET_SECONDS(delta);
   int64_t mics = PyDateTime_DELTA_GET_MICROSECONDS(delta);
   int64_t total_nanos = secs * 1000000000 + mics * 1000;
-  auto t = fm_time64_from_nanos(total_nanos);
+  auto t = fmc_time64_from_nanos(total_nanos);
   return ExtractorBaseTypeTime64::py_new(t);
 }
 
 static PyObject *ExtractorBaseTypeTime64_end_time(PyObject *type,
                                                   PyObject *sec_obj) {
-  return ExtractorBaseTypeTime64::py_new(fm_time64_end());
+  return ExtractorBaseTypeTime64::py_new(fmc_time64_end());
 }
 
 static PyObject *ExtractorBaseTypeTime64_as_timedelta(PyObject *self) {
-  int64_t ns = fm_time64_to_nanos(((ExtractorBaseTypeTime64 *)self)->val);
+  int64_t ns = fmc_time64_to_nanos(((ExtractorBaseTypeTime64 *)self)->val);
   int64_t us = ns / 1000;
   int64_t sec = us / 1000000;
   us = us - sec * 1000000;
@@ -297,12 +297,12 @@ static PyObject *ExtractorBaseTypeTime64_from_nanos(PyObject *self,
   if (!PyArg_ParseTuple(args, "l", &nanos)) {
     return nullptr;
   }
-  auto t = fm_time64_from_nanos(nanos);
+  auto t = fmc_time64_from_nanos(nanos);
   return ExtractorBaseTypeTime64::py_new(t);
 }
 
 static PyObject *ExtractorBaseTypeTime64_as_nanos(PyObject *self) {
-  int64_t ns = fm_time64_to_nanos(((ExtractorBaseTypeTime64 *)self)->val);
+  int64_t ns = fmc_time64_to_nanos(((ExtractorBaseTypeTime64 *)self)->val);
   return PyLong_FromLongLong(ns);
 }
 
@@ -384,7 +384,7 @@ PyObject *ExtractorBaseTypeTime64::tp_new(PyTypeObject *type, PyObject *args,
     error("cannot parse tuple");
 
   fm::python::datetime dt(fm::python::object::from_borrowed(input));
-  auto time64 = static_cast<fm_time64_t>(dt);
+  auto time64 = static_cast<fmc_time64_t>(dt);
   auto *err = PyErr_Occurred();
   if (err == nullptr)
     return py_new(time64);
@@ -393,7 +393,7 @@ PyObject *ExtractorBaseTypeTime64::tp_new(PyTypeObject *type, PyObject *args,
   return create(type, args, kwds);
 }
 
-PyObject *ExtractorBaseTypeTime64::py_new(fm_time64_t t) {
+PyObject *ExtractorBaseTypeTime64::py_new(fmc_time64_t t) {
   PyTypeObject *type = (PyTypeObject *)&ExtractorBaseTypeTime64Type;
   ExtractorBaseTypeTime64 *self;
 
@@ -424,8 +424,8 @@ PyObject *ExtractorBaseTypeTime64::py_richcmp(PyObject *obj1, PyObject *obj2,
   }
   PyObject *result;
   int c = 0;
-  fm_time64_t t1;
-  fm_time64_t t2;
+  fmc_time64_t t1;
+  fmc_time64_t t2;
   t1 = ((ExtractorBaseTypeTime64 *)obj1)->val;
   t2 = ((ExtractorBaseTypeTime64 *)obj2)->val;
   switch (op) {

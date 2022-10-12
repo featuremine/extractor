@@ -24,7 +24,7 @@
 """
 from datetime import datetime, timedelta
 import extractor as extr
-import ytp
+from yamal import ytp
 import os
 import shutil
 

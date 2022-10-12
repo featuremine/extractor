@@ -28,13 +28,13 @@ extern "C" {
 #include "extractor/type_sys.h"
 }
 
-#include "test_util.hpp"
 #include "fmc++/gtestwrap.hpp"
+#include "test_util.hpp"
 #include <iostream>
 
 TEST(module_serial, serialize) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);

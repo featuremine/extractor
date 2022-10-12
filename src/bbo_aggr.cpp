@@ -24,21 +24,21 @@
 
 extern "C" {
 #include "bbo_aggr.h"
-#include "extractor/comp_sys.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
 #include "extractor/decimal64.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "extractor/rprice.hpp"
-#include "extractor/side.hpp"
+#include "fmc++/side.hpp"
 
 #include <utility>
 #include <vector>
 
-using namespace fm;
+using namespace fmc;
 using namespace std;
 
 struct bbo_aggr_exec_cl {
@@ -88,7 +88,7 @@ bool fm_comp_bbo_aggr_stream_exec(fm_frame_t *result, size_t argc,
                                   fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
   auto *exec_cl = (bbo_aggr_exec_cl *)cl;
   auto now = fm_stream_ctx_now((fm_stream_ctx_t *)ctx->exec);
-  *(fm_time64_t *)fm_frame_get_ptr1(result, exec_cl->rec, 0) = now;
+  *(fmc_time64_t *)fm_frame_get_ptr1(result, exec_cl->rec, 0) = now;
   for (auto side : trade_side::all()) {
     better<rprice> cmp(side);
     auto best_px = sided<rprice>()[side];

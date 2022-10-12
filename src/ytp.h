@@ -24,7 +24,7 @@
 
 #pragma once
 
-#include "ytp/sequence.h"
+#include "ytp/api.h"
 
 struct ytp_msg_decoded {
   uint64_t time;
@@ -32,21 +32,21 @@ struct ytp_msg_decoded {
 };
 
 struct ytp_sequence_wrapper {
-  ytp_sequence_shared_t *sequence;
+  shared_sequence *sequence;
 };
 
 struct ytp_stream_wrapper {
-  ytp_sequence_shared_t *sequence;
+  shared_sequence *sequence;
   ytp_peer_t peer;
   ytp_channel_t channel;
 };
 
 struct ytp_channel_wrapper {
-  ytp_sequence_shared_t *sequence;
+  shared_sequence *sequence;
   ytp_channel_t channel;
 };
 
 struct ytp_peer_wrapper {
-  ytp_sequence_shared_t *sequence;
+  shared_sequence *sequence;
   ytp_peer_t peer;
 };

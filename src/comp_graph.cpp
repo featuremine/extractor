@@ -24,8 +24,8 @@ extern "C" {
 #include "comp_graph.h"
 }
 
-#include <algorithm>
 #include "fmc++/mpl.hpp"
+#include <algorithm>
 #include <set>
 #include <string.h>
 #include <unordered_map>

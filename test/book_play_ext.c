@@ -20,8 +20,8 @@
  * @see http://www.featuremine.com
  */
 
-#include "extractor/comp_sys.h"
 #include "book_play_split.h"
+#include "extractor/comp_sys.h"
 /**
  * Computation definition
  * It must provide the following information to describe a computation:

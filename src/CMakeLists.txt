@@ -104,7 +104,6 @@ target_link_libraries(
     PUBLIC
     fmc++
     ytp
-    rlm
 )
 target_include_directories(
     extractor_obj
@@ -122,7 +121,6 @@ target_link_libraries(
     INTERFACE
     fmc++
     ytp
-    rlm
 )
 target_include_directories(
     extractor_dep
@@ -132,7 +130,7 @@ target_include_directories(
 
 add_library(
     extractor
-    SHARED
+    STATIC
     $<TARGET_OBJECTS:extractor_obj>
 )
 target_link_libraries(

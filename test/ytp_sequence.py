@@ -20,7 +20,7 @@
 
 from run_live import run_live_test
 from datetime import timedelta
-import ytp
+from yamal import ytp
 import os
 import extractor as extr
 from time import time, sleep

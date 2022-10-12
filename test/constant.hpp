@@ -37,7 +37,7 @@ TEST(constant_comp, single_field) {
   using namespace std;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -119,12 +119,12 @@ TEST(constant_comp, single_field) {
   auto *ctx = fm_stream_ctx_get(sys, g);
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fm_comp_sys_del(sys);
 
@@ -143,7 +143,7 @@ TEST(constant_comp, multiple_field) {
   using namespace std;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -190,7 +190,7 @@ TEST(constant_comp, multiple_field) {
 
   auto *comp_B = fm_comp_decl(
       sys, g, "constant", 0, constant_param_t, "timestamp",
-      fm_base_type_get(tsys, FM_TYPE_TIME64), fm_time64_from_nanos(20), "val1",
+      fm_base_type_get(tsys, FM_TYPE_TIME64), fmc_time64_from_nanos(20), "val1",
       fm_base_type_get(tsys, FM_TYPE_DECIMAL64), fm_decimal64_from_double(1.0),
       "val2", fm_base_type_get(tsys, FM_TYPE_INT32), 0);
   ASSERT_NE(comp_B, nullptr);
@@ -207,12 +207,12 @@ TEST(constant_comp, multiple_field) {
   auto *ctx = fm_stream_ctx_get(sys, g);
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fm_comp_sys_del(sys);
 
@@ -226,7 +226,7 @@ TEST(constant_comp, string) {
   using namespace std;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -267,12 +267,12 @@ TEST(constant_comp, string) {
   auto *ctx = fm_stream_ctx_get(sys, g);
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   ASSERT_EQ(
       strncmp(val1, (char *)fm_frame_get_ptr1(fm_data_get(ref_B), 0, 0), 4), 0);

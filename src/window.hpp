@@ -118,63 +118,63 @@ template <class T>
 using median_comp_cl = queued_field_exec_cl<T, median_base_comp_cl>;
 
 template <class T> struct ema_exp_base_comp_cl {
-  ema_exp_base_comp_cl(fm_time64_t size) : window_size_(size) {}
+  ema_exp_base_comp_cl(fmc_time64_t size) : window_size_(size) {}
   T init(const T &val) { return buff_ = val; };
-  void set(const T &val, const fm_time64_t &prev, const fm_time64_t &now) {
+  void set(const T &val, const fmc_time64_t &prev, const fmc_time64_t &now) {
     if (isnan(buff_)) {
       buff_ = val;
       return;
     }
-    T e = exp(-(T(fm_time64_raw(now)) - T(fm_time64_raw(prev))) /
-              T(fm_time64_raw(window_size_)));
+    T e = exp(-(T(fmc_time64_raw(now)) - T(fmc_time64_raw(prev))) /
+              T(fmc_time64_raw(window_size_)));
     buff_ = (1.0 - e) * val + e * buff_;
   };
-  T asof(const T &val, const fm_time64_t &prev, const fm_time64_t &now) {
+  T asof(const T &val, const fmc_time64_t &prev, const fmc_time64_t &now) {
     if (prev == now || isnan(val)) {
       return buff_;
     }
-    T e = exp(-(T(fm_time64_raw(now)) - T(fm_time64_raw(prev))) /
-              T(fm_time64_raw(window_size_)));
+    T e = exp(-(T(fmc_time64_raw(now)) - T(fmc_time64_raw(prev))) /
+              T(fmc_time64_raw(window_size_)));
     return (1.0 - e) * val + e * buff_;
   };
   T buff_;
-  fm_time64_t window_size_;
+  fmc_time64_t window_size_;
 };
 
 template <class T>
 using ema_exp_comp_cl = exp_field_exec_cl<T, ema_exp_base_comp_cl>;
 
 template <class T> struct stdev_exp_base_comp_cl {
-  stdev_exp_base_comp_cl(fm_time64_t size) : var_(0.0), window_size_(size) {}
+  stdev_exp_base_comp_cl(fmc_time64_t size) : var_(0.0), window_size_(size) {}
   T init(const T &val) {
     buff_ = val;
     return T(0.0);
   };
-  void set(const T &val, const fm_time64_t &prev, const fm_time64_t &now) {
+  void set(const T &val, const fmc_time64_t &prev, const fmc_time64_t &now) {
     if (isnan(buff_)) {
       buff_ = val;
       var_ = T(0.0);
       return;
     }
     T delta = val - buff_;
-    T e = exp(-(T(fm_time64_raw(now)) - T(fm_time64_raw(prev))) /
-              T(fm_time64_raw(window_size_)));
+    T e = exp(-(T(fmc_time64_raw(now)) - T(fmc_time64_raw(prev))) /
+              T(fmc_time64_raw(window_size_)));
     buff_ = buff_ + (1.0 - e) * delta;
     var_ = e * (var_ + (1.0 - e) * delta * delta);
   };
-  T asof(const T &val, const fm_time64_t &prev, const fm_time64_t &now) {
+  T asof(const T &val, const fmc_time64_t &prev, const fmc_time64_t &now) {
     if (prev == now || isnan(val)) {
       return sqrt(var_);
     }
 
     T delta = val - buff_;
-    T e = exp(-(T(fm_time64_raw(now)) - T(fm_time64_raw(prev))) /
-              T(fm_time64_raw(window_size_)));
+    T e = exp(-(T(fmc_time64_raw(now)) - T(fmc_time64_raw(prev))) /
+              T(fmc_time64_raw(window_size_)));
     return sqrt(e * (var_ + (1.0 - e) * delta * delta));
   };
   T buff_;
   T var_;
-  fm_time64_t window_size_;
+  fmc_time64_t window_size_;
 };
 
 template <class T>

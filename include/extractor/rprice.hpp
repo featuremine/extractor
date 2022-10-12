@@ -23,12 +23,12 @@
 
 #include "extractor/decimal64.hpp"
 #include "fmc++/convert.hpp"
-#include "extractor/side.hpp"
+#include "fmc++/side.hpp"
 
 #include <iomanip>
 #include <iostream>
 
-namespace fm {
+namespace fmc {
 using namespace std;
 
 using rprice = fm_decimal64_t;
@@ -38,32 +38,34 @@ template <> struct sided_initializer<rprice> {
   static constexpr rprice min() noexcept { return FM_DECIMAL64_MIN; }
   static constexpr rprice max() noexcept { return FM_DECIMAL64_MAX; }
 };
-} // namespace fm
+} // namespace fmc
 
 namespace fmc {
-template <> struct conversion<fm::rprice, double> {
-  double operator()(fm::rprice x) { return fm_decimal64_to_double(x); }
+template <> struct conversion<fmc::rprice, double> {
+  double operator()(fmc::rprice x) { return fm_decimal64_to_double(x); }
 };
 
-template <> struct conversion<double, fm::rprice> {
-  fm::rprice operator()(double x) { return fm_decimal64_from_double(x); }
+template <> struct conversion<double, fmc::rprice> {
+  fmc::rprice operator()(double x) { return fm_decimal64_from_double(x); }
 };
 } // namespace fmc
 
 namespace std {
-inline ostream &operator<<(ostream &s, const fm::rprice &x) {
+inline ostream &operator<<(ostream &s, const fmc::rprice &x) {
   using namespace std;
   return s << setprecision(15) << fmc::to<double>(x);
 }
 
-inline istream &operator>>(istream &s, fm::rprice &x) {
+inline istream &operator>>(istream &s, fmc::rprice &x) {
   using namespace std;
   double d;
   s >> d;
-  x = fmc::to<fm::rprice>(d);
+  x = fmc::to<fmc::rprice>(d);
   return s;
 }
 
-inline string to_string(fm::rprice &x) { return to_string(fmc::to<double>(x)); }
+inline string to_string(fmc::rprice &x) {
+  return to_string(fmc::to<double>(x));
+}
 
 } // namespace std

@@ -24,17 +24,17 @@
 
 extern "C" {
 #include "extractor/comp_sys.h"
-#include "extractor/arg_stack.h"
-#include "extractor/frame.h"
 #include "comp.h"
 #include "comp_graph.h"
-#include "stream_ctx.h"
+#include "extractor/arg_stack.h"
+#include "extractor/frame.h"
 #include "extractor/type_sys.h"
+#include "stream_ctx.h"
 }
 
 #include "comp_sys.hpp"
-#include "serial_util.hpp"
 #include "fmc++/strings.hpp"
+#include "serial_util.hpp"
 
 #include <algorithm>
 #include <cstdio>
@@ -48,32 +48,12 @@ extern "C" {
 
 #include "fmc/extension.h"
 #include "fmc/platform.h"
-#ifdef FMC_LICENSE
-#include <license.h>
-#include <license.hpp>
-#endif
 
 using namespace std;
 
-fm_comp_sys_t *fm_comp_sys_new(const char *license_file, char **errmsg) {
-
-  static mutex m;
-
-  lock_guard<mutex> guard(m);
-
-#ifdef FMC_LICENSE
-  RLM_HANDLE rh;
-  RLM_LICENSE lic = (RLM_LICENSE)NULL;
-  if (!fm::rlm_checkin(&lic, &rh, license_file, errmsg)) {
-    return nullptr;
-  }
-#endif
+fm_comp_sys_t *fm_comp_sys_new(char **errmsg) {
   auto *s = new fm_comp_sys();
   s->types = fm_type_sys_new();
-#ifdef FMC_LICENSE
-  s->rh = rh;
-  s->lic = lic;
-#endif
   return s;
 }
 
@@ -89,9 +69,6 @@ void fm_comp_sys_cleanup(fm_comp_sys_t *s) {
 }
 
 void fm_comp_sys_del(fm_comp_sys_t *s) {
-#ifdef FMC_LICENSE
-  fm::rlm_checkout(s->lic, s->rh);
-#endif
   fm_type_sys_del(s->types);
   fm_comp_sys_cleanup(s);
   delete s;
@@ -284,7 +261,7 @@ bool fm_comp_sys_ext_load(fm_comp_sys_t *s, const char *name,
   auto handle = fmc_ext_open(path, &error);
   if (error) {
     fm_comp_sys_error_set(s,
-                          "[ERROR]\t(comp_sys) failed to load "
+                          "[ERROR]\t(comp_sys) failed to open "
                           "extension library %s from %s;\n\t%s",
                           name, path, fmc_error_msg(error));
     return false;
@@ -311,3 +288,9 @@ bool fm_comp_sys_sample_value(fm_comp_sys_t *sys, const char *sample_name,
   }
   return false;
 }
+
+static ytp_sequence_api_v1 *api_v1 = nullptr;
+
+void set_ytp_api_v1(ytp_sequence_api_v1 *api) { api_v1 = api; }
+
+ytp_sequence_api_v1 *get_ytp_api_v1() { return api_v1; }

@@ -3,7 +3,7 @@ extern "C" {
 #include "frame_serial.h"
 #include "extractor/frame.h"
 #include "extractor/serial.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 #include <cmp/cmp.h>
 }
 

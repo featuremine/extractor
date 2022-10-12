@@ -44,7 +44,7 @@ TEST(module, create) {
 
 TEST(module, add_comps) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -81,7 +81,7 @@ TEST(module, add_comps) {
 
 TEST(module, add_multi_comps) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -128,7 +128,7 @@ TEST(module, add_multi_comps) {
 
 TEST(module, add_repeated_comps) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -175,7 +175,7 @@ TEST(module, add_repeated_comps) {
 
 TEST(module, run_comps) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -228,12 +228,12 @@ TEST(module, run_comps) {
 
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fm_module_del(m);
 
@@ -245,7 +245,7 @@ TEST(module, run_comps) {
 
 TEST(module, comp_no_params) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -304,12 +304,12 @@ TEST(module, comp_no_params) {
 
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fm_module_del(m);
 
@@ -321,7 +321,7 @@ TEST(module, comp_no_params) {
 
 TEST(module, multi_inst) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -365,12 +365,12 @@ TEST(module, multi_inst) {
 
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fm_module_del(m);
 
@@ -382,7 +382,7 @@ TEST(module, multi_inst) {
 
 TEST(module, failed_multi_equal_comp_name) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -425,7 +425,7 @@ TEST(module, failed_multi_equal_comp_name) {
 
 TEST(module, multi_module) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -501,12 +501,12 @@ TEST(module, multi_module) {
 
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fm_module_del(m);
 
@@ -525,7 +525,7 @@ TEST(module, multi_module) {
 
 TEST(module, failed_multi_equal_module_name) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -581,7 +581,7 @@ TEST(module, failed_multi_equal_module_name) {
 
 TEST(module, run_comps_with_input) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -638,12 +638,12 @@ TEST(module, run_comps_with_input) {
 
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fm_module_del(m);
 
@@ -657,7 +657,7 @@ TEST(module, run_comps_with_input) {
 
 TEST(module, run_comps_with_output) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -712,12 +712,12 @@ TEST(module, run_comps_with_output) {
   auto *ctx = fm_stream_ctx_get(sys, g);
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fm_module_del(m);
 

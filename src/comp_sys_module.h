@@ -12,9 +12,9 @@
 
  *****************************************************************************/
 
+#include "comp_graph.h"
 #include "extractor/comp_sys.h"
 #include "extractor/module.h"
-#include "comp_graph.h"
 #include "frame_serial.h"
 
 char *fm_module_uniq_name_gen(fm_comp_sys_t *sys);

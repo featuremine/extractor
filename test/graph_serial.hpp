@@ -24,17 +24,17 @@
  */
 
 extern "C" {
+#include "comp_graph.h"
 #include "extractor/comp_sys.h"
 #include "extractor/frame.h"
-#include "comp_graph.h"
 #include "extractor/std_comp.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/type_sys.h"
 }
 
-#include "test_util.hpp"
 #include "fmc++/gtestwrap.hpp"
 #include "fmc/platform.h"
+#include "test_util.hpp"
 #include <iostream>
 
 using namespace fmc;
@@ -49,7 +49,7 @@ TEST(graph_serial, dep_sort) {
                    "identity_2\n";
 
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -131,7 +131,7 @@ TEST(graph_serial, serialize) {
                    "identity_2\n";
 
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);

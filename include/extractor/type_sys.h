@@ -413,13 +413,13 @@ FMMODFUNC bool fm_arg_try_uinteger(fm_type_decl_cp, fm_arg_stack_t *,
                                    uint64_t *);
 
 /**
- * @brief will try to get an fm_time64_t
+ * @brief will try to get an fmc_time64_t
  *
  * Function will try to get an signed int. If the type is unmatched,
  * stack will remain untouched.
  */
 FMMODFUNC bool fm_arg_try_time64(fm_type_decl_cp, fm_arg_stack_t *,
-                                 fm_time64_t *);
+                                 fmc_time64_t *);
 
 /**
  * @brief will try to get a type declaration parameter

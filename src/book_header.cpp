@@ -24,18 +24,18 @@
  */
 
 extern "C" {
+#include "book/book.h"
+#include "book_msg.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
-#include "book/book.h"
-#include "book_msg.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "extractor/book/updates.hpp"
-#include "extractor/time64.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/time.hpp"
 
 #include <string>
 #include <variant>
@@ -55,10 +55,10 @@ public:
   }
   ~header_op_cl() {}
   void init(fm_frame_t *result) {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, receive_field_, 0) =
-        fm_time64_start();
-    *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
-        fm_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, receive_field_, 0) =
+        fmc_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+        fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
   }
@@ -69,9 +69,9 @@ public:
             [](const book::updates::time &m) { return false; },
             [](const book::updates::none &m) { return false; },
             [&](const auto &m) {
-              *(fm_time64_t *)fm_frame_get_ptr1(result, receive_field_, 0) =
+              *(fmc_time64_t *)fm_frame_get_ptr1(result, receive_field_, 0) =
                   fm_stream_ctx_now(ctx);
-              *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+              *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
                   m.vendor;
               *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = m.seqn;
               *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = m.batch;

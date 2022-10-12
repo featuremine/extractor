@@ -23,12 +23,12 @@
 
 extern "C" {
 #include "csv_tail.h"
+#include "csv_play.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
-#include "csv_play.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 #include "csv_utils.hpp"
 #include "errno.h"
@@ -39,8 +39,8 @@ extern "C" {
 #include <utility>
 #include <vector>
 
-#include "extractor/time64.hpp"
 #include "fmc++/strings.hpp"
+#include "fmc++/time.hpp"
 
 struct csv_tail_exec_cl {
   explicit csv_tail_exec_cl(FILE *file, bool is_pipe) : reader(file, is_pipe) {}
@@ -54,7 +54,7 @@ struct csv_tail_exec_cl {
 struct csv_tail_info {
   fm_type_sys_t *tsys;
   std::string file;
-  fm_time64_t polling_period;
+  fmc_time64_t polling_period;
   std::vector<csv_column_info> columns;
 };
 
@@ -62,7 +62,7 @@ int process_row(fm_frame_t *frame, fm_call_ctx_t *ctx,
                 csv_tail_exec_cl *exec_cl) {
   auto *exec_ctx = (fm_exec_ctx *)ctx->exec;
 
-  auto error = [exec_ctx](auto &&... args) {
+  auto error = [exec_ctx](auto &&...args) {
     fm_exec_ctx_error_set(exec_ctx, args...);
     return -1;
   };
@@ -324,7 +324,7 @@ fm_ctx_def_t *fm_comp_csv_tail_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     return error("expect first parameter to be a file name");
   const char *file = STACK_POP(plist, const char *);
 
-  fm_time64_t polling_period{0};
+  fmc_time64_t polling_period{0};
   auto *polling_period_param = fm_type_tuple_arg(ptype, 1);
   if (!fm_arg_try_time64(polling_period_param, &plist, &polling_period))
     return error("expect second parameter to be a polling period");

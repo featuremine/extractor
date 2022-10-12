@@ -27,15 +27,15 @@ extern "C" {
 #include "extractor/arg_stack.h"  // fm_arg_stack_t
 #include "extractor/comp_def.h"   // fm_ctx_def_cl
 #include "extractor/comp_sys.h"   // fm_type_sys_get
-#include "fmc/error.h"  // fmc_error_t
 #include "extractor/stream_ctx.h" // fm_stream_ctx_queue
+#include "fmc/error.h"            // fmc_error_t
 }
 
 #include "extractor/book/ore.hpp"     // parser
 #include "extractor/book/updates.hpp" // fm::book::updates::announce
-#include "ytp.h"        // ytp_channel_wrapper
 #include "fmc++/serialization.hpp"
-#include "ytp/sequence.h" // ytp_sequence_t
+#include "ytp.h"     // ytp_channel_wrapper
+#include "ytp/api.h" // ytp_sequence_t
 
 #include <deque>
 #include <string>
@@ -43,10 +43,12 @@ extern "C" {
 #include <unordered_map>
 #include <variant> // get_if
 
+static ytp_sequence_api_v1 *ytp_; // ytp_api
+
 struct ore_ytp_decode_cl {
   fm_frame_alloc_t *alloc;
   fm_frame_t *frame;
-  ytp_sequence_shared_t *shared_seq;
+  shared_sequence *shared_seq;
   ytp_channel_t channel;
   fm_stream_ctx *exec_ctx;
   fm_call_ctx *call_ctx;
@@ -57,22 +59,21 @@ struct ore_ytp_decode_cl {
   fm::book::ore::imnt_infos_t imnts;
   fm::book::ore::parser parser;
 
-  ore_ytp_decode_cl(fm_type_decl_cp type, ytp_sequence_shared_t *shared_seq,
+  ore_ytp_decode_cl(fm_type_decl_cp type, shared_sequence *shared_seq,
                     ytp_channel_t channel)
       : alloc(fm_frame_alloc_new()), frame(fm_frame_from_type(alloc, type)),
         shared_seq(shared_seq), channel(channel), parser(imnts) {
     fmc_error_t *error;
-    ytp_sequence_shared_inc(shared_seq);
-    ytp_sequence_t *seq = ytp_sequence_shared_get(shared_seq);
-    ytp_sequence_indx_cb(seq, channel, static_data_cb, this, &error);
+    ytp_->sequence_shared_inc(shared_seq);
+    ytp_->sequence_indx_cb(shared_seq, channel, static_data_cb, this, &error);
   }
 
   ~ore_ytp_decode_cl() {
     fm_frame_alloc_del(alloc);
     fmc_error_t *error;
-    ytp_sequence_t *seq = ytp_sequence_shared_get(shared_seq);
-    ytp_sequence_indx_cb_rm(seq, channel, static_data_cb, this, &error);
-    ytp_sequence_shared_dec(shared_seq, &error);
+    ytp_->sequence_indx_cb_rm(shared_seq, channel, static_data_cb, this,
+                              &error);
+    ytp_->sequence_shared_dec(shared_seq, &error);
   }
 
   static void static_data_cb(void *closure, ytp_peer_t peer,
@@ -174,6 +175,13 @@ fm_ctx_def_t *fm_comp_ore_ytp_decode_gen(fm_comp_sys_t *csys,
                                          fm_type_decl_cp argv[],
                                          fm_type_decl_cp ptype,
                                          fm_arg_stack_t plist) {
+  ytp_ = get_ytp_api_v1();
+  if (!ytp_) {
+    auto *errstr = "ytp api is not set";
+    fm_comp_sys_error_set(csys, errstr);
+    return nullptr;
+  }
+
   auto *sys = fm_type_sys_get(csys);
   if (argc != 0) {
     auto *errstr = "expect no operator arguments";

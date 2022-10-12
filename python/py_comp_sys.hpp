@@ -58,7 +58,7 @@ ExtractorSystem *ExtractorSystem_lazy(ExtractorSystem *obj) {
       return nullptr;
     }
     char *errmsg;
-    self->sys = fm_comp_sys_new(file_name, &errmsg);
+    self->sys = fm_comp_sys_new(&errmsg);
     if (!self->sys) {
       PyErr_SetString(PyExc_RuntimeError, errmsg);
       free(errmsg);
