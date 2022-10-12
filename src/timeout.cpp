@@ -24,15 +24,14 @@
 
 extern "C" {
 #include "timeout.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include <fmc/time.h>
-#include <ytp/sequence.h>
+#include "fmc/time.h"
 
 #include <array>
 #include <chrono>
@@ -44,9 +43,9 @@ extern "C" {
 #include <unordered_map>
 
 struct timeout_cl {
-  fm_time64_t timeout_period;
-  fm_time64_t timeout_on = fm_time64_start();
-  fm_time64_t scheduled_on = fm_time64_start();
+  fmc_time64_t timeout_period;
+  fmc_time64_t timeout_on = fmc_time64_start();
+  fmc_time64_t scheduled_on = fmc_time64_start();
   BOOL current_value = true;
   bool updated = false;
 };
@@ -68,25 +67,25 @@ bool fm_comp_timeout_stream_exec(fm_frame_t *result, size_t,
 
   auto now = fm_stream_ctx_now(s_ctx);
 
-  auto schedule_event = !fm_time64_greater(exec_cl.scheduled_on, now);
+  auto schedule_event = !fmc_time64_greater(exec_cl.scheduled_on, now);
 
   if (exec_cl.updated) {
     exec_cl.updated = false;
 
-    auto new_timeout = fm_time64_add(now, exec_cl.timeout_period);
+    auto new_timeout = fmc_time64_add(now, exec_cl.timeout_period);
     exec_cl.timeout_on = new_timeout;
   }
 
   if (schedule_event) {
-    if (fm_time64_greater(exec_cl.timeout_on, now)) {
+    if (fmc_time64_greater(exec_cl.timeout_on, now)) {
       exec_cl.scheduled_on = exec_cl.timeout_on;
       fm_stream_ctx_schedule(s_ctx, ctx->handle, exec_cl.scheduled_on);
     } else {
-      exec_cl.scheduled_on = fm_time64_start();
+      exec_cl.scheduled_on = fmc_time64_start();
     }
   }
 
-  auto new_value = !fm_time64_less(now, exec_cl.timeout_on);
+  auto new_value = !fmc_time64_less(now, exec_cl.timeout_on);
   if (new_value == exec_cl.current_value) {
     return false;
   }
@@ -134,7 +133,7 @@ fm_ctx_def_t *fm_comp_timeout_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   auto stream_arg = fm_type_tuple_arg(ptype, 0);
 
-  fm_time64_t timeout;
+  fmc_time64_t timeout;
   if (!fm_arg_try_time64(stream_arg, &plist, &timeout)) {
     param_error();
     return nullptr;

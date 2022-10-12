@@ -22,37 +22,39 @@
  */
 
 extern "C" {
-#include "py_extractor.h"
-#include "py_side.h"
-#include "python/book/py_book.h"
-#include "src/ytp.h"
+#include "extractor/python/py_extractor.h"
+#include "book/py_book.h"
+#include "extractor/python/py_side.h"
+#include "ytp.h"
 }
 
-#include "python/custom.hpp"
-#include "python/live_batch.hpp"
-#include "python/live_poll.hpp"
-#include "python/pandas_play.hpp"
-#include "python/py_comp.hpp"
-#include "python/py_comp_sys.hpp"
-#include "python/py_frame.hpp"
-#include "python/py_graph.hpp"
-#include "python/py_module.hpp"
-#include "python/py_play.hpp"
-#include "python/py_side.hpp"
-#include "python/py_utils.hpp"
-#include "python/sim_poll.hpp"
-#include "python/tuple_msg.hpp"
-#include "python/tuple_split.hpp"
+#include "custom.hpp"
+#include "live_batch.hpp"
+#include "live_poll.hpp"
+#include "pandas_play.hpp"
+#include "py_comp.hpp"
+#include "py_comp_sys.hpp"
+#include "py_frame.hpp"
+#include "py_graph.hpp"
+#include "py_module.hpp"
+#include "py_play.hpp"
+#include "py_side.hpp"
+#include "py_utils.hpp"
+#include "sim_poll.hpp"
+#include "tuple_msg.hpp"
+#include "tuple_split.hpp"
 
-#include <fmc/files.h>
-#include <fmc/platform.h>
-#include <fmc/test.h>
+#include "fmc/files.h"
+#include "fmc/platform.h"
+#include "fmc/test.h"
 
-#include <ytp/py_wrapper.h>
+#include "ytp/python/py_api.h"
 
 #include <Python.h>
 #include <numpy/arrayobject.h>
-#include <python/py_wrapper.hpp>
+#include <py_wrapper.hpp>
+
+static py_ytp_sequence_api_v1 *ytp_; // py_ytp_api
 
 static PyObject *Extractor_fflush(PyObject *self, PyObject *args) {
   fmc_fflush();
@@ -215,55 +217,54 @@ static int python_to_stack_arg(fm_type_sys_t *tsys, PyObject *obj,
     *type = fm_tuple_type_get1(tsys, count, types.data());
   } else if (PyObject_TypeCheck(obj, &ExtractorComputationType) ||
              PyObject_TypeCheck(obj, &ExtractorModuleComputationType)) {
-    visit(
-        fmc::overloaded{
-            [obj, type](vector<fm_comp_t *> &inps) {
-              inps.push_back(((ExtractorComputation *)obj)->comp_);
-              *type = nullptr;
-            },
-            [obj, type](vector<fm_module_comp_t *> &inps) {
-              inps.push_back(((ExtractorModuleComputation *)obj)->comp_);
-              *type = nullptr;
-            },
-        },
-        inputs);
+    visit(fmc::overloaded{
+              [obj, type](vector<fm_comp_t *> &inps) {
+                inps.push_back(((ExtractorComputation *)obj)->comp_);
+                *type = nullptr;
+              },
+              [obj, type](vector<fm_module_comp_t *> &inps) {
+                inps.push_back(((ExtractorModuleComputation *)obj)->comp_);
+                *type = nullptr;
+              },
+          },
+          inputs);
   } else if (PyBook_Check(obj)) {
     auto *shared_book = PyBook_SharedBook(obj);
     HEAP_STACK_PUSH(s, shared_book);
     *type = fm_record_type_get(tsys, "fm_book_shared_t*",
                                sizeof(fm_book_shared_t *));
-  } else if (PyYTPSequence_Check(obj)) {
+  } else if (ytp_->sequence_check(obj)) {
     ytp_sequence_wrapper stream;
-    stream.sequence = PyYTPSequence_Shared(obj);
+    stream.sequence = ytp_->sequence_shared(obj);
     HEAP_STACK_PUSH(s, stream);
     *type = fm_record_type_get(tsys, "ytp_sequence_wrapper",
                                sizeof(ytp_sequence_wrapper));
-  } else if (PyYTPStream_Check(obj)) {
+  } else if (ytp_->stream_check(obj)) {
     ytp_stream_wrapper stream;
-    stream.sequence = PyYTPStream_Shared(obj);
-    stream.peer = PyYTPStream_PeerId(obj);
-    stream.channel = PyYTPStream_ChannelId(obj);
+    stream.sequence = ytp_->stream_shared(obj);
+    stream.peer = ytp_->stream_peer_id(obj);
+    stream.channel = ytp_->stream_channel_id(obj);
     HEAP_STACK_PUSH(s, stream);
     *type = fm_record_type_get(tsys, "ytp_stream_wrapper",
                                sizeof(ytp_stream_wrapper));
-  } else if (PyYTPPeer_Check(obj)) {
+  } else if (ytp_->peer_check(obj)) {
     ytp_peer_wrapper peer;
-    peer.sequence = PyYTPPeer_Shared(obj);
-    peer.peer = PyYTPPeer_Id(obj);
+    peer.sequence = ytp_->peer_shared(obj);
+    peer.peer = ytp_->peer_id(obj);
     HEAP_STACK_PUSH(s, peer);
     *type =
         fm_record_type_get(tsys, "ytp_peer_wrapper", sizeof(ytp_peer_wrapper));
-  } else if (PyYTPChannel_Check(obj)) {
+  } else if (ytp_->channel_check(obj)) {
     ytp_channel_wrapper channel;
-    channel.sequence = PyYTPChannel_Shared(obj);
-    channel.channel = PyYTPChannel_Id(obj);
+    channel.sequence = ytp_->channel_shared(obj);
+    channel.channel = ytp_->channel_id(obj);
     HEAP_STACK_PUSH(s, channel);
     *type = fm_record_type_get(tsys, "ytp_channel_wrapper",
                                sizeof(ytp_channel_wrapper));
   } else if (PyDelta_Check(obj) ||
              fm::python::datetime::is_pandas_timestamp_type(obj)) {
     fm::python::datetime dt(fm::python::object::from_borrowed(obj));
-    auto tm = static_cast<fm_time64_t>(dt);
+    auto tm = static_cast<fmc_time64_t>(dt);
     HEAP_STACK_PUSH(s, tm);
     *type = fm_base_type_get(tsys, FM_TYPE_TIME64);
   } else if (PyObject_TypeCheck(obj, &ExtractorModuleType)) {
@@ -302,6 +303,25 @@ PyMODINIT_FUNC fm_extractor_py_init(void) {
     numpy_init_ = true;
   }
 
+  PyObject *ytp_str = PyUnicode_FromString("yamal.ytp");
+  if (!ytp_str) {
+    return NULL;
+  }
+  PyObject *ytp_mod = PyImport_Import(ytp_str);
+  Py_XDECREF(ytp_str);
+  if (!ytp_mod) {
+    return NULL;
+  }
+
+  auto typed_ytp_ = (PyAPIWrapper *)PyObject_CallMethod(ytp_mod, "api_v1", "");
+  if (!typed_ytp_) {
+    Py_XDECREF(ytp_mod);
+    return NULL;
+  }
+
+  set_ytp_api_v1(typed_ytp_->api);
+  ytp_ = typed_ytp_->py_api;
+
   PyDateTime_IMPORT;
 
   PyObject *m;
@@ -315,6 +335,11 @@ PyMODINIT_FUNC fm_extractor_py_init(void) {
 
   if (!init_type_wrappers(m))
     return NULL;
+
+  // Keep it in extractor module to ensure module is not offloaded
+  // No need to increment the reference count because PyImport_Import returns a
+  // new reference https://docs.python.org/3/c-api/import.html#c.PyImport_Import
+  PyModule_AddObject(m, "ytp", ytp_mod);
 
   if (PyType_Ready(&ExtractorStreamContextType) < 0)
     return NULL;

@@ -24,15 +24,15 @@
 #pragma once
 
 extern "C" {
-#include "type_decl.h"
+#include "extractor/type_decl.h"
 }
 
-#include "frame.hpp"
-#include <fmc++/mpl.hpp>
+#include "extractor/frame.hpp"
+#include "fmc++/mpl.hpp"
 
 template <class T, template <class> class C, class... Ts, class... Args>
 T *get_field_exec_cl(fmc::type_list<Ts...>, fm_type_decl_cp f_type,
-                     Args &&... args) {
+                     Args &&...args) {
   T *result = nullptr;
   auto create = [&](auto t) {
     using Tt = decltype(t);

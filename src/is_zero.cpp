@@ -23,18 +23,18 @@
 
 extern "C" {
 #include "is_zero.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "decimal64.hpp"
-#include "frame.hpp"
+#include "extractor/decimal64.hpp"
+#include "extractor/frame.hpp"
+#include "fmc++/mpl.hpp"
+#include "fmc++/time.hpp"
 #include "op_util.hpp"
-#include "time64.hpp"
-#include <fmc++/mpl.hpp>
 
 #include <memory>
 #include <stdlib.h>
@@ -58,14 +58,14 @@ template <class T> struct the_is_zero_field_exec_2_0 : op_field_exec {
   fm_field_t field_;
 };
 
-template <> struct the_is_zero_field_exec_2_0<fm_time64_t> : op_field_exec {
+template <> struct the_is_zero_field_exec_2_0<fmc_time64_t> : op_field_exec {
   the_is_zero_field_exec_2_0(fm_field_t field) : field_(field) {}
 
   void exec(fm_frame_t *result, size_t args,
             const fm_frame_t *const argv[]) override {
-    auto zero = fm_time64_from_nanos(0);
+    auto zero = fmc_time64_from_nanos(0);
     bool res =
-        *(const fm_time64_t *)fm_frame_get_cptr1(argv[0], field_, 0) == zero;
+        *(const fmc_time64_t *)fm_frame_get_cptr1(argv[0], field_, 0) == zero;
 
     *(bool *)fm_frame_get_ptr1(result, field_, 0) = res;
   }

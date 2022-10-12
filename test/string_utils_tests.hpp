@@ -21,8 +21,8 @@
  * @see http://www.featuremine.com
  */
 
-#include <fmc++/gtestwrap.hpp>
-#include <fmc++/strings.hpp>
+#include "fmc++/gtestwrap.hpp"
+#include "fmc++/strings.hpp"
 
 #include <string>
 

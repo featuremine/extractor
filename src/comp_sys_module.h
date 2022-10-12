@@ -12,10 +12,10 @@
 
  *****************************************************************************/
 
-#include "comp_sys.h"
-#include "module.h"
-#include "src/comp_graph.h"
-#include "src/frame_serial.h"
+#include "comp_graph.h"
+#include "extractor/comp_sys.h"
+#include "extractor/module.h"
+#include "frame_serial.h"
 
 char *fm_module_uniq_name_gen(fm_comp_sys_t *sys);
 bool fm_module_name_add(fm_comp_sys_t *sys, const char *name, fm_module_t *m);

@@ -2,7 +2,7 @@ import os
 import argparse
 import shutil
 import extractor
-import ytp
+from yamal import ytp
 from datetime import timedelta
 
 

@@ -13,10 +13,10 @@
  *****************************************************************************/
 #pragma once
 
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "include/stream_ctx.h"
-#include "src/comp_graph.h"
+#include "comp_graph.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/stream_ctx.h"
 
 typedef struct ExtractorStreamContext ExtractorStreamContext;
 FMMODFUNC fm_stream_ctx_t *get_stream_ctx(ExtractorStreamContext *self);

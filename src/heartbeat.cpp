@@ -24,15 +24,14 @@
 
 extern "C" {
 #include "heartbeat.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include <fmc/time.h>
-#include <ytp/sequence.h>
+#include "fmc/time.h"
 
 #include <array>
 #include <chrono>
@@ -44,9 +43,9 @@ extern "C" {
 #include <unordered_map>
 
 struct heartbeat_cl {
-  fm_time64_t heartbeat_period;
-  fm_time64_t heartbeat_on = fm_time64_start();
-  fm_time64_t scheduled_on = fm_time64_end();
+  fmc_time64_t heartbeat_period;
+  fmc_time64_t heartbeat_on = fmc_time64_start();
+  fmc_time64_t scheduled_on = fmc_time64_end();
   bool updated = false;
 };
 
@@ -71,15 +70,15 @@ bool fm_comp_heartbeat_stream_exec(fm_frame_t *result, size_t,
 
   auto now = fm_stream_ctx_now(s_ctx);
 
-  auto schedule_event = !fm_time64_greater(exec_cl.scheduled_on, now);
-  auto time_to_heartbeat = !fm_time64_greater(exec_cl.heartbeat_on, now);
+  auto schedule_event = !fmc_time64_greater(exec_cl.scheduled_on, now);
+  auto time_to_heartbeat = !fmc_time64_greater(exec_cl.heartbeat_on, now);
   auto heartbeat_now = time_to_heartbeat && !exec_cl.updated;
 
   if (exec_cl.updated || time_to_heartbeat) {
     exec_cl.updated = false;
 
-    auto new_heartbeat = fm_time64_add(now, exec_cl.heartbeat_period);
-    if (fm_time64_less(exec_cl.heartbeat_on, new_heartbeat)) {
+    auto new_heartbeat = fmc_time64_add(now, exec_cl.heartbeat_period);
+    if (fmc_time64_less(exec_cl.heartbeat_on, new_heartbeat)) {
       exec_cl.heartbeat_on = new_heartbeat;
     }
   }
@@ -128,7 +127,7 @@ fm_ctx_def_t *fm_comp_heartbeat_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   auto stream_arg = fm_type_tuple_arg(ptype, 0);
 
-  fm_time64_t heartbeat;
+  fmc_time64_t heartbeat;
   if (!fm_arg_try_time64(stream_arg, &plist, &heartbeat)) {
     param_error();
     return nullptr;

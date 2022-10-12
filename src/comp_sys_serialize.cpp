@@ -23,21 +23,21 @@
  */
 
 extern "C" {
-#include "arg_stack.h"
-#include "comp_sys.h"
-#include "frame.h"
-#include "src/comp.h"
-#include "src/comp_graph.h"
-#include "src/frame_serial.h"
-#include "src/stream_ctx.h"
-#include "time64.h"
-#include "type_sys.h"
-#include <fmc/cmp/cmp.h>
+#include "comp.h"
+#include "comp_graph.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_sys.h"
+#include "extractor/frame.h"
+#include "extractor/type_sys.h"
+#include "fmc/time.h"
+#include "frame_serial.h"
+#include "stream_ctx.h"
+#include <cmp/cmp.h>
 }
 
-#include "src/comp_sys.hpp"
-#include "src/mp_util.hpp"
-#include "src/serial_util.hpp"
+#include "comp_sys.hpp"
+#include "mp_util.hpp"
+#include "serial_util.hpp"
 #include <functional>
 #include <string.h>
 #include <string>

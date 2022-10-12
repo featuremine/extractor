@@ -1,14 +1,14 @@
 #pragma once
 
-#include "side.hpp"
+#include "fmc++/side.hpp"
 #include <sstream>
 
 extern "C" {
-#include "py_side.h"
+#include "extractor/python/py_side.h"
 }
 
 struct TradeSideStruct {
-  PyObject_VAR_HEAD fm::trade_side side_;
+  PyObject_VAR_HEAD fmc::trade_side side_;
 };
 
 static void TradeSide_dealloc(PyObject *self) { Py_TYPE(self)->tp_free(self); }
@@ -93,13 +93,13 @@ bool TradeSide_TypeCheck(PyObject *obj) {
 int TradeSide_Side(PyObject *obj) { return ((TradeSideS *)obj)->side_.value; }
 
 TradeSideS _TradeSide_UNKNOWN = {
-    PyVarObject_HEAD_INIT(&TradeSide_type, 0){trade_side::SIDE::UNKNOWN}};
+    PyVarObject_HEAD_INIT(&TradeSide_type, 0){fmc::trade_side::SIDE::UNKNOWN}};
 
 TradeSideS _TradeSide_BID = {
-    PyVarObject_HEAD_INIT(&TradeSide_type, 1){trade_side::SIDE::BID}};
+    PyVarObject_HEAD_INIT(&TradeSide_type, 1){fmc::trade_side::SIDE::BID}};
 
 TradeSideS _TradeSide_ASK = {
-    PyVarObject_HEAD_INIT(&TradeSide_type, 2){trade_side::SIDE::ASK}};
+    PyVarObject_HEAD_INIT(&TradeSide_type, 2){fmc::trade_side::SIDE::ASK}};
 
 PyObject *TradeSide_method_other_side(PyObject *self) {
   if (self == TradeSide_BID) {

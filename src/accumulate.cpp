@@ -24,16 +24,16 @@
 
 extern "C" {
 #include "accumulate.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "time64.hpp"
+#include "fmc++/time.hpp"
 
-#include "time64.h"
+#include "fmc/time.h"
 #include <deque>
 #include <sstream>
 #include <stdlib.h>
@@ -88,7 +88,7 @@ struct accum_cl {
 
     fm_frame_reserve0(data_, nd + 1);
     memcpy(fm_frame_get_ptr1(data_, indices_[nf - 1], nd), &curr,
-           sizeof(fm_time64_t));
+           sizeof(fmc_time64_t));
 
     for (unsigned i = 0; i < nf - 1; ++i) {
       fm_frame_field_copy_from0(data_, indices_[i], inp_, i, nd);

@@ -23,16 +23,16 @@
  */
 
 extern "C" {
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "comp_def.hpp"
-#include "src/sample_gen.hpp"
-#include "time64.hpp"
-#include <fmc++/mpl.hpp>
+#include "extractor/comp_def.hpp"
+#include "fmc++/mpl.hpp"
+#include "fmc++/time.hpp"
+#include "sample_gen.hpp"
 
 #pragma once
 

@@ -24,13 +24,13 @@
 #pragma once
 
 extern "C" {
-#include "comp_sys.h"
-#include "src/comp.h"
-#include "src/comp_graph.h"
+#include "comp.h"
+#include "comp_graph.h"
+#include "extractor/comp_sys.h"
 }
 
-#include "python/py_utils.hpp"
-#include "python/py_wrapper.hpp"
+#include "py_utils.hpp"
+#include "py_wrapper.hpp"
 #include <Python.h>
 
 using namespace fm;

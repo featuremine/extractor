@@ -25,8 +25,8 @@
 #ifndef __FM_MP_PLAY_H__
 #define __FM_MP_PLAY_H__
 
-#include "arg_stack.h"
-#include "comp_def.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
 
 fm_ctx_def_t *fm_comp_mp_play_gen(fm_comp_sys_t *sys, fm_comp_def_cl, unsigned,
                                   fm_type_decl_cp[], fm_type_decl_cp,

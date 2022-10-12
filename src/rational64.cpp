@@ -23,8 +23,8 @@
  */
 
 extern "C" {
-#include "rational64.h"
-#include "decimal64.h"
+#include "extractor/rational64.h"
+#include "extractor/decimal64.h"
 }
 #include <numeric>
 

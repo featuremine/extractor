@@ -25,17 +25,17 @@
 #pragma once
 
 extern "C" {
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "python/py_utils.hpp"
-#include "python/py_wrapper.hpp"
-#include "type_sys.h"
-#include <fmc++/mpl.hpp>
+#include "extractor/type_sys.h"
+#include "fmc++/mpl.hpp"
+#include "py_utils.hpp"
+#include "py_wrapper.hpp"
 
 #include <cassert>
 #include <errno.h>
@@ -46,7 +46,7 @@ extern "C" {
 #include <utility>
 #include <vector>
 
-#include <fmc++/strings.hpp>
+#include "fmc++/strings.hpp"
 #include <numpy/arrayobject.h>
 
 using namespace fm;
@@ -158,7 +158,7 @@ py_field_conv get_py_field_checked_converter(fm_type_decl_cp decl) {
     case FM_TYPE_TIME64:
       return [](void *ptr, PyObject *obj) {
         if (PyLong_Check(obj)) {
-          *(TIME64 *)ptr = fm_time64_from_nanos(PyLong_AsLongLong(obj));
+          *(TIME64 *)ptr = fmc_time64_from_nanos(PyLong_AsLongLong(obj));
           if (PyErr_Occurred()) {
             return false;
           }
@@ -169,7 +169,7 @@ py_field_conv get_py_field_checked_converter(fm_type_decl_cp decl) {
           return false;
         }
         *(TIME64 *)ptr =
-            fm_time64_from_nanos(PyLong_AsLongLong(dt_ob.get_ref()));
+            fmc_time64_from_nanos(PyLong_AsLongLong(dt_ob.get_ref()));
         return true;
       };
       break;
@@ -362,7 +362,7 @@ fm_ctx_def_t *fm_comp_tuple_msg_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   vector<fm_type_decl_cp> types(size);
   int dims[1] = {1};
 
-  auto field_error = [sys, error](size_t field_idx, const char *str) {
+  auto field_error = [sys](size_t field_idx, const char *str) {
     string errstr = str;
     errstr.append(" for field ");
     errstr.append(to_string(field_idx));

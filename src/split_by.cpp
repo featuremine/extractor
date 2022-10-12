@@ -24,22 +24,22 @@
 
 extern "C" {
 #include "split_by.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "module.h"
-#include "src/comp.h"
-#include "src/comp_graph.h"
-#include "src/stream_ctx.h"
-#include "time64.h"
+#include "comp.h"
+#include "comp_graph.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/module.h"
+#include "fmc/time.h"
+#include "stream_ctx.h"
 }
 #include "comp_sys.hpp"
 
+#include "fmc++/time.hpp"
 #include "frame_pool.hpp"
-#include "time64.hpp"
 #include "unique_pq.hpp"
 
-#include <fmc++/metatable.hpp>
+#include "fmc++/metatable.hpp"
 
 #include <condition_variable>
 #include <deque>
@@ -116,11 +116,11 @@ struct module_cl {
 };
 
 struct split_by_cl {
-  using item = std::pair<fm_time64_t, module_cl *>;
+  using item = std::pair<fmc_time64_t, module_cl *>;
   struct compare {
     bool operator()(const item &a, const item &b) {
-      return fm_time64_less(a.first, b.first) ||
-             (!fm_time64_less(b.first, a.first) &&
+      return fmc_time64_less(a.first, b.first) ||
+             (!fmc_time64_less(b.first, a.first) &&
               a.second->index < b.second->index);
     }
   };
@@ -200,7 +200,7 @@ struct split_by_cl {
 
   fmc::metatable<std::string, module_cl> module_map;
   fm::unique_pq<item, std::vector<item>, compare> queue;
-  fm_time64_t next_scheduled_time = fm_time64_end();
+  fmc_time64_t next_scheduled_time = fmc_time64_end();
   fm_field_t in_split_field = -1;
   fm_field_t out_split_field = -1;
   std::vector<std::pair<fm_field_t, fm_field_t>> fields_map;
@@ -261,7 +261,7 @@ bool fm_comp_split_by_stream_exec(fm_frame_t *result, size_t,
   }
 
   if (comp_cl->next_scheduled_time <= now) {
-    comp_cl->next_scheduled_time = fm_time64_end();
+    comp_cl->next_scheduled_time = fmc_time64_end();
   }
 
   comp_cl->result = result;
@@ -272,14 +272,14 @@ bool fm_comp_split_by_stream_exec(fm_frame_t *result, size_t,
   comp_cl->output_updated = false;
 
   auto module_next_time = fm_stream_ctx_next_time(module->stream_ctx);
-  if (module_next_time != fm_time64_end()) {
+  if (module_next_time != fmc_time64_end()) {
     comp_cl->queue.push(std::make_pair(module_next_time, module));
   }
 
   if (!comp_cl->queue.empty()) {
     auto desired_next_scheduled_time = comp_cl->queue.top().first;
-    if (fm_time64_less(desired_next_scheduled_time,
-                       comp_cl->next_scheduled_time)) {
+    if (fmc_time64_less(desired_next_scheduled_time,
+                        comp_cl->next_scheduled_time)) {
       fm_stream_ctx_schedule(stream_ctx, ctx->handle,
                              desired_next_scheduled_time);
       comp_cl->next_scheduled_time = desired_next_scheduled_time;

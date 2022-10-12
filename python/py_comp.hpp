@@ -24,13 +24,13 @@
 #pragma once
 
 extern "C" {
-#include "comp_sys.h"
-#include "src/comp.h"
+#include "comp.h"
+#include "extractor/comp_sys.h"
 }
 
-#include "python/py_comp_base.hpp"
-#include "python/py_types.hpp"
-#include "python/py_wrapper.hpp"
+#include "py_comp_base.hpp"
+#include "py_types.hpp"
+#include "py_wrapper.hpp"
 
 #include <Python.h>
 
@@ -370,8 +370,8 @@ PyObject *ConstGen(PyObject *obj, fm_comp_sys_t *sys, fm_comp_graph *graph) {
     auto h = 24 * PyLong_AsLong(PyObject_GetAttrString(obj, "days"));
     auto sec = PyLong_AsLong(PyObject_GetAttrString(obj, "seconds"));
     auto us = PyLong_AsLong(PyObject_GetAttrString(obj, "microseconds"));
-    auto val = fm_time64_from_nanos(us * 1000) +
-               fm_time64_from_seconds(h * 3600 + sec);
+    auto val = fmc_time64_from_nanos(us * 1000) +
+               fmc_time64_from_seconds(h * 3600 + sec);
     auto *type = fm_base_type_get(tsys, FM_TYPE_TIME64);
     auto *constant_param_t =
         fm_tuple_type_get(tsys, 1,

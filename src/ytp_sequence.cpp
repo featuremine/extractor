@@ -24,19 +24,18 @@
 
 extern "C" {
 #include "ytp_sequence.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "src/mp_util.hpp"
-#include "src/ytp.h"
+#include "mp_util.hpp"
+#include "ytp.h"
 
-#include <fmc++/memory.hpp>
-#include <fmc/time.h>
-#include <ytp/sequence.h>
+#include "fmc++/memory.hpp"
+#include "fmc/time.h"
 
 #include <optional>
 #include <stdlib.h>
@@ -45,18 +44,20 @@ extern "C" {
 #include <unordered_map>
 #include <vector>
 
-struct ytp_sequence_cl {
-  ytp_sequence_shared_t *seq;
-  fm_time64_t polling_time;
+static ytp_sequence_api_v1 *ytp_; // ytp_api
 
-  ytp_sequence_cl(ytp_sequence_shared_t *seq, fm_time64_t polling_time)
+struct ytp_sequence_cl {
+  shared_sequence *seq;
+  fmc_time64_t polling_time;
+
+  ytp_sequence_cl(shared_sequence *seq, fmc_time64_t polling_time)
       : seq(seq), polling_time(polling_time) {
-    ytp_sequence_shared_inc(seq);
+    ytp_->sequence_shared_inc(seq);
   }
 
   ~ytp_sequence_cl() {
     fmc_error_t *error;
-    ytp_sequence_shared_dec(seq, &error);
+    ytp_->sequence_shared_dec(seq, &error);
   }
 };
 
@@ -74,10 +75,9 @@ bool fm_comp_ytp_sequence_stream_exec(fm_frame_t *result, size_t,
                                       fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
   auto *s_ctx = (fm_stream_ctx *)ctx->exec;
   auto *seq_cl = (ytp_sequence_cl *)ctx->comp;
-  auto seq = ytp_sequence_shared_get(seq_cl->seq);
 
   fmc_error_t *error;
-  auto poll = ytp_sequence_poll(seq, &error);
+  auto poll = ytp_->sequence_poll(seq_cl->seq, &error);
   if (error) {
     auto errstr =
         std::string("unable to poll the sequence: ") + fmc_error_msg(error);
@@ -88,7 +88,7 @@ bool fm_comp_ytp_sequence_stream_exec(fm_frame_t *result, size_t,
   fm_stream_ctx_schedule(
       s_ctx, ctx->handle,
       poll ? fm_stream_ctx_now(s_ctx)
-           : fm_time64_add(fm_stream_ctx_now(s_ctx), seq_cl->polling_time));
+           : fmc_time64_add(fm_stream_ctx_now(s_ctx), seq_cl->polling_time));
   return false;
 }
 
@@ -105,6 +105,13 @@ fm_ctx_def_t *fm_comp_ytp_sequence_gen(fm_comp_sys_t *csys,
                                        fm_type_decl_cp argv[],
                                        fm_type_decl_cp ptype,
                                        fm_arg_stack_t plist) {
+  ytp_ = get_ytp_api_v1();
+  if (!ytp_) {
+    auto *errstr = "ytp api is not set";
+    fm_comp_sys_error_set(csys, errstr);
+    return nullptr;
+  }
+
   auto *sys = fm_type_sys_get(csys);
 
   if (argc != 0) {
@@ -141,14 +148,14 @@ fm_ctx_def_t *fm_comp_ytp_sequence_gen(fm_comp_sys_t *csys,
   auto sequence = STACK_POP(plist, ytp_sequence_wrapper);
   auto *shared_seq = sequence.sequence;
 
-  fm_time64_t polling_time;
+  fmc_time64_t polling_time;
   if (polling_time_arg) {
     if (!fm_arg_try_time64(polling_time_arg, &plist, &polling_time)) {
       param_error();
       return nullptr;
     }
   } else {
-    polling_time = fm_time64_from_nanos(0);
+    polling_time = fmc_time64_from_nanos(0);
   }
 
   auto *cl = new ytp_sequence_cl(shared_seq, polling_time);

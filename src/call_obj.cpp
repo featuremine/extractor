@@ -22,9 +22,9 @@
  */
 
 extern "C" {
-#include "src/call_obj.h"
-#include "call_ctx.h"
-#include "handle.h"
+#include "call_obj.h"
+#include "extractor/call_ctx.h"
+#include "extractor/handle.h"
 }
 
 #include <stddef.h>

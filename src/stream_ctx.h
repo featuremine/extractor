@@ -27,9 +27,9 @@
 
 #include "call_stack.h"
 #include "comp_graph.h"
-#include "handle.h"
-#include "include/stream_ctx.h"
-#include "time64.h"
+#include "extractor/handle.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 
 /**
  * @brief

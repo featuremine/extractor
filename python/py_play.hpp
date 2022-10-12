@@ -25,17 +25,17 @@
 #pragma once
 
 extern "C" {
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "python/py_utils.hpp"
-#include "python/py_wrapper.hpp"
-#include "type_sys.h"
-#include <fmc++/mpl.hpp>
+#include "extractor/type_sys.h"
+#include "fmc++/mpl.hpp"
+#include "py_utils.hpp"
+#include "py_wrapper.hpp"
 
 #include <cassert>
 #include <errno.h>
@@ -46,7 +46,7 @@ extern "C" {
 #include <utility>
 #include <vector>
 
-#include <fmc++/strings.hpp>
+#include "fmc++/strings.hpp"
 #include <numpy/arrayobject.h>
 
 using namespace fm;
@@ -139,8 +139,8 @@ struct df_row_parser {
 
 struct py_play {
   enum status { ERR = 0, IDLE, DATA, DONE };
-  py_play(fm_type_decl_cp type, bool immediate, object iter, fm_time64_t pp)
-      : frm_it_(iter), nxt_tm_(fm_time64_end()), parser_(type),
+  py_play(fm_type_decl_cp type, bool immediate, object iter, fmc_time64_t pp)
+      : frm_it_(iter), nxt_tm_(fmc_time64_end()), parser_(type),
         immediate_(immediate), polling_period_(pp) {}
   status iter_process_next(fm_call_ctx_t *ctx, bool repeat = true) {
     auto py_error_check = [&](status s) {
@@ -170,7 +170,7 @@ struct py_play {
     row_ob_ = row_it_.next();
     if (!row_ob_) {
       row_it_ = object();
-      nxt_tm_ = fm_time64_end();
+      nxt_tm_ = fmc_time64_end();
       if (PyErr_Occurred()) {
         return py_error_check(ERR);
       } else {
@@ -191,7 +191,7 @@ struct py_play {
     return DATA;
   }
 
-  fm_time64_t iter_next_time() { return nxt_tm_; }
+  fmc_time64_t iter_next_time() { return nxt_tm_; }
 
   bool iter_has_data() { return bool(row_ob_); }
 
@@ -199,9 +199,9 @@ struct py_play {
     return parser_.parse(row_ob_, result, ctx);
   }
 
-  fm_time64_t set_next_time(object obj) {
+  fmc_time64_t set_next_time(object obj) {
     auto dt_ob = obj["value"];
-    return fm_time64_from_nanos(PyLong_AsLongLong(dt_ob.get_ref()));
+    return fmc_time64_from_nanos(PyLong_AsLongLong(dt_ob.get_ref()));
   }
 
   status process_next(fm_call_ctx_t *ctx, bool done) {
@@ -245,10 +245,10 @@ struct py_play {
   object frm_it_;
   object row_it_;
   object row_ob_;
-  fm_time64_t nxt_tm_;
+  fmc_time64_t nxt_tm_;
   df_row_parser parser_;
   bool immediate_;
-  fm_time64_t polling_period_;
+  fmc_time64_t polling_period_;
 };
 
 bool fm_comp_py_play_stream_init(fm_frame_t *result, size_t args,
@@ -373,7 +373,7 @@ fm_ctx_def_t *fm_comp_base_py_play_gen(bool immediate, fm_comp_sys_t *csys,
     return nullptr;
   }
 
-  fm_time64_t polling_period{0};
+  fmc_time64_t polling_period{0};
   if (!fm_arg_try_time64(fm_type_tuple_arg(ptype, 2), &plist,
                          &polling_period)) {
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS,

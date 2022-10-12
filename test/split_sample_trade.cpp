@@ -24,14 +24,14 @@
  */
 
 extern "C" {
-#include "comp_sys.h"
-#include "frame.h"
-#include "std_comp.h"
-#include "stream_ctx.h"
-#include "type_sys.h"
+#include "extractor/comp_sys.h"
+#include "extractor/frame.h"
+#include "extractor/std_comp.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/type_sys.h"
 }
 
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 #include <iostream>
 
 void csv_play_clbck(const fm_frame_t *frame, fm_frame_clbck_cl cl,
@@ -43,7 +43,7 @@ TEST(csv_plays, identity) {
   string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new("../test/test.lic", &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -110,12 +110,12 @@ TEST(csv_plays, identity) {
   auto *ctx = fm_stream_ctx_get(sys, g);
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fm_comp_sys_del(sys);
 }

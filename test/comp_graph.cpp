@@ -22,10 +22,10 @@
  */
 
 extern "C" {
-#include "src/comp_graph.h"
+#include "comp_graph.h"
 }
 
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 
 #include <string>
 

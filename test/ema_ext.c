@@ -21,12 +21,12 @@
  * @see http://www.featuremine.com
  */
 
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "type_decl.h"
-#include "type_sys.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/type_decl.h"
+#include "extractor/type_sys.h"
 
 typedef struct {
   double alpha;
@@ -355,4 +355,6 @@ fm_comp_def_t ema_comp_def = {
  *
  * @param sys computing system
  */
-void FmInit_ema(fm_comp_sys_t *sys) { fm_comp_type_add(sys, &ema_comp_def); }
+FMMODFUNC void FmInit_ema(fm_comp_sys_t *sys) {
+  fm_comp_type_add(sys, &ema_comp_def);
+}

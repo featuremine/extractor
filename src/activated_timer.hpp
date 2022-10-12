@@ -23,22 +23,22 @@
  */
 
 extern "C" {
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "time64.hpp"
+#include "fmc++/time.hpp"
 
 struct act_timer_closure {
   bool updated = 0;
   bool activated = 0;
   fm_field_t scheduled_id;
   fm_field_t actual_id;
-  fm_time64_t period_;
-  fm_time64_t scheduled;
+  fmc_time64_t period_;
+  fmc_time64_t scheduled;
 };
 
 bool fm_comp_activated_timer_stream_init(fm_frame_t *result, size_t args,
@@ -46,7 +46,7 @@ bool fm_comp_activated_timer_stream_init(fm_frame_t *result, size_t args,
                                          fm_call_ctx_t *ctx,
                                          fm_call_exec_cl *cl) {
   auto *comp_cl = (act_timer_closure *)ctx->comp;
-  comp_cl->scheduled = fm_time64_end();
+  comp_cl->scheduled = fmc_time64_end();
   fm_stream_ctx_queue((fm_stream_ctx_t *)ctx->exec, ctx->handle);
   return true;
 }
@@ -61,7 +61,7 @@ bool fm_comp_activated_timer_stream_exec(fm_frame_t *result, size_t args,
   comp_cl->updated = 0;
 
   auto now = fm_stream_ctx_now(s_ctx);
-  bool start = fm_time64_is_end(comp_cl->scheduled);
+  bool start = fmc_time64_is_end(comp_cl->scheduled);
 
   if (!start && (updated || comp_cl->scheduled != now)) {
     return false;
@@ -80,9 +80,9 @@ bool fm_comp_activated_timer_stream_exec(fm_frame_t *result, size_t args,
 
   if (comp_cl->activated) {
     if (done) {
-      *(fm_time64_t *)fm_frame_get_ptr1(result, comp_cl->scheduled_id, 0) =
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, comp_cl->scheduled_id, 0) =
           prev;
-      *(fm_time64_t *)fm_frame_get_ptr1(result, comp_cl->actual_id, 0) = now;
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, comp_cl->actual_id, 0) = now;
     }
     return done;
   }
@@ -126,7 +126,7 @@ fm_ctx_def_t *fm_comp_activated_timer_gen(fm_comp_sys_t *csys,
     return nullptr;
   }
 
-  fm_time64_t period{0};
+  fmc_time64_t period{0};
   if (!fm_arg_try_time64(fm_type_tuple_arg(ptype, 0), &plist, &period)) {
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS,
                            "expect first parameter to be a lag time");

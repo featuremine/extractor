@@ -25,8 +25,8 @@
 #ifndef __OPERATOR_DEF_H__
 #define __OPERATOR_DEF_H__
 
-#include "arg_stack.h"
-#include "comp_def.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
 
 #define FM_DEFINE_COMP_OP(op_name)                                             \
   fm_ctx_def_t *fm_comp_##op_name##_gen(fm_comp_sys_t *sys, fm_comp_def_cl,    \

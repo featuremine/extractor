@@ -24,19 +24,18 @@
 
 extern "C" {
 #include "decode_receive.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "src/mp_util.hpp"
-#include "src/ytp.h"
+#include "mp_util.hpp"
+#include "ytp.h"
 
-#include <fmc++/memory.hpp>
-#include <fmc/time.h>
-#include <ytp/sequence.h>
+#include "fmc++/memory.hpp"
+#include "fmc/time.h"
 
 #include <array>
 #include <chrono>
@@ -60,7 +59,7 @@ bool fm_comp_decode_receive_stream_exec(fm_frame_t *result, size_t,
                                         fm_call_exec_cl cl) {
   auto &d = *(ytp_msg_decoded *)fm_frame_get_cptr1(argv[0], 0, 0);
   auto dest_f = fm_frame_get_ptr1(result, 0, 0);
-  memcpy(dest_f, &d.time, sizeof(fm_time64_t));
+  memcpy(dest_f, &d.time, sizeof(fmc_time64_t));
   return true;
 }
 

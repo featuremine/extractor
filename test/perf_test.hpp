@@ -21,10 +21,10 @@
  * This file contains test for mm_file
  */
 
+#include "fmc++/counters.hpp"
+#include "fmc/platform.h"
 #include <cstring>
 #include <fcntl.h>
-#include <fmc++/counters.hpp>
-#include <fmc/platform.h>
 #include <iostream>
 #include <stdint.h>
 #include <stdio.h>
@@ -33,10 +33,10 @@
 #include <sys/stat.h>
 #include <sys/types.h>
 extern "C" {
-#include "src/mm_file.h"
+#include "mm_file.h"
 }
 
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 
 using namespace fmc;
 

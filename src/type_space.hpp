@@ -35,8 +35,8 @@
 #include <vector>
 
 extern "C" {
-#include "type_decl.h"
-#include <fmc/alignment.h>
+#include "extractor/type_decl.h"
+#include "fmc/extension.h"
 }
 
 struct fm_type_decl;
@@ -144,7 +144,7 @@ using type_def = std::variant<base_type_def, record_type_def, array_type_def,
 struct fm_type_decl {
   template <class T> fm_type_decl(size_t i, size_t h, T &&t);
   std::string str() const {
-    return visit([this](auto &t) { return t.str(); }, def);
+    return visit([](auto &t) { return t.str(); }, def);
   }
   size_t index;
   size_t hash;
@@ -174,12 +174,12 @@ struct type_space {
   fm_type_decl_cp get_type_type();
   const fm_type_decl *get_type_from_str(string_view &view);
   template <class T, class... Args>
-  fm_type_decl_cp get_type_decl(Args &&... args);
+  fm_type_decl_cp get_type_decl(Args &&...args);
   std::unordered_multimap<size_t, fm_type_decl_cp> decls;
 };
 
 template <class T, class... Args>
-fm_type_decl_cp type_space::get_type_decl(Args &&... args) {
+fm_type_decl_cp type_space::get_type_decl(Args &&...args) {
   auto hash = T::hash(std::forward<Args>(args)...);
   auto range = decls.equal_range(hash);
   for (auto it = range.first; it != range.second; ++it) {

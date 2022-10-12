@@ -24,7 +24,7 @@
 
 extern "C" {
 #include "zero.h"
-#include "comp_sys.h"
+#include "extractor/comp_sys.h"
 }
 
 #include <vector>

@@ -25,7 +25,7 @@
 #ifndef __FM_COMP_GRAPH_H__
 #define __FM_COMP_GRAPH_H__
 
-#include <fmc/platform.h>
+#include "fmc/platform.h"
 
 #ifdef __cplusplus
 extern "C" {

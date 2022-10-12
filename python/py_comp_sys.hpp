@@ -24,13 +24,13 @@
 #pragma once
 
 extern "C" {
-#include "comp_def.h"
-#include "std_comp.h"
+#include "extractor/comp_def.h"
+#include "extractor/std_comp.h"
 }
 
-#include "python/custom.hpp"
-#include "python/pandas_play.hpp"
-#include "python/py_module.hpp"
+#include "custom.hpp"
+#include "pandas_play.hpp"
+#include "py_module.hpp"
 #include <Python.h>
 #include <memory>
 #include <string>
@@ -58,7 +58,7 @@ ExtractorSystem *ExtractorSystem_lazy(ExtractorSystem *obj) {
       return nullptr;
     }
     char *errmsg;
-    self->sys = fm_comp_sys_new(file_name, &errmsg);
+    self->sys = fm_comp_sys_new(&errmsg);
     if (!self->sys) {
       PyErr_SetString(PyExc_RuntimeError, errmsg);
       free(errmsg);

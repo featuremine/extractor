@@ -26,9 +26,9 @@
 #ifndef __FM_ARG_SERIAL_H__
 #define __FM_ARG_SERIAL_H__
 
-#include "arg_stack.h"
-#include "serial.h"
-#include "type_sys.h"
+#include "extractor/arg_stack.h"
+#include "extractor/serial.h"
+#include "extractor/type_sys.h"
 
 typedef struct fm_arg_buffer fm_arg_buffer_t;
 

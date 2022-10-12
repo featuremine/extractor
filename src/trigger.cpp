@@ -24,11 +24,11 @@
 
 extern "C" {
 #include "trigger.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
 #include <stdlib.h>
@@ -48,7 +48,7 @@ bool fm_comp_trigger_stream_exec(fm_frame_t *result, size_t,
                                  const fm_frame_t *const argv[],
                                  fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
   auto now = fm_stream_ctx_now((fm_stream_ctx_t *)ctx->exec);
-  *(fm_time64_t *)fm_frame_get_ptr1(result, 0, 0) = now;
+  *(fmc_time64_t *)fm_frame_get_ptr1(result, 0, 0) = now;
   return true;
 }
 

@@ -26,7 +26,7 @@
 #pragma once
 
 extern "C" {
-#include "type_sys.h"
+#include "extractor/type_sys.h"
 }
 
 extern const char *FM_ERROR_MESSAGES[FM_TYPE_ERROR_LAST];

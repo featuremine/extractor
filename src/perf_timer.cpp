@@ -23,11 +23,11 @@
  */
 
 extern "C" {
-#include "perf_timer.h"
-#include "comp_sys.h"
+#include "extractor/perf_timer.h"
+#include "extractor/comp_sys.h"
 }
 
-#include <fmc++/counters.hpp>
+#include "fmc++/counters.hpp"
 
 using perf_timer = fmc::counter::rdtsc_avg;
 

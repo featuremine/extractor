@@ -23,23 +23,23 @@
  */
 
 extern "C" {
-#include "arg_stack.h"
 #include "bbo_aggr.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "decimal64.h"
-#include "src/book/book.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "book/book.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/decimal64.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "include/rprice.hpp"
-#include "include/side.hpp"
+#include "extractor/rprice.hpp"
+#include "fmc++/side.hpp"
 
 #include <utility>
 #include <vector>
 
-using namespace fm;
+using namespace fmc;
 using namespace std;
 
 struct bbo_book_aggr_exec_cl {
@@ -94,7 +94,7 @@ struct bbo_book_aggr_exec_cl {
       fm_decimal64_t qty =
           *(fm_decimal64_t *)fm_frame_get_cptr1(frame, qts_idx, 0);
       if (qty != fm_decimal64_t{0}) {
-        auto ven = *(fm_time64_t *)fm_frame_get_cptr1(frame, recv_idx, 0);
+        auto ven = *(fmc_time64_t *)fm_frame_get_cptr1(frame, recv_idx, 0);
         fm_book_add(book, now, ven, 0, idx, px, qty, isbid);
       }
 
@@ -119,7 +119,7 @@ struct bbo_book_aggr_exec_cl {
         px = fm_book_level_prx(lvl);
       }
 
-      *(fm_time64_t *)fm_frame_get_ptr1(result, rec_, 0) = now;
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, rec_, 0) = now;
       *(fm_decimal64_t *)fm_frame_get_ptr1(result, out_pxs_[side], 0) = px;
       *(fm_decimal64_t *)fm_frame_get_ptr1(result, out_qts_[side], 0) = qty;
     }

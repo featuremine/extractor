@@ -22,10 +22,10 @@
  */
 
 extern "C" {
-#include "arg_stack.h"
+#include "extractor/arg_stack.h"
 }
 
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 
 void receive_args(fm_arg_stack_t args) {
   const char *teststr = STACK_POP(args, const char *);

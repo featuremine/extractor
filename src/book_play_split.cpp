@@ -23,19 +23,19 @@
  */
 
 extern "C" {
-#include "src/book_play_split.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "book_play_split.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "book/ore.hpp"
-#include "book/updates.hpp"
-#include "decimal64.hpp"
-#include "time64.hpp"
-#include <fmc/cmp/serialization.hpp>
+#include "extractor/book/ore.hpp"
+#include "extractor/book/updates.hpp"
+#include "extractor/decimal64.hpp"
+#include "fmc++/serialization.hpp"
+#include "fmc++/time.hpp"
 
 #include <memory>
 #include <stdlib.h>

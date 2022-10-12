@@ -24,14 +24,13 @@
 """
 from datetime import datetime, timedelta
 import extractor as extr
-import ytp
+from yamal import ytp
 import os
 import shutil
 import argparse
 
 src_dir = os.path.dirname(os.path.realpath(__file__))
-bulldozer_dir = os.path.join(src_dir, '..', '..', 'bulldozer')
-ytp_file = os.path.join(bulldozer_dir, 'tests', 'data', 'coinbase_bulldozer.base.ytp')
+ytp_file = os.path.join(src_dir, 'data', 'coinbase_bulldozer.base.ytp')
 book_base_file = os.path.join(src_dir, 'data', 'coinbase_bulldozer.base.csv')
 book_test_file = os.path.join(src_dir, 'data', 'coinbase_bulldozer.test.csv')
 

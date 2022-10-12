@@ -26,17 +26,17 @@
 #pragma once
 
 extern "C" {
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "python/py_utils.hpp"
-#include "python/py_wrapper.hpp"
-#include "type_sys.h"
-#include <fmc++/mpl.hpp>
+#include "extractor/type_sys.h"
+#include "fmc++/mpl.hpp"
+#include "py_utils.hpp"
+#include "py_wrapper.hpp"
 
 #include <cassert>
 #include <errno.h>
@@ -47,7 +47,7 @@ extern "C" {
 #include <utility>
 #include <vector>
 
-#include <fmc++/strings.hpp>
+#include "fmc++/strings.hpp"
 #include <numpy/arrayobject.h>
 
 using namespace fm;
@@ -57,7 +57,7 @@ using namespace std;
 struct sim_poll {
   enum status { ERR = 0, DATA, DONE };
   sim_poll(object iter, string fld)
-      : frm_it_(iter), fld_(fld), next_time_(fm_time64_start()) {}
+      : frm_it_(iter), fld_(fld), next_time_(fmc_time64_start()) {}
   status iter_process_next(fm_call_ctx_t *ctx) {
     auto py_error_check = [&](status s) {
       if (PyErr_Occurred()) {
@@ -115,7 +115,7 @@ struct sim_poll {
     return DATA;
   }
 
-  fm_time64_t iter_next_time() { return next_time_; }
+  fmc_time64_t iter_next_time() { return next_time_; }
 
   bool read_timestamp(fm::python::object row_ob) {
     auto tm_obj = row_ob[fld_];
@@ -123,7 +123,7 @@ struct sim_poll {
       return false;
     }
     if (PyLong_Check(tm_obj.get_ref())) {
-      auto tm = fm_time64_from_nanos(PyLong_AsLong(tm_obj.get_ref()));
+      auto tm = fmc_time64_from_nanos(PyLong_AsLong(tm_obj.get_ref()));
       if (PyErr_Occurred()) {
         return false;
       }
@@ -132,7 +132,7 @@ struct sim_poll {
     }
     auto dt_ob = tm_obj["value"];
     if (dt_ob) {
-      auto tm = fm_time64_from_nanos(PyLong_AsLong(dt_ob.get_ref()));
+      auto tm = fmc_time64_from_nanos(PyLong_AsLong(dt_ob.get_ref()));
       if (PyErr_Occurred()) {
         return false;
       }
@@ -154,7 +154,7 @@ struct sim_poll {
   object row_it_;
   object row_ob_;
   string fld_;
-  fm_time64_t next_time_;
+  fmc_time64_t next_time_;
 };
 
 bool fm_comp_sim_poll_stream_init(fm_frame_t *result, size_t args,

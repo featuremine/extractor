@@ -25,8 +25,8 @@
 #ifndef __FM_CSV_RECORD_H__
 #define __FM_CSV_RECORD_H__
 
-#include "arg_stack.h"
-#include "comp_def.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
 
 #ifdef __cplusplus
 extern "C" {

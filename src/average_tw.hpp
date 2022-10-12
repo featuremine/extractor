@@ -22,13 +22,13 @@
  * @see http://www.featuremine.com
  */
 
-#include "src/sample.hpp"
+#include "sample.hpp"
 
 #include <limits>
 #include <vector>
 
 struct exec_cl {
-  virtual void exec(fm_time64_t t_d) = 0;
+  virtual void exec(fmc_time64_t t_d) = 0;
   virtual void set(fm_frame_t *result) = 0;
   virtual void reset(const fm_frame_t *argv) = 0;
   virtual ~exec_cl(){};
@@ -70,7 +70,7 @@ template <template <class> class Comp> struct fm_comp_tw : fm_comp_sample_2_0 {
              fm_type_decl_cp argv[], fm_type_decl_cp ptype,
              fm_arg_stack_t plist)
       : fm_comp_sample_2_0(csys, closure, argc, argv, ptype, plist),
-        last_time_(fm_time64_start()) {
+        last_time_(fmc_time64_start()) {
     using supported_types = fmc::type_list<FLOAT32, FLOAT64>;
 
     int nf = fm_type_frame_nfields(argv[0]);
@@ -115,7 +115,7 @@ template <template <class> class Comp> struct fm_comp_tw : fm_comp_sample_2_0 {
             fm_call_ctx_t *ctx, bool interval, bool updated) {
     auto now = fm_stream_ctx_now((fm_stream_ctx_t *)ctx->exec);
     auto delta =
-        last_time_ == fm_time64_start() ? fm_time64_end() : now - last_time_;
+        last_time_ == fmc_time64_start() ? fmc_time64_end() : now - last_time_;
     if (interval) {
       for (auto *call : calls) {
         call->exec(delta);
@@ -134,7 +134,7 @@ template <template <class> class Comp> struct fm_comp_tw : fm_comp_sample_2_0 {
     return interval;
   }
   vector<exec_cl *> calls;
-  fm_time64_t last_time_;
+  fmc_time64_t last_time_;
   fm_type_decl_cp ret_type = nullptr;
 };
 
@@ -142,75 +142,75 @@ template <class T> struct average_tw_exec_cl : public exec_cl {
   using result = T;
   average_tw_exec_cl(fm_field_t field)
       : field_(field), last_val_(0), num_(0), denom_({0}) {}
-  void exec(fm_time64_t t_d) override {
-    if (t_d == fm_time64_end()) {
+  void exec(fmc_time64_t t_d) override {
+    if (t_d == fmc_time64_end()) {
       if (!isnan(last_val_)) {
         denom_ = t_d;
       }
       return;
     }
 
-    if (!isnan(last_val_) && denom_ != fm_time64_end()) {
-      num_ += last_val_ * T(fm_time64_raw(t_d));
+    if (!isnan(last_val_) && denom_ != fmc_time64_end()) {
+      num_ += last_val_ * T(fmc_time64_raw(t_d));
       denom_ += t_d;
     }
   }
   void set(fm_frame_t *result) override {
-    if (denom_ == fm_time64_from_raw(0) || denom_ == fm_time64_end()) {
+    if (denom_ == fmc_time64_from_raw(0) || denom_ == fmc_time64_end()) {
       *(T *)fm_frame_get_ptr1(result, field_, 0) = last_val_;
     } else {
       *(T *)fm_frame_get_ptr1(result, field_, 0) =
-          num_ / T(fm_time64_raw(denom_));
+          num_ / T(fmc_time64_raw(denom_));
     }
     num_ = T(0);
-    denom_ = fm_time64_from_raw(0);
+    denom_ = fmc_time64_from_raw(0);
   }
   void reset(const fm_frame_t *argv) override {
-    if (denom_ != fm_time64_end()) {
+    if (denom_ != fmc_time64_end()) {
       last_val_ = *(const T *)fm_frame_get_cptr1(argv, field_, 0);
     }
   }
   fm_field_t field_;
   T last_val_;
   T num_;
-  fm_time64_t denom_;
+  fmc_time64_t denom_;
 };
 
 template <class T> struct elapsed_exec_cl : public exec_cl {
-  using result = fm_time64_t;
+  using result = fmc_time64_t;
   elapsed_exec_cl(fm_field_t field)
       : field_(field), last_val_(0), denom_({0}) {}
-  void exec(fm_time64_t t_d) override {
-    if (t_d == fm_time64_end()) {
+  void exec(fmc_time64_t t_d) override {
+    if (t_d == fmc_time64_end()) {
       if (!isnan(last_val_)) {
         denom_ = t_d;
       }
       return;
     }
 
-    if (!isnan(last_val_) && denom_ != fm_time64_end()) {
+    if (!isnan(last_val_) && denom_ != fmc_time64_end()) {
       denom_ += t_d;
     }
   }
   void set(fm_frame_t *result) override {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, field_, 0) = denom_;
-    denom_ = fm_time64_from_raw(0);
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, field_, 0) = denom_;
+    denom_ = fmc_time64_from_raw(0);
   }
   void reset(const fm_frame_t *argv) override {
-    if (denom_ != fm_time64_end()) {
+    if (denom_ != fmc_time64_end()) {
       last_val_ = *(const T *)fm_frame_get_cptr1(argv, field_, 0);
     }
   }
   fm_field_t field_;
   T last_val_;
-  fm_time64_t denom_;
+  fmc_time64_t denom_;
 };
 
 template <class T> struct sum_tw_exec_cl : public exec_cl {
   using result = T;
   sum_tw_exec_cl(fm_field_t field) : field_(field), last_val_(0), num_(0) {}
-  void exec(fm_time64_t t_d) override {
-    if (t_d == fm_time64_end()) {
+  void exec(fmc_time64_t t_d) override {
+    if (t_d == fmc_time64_end()) {
       if (!isnan(last_val_)) {
         if (last_val_ > std::numeric_limits<T>::epsilon()) {
           num_ = numeric_limits<T>::infinity();
@@ -224,7 +224,7 @@ template <class T> struct sum_tw_exec_cl : public exec_cl {
     }
 
     if (!isnan(last_val_) && isfinite(num_)) {
-      num_ += last_val_ * fm_time64_to_fseconds(t_d);
+      num_ += last_val_ * fmc_time64_to_fseconds(t_d);
     }
   }
   void set(fm_frame_t *result) override {

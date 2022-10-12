@@ -23,10 +23,10 @@
  */
 
 extern "C" {
-#include "comp_def.h"
-#include "call_ctx.h"
-#include "frame_base.h"
-#include "time64.h"
+#include "extractor/comp_def.h"
+#include "extractor/call_ctx.h"
+#include "extractor/frame_base.h"
+#include "fmc/time.h"
 }
 
 #include <stdarg.h>

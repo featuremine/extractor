@@ -22,7 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#include "src/exec_ctx.hpp"
+#include "exec_ctx.hpp"
 
 #include <stdarg.h>
 #include <string>

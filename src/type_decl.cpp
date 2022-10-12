@@ -24,8 +24,8 @@
  */
 
 extern "C" {
-#include "type_decl.h"
-#include "time64.h"
+#include "extractor/type_decl.h"
+#include "fmc/time.h"
 }
 
 #include <algorithm>
@@ -90,7 +90,7 @@ const char *parser_def(const char *begin, const char *end, T *data,
 
 const char *nano_parser(const char *begin, const char *end, void *data,
                         const char *fmt) {
-  auto &time = *(fm_time64_t *)data;
+  auto &time = *(fmc_time64_t *)data;
   return parser_def(begin, end, &time.value, "");
 }
 
@@ -264,7 +264,7 @@ size_t fm_base_type_sizeof(FM_BASE_TYPE t) {
     return sizeof(fm_decimal64_t);
     break;
   case FM_TYPE_TIME64:
-    return sizeof(fm_time64_t);
+    return sizeof(fmc_time64_t);
     break;
   case FM_TYPE_CHAR:
     return sizeof(CHAR);
@@ -344,7 +344,7 @@ bool type_fwrite(FILE *file, const void *val, const char *fmt) {
 }
 
 bool nano_fwriter(FILE *file, const void *val, const char *fmt) {
-  auto &time = *(fm_time64_t *)val;
+  auto &time = *(fmc_time64_t *)val;
   return fprintf(file, "%li", time.value) > 0;
 }
 

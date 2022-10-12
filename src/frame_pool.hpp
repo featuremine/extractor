@@ -23,7 +23,7 @@
  */
 
 extern "C" {
-#include "frame_base.h"
+#include "extractor/frame_base.h"
 }
 
 #include <vector>

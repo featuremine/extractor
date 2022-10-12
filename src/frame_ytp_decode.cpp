@@ -24,19 +24,19 @@
 
 extern "C" {
 #include "frame_ytp_decode.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "src/mp_util.hpp"
-#include "src/ytp.h"
+#include "mp_util.hpp"
+#include "ytp.h"
 
-#include <fmc++/memory.hpp>
-#include <fmc/time.h>
-#include <ytp/sequence.h>
+#include "fmc++/memory.hpp"
+#include "fmc/time.h"
+#include "ytp/api.h"
 
 #include <chrono>
 #include <optional>
@@ -47,9 +47,11 @@ extern "C" {
 #include <unordered_map>
 #include <vector>
 
+static ytp_sequence_api_v1 *ytp_; // ytp_api
+
 struct frame_ytp_decode_cl {
   std::vector<fm_frame_reader_p> readers;
-  ytp_sequence_shared_t *shared_seq;
+  shared_sequence *shared_seq;
   ytp_channel_t channel;
   fm_call_ctx_t *ctx;
   fm_frame_alloc_t *alloc;
@@ -58,24 +60,23 @@ struct frame_ytp_decode_cl {
   cmp_mem_t buffer;
 
   frame_ytp_decode_cl(std::vector<fm_frame_reader_p> readers,
-                      ytp_sequence_shared_t *shared_seq, ytp_channel_t channel,
+                      shared_sequence *shared_seq, ytp_channel_t channel,
                       fm_type_decl_cp frame_type)
       : readers(std::move(readers)), shared_seq(shared_seq), channel(channel),
         alloc(fm_frame_alloc_new()),
         frame(fm_frame_from_type(alloc, frame_type)) {
     fmc_error_t *error;
 
-    ytp_sequence_shared_inc(shared_seq);
-    auto seq = ytp_sequence_shared_get(shared_seq);
-    ytp_sequence_indx_cb(seq, channel, static_data_cb, this, &error);
+    ytp_->sequence_shared_inc(shared_seq);
+    ytp_->sequence_indx_cb(shared_seq, channel, static_data_cb, this, &error);
   }
 
   ~frame_ytp_decode_cl() {
     fm_frame_alloc_del(alloc);
     fmc_error_t *error;
-    auto seq = ytp_sequence_shared_get(shared_seq);
-    ytp_sequence_indx_cb_rm(seq, channel, static_data_cb, this, &error);
-    ytp_sequence_shared_dec(shared_seq, &error);
+    ytp_->sequence_indx_cb_rm(shared_seq, channel, static_data_cb, this,
+                              &error);
+    ytp_->sequence_shared_dec(shared_seq, &error);
   }
 
   static void static_data_cb(void *closure, ytp_peer_t peer,
@@ -138,6 +139,13 @@ fm_ctx_def_t *
 fm_comp_frame_ytp_decode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
                              unsigned argc, fm_type_decl_cp argv[],
                              fm_type_decl_cp ptype, fm_arg_stack_t plist) {
+  ytp_ = get_ytp_api_v1();
+  if (!ytp_) {
+    auto *errstr = "ytp api is not set";
+    fm_comp_sys_error_set(csys, errstr);
+    return nullptr;
+  }
+
   auto *sys = fm_type_sys_get(csys);
   if (argc != 0) {
     auto *errstr = "expect no operator arguments";
@@ -173,7 +181,6 @@ fm_comp_frame_ytp_decode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   auto stream = STACK_POP(plist, ytp_channel_wrapper);
   auto *shared_seq = stream.sequence;
-  auto *seq = ytp_sequence_shared_get(shared_seq);
 
   fmc_error_t *error;
   std::optional<std::string_view> header_opt;
@@ -181,7 +188,7 @@ fm_comp_frame_ytp_decode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   int64_t timeout_expires = std::numeric_limits<int64_t>::max();
   if (fm_type_tuple_size(ptype) >= 2) {
     auto timeout_arg = fm_type_tuple_arg(ptype, 1);
-    fm_time64_t timeout;
+    fmc_time64_t timeout;
     if (!fm_arg_try_time64(timeout_arg, &plist, &timeout)) {
       param_error();
       return nullptr;
@@ -192,24 +199,24 @@ fm_comp_frame_ytp_decode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   {
     struct find_header_cl_t {
       fmc_error_t *&error;
-      ytp_sequence_t *seq;
+      shared_sequence *seq;
       ytp_channel_t channel;
       std::optional<std::string_view> &header_opt;
       ytp_iterator_t current_it;
 
-      find_header_cl_t(fmc_error_t *&error, ytp_sequence_t *seq,
+      find_header_cl_t(fmc_error_t *&error, shared_sequence *seq,
                        ytp_channel_t channel,
                        std::optional<std::string_view> &header_opt)
           : error(error), seq(seq), channel(channel), header_opt(header_opt) {
-        current_it = ytp_sequence_get_it(seq);
-        ytp_sequence_indx_cb(seq, channel, &find_header_cl_t::cb_static, this,
-                             &error);
+        current_it = ytp_->sequence_get_it(seq);
+        ytp_->sequence_indx_cb(seq, channel, &find_header_cl_t::cb_static, this,
+                               &error);
       }
 
       ~find_header_cl_t() {
-        ytp_sequence_indx_cb_rm(seq, channel, &find_header_cl_t::cb_static,
-                                this, &error);
-        ytp_sequence_set_it(seq, current_it);
+        ytp_->sequence_indx_cb_rm(seq, channel, &find_header_cl_t::cb_static,
+                                  this, &error);
+        ytp_->sequence_set_it(seq, current_it);
       }
 
       static void cb_static(void *closure, ytp_peer_t peer,
@@ -223,13 +230,13 @@ fm_comp_frame_ytp_decode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
     } find_header_cl{
         error,
-        seq,
+        shared_seq,
         stream.channel,
         header_opt,
     };
 
     while (true) {
-      auto poll = ytp_sequence_poll(find_header_cl.seq, &error);
+      auto poll = ytp_->sequence_poll(find_header_cl.seq, &error);
       if (error) {
         auto errstr =
             std::string("unable to poll ytp object: ") + fmc_error_msg(error);

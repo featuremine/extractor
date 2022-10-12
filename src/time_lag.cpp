@@ -24,16 +24,16 @@
 
 extern "C" {
 #include "time_lag.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "time64.hpp"
+#include "fmc++/time.hpp"
 
-#include "time64.h"
+#include "fmc/time.h"
 #include <deque>
 #include <stdlib.h>
 #include <string.h>
@@ -42,10 +42,10 @@ extern "C" {
 using namespace std;
 
 struct time_lag_comp_cl {
-  fm_time64_t lag;
-  fm_time64_t resolution;
+  fmc_time64_t lag;
+  fmc_time64_t resolution;
   bool enqueue = false;
-  deque<pair<fm_time64_t, fm_frame_t *>> queue;
+  deque<pair<fmc_time64_t, fm_frame_t *>> queue;
   vector<fm_frame_t *> pool;
 };
 
@@ -135,14 +135,14 @@ fm_ctx_def_t *fm_comp_time_lag_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     return nullptr;
   }
 
-  fm_time64_t lag{0};
+  fmc_time64_t lag{0};
   if (!fm_arg_try_time64(fm_type_tuple_arg(ptype, 0), &plist, &lag)) {
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS,
                            "expect first parameter to be a lag time");
     return nullptr;
   }
 
-  fm_time64_t resolution{0};
+  fmc_time64_t resolution{0};
   if (!fm_arg_try_time64(fm_type_tuple_arg(ptype, 1), &plist, &resolution)) {
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS,
                            "expect second "

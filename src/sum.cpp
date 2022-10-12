@@ -25,17 +25,18 @@
 extern "C" {
 
 #include "sum.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "decimal64.hpp"
-#include "frame.hpp"
-#include "rational64.hpp"
-#include "time64.hpp"
-#include <fmc++/mpl.hpp>
+#include "extractor/comp_def.hpp"
+#include "extractor/decimal64.hpp"
+#include "extractor/frame.hpp"
+#include "extractor/rational64.hpp"
+#include "fmc++/mpl.hpp"
+#include "fmc++/time.hpp"
 
 #include <memory>
 #include <stdlib.h>
@@ -114,24 +115,24 @@ template <> struct the_sum_field_exec_2_0<fm_decimal64_t> : sum_field_exec {
   fm_field_t field_;
 };
 
-template <> struct the_sum_field_exec_2_0<fm_time64_t> : sum_field_exec {
+template <> struct the_sum_field_exec_2_0<fmc_time64_t> : sum_field_exec {
   the_sum_field_exec_2_0(fm_field_t field) : field_(field) {}
   void init(fm_frame_t *result, size_t argc,
             const fm_frame_t *const argv[]) override {
-    fm_time64_t val = fm_time64_t();
+    fmc_time64_t val = fmc_time64_t();
     for (unsigned i = 0; i < argc; ++i) {
-      val = val + *(const fm_time64_t *)fm_frame_get_cptr1(argv[i], field_, 0);
+      val = val + *(const fmc_time64_t *)fm_frame_get_cptr1(argv[i], field_, 0);
     }
-    *(fm_time64_t *)fm_frame_get_ptr1(result, field_, 0) = val;
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, field_, 0) = val;
   }
   void exec(fm_frame_t *result, fm_frame_t *o_val,
             const fm_frame_t *n_val) override {
-    auto val_old = *(const fm_time64_t *)fm_frame_get_cptr1(o_val, field_, 0);
-    auto val_new = *(const fm_time64_t *)fm_frame_get_cptr1(n_val, field_, 0);
-    auto val0 = *(const fm_time64_t *)fm_frame_get_cptr1(result, field_, 0);
-    *(fm_time64_t *)fm_frame_get_ptr1(result, field_, 0) =
+    auto val_old = *(const fmc_time64_t *)fm_frame_get_cptr1(o_val, field_, 0);
+    auto val_new = *(const fmc_time64_t *)fm_frame_get_cptr1(n_val, field_, 0);
+    auto val0 = *(const fmc_time64_t *)fm_frame_get_cptr1(result, field_, 0);
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, field_, 0) =
         val0 - val_old + val_new;
-    *(fm_time64_t *)fm_frame_get_ptr1(o_val, field_, 0) = val_new;
+    *(fmc_time64_t *)fm_frame_get_ptr1(o_val, field_, 0) = val_new;
   }
   fm_field_t field_;
 };

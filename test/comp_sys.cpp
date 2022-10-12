@@ -22,15 +22,15 @@
  */
 
 extern "C" {
-#include "comp_sys.h"
-#include "comp_def_simp.h"
-#include "frame.h"
-#include "src/comp.h"
-#include "stream_ctx.h"
-#include "type_sys.h"
+#include "extractor/comp_sys.h"
+#include "comp.h"
+#include "extractor/comp_def_simp.h"
+#include "extractor/frame.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/type_sys.h"
 }
 
-#include <fmc++/gtestwrap.hpp>
+#include "fmc++/gtestwrap.hpp"
 
 #include <string>
 
@@ -145,9 +145,9 @@ bool timer_exec(fm_frame_t *frame, size_t argc, const fm_frame_t *const argv[],
   auto *exec = (fm_stream_ctx *)ctx->exec;
   auto &comp = *(std::string *)ctx->comp;
   auto now = fm_stream_ctx_now(exec);
-  auto time = fm_time64_from_raw(fm_time64_raw(now) + 1);
+  auto time = fmc_time64_from_raw(fmc_time64_raw(now) + 1);
   fm_stream_ctx_schedule(exec, ctx->handle, time);
-  frame->data = comp + std::to_string(fm_time64_raw(time));
+  frame->data = comp + std::to_string(fmc_time64_raw(time));
   return true;
 }
 
@@ -206,7 +206,7 @@ TEST(comp_sys, main) {
   std::string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -242,16 +242,16 @@ TEST(comp_sys, main) {
 
   auto *ctx = fm_stream_ctx_get(sys, g);
 
-  fm_time64_t now = fm_time64_from_raw(0);
+  fmc_time64_t now = fmc_time64_from_raw(0);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     // @note add check for data correction
     auto *frame = fm_data_get(res_ref);
-    EXPECT_EQ(frame->data, baseval[fm_time64_raw(now)]);
+    EXPECT_EQ(frame->data, baseval[fmc_time64_raw(now)]);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (fm_time64_raw(now) < 10);
+  } while (fmc_time64_raw(now) < 10);
 
   fm_comp_sys_del(sys);
 

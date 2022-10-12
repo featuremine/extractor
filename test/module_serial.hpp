@@ -21,20 +21,20 @@
  * @see http://www.featuremine.com
  */
 extern "C" {
-#include "comp_sys.h"
-#include "module.h"
-#include "std_comp.h"
-#include "stream_ctx.h"
-#include "type_sys.h"
+#include "extractor/comp_sys.h"
+#include "extractor/module.h"
+#include "extractor/std_comp.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/type_sys.h"
 }
 
+#include "fmc++/gtestwrap.hpp"
 #include "test_util.hpp"
-#include <fmc++/gtestwrap.hpp>
 #include <iostream>
 
 TEST(module_serial, serialize) {
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);

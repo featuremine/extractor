@@ -23,12 +23,12 @@
 
 #pragma once
 
-#include "time64.h"
-#include "time64.hpp"
+#include "fmc++/mpl.hpp"
+#include "fmc++/time.hpp"
+#include "fmc/time.h"
 #include <Python.h>
 #include <chrono>
 #include <datetime.h>
-#include <fmc++/mpl.hpp>
 
 namespace fm {
 namespace python {
@@ -70,7 +70,7 @@ public:
     auto obj = PyTuple_GetItem(obj_, pos);
     return object::from_borrowed(obj);
   }
-  template <class... Args> object operator()(Args &&... args) const {
+  template <class... Args> object operator()(Args &&...args) const {
     const size_t n = std::tuple_size<std::tuple<Args...>>::value;
     auto *obj = PyTuple_New(n);
     if constexpr (n > 0) {
@@ -120,7 +120,7 @@ private:
 
 class module : public object {
 public:
-  module() : object() {}
+  module() :object() {}
   explicit module(const char *name)
       : object(object::from_new(PyImport_ImportModule(name))) {}
 };
@@ -128,27 +128,27 @@ public:
 class datetime : public object {
 public:
   datetime(object &&obj) : object(obj) {}
-  operator fm_time64_t() {
+  operator fmc_time64_t() {
     using namespace std::chrono;
     if (PyDelta_Check(get_ref())) {
       auto h = 24 * PyLong_AsLong(PyObject_GetAttrString(get_ref(), "days"));
       auto sec = PyLong_AsLong(PyObject_GetAttrString(get_ref(), "seconds"));
       auto us =
           PyLong_AsLong(PyObject_GetAttrString(get_ref(), "microseconds"));
-      return fm_time64_from_nanos(us * 1000) +
-             fm_time64_from_seconds(h * 3600 + sec);
+      return fmc_time64_from_nanos(us * 1000) +
+             fmc_time64_from_seconds(h * 3600 + sec);
     } else if (PyFloat_Check(get_ref())) {
       auto fdur = duration<double>(PyFloat_AsDouble(get_ref()));
       auto nanos = duration_cast<nanoseconds>(fdur);
-      return fm_time64_from_nanos(nanos.count());
+      return fmc_time64_from_nanos(nanos.count());
     } else if (PyLong_Check(get_ref()))
-      return fm_time64_from_nanos(PyLong_AsLongLong(get_ref()));
+      return fmc_time64_from_nanos(PyLong_AsLongLong(get_ref()));
     else if (is_pandas_timestamp_type(get_ref())) {
-      return fm_time64_from_nanos(
+      return fmc_time64_from_nanos(
           PyLong_AsLongLong((*this)["value"].get_ref()));
     }
     PyErr_SetString(PyExc_RuntimeError, "unsupported datetime type");
-    return fm_time64_from_nanos(0);
+    return fmc_time64_from_nanos(0);
   }
 
   static bool is_pandas_timestamp_type(PyObject *obj) {

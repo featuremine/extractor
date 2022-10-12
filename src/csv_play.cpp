@@ -24,22 +24,22 @@
 
 extern "C" {
 #include "csv_play.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "comp_sys.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/comp_sys.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 #include "csv_utils.hpp"
 #include "errno.h"
-#include <fmc/files.h>
+#include "fmc/files.h"
 #include <functional>
 #include <stdlib.h>
 #include <string>
 #include <utility>
 #include <vector>
 
-#include <fmc++/strings.hpp>
+#include "fmc++/strings.hpp"
 
 using namespace std;
 
@@ -88,7 +88,7 @@ int csv_parse_one(fm_call_ctx *ctx, csv_play_exec_cl *cl, fm_frame_t *frame) {
   auto *exec_ctx = (fm_exec_ctx *)ctx->exec;
   auto *info = (csv_play_info *)ctx->comp;
 
-  auto error = [frame, exec_ctx, info](const char *err = nullptr) {
+  auto error = [exec_ctx, info](const char *err = nullptr) {
     string errstr;
     errstr.append(err);
     csv_play_error_set(exec_ctx, info, errstr.c_str());
@@ -292,7 +292,7 @@ bool fm_comp_csv_play_call_stream_init(fm_frame_t *result, size_t args,
   auto *info = (csv_play_info *)ctx->comp;
   auto idx_field = fm_frame_field(exec_cl->next, info->index.c_str());
   exec_cl->index = idx_field;
-  auto next = *(fm_time64_t *)fm_frame_get_ptr1(exec_cl->next, idx_field, 0);
+  auto next = *(fmc_time64_t *)fm_frame_get_ptr1(exec_cl->next, idx_field, 0);
   fm_stream_ctx_schedule(exec_ctx, ctx->handle, next);
   return true;
 }
@@ -314,15 +314,15 @@ bool fm_comp_csv_play_stream_exec(fm_frame_t *result, size_t,
   auto *exec_cl = (csv_play_exec_cl *)cl;
 
   auto prev =
-      *(fm_time64_t *)fm_frame_get_ptr1(exec_cl->next, exec_cl->index, 0);
+      *(fmc_time64_t *)fm_frame_get_ptr1(exec_cl->next, exec_cl->index, 0);
 
   fm_frame_swap(result, exec_cl->next);
 
   auto good = csv_parse_one(ctx, exec_cl, exec_cl->next);
   if (good > 0) {
     auto next =
-        *(fm_time64_t *)fm_frame_get_ptr1(exec_cl->next, exec_cl->index, 0);
-    if (fm_time64_less(next, prev)) {
+        *(fmc_time64_t *)fm_frame_get_ptr1(exec_cl->next, exec_cl->index, 0);
+    if (fmc_time64_less(next, prev)) {
       csv_play_error_set(
           (fm_exec_ctx *)exec_ctx, (csv_play_info *)ctx->comp,
           "next timestamp provided is lower than last timestamp.");

@@ -24,15 +24,15 @@
  */
 
 extern "C" {
-#include "comp_sys.h"
-#include "frame.h"
-#include "std_comp.h"
-#include "stream_ctx.h"
-#include "type_sys.h"
+#include "extractor/comp_sys.h"
+#include "extractor/frame.h"
+#include "extractor/std_comp.h"
+#include "extractor/stream_ctx.h"
+#include "extractor/type_sys.h"
 }
 
-#include <fmc++/gtestwrap.hpp>
-#include <fmc/platform.h>
+#include "fmc++/gtestwrap.hpp"
+#include "fmc/platform.h"
 #include <iostream>
 
 using namespace fmc;
@@ -43,7 +43,7 @@ TEST(split_sample, main) {
   string testout;
 
   char *errstring;
-  auto *sys = fm_comp_sys_new((src_dir + "/test.lic").c_str(), &errstring);
+  auto *sys = fm_comp_sys_new(&errstring);
   if (!sys) {
     cout << errstring << endl;
     free(errstring);
@@ -108,12 +108,12 @@ TEST(split_sample, main) {
   auto *ctx = fm_stream_ctx_get(sys, g);
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fmc_fflush();
 
