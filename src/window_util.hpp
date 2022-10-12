@@ -25,8 +25,8 @@
 
 extern "C" {
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
 #include "extractor/type_sys.h"
+#include "fmc/time.h"
 }
 
 #include "field_util.hpp"
@@ -43,9 +43,9 @@ struct field_exec_cl {
 
 struct base_exp_field_exec_cl {
   virtual void init(const fm_frame_t *input, fm_frame_t *result) = 0;
-  virtual void set(const fm_frame_t *input, const fm_time64_t &now) = 0;
+  virtual void set(const fm_frame_t *input, const fmc_time64_t &now) = 0;
   virtual void asof(const fm_frame_t *input, fm_frame_t *result,
-                    const fm_time64_t &now) = 0;
+                    const fmc_time64_t &now) = 0;
   virtual ~base_exp_field_exec_cl(){};
 };
 
@@ -152,7 +152,7 @@ struct fm_comp_time_window : fm_comp_identity_result {
   }
   bool exec(fm_frame_t *result, size_t args, const fm_frame_t *const argv[],
             fm_call_ctx_t *ctx, bool interval, bool updated) {
-    const fm_time64_t now = fm_stream_ctx_now((fm_stream_ctx_t *)ctx->exec);
+    const fmc_time64_t now = fm_stream_ctx_now((fm_stream_ctx_t *)ctx->exec);
 
     while (!queue_.empty() && now >= queue_.front() + window_size_) {
       for (auto *call : calls) {
@@ -174,9 +174,9 @@ struct fm_comp_time_window : fm_comp_identity_result {
 
     return true;
   }
-  fm_time64_t window_size_;
+  fmc_time64_t window_size_;
   vector<field_exec_cl *> calls;
-  std::deque<fm_time64_t> queue_;
+  std::deque<fmc_time64_t> queue_;
 };
 
 template <template <class> class Comp>
@@ -186,7 +186,7 @@ struct fm_comp_exp_window : fm_comp_identity_result {
                      fm_arg_stack_t plist) {
     fmc_runtime_error_unless(argc == 2) << "expect two operators as input";
 
-    fm_time64_t window_size;
+    fmc_time64_t window_size;
 
     fmc_runtime_error_unless(
         fm_arg_try_time64(fm_type_tuple_arg(ptype, 0), &plist, &window_size))
@@ -222,7 +222,7 @@ struct fm_comp_exp_window : fm_comp_identity_result {
   }
   bool exec(fm_frame_t *result, size_t args, const fm_frame_t *const argv[],
             fm_call_ctx_t *ctx, bool interval, bool updated) {
-    const fm_time64_t now = fm_stream_ctx_now((fm_stream_ctx_t *)ctx->exec);
+    const fmc_time64_t now = fm_stream_ctx_now((fm_stream_ctx_t *)ctx->exec);
 
     if (updated) {
       for (auto *call : calls) {
@@ -277,13 +277,13 @@ struct queued_field_exec_cl : field_exec_cl {
 
 template <class T, template <class> class S>
 struct exp_field_exec_cl : base_exp_field_exec_cl {
-  exp_field_exec_cl(fm_field_t field, fm_time64_t size)
-      : field_(field), prev_(fm_time64_start()), obj_(size) {}
+  exp_field_exec_cl(fm_field_t field, fmc_time64_t size)
+      : field_(field), prev_(fmc_time64_start()), obj_(size) {}
   void init(const fm_frame_t *input, fm_frame_t *result) {
     const T &val = *(const T *)fm_frame_get_cptr1(input, field_, 0);
     *(T *)fm_frame_get_ptr1(result, field_, 0) = obj_.init(val);
   };
-  void set(const fm_frame_t *input, const fm_time64_t &now) {
+  void set(const fm_frame_t *input, const fmc_time64_t &now) {
     const T &val = *(const T *)fm_frame_get_cptr1(input, field_, 0);
 
     if (isnan(val))
@@ -293,11 +293,11 @@ struct exp_field_exec_cl : base_exp_field_exec_cl {
     prev_ = now;
   };
   void asof(const fm_frame_t *input, fm_frame_t *result,
-            const fm_time64_t &now) {
+            const fmc_time64_t &now) {
     const T &val = *(const T *)fm_frame_get_cptr1(input, field_, 0);
     *(T *)fm_frame_get_ptr1(result, field_, 0) = obj_.asof(val, prev_, now);
   };
   fm_field_t field_;
-  fm_time64_t prev_;
+  fmc_time64_t prev_;
   S<T> obj_;
 };

@@ -28,7 +28,7 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "mp_util.hpp"
@@ -188,7 +188,7 @@ fm_comp_frame_ytp_decode_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   int64_t timeout_expires = std::numeric_limits<int64_t>::max();
   if (fm_type_tuple_size(ptype) >= 2) {
     auto timeout_arg = fm_type_tuple_arg(ptype, 1);
-    fm_time64_t timeout;
+    fmc_time64_t timeout;
     if (!fm_arg_try_time64(timeout_arg, &plist, &timeout)) {
       param_error();
       return nullptr;

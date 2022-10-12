@@ -120,9 +120,9 @@ bool timer_exec(fm_frame_t *frame, size_t argc, const fm_frame_t *const *argv,
   auto *exec = (fm_stream_ctx *)ctx->exec;
   auto &comp = *(std::string *)ctx->comp;
   auto now = fm_stream_ctx_now(exec);
-  auto time = fm_time64_from_raw(fm_time64_raw(now) + 1);
+  auto time = fmc_time64_from_raw(fmc_time64_raw(now) + 1);
   fm_stream_ctx_schedule(exec, ctx->handle, time);
-  frame->data = comp + std::to_string(fm_time64_raw(time));
+  frame->data = comp + std::to_string(fmc_time64_raw(time));
   return true;
 }
 
@@ -230,11 +230,11 @@ TEST(exec_ctx, main) {
 
   auto *ctx = fm_stream_ctx_new(g);
 
-  fm_time64_t now = fm_time64_from_raw(0);
+  fmc_time64_t now = fmc_time64_from_raw(0);
   do {
     fm_stream_ctx_proc_one(ctx, now);
     now = fm_stream_ctx_next_time(ctx);
-  } while (fm_time64_raw(now) < 10);
+  } while (fmc_time64_raw(now) < 10);
 
   fm_stream_ctx_del(ctx);
   fm_comp_graph_del(g);

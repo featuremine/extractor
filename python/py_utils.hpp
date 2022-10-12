@@ -47,7 +47,7 @@ extern "C" {
 #include "fmc++/strings.hpp"
 #include <numpy/arrayobject.h>
 
-#include "extractor/time64.hpp"
+#include "fmc++/time.hpp"
 #include <Python.h>
 #include <datetime.h>
 #include <variant>
@@ -288,7 +288,7 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
             (seconds(PyLong_AsLong(PyObject_GetAttrString(obj, "seconds")))));
         auto us = duration_cast<nanoseconds>((microseconds(
             PyLong_AsLong(PyObject_GetAttrString(obj, "microseconds")))));
-        auto tm = fm_time64_from_nanos((h + sec + us).count());
+        auto tm = fmc_time64_from_nanos((h + sec + us).count());
         if (PyErr_Occurred())
           return false;
         *(TIME64 *)ptr = tm;
@@ -392,7 +392,7 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
       break;
     case FM_TYPE_TIME64: {
       using days = typename chrono::duration<long int, std::ratio<86400>>;
-      auto t = nanoseconds(fm_time64_to_nanos(*(TIME64 *)ptr));
+      auto t = nanoseconds(fmc_time64_to_nanos(*(TIME64 *)ptr));
       auto d = duration_cast<days>(t);
       auto us = duration_cast<microseconds>(t - d);
       auto sec = duration_cast<seconds>(us);
@@ -476,7 +476,7 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       break;
     case FM_TYPE_TIME64: {
       using days = typename chrono::duration<long int, std::ratio<86400>>;
-      auto t = nanoseconds(fm_time64_to_nanos(STACK_POP(plist, TIME64)));
+      auto t = nanoseconds(fmc_time64_to_nanos(STACK_POP(plist, TIME64)));
       auto d = duration_cast<days>(t);
       auto us = duration_cast<microseconds>(t - d);
       auto sec = duration_cast<seconds>(us);
@@ -1047,7 +1047,7 @@ string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
       using namespace chrono;
 
       stringstream s;
-      auto x = std::chrono::nanoseconds(fm_time64_to_nanos(*(TIME64 *)ptr));
+      auto x = std::chrono::nanoseconds(fmc_time64_to_nanos(*(TIME64 *)ptr));
       auto epoch = time_point<system_clock>(
           duration_cast<time_point<system_clock>::duration>(x));
       auto t = system_clock::to_time_t(epoch);

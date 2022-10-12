@@ -30,13 +30,13 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "extractor/book/updates.hpp"
 #include "extractor/decimal64.hpp"
-#include "extractor/time64.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/time.hpp"
 
 #include <string>
 #include <variant>
@@ -58,8 +58,8 @@ public:
   }
   ~all_trades_op_cl() {}
   void init(fm_frame_t *result) {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
-        fm_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+        fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(fm_decimal64_t *)fm_frame_get_ptr1(result, trade_price_field_, 0) =
         fm_decimal64_from_raw(0);
@@ -73,7 +73,7 @@ public:
     return std::visit(
         fmc::overloaded{
             [this, result](const book::updates::trade &m) {
-              *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+              *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
                   m.vendor;
               *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = m.seqn;
               *(fm_decimal64_t *)fm_frame_get_ptr1(result, trade_price_field_,
@@ -86,7 +86,7 @@ public:
               return true;
             },
             [this, result](const book::updates::execute &m) {
-              *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+              *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
                   m.vendor;
               *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = m.seqn;
               *(fm_decimal64_t *)fm_frame_get_ptr1(result, trade_price_field_,

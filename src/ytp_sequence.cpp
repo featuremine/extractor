@@ -28,7 +28,7 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "mp_util.hpp"
@@ -48,9 +48,9 @@ static ytp_sequence_api_v1 *ytp_; // ytp_api
 
 struct ytp_sequence_cl {
   shared_sequence *seq;
-  fm_time64_t polling_time;
+  fmc_time64_t polling_time;
 
-  ytp_sequence_cl(shared_sequence *seq, fm_time64_t polling_time)
+  ytp_sequence_cl(shared_sequence *seq, fmc_time64_t polling_time)
       : seq(seq), polling_time(polling_time) {
     ytp_->sequence_shared_inc(seq);
   }
@@ -88,7 +88,7 @@ bool fm_comp_ytp_sequence_stream_exec(fm_frame_t *result, size_t,
   fm_stream_ctx_schedule(
       s_ctx, ctx->handle,
       poll ? fm_stream_ctx_now(s_ctx)
-           : fm_time64_add(fm_stream_ctx_now(s_ctx), seq_cl->polling_time));
+           : fmc_time64_add(fm_stream_ctx_now(s_ctx), seq_cl->polling_time));
   return false;
 }
 
@@ -148,14 +148,14 @@ fm_ctx_def_t *fm_comp_ytp_sequence_gen(fm_comp_sys_t *csys,
   auto sequence = STACK_POP(plist, ytp_sequence_wrapper);
   auto *shared_seq = sequence.sequence;
 
-  fm_time64_t polling_time;
+  fmc_time64_t polling_time;
   if (polling_time_arg) {
     if (!fm_arg_try_time64(polling_time_arg, &plist, &polling_time)) {
       param_error();
       return nullptr;
     }
   } else {
-    polling_time = fm_time64_from_nanos(0);
+    polling_time = fmc_time64_from_nanos(0);
   }
 
   auto *cl = new ytp_sequence_cl(shared_seq, polling_time);

@@ -30,7 +30,7 @@ extern "C" {
 }
 
 #include "extractor/decimal64.hpp"
-#include "extractor/side.hpp"
+#include "fmc++/side.hpp"
 #include "py_wrapper.hpp"
 #include <datetime.h>
 
@@ -66,8 +66,8 @@ typedef struct {
   Level *level() { return (Level *)level_.get_ref(); }
 } OrderIter;
 
-fm_time64_t fm_book_order_rec(fm_order_t *lvl);
-fm_time64_t fm_book_order_ven(fm_order_t *lvl);
+fmc_time64_t fm_book_order_rec(fm_order_t *lvl);
+fmc_time64_t fm_book_order_ven(fm_order_t *lvl);
 
 static PyObject *Order_prio(Order *self, void *) {
   return PyLong_FromUnsignedLongLong(fm_book_order_prio(self->order_));
@@ -85,7 +85,7 @@ static PyObject *Order_qty(Order *self, void *) {
 static PyObject *Order_rec(Order *self, void *) {
   auto rec_time = fm_book_order_rec(self->order_);
   using namespace std::chrono;
-  auto t = nanoseconds(fm_time64_to_nanos(rec_time));
+  auto t = nanoseconds(fmc_time64_to_nanos(rec_time));
   auto us = duration_cast<microseconds>(t);
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
@@ -96,7 +96,7 @@ static PyObject *Order_rec(Order *self, void *) {
 static PyObject *Order_ven(Order *self, void *) {
   auto ven_time = fm_book_order_ven(self->order_);
   using namespace std::chrono;
-  auto t = nanoseconds(fm_time64_to_nanos(ven_time));
+  auto t = nanoseconds(fmc_time64_to_nanos(ven_time));
   auto us = duration_cast<microseconds>(t);
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);

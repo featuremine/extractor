@@ -759,7 +759,7 @@ bool fm_arg_try_float64(fm_type_decl_cp td, fm_arg_stack_t *arg, double *i) {
 }
 
 bool fm_arg_try_time64(fm_type_decl_cp td, fm_arg_stack_t *arg,
-                       fm_time64_t *i) {
+                       fmc_time64_t *i) {
   auto en = fm_type_base_enum(td);
   if (en != FM_TYPE_TIME64) {
     return false;

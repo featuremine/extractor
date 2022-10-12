@@ -95,8 +95,8 @@ FIELDS(shares, notional);
 END_FRAME(cum_trade_frame);
 
 FRAME(timer_frame, 1);
-FIELD(scheduled, fm_time64_t);
-FIELD(actual, fm_time64_t);
+FIELD(scheduled, fmc_time64_t);
+FIELD(actual, fmc_time64_t);
 FIELDS(scheduled, actual);
 END_FRAME(timer_frame);
 

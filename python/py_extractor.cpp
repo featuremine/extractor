@@ -264,7 +264,7 @@ static int python_to_stack_arg(fm_type_sys_t *tsys, PyObject *obj,
   } else if (PyDelta_Check(obj) ||
              fm::python::datetime::is_pandas_timestamp_type(obj)) {
     fm::python::datetime dt(fm::python::object::from_borrowed(obj));
-    auto tm = static_cast<fm_time64_t>(dt);
+    auto tm = static_cast<fmc_time64_t>(dt);
     HEAP_STACK_PUSH(s, tm);
     *type = fm_base_type_get(tsys, FM_TYPE_TIME64);
   } else if (PyObject_TypeCheck(obj, &ExtractorModuleType)) {

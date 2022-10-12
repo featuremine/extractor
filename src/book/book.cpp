@@ -25,11 +25,11 @@
 extern "C" {
 #include "book/book.h"
 #include "extractor/decimal64.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "extractor/decimal64.hpp"
-#include "extractor/time64.hpp"
+#include "fmc++/time.hpp"
 
 #include <algorithm>
 #include <array>
@@ -43,8 +43,8 @@ struct fm_order {
   uint64_t prio = 0;
   uint64_t id = 0;
   fm_decimal64_t qty = {0};
-  fm_time64_t rec = {0};
-  fm_time64_t ven = {0};
+  fmc_time64_t rec = {0};
+  fmc_time64_t ven = {0};
   uint64_t seq = 0;
 };
 
@@ -204,7 +204,7 @@ fm_orders::iterator front_find(fm_orders &orders, uint64_t id) {
   return orders.end();
 }
 
-void fm_book_add(fm_book_t *book, fm_time64_t rec, fm_time64_t ven,
+void fm_book_add(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
                  uint64_t seq, uint64_t id, fm_decimal64_t price,
                  fm_decimal64_t qty, bool is_bid) {
   auto &level = find_or_add(book, price, is_bid);
@@ -218,7 +218,7 @@ void fm_book_add(fm_book_t *book, fm_time64_t rec, fm_time64_t ven,
   order.seq = seq;
 }
 
-void fm_book_ins(fm_book_t *book, fm_time64_t rec, fm_time64_t ven,
+void fm_book_ins(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
                  uint64_t seq, uint64_t id, uint64_t prio, fm_decimal64_t price,
                  fm_decimal64_t qty, bool is_bid) {
   auto &level = find_or_add(book, price, is_bid);
@@ -232,7 +232,7 @@ void fm_book_ins(fm_book_t *book, fm_time64_t rec, fm_time64_t ven,
   order.seq = seq;
 }
 
-void fm_book_pos(fm_book_t *book, fm_time64_t rec, fm_time64_t ven,
+void fm_book_pos(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
                  uint64_t seq, uint64_t id, uint32_t pos, fm_decimal64_t price,
                  fm_decimal64_t qty, bool is_bid) {
   auto &level = find_or_add(book, price, is_bid);
@@ -307,7 +307,7 @@ bool fm_book_exe(fm_book_t *book, uint64_t id, fm_decimal64_t price,
   return true;
 }
 
-bool fm_book_pla(fm_book_t *book, fm_time64_t rec, fm_time64_t ven,
+bool fm_book_pla(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
                  uint64_t seq, fm_decimal64_t price, fm_decimal64_t qty,
                  bool is_bid) {
   if (qty > fm_decimal64_t{0}) {
@@ -370,9 +370,9 @@ uint64_t fm_book_order_id(fm_order_t *ord) { return ord->id; }
 
 fm_decimal64_t fm_book_order_qty(fm_order_t *ord) { return ord->qty; }
 
-fm_time64_t fm_book_order_rec(fm_order_t *ord) { return ord->rec; }
+fmc_time64_t fm_book_order_rec(fm_order_t *ord) { return ord->rec; }
 
-fm_time64_t fm_book_order_ven(fm_order_t *ord) { return ord->ven; }
+fmc_time64_t fm_book_order_ven(fm_order_t *ord) { return ord->ven; }
 
 uint64_t fm_book_order_seq(fm_order_t *ord) { return ord->seq; }
 
