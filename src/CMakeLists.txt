@@ -130,7 +130,7 @@ target_include_directories(
 
 add_library(
     extractor
-    SHARED
+    STATIC
     $<TARGET_OBJECTS:extractor_obj>
 )
 target_link_libraries(

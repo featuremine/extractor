@@ -26,20 +26,20 @@
 #include "extractor/common.hpp"
 #include "extractor/comp_def.hpp"
 #include "extractor/frame.hpp"
-#include "extractor/time64.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/time.hpp"
 
 namespace fm {
 using namespace std;
 
 class timer : public fm::computation<tuple<>, timer_frame> {
-  timer(fm_time64_t period) : period_(period) {}
+  timer(fmc_time64_t period) : period_(period) {}
 
 public:
-  static timer *create(fm_time64_t period) { return new timer(period); }
+  static timer *create(fmc_time64_t period) { return new timer(period); }
   bool init(fm::stream_context &ctx) {
     result().resize(1);
-    scheduled = fm_time64_end();
+    scheduled = fmc_time64_end();
     ctx.queue(this);
     return true;
   }
@@ -47,7 +47,7 @@ public:
     auto now = ctx.now();
     auto needed = period_ * (now / period_);
     auto next = needed + period_;
-    bool start = scheduled == fm_time64_end();
+    bool start = scheduled == fmc_time64_end();
     bool done = !start;
     if (start && needed == now) {
       done = true;
@@ -64,17 +64,17 @@ public:
   bool exec(fm::query_context &ctx) { return false; }
 
 private:
-  fm_time64_t period_;
-  fm_time64_t scheduled;
+  fmc_time64_t period_;
+  fmc_time64_t scheduled;
 };
 
 class clock_timer : public fm::computation<tuple<>, timer_frame> {
-  clock_timer(fm_time64_t start, fm_time64_t stop, fm_time64_t period)
+  clock_timer(fmc_time64_t start, fmc_time64_t stop, fmc_time64_t period)
       : start_(start), stop_(stop), period_(period) {}
 
 public:
-  static clock_timer *create(fm_time64_t start, fm_time64_t stop,
-                             fm_time64_t period) {
+  static clock_timer *create(fmc_time64_t start, fmc_time64_t stop,
+                             fmc_time64_t period) {
     return new clock_timer(start, stop, period);
   }
   bool init(fm::stream_context &ctx) {
@@ -101,10 +101,10 @@ public:
   bool exec(fm::query_context &ctx) { return false; }
 
 private:
-  fm_time64_t start_;
-  fm_time64_t stop_;
-  fm_time64_t period_;
-  fm_time64_t scheduled;
+  fmc_time64_t start_;
+  fmc_time64_t stop_;
+  fmc_time64_t period_;
+  fmc_time64_t scheduled;
 };
 
 } // namespace fm

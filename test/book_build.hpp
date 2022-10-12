@@ -24,7 +24,7 @@
 extern "C" {
 #include "extractor/comp_sys.h"
 #include "extractor/frame.h"
-#include "extractor/py_extractor.h"
+#include "extractor/python/py_extractor.h"
 #include "extractor/std_comp.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/type_sys.h"
@@ -90,12 +90,12 @@ void book_building_test(const char *input_file) {
   cout << fm_comp_sys_error_msg(sys) << endl;
   ASSERT_NE(ctx, nullptr);
 
-  fm_time64_t now = fm_stream_ctx_next_time(ctx);
+  fmc_time64_t now = fm_stream_ctx_next_time(ctx);
   do {
     fm_stream_ctx_proc_one(ctx, now);
 
     now = fm_stream_ctx_next_time(ctx);
-  } while (!fm_time64_is_end(now));
+  } while (!fmc_time64_is_end(now));
 
   fm_comp_sys_del(sys);
 }

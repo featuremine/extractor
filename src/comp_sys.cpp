@@ -261,7 +261,7 @@ bool fm_comp_sys_ext_load(fm_comp_sys_t *s, const char *name,
   auto handle = fmc_ext_open(path, &error);
   if (error) {
     fm_comp_sys_error_set(s,
-                          "[ERROR]\t(comp_sys) failed to load "
+                          "[ERROR]\t(comp_sys) failed to open "
                           "extension library %s from %s;\n\t%s",
                           name, path, fmc_error_msg(error));
     return false;
@@ -288,3 +288,9 @@ bool fm_comp_sys_sample_value(fm_comp_sys_t *sys, const char *sample_name,
   }
   return false;
 }
+
+static ytp_sequence_api_v1 *api_v1 = nullptr;
+
+void set_ytp_api_v1(ytp_sequence_api_v1 *api) { api_v1 = api; }
+
+ytp_sequence_api_v1 *get_ytp_api_v1() { return api_v1; }

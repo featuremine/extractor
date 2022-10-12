@@ -15,13 +15,15 @@ find_package(Subproject REQUIRED)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subproject(
     NAME yamal
-    GIT_REVISION "cmp_improvement_string_view"
+    VERSION "7.2.20"
+    GIT_REVISION "v7.2.20"
     GIT_URL "https://github.com/featuremine/yamal.git"
     TARGETS fmc++ ytp
 )
 add_subproject(
     NAME yamal-python
-    GIT_REVISION "expose_targets"
+    VERSION "7.2.20"
+    GIT_REVISION "v7.2.20"
     GIT_URL "https://github.com/featuremine/yamal-python.git"
     VARIABLES yamal-python-incdir yamal-python-source
 )
@@ -40,9 +42,86 @@ set(EXTRACTOR_LIB_DIR "${CMAKE_CURRENT_BINARY_DIR}/package/lib")
 set(FmConfig_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(FmConfig REQUIRED)
 fm_config()
+execute_process(COMMAND ${PYTHON3_BIN} -c "import sys;sys.stdout.write('scripts-%d.%d' % sys.version_info[:2])" OUTPUT_VARIABLE PYTHON3_SCRIPTS_DIR)
+include(GNUInstallDirs)
 
 add_subdirectory(src)
 add_subdirectory(python)
 
-enable_testing()
-add_subdirectory(test)
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/__init__.py"
+    "${CMAKE_BINARY_DIR}/python_dist/extractor/__init__.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/__init__.py"
+    "${CMAKE_BINARY_DIR}/python_dist/extractor/tests/__init__.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/component.py"
+    "${CMAKE_BINARY_DIR}/python_dist/extractor/tests/component.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/scripts/test-extractor-python"
+    "${CMAKE_BINARY_DIR}/python_dist/scripts/test-extractor-python"
+    COPYONLY
+)
+
+add_custom_target(
+    extractor-whl ALL
+
+    COMMAND
+    "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
+
+    "build"
+    "--build-base=${CMAKE_CURRENT_BINARY_DIR}/python_dist/build"
+    ${DEBUG_FLAG}
+
+    "egg_info"
+    "--egg-base" "${CMAKE_CURRENT_BINARY_DIR}/python_dist"
+
+    "bdist_wheel"
+    "--bdist-dir=${CMAKE_CURRENT_BINARY_DIR}/python_dist/bdist"
+    "--dist-dir=${CMAKE_BINARY_DIR}/output"
+
+    COMMAND
+    "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
+
+    "build"
+    "--build-base=${CMAKE_CURRENT_BINARY_DIR}/python_dist/build"
+    ${DEBUG_FLAG}
+
+    "build_scripts"
+    "--executable=${PYTHON3_BIN}"
+    "-f"
+
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python_dist
+
+    DEPENDS extractor_module
+)
+
+if(BUILD_TESTING)
+    enable_testing()
+    add_subdirectory(test)
+    find_program(PYTHON3_BIN "python3" REQUIRED)
+    add_test(
+        NAME extractor_py COMMAND
+
+        "/bin/sh"
+        "-c"
+        "test-extractor-python"
+
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python
+    )
+    set_tests_properties(
+        extractor_py
+        PROPERTIES
+        ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_CURRENT_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+        TIMEOUT 100
+    )
+endif()

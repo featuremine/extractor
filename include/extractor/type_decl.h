@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "extractor/time64.h"
+#include "fmc/time.h"
 //#include "time32.h"
 #include "extractor/decimal64.h"
 #include "extractor/rational64.h"
@@ -63,7 +63,7 @@ typedef float FLOAT32;
 typedef double FLOAT64;
 typedef fm_rational64_t RATIONAL64;
 typedef fm_decimal64_t DECIMAL64;
-typedef fm_time64_t TIME64;
+typedef fmc_time64_t TIME64;
 typedef char CHAR;
 typedef wchar_t WCHAR;
 #ifndef FM_SYS_WIN

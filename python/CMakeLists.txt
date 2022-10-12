@@ -15,7 +15,6 @@ add_library(
     STATIC
     "book/py_book.cpp"
     "py_extractor.cpp"
-    ${yamal-python-source}
 )
 target_link_libraries(
     py_extractor_obj
@@ -61,7 +60,7 @@ target_include_directories(
 
 add_library(
     py_extractor
-    SHARED
+    STATIC
     $<TARGET_OBJECTS:py_extractor_obj>
 )
 target_link_libraries(
@@ -76,3 +75,31 @@ set_target_properties(
     LIBRARY_OUTPUT_DIRECTORY "${EXTRACTOR_LIB_DIR}"
 )
 
+add_library(
+    extractor_module
+    SHARED
+    "py_extractor_main.cpp"
+)
+target_link_libraries(
+    extractor_module
+    PRIVATE
+    fmc++
+    ytp
+    extractor
+    py_extractor
+    PkgConfig::PYTHON
+)
+set_target_properties(
+    extractor_module
+    PROPERTIES
+    OUTPUT_NAME "extractor"
+    PREFIX ""
+    SUFFIX ".so"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/python_dist/extractor"
+)
+target_include_directories(
+    extractor_module
+    PRIVATE
+    "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_SRC_DIR}"
+)

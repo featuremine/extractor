@@ -30,13 +30,13 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "extractor/book/updates.hpp"
 #include "extractor/decimal64.hpp"
-#include "extractor/time64.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/time.hpp"
 
 #include <string>
 #include <variant>
@@ -81,8 +81,8 @@ public:
     batch_field_ = fm_type_frame_field_idx(type_, "batch");
   }
   void init(fm_frame_t *result) override {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
-        fm_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+        fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = 0UL;
     *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
@@ -94,7 +94,7 @@ public:
   }
   bool exec(const book::message &msg, fm_frame_t *result) override {
     if (auto pval = std::get_if<book::updates::add>(&msg)) {
-      *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = pval->id;
@@ -139,8 +139,8 @@ public:
     batch_field_ = fm_type_frame_field_idx(type_, "batch");
   }
   void init(fm_frame_t *result) override {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
-        fm_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+        fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, prio_field_, 0) = 0UL;
@@ -153,7 +153,7 @@ public:
   }
   bool exec(const book::message &msg, fm_frame_t *result) override {
     if (auto pval = std::get_if<book::updates::insert>(&msg)) {
-      *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = pval->id;
@@ -199,8 +199,8 @@ public:
     batch_field_ = fm_type_frame_field_idx(type_, "batch");
   }
   void init(fm_frame_t *result) override {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
-        fm_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+        fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = 0UL;
     *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
@@ -213,7 +213,7 @@ public:
   }
   bool exec(const book::message &msg, fm_frame_t *result) override {
     if (auto pval = std::get_if<book::updates::position>(&msg)) {
-      *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = pval->id;
@@ -257,8 +257,8 @@ public:
     batch_field_ = fm_type_frame_field_idx(type_, "batch");
   }
   void init(fm_frame_t *result) override {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
-        fm_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+        fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = 0UL;
     *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
@@ -270,7 +270,7 @@ public:
   }
   bool exec(const book::message &msg, fm_frame_t *result) override {
     if (auto pval = std::get_if<book::updates::cancel>(&msg)) {
-      *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = pval->id;
@@ -315,8 +315,8 @@ public:
     batch_field_ = fm_type_frame_field_idx(type_, "batch");
   }
   void init(fm_frame_t *result) override {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
-        fm_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+        fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = 0UL;
     *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
@@ -330,7 +330,7 @@ public:
   }
   bool exec(const book::message &msg, fm_frame_t *result) override {
     if (auto pval = std::get_if<book::updates::execute>(&msg)) {
-      *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = pval->id;
@@ -372,8 +372,8 @@ public:
     decoration_field_ = fm_type_frame_field_idx(type_, "decoration");
   }
   void init(fm_frame_t *result) override {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
-        fm_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+        fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(fm_decimal64_t *)fm_frame_get_ptr1(result, trade_price_field_, 0) =
         fm_decimal64_from_raw(0);
@@ -384,7 +384,7 @@ public:
   }
   bool exec(const book::message &msg, fm_frame_t *result) override {
     if (auto pval = std::get_if<book::updates::trade>(&msg)) {
-      *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(fm_decimal64_t *)fm_frame_get_ptr1(result, trade_price_field_, 0) =
@@ -428,8 +428,8 @@ public:
     batch_field_ = fm_type_frame_field_idx(type_, "batch");
   }
   void init(fm_frame_t *result) override {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
-        fm_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+        fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = 0UL;
     *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
@@ -440,7 +440,7 @@ public:
   }
   bool exec(const book::message &msg, fm_frame_t *result) override {
     if (auto pval = std::get_if<book::updates::state>(&msg)) {
-      *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = pval->id;
@@ -476,8 +476,8 @@ public:
     command_field_ = fm_type_frame_field_idx(type_, "command");
   }
   void init(fm_frame_t *result) override {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
-        fm_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+        fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
     *(uint8_t *)fm_frame_get_ptr1(result, uncross_field_, 0) = 0;
@@ -485,7 +485,7 @@ public:
   }
   bool exec(const book::message &msg, fm_frame_t *result) override {
     if (auto pval = std::get_if<book::updates::control>(&msg)) {
-      *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = pval->batch;
@@ -523,8 +523,8 @@ public:
     batch_field_ = fm_type_frame_field_idx(type_, "batch");
   }
   void init(fm_frame_t *result) override {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
-        fm_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+        fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
         fm_decimal64_from_raw(0);
@@ -535,7 +535,7 @@ public:
   }
   bool exec(const book::message &msg, fm_frame_t *result) override {
     if (auto pval = std::get_if<book::updates::set>(&msg)) {
-      *(fm_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
@@ -562,12 +562,12 @@ public:
     seconds_field_ = fm_type_frame_field_idx(type_, "seconds");
   }
   void init(fm_frame_t *result) override {
-    *(fm_time64_t *)fm_frame_get_ptr1(result, seconds_field_, 0) =
-        fm_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, seconds_field_, 0) =
+        fmc_time64_start();
   }
   bool exec(const book::message &msg, fm_frame_t *result) override {
     if (auto pval = std::get_if<book::updates::time>(&msg)) {
-      *(fm_time64_t *)fm_frame_get_ptr1(result, seconds_field_, 0) =
+      *(fmc_time64_t *)fm_frame_get_ptr1(result, seconds_field_, 0) =
           pval->seconds;
       return true;
     }

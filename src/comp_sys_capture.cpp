@@ -8,8 +8,8 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/frame.h"
-#include "extractor/time64.h"
 #include "extractor/type_sys.h"
+#include "fmc/time.h"
 #include "frame_serial.h"
 #include "stream_ctx.h"
 #include <cmp/cmp.h>
@@ -145,7 +145,7 @@ fm_stream_ctx_t *fm_stream_ctx_recorded(fm_comp_sys_t *s, fm_comp_graph_t *g,
     if (!*written)
       return;
     cmp_write_integer(cmp_ctx, -1);
-    auto now = fm_time64_to_nanos(fm_stream_ctx_now(ctx));
+    auto now = fmc_time64_to_nanos(fm_stream_ctx_now(ctx));
     cmp_write_integer(cmp_ctx, now);
     *written = false;
   });
@@ -320,10 +320,10 @@ fm_stream_ctx_t *fm_stream_ctx_replayed(fm_comp_sys_t *s, fm_comp_graph_t *g,
 
   auto *postproc_clbck =
       new function([cmp_ctx, closures, queue = vector<fm_replay_cl *>(),
-                    last = fm_time64_t{0}](fm_stream_ctx_t *ctx) mutable {
+                    last = fmc_time64_t{0}](fm_stream_ctx_t *ctx) mutable {
         auto now = fm_stream_ctx_now(ctx);
         //@note this can be changed if we redefine > operator for time64
-        if (fm_time64_to_nanos(last) > fm_time64_to_nanos(now))
+        if (fmc_time64_to_nanos(last) > fmc_time64_to_nanos(now))
           return;
         do {
           int64_t index = 0;
@@ -337,7 +337,7 @@ fm_stream_ctx_t *fm_stream_ctx_replayed(fm_comp_sys_t *s, fm_comp_graph_t *g,
                                     "(stream_ctx) expecting timestamp");
               return;
             }
-            last = fm_time64_from_nanos(last_nano);
+            last = fmc_time64_from_nanos(last_nano);
             for (auto &&closure : queue) {
               fm_stream_ctx_schedule(ctx, closure->handle, last);
             }

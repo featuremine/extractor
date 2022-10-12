@@ -26,10 +26,10 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 #include "fmtron.h"
 }
-#include "extractor/time64.hpp"
+#include "fmc++/time.hpp"
 
 #include <algorithm>
 #include <list>
@@ -192,8 +192,8 @@ void process_msg(fmtron_msg *msg, void *closure) {
       strncpy((char *)data, (const char *)upd->data, fld_info.len);
     } break;
     case FMTRON_TIME:
-      *(fm_time64_t *)fm_frame_get_ptr1(frame, fld_info.index, 0) =
-          fm_time64_from_nanos(*(int64_t *)upd->data);
+      *(fmc_time64_t *)fm_frame_get_ptr1(frame, fld_info.index, 0) =
+          fmc_time64_from_nanos(*(int64_t *)upd->data);
       break;
     default:
       break;

@@ -24,7 +24,7 @@
 #pragma once
 
 #include "extractor/decimal64.hpp"
-#include "extractor/time64.hpp"
+#include "fmc++/time.hpp"
 
 #include <optional>
 #include <string>
@@ -35,7 +35,7 @@ namespace book {
 namespace updates {
 using namespace std;
 struct add {
-  fm_time64_t vendor;
+  fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
   fm_decimal64_t price;
@@ -45,7 +45,7 @@ struct add {
 };
 
 struct insert {
-  fm_time64_t vendor;
+  fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
   uint64_t prio;
@@ -56,7 +56,7 @@ struct insert {
 };
 
 struct position {
-  fm_time64_t vendor;
+  fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
   fm_decimal64_t price;
@@ -67,7 +67,7 @@ struct position {
 };
 
 struct cancel {
-  fm_time64_t vendor;
+  fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
   fm_decimal64_t price;
@@ -77,7 +77,7 @@ struct cancel {
 };
 
 struct execute {
-  fm_time64_t vendor;
+  fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
   fm_decimal64_t price;
@@ -88,7 +88,7 @@ struct execute {
 };
 
 struct trade {
-  fm_time64_t vendor;
+  fmc_time64_t vendor;
   uint64_t seqn;
   fm_decimal64_t trade_price;
   fm_decimal64_t qty;
@@ -97,7 +97,7 @@ struct trade {
 };
 
 struct state {
-  fm_time64_t vendor;
+  fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
   fm_decimal64_t price;
@@ -107,7 +107,7 @@ struct state {
 };
 
 struct control {
-  fm_time64_t vendor;
+  fmc_time64_t vendor;
   uint64_t seqn;
   uint16_t batch;
   uint8_t uncross;
@@ -115,7 +115,7 @@ struct control {
 };
 
 struct set {
-  fm_time64_t vendor;
+  fmc_time64_t vendor;
   uint64_t seqn;
   fm_decimal64_t price;
   fm_decimal64_t qty;
@@ -132,7 +132,7 @@ struct announce {
 };
 
 struct time {
-  fm_time64_t seconds;
+  fmc_time64_t seconds;
 };
 
 struct none {};

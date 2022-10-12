@@ -28,7 +28,7 @@ extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "extractor/time64.h"
+#include "fmc/time.h"
 }
 
 #include "mp_util.hpp"
@@ -36,7 +36,6 @@ extern "C" {
 
 #include "fmc++/memory.hpp"
 #include "fmc/time.h"
-#include "ytp/sequence.h"
 
 #include <chrono>
 #include <optional>

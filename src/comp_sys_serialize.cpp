@@ -28,8 +28,8 @@ extern "C" {
 #include "extractor/arg_stack.h"
 #include "extractor/comp_sys.h"
 #include "extractor/frame.h"
-#include "extractor/time64.h"
 #include "extractor/type_sys.h"
+#include "fmc/time.h"
 #include "frame_serial.h"
 #include "stream_ctx.h"
 #include <cmp/cmp.h>

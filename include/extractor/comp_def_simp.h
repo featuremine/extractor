@@ -28,8 +28,8 @@
 #include "extractor/arg_stack.h"
 #include "extractor/call_ctx.h"
 #include "extractor/comp_def.h"
-#include "extractor/time64.h"
 #include "fmc/platform.h"
+#include "fmc/time.h"
 
 typedef struct fm_comp_def_simp {
   bool inplace;
