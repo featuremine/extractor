@@ -31,8 +31,8 @@ jobs:
         submodules: recursive
         token: ${{ secrets.CIBOT_TOKEN }}
 
-    - name: Install numpy
-      run: pip3 install numpy
+    - name: Install python dependencies
+      run: pip3 install numpy msgpack pandas
       shell: bash
 
     - name: Install numdiff
@@ -64,8 +64,8 @@ jobs:
       image: public.ecr.aws/p0w8t0l8/ci-hosted-gh-centos7-gcc10.2.0
     
     steps:
-    - name: Install numpy
-      run: pip3 install numpy
+    - name: Install python dependencies
+      run: pip3 install numpy msgpack pandas
       shell: bash
 
     - name: Install numdiff
