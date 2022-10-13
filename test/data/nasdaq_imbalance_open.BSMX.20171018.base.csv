@@ -1,0 +1,3 @@
+ticker,imbalanceSide,type,matchPrice,matchQty,imbalanceQuantity,receive,Exchange
+BSMX,0,Open,0.000000,0,0,1508333280000000000,NASDAQ
+BSMX,0,Open,0.000000,0,0,1508333285133000000,NASDAQ

@@ -1,0 +1,17 @@
+name: Release Publication
+
+on:
+  pull_request:
+    types: closed
+
+permissions: write-all
+
+jobs:
+  publish-release:
+    runs-on: ubuntu-20.04
+    
+    steps:
+    - name: Publish release
+      uses: featuremine/actions/release@main
+      with:
+        gh_token: ${{ secrets.GITHUB_TOKEN }}

@@ -1,0 +1,5 @@
+[wrap-git]
+directory=fmtron-lib
+url=https://git-codecommit.us-east-1.amazonaws.com/v1/repos/fmtron-lib
+push-url=https://git-codecommit.us-east-1.amazonaws.com/v1/repos/fmtron-lib
+revision=master
