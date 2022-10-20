@@ -58,6 +58,9 @@ if __name__ == "__main__":
             # Decimal
             "decimal_from_float32_col": f32,
             "decimal_from_float64_col": f64,
+            # Decimal128
+            "decimal128_from_float32_col": f32,
+            "decimal128_from_float64_col": f64,
             # Float 32
             "float32_col": f32,
             # Float 64
@@ -95,6 +98,8 @@ if __name__ == "__main__":
              ("bool_col", extr.Bool),
              ("decimal_from_float32_col", extr.Decimal64),
              ("decimal_from_float64_col", extr.Decimal64),
+             ("decimal128_from_float32_col", extr.Decimal128),
+             ("decimal128_from_float64_col", extr.Decimal128),
              ("float32_col", extr.Float32),
              ("float64_col", extr.Float64),
              ("float64_from_float32_col", extr.Float64),
@@ -190,6 +195,8 @@ if __name__ == "__main__":
 
                                      "decimal_from_float32_col": "float32",
                                      "decimal_from_float64_col": "float64",
+                                     "decimal128_from_float32_col": "float32",
+                                     "decimal128_from_float64_col": "float64",
                                      "float32_col": "float32",
                                      "float64_col": "float64",
                                      "float64_from_float32_col": "float32",
@@ -235,6 +242,8 @@ if __name__ == "__main__":
         df_2 = df.drop([
             "decimal_from_float32_col",
             "decimal_from_float64_col",
+            "decimal128_from_float32_col",
+            "decimal128_from_float64_col",
             "float32_col",
             "float64_col",
             "float64_from_float32_col",

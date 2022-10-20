@@ -659,7 +659,7 @@ fm_ctx_def_t *fm_comp_pandas_play_gen(fm_comp_sys_t *csys,
   vector<fm_type_decl_cp> types(size);
   int dims[1] = {1};
 
-  auto field_error = [sys, error](size_t field_idx, const char *str) {
+  auto field_error = [sys](size_t field_idx, const char *str) {
     string errstr = str;
     errstr.append(" for field ");
     errstr.append(to_string(field_idx));
