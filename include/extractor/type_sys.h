@@ -263,6 +263,11 @@ FMMODFUNC bool fm_type_is_bool(fm_type_decl_cp td);
 FMMODFUNC bool fm_type_is_decimal(fm_type_decl_cp td);
 
 /**
+ * @brief checks whether type declaration is for a decimal128
+ */
+FMMODFUNC bool fm_type_is_decimal128(fm_type_decl_cp td);
+
+/**
  * @brief checks whether type declaration is of frame type
  */
 FMMODFUNC bool fm_type_is_frame(fm_type_decl_cp td);
