@@ -35,6 +35,7 @@ extern "C" {
 #include "extractor/decimal64.hpp"
 #include "extractor/frame.hpp"
 #include "extractor/rational64.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/time.hpp"
 

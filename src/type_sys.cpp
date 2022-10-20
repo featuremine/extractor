@@ -389,6 +389,41 @@ bool fm_type_is_decimal(fm_type_decl_cp td) {
   return false;
 }
 
+bool fm_type_is_decimal128(fm_type_decl_cp td) {
+  if (!td)
+    return false;
+  if (auto pval = std::get_if<fm::base_type_def>(&td->def)) {
+    switch (pval->type) {
+    case FM_TYPE_INT8:
+    case FM_TYPE_INT16:
+    case FM_TYPE_INT32:
+    case FM_TYPE_INT64:
+      return false;
+      break;
+    case FM_TYPE_UINT8:
+    case FM_TYPE_UINT16:
+    case FM_TYPE_UINT32:
+    case FM_TYPE_UINT64:
+      return false;
+      break;
+    case FM_TYPE_FLOAT32:
+    case FM_TYPE_FLOAT64:
+      return false;
+      break;
+    case FM_TYPE_DECIMAL64:
+      return false;
+      break;
+    case FM_TYPE_DECIMAL128:
+      return true;
+      break;
+    default:
+      return false;
+      break;
+    }
+  }
+  return false;
+}
+
 bool fm_type_is_frame(fm_type_decl_cp td) {
   return std::holds_alternative<fm::frame_type_def>(td->def);
 }
