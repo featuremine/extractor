@@ -401,7 +401,7 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
       break;
     case FM_TYPE_DECIMAL128: {
       char str[FMC_DECIMAL128_STR_SIZE];
-      fmc_decimal128_to_str((DECIMAL128 *)ptr, str);
+      fmc_decimal128_to_str(str, (DECIMAL128 *)ptr);
       char *ptr = nullptr;
       return PyFloat_FromDouble(strtod(str, &ptr));
     } break;
@@ -497,7 +497,7 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       break;
     case FM_TYPE_DECIMAL128: {
       char str[FMC_DECIMAL128_STR_SIZE];
-      fmc_decimal128_to_str(&STACK_POP(plist, DECIMAL128), str);
+      fmc_decimal128_to_str(str, &STACK_POP(plist, DECIMAL128));
       char *ptr = nullptr;
       return PyFloat_FromDouble(strtod(str, &ptr));
     } break;
@@ -1075,7 +1075,7 @@ string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
     } break;
     case FM_TYPE_DECIMAL128: {
       char str[FMC_DECIMAL128_STR_SIZE];
-      fmc_decimal128_to_str((DECIMAL128 *)ptr, str);
+      fmc_decimal128_to_str(str, (DECIMAL128 *)ptr);
       return string(str);
     } break;
     case FM_TYPE_CHAR:
