@@ -374,7 +374,9 @@ bool decimal64_fwriter(FILE *file, const void *val, const char *fmt) {
 }
 
 bool decimal128_fwriter(FILE *file, const void *val, const char *fmt) {
-  return false;
+  char buf[FMC_DECIMAL128_STR_SIZE];
+  fmc_decimal128_to_str((fmc_decimal128_t *)val, buf);
+  return fprintf(file, "%s", buf) > 0;
 }
 
 bool bool_fwriter(FILE *file, const void *val, const char *fmt) {
