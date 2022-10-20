@@ -153,8 +153,8 @@ const char *decimal64_parser(const char *begin, const char *end, void *data,
 
 const char *decimal128_parser(const char *begin, const char *end, void *data,
                              const char *fmt) {
-  //TODO: Implement
-  return nullptr;
+  fmc_decimal128_from_str((fmc_decimal128_t *)data, begin);
+  return end;
 }
 
 template <class T>
@@ -285,7 +285,6 @@ size_t fm_base_type_sizeof(FM_BASE_TYPE t) {
     return sizeof(WCHAR);
     break;
   case FM_TYPE_BOOL:
-    //TODO: review
     return sizeof(int32_t);
     break;
   case FM_TYPE_LAST:

@@ -2,6 +2,7 @@
 extern "C" {
 #include "extractor/frame.h"
 #include "extractor/type_sys.h"
+#include "fmc/decimal128.h"
 #include "fmc/time.h"
 }
 
@@ -69,8 +70,9 @@ inline bool msgpack_writer(cmp_ctx_t &cmp, bool val) {
   return cmp_write_bool(&cmp, val);
 }
 inline bool msgpack_writer(cmp_ctx_t &cmp, fmc_decimal128_t val) {
-  //TODO: implement
-  return false;
+  char buf[FMC_DECIMAL128_STR_SIZE];
+  fmc_decimal128_to_str(&val, buf);
+  return cmp_write_str(&cmp, buf, strlen(buf));
 }
 
 template <class T> auto base_writer(fm_field_t offset) {
@@ -222,8 +224,12 @@ inline bool msgpack_parser(cmp_ctx_t &cmp, bool &val) {
   return cmp_read_bool(&cmp, &val);
 }
 inline bool msgpack_parser(cmp_ctx_t &cmp, fmc_decimal128_t &val) {
-  //TODO: Implement
-  return false;
+  std::string buf;
+  if (!cmp_read_string(&cmp, buf)) {
+    return false;
+  }
+  fmc_decimal128_from_str(&val, buf.c_str());
+  return true;
 }
 
 template <class T> auto base_reader(fm_field_t offset) {
