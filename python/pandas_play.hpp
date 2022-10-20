@@ -406,7 +406,9 @@ bool pandas_parse_one(fm_exec_ctx_t *ctx, pandas_play_exec_cl *cl,
       double val = PyFloat_AsDouble(item.get_ref());
       char str[FMC_DECIMAL128_STR_SIZE];
       snprintf(str, FMC_DECIMAL128_STR_SIZE, "%.15g", val);
-      fmc_decimal128_from_str((DECIMAL128 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row), str);
+      fmc_decimal128_from_str(
+          (DECIMAL128 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row),
+          str);
       p_off += 3;
     } break;
     default:

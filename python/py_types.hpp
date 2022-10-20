@@ -26,8 +26,8 @@ extern "C" {
 }
 #include "extractor/comp_def.hpp"
 #include "extractor/decimal64.hpp"
-#include "fmc++/decimal128.hpp"
 #include "extractor/rational64.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/time.hpp"
 
 #include <Python.h>
