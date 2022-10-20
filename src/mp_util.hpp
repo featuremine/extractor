@@ -68,6 +68,10 @@ inline bool msgpack_writer(cmp_ctx_t &cmp, WCHAR val) {
 inline bool msgpack_writer(cmp_ctx_t &cmp, bool val) {
   return cmp_write_bool(&cmp, val);
 }
+inline bool msgpack_writer(cmp_ctx_t &cmp, fmc_decimal128_t val) {
+  //TODO: implement
+  return false;
+}
 
 template <class T> auto base_writer(fm_field_t offset) {
   return [offset](cmp_ctx_t &cmp, const fm_frame_t *frame, int row) {
@@ -116,6 +120,9 @@ inline fm_frame_writer_p fm_type_to_mp_writer(fm_type_decl_cp decl,
       break;
     case FM_TYPE_DECIMAL64:
       return base_writer<DECIMAL64>(offset);
+      break;
+    case FM_TYPE_DECIMAL128:
+      return base_writer<DECIMAL128>(offset);
       break;
     case FM_TYPE_TIME64:
       return base_writer<TIME64>(offset);
@@ -214,6 +221,10 @@ inline bool msgpack_parser(cmp_ctx_t &cmp, WCHAR &val) {
 inline bool msgpack_parser(cmp_ctx_t &cmp, bool &val) {
   return cmp_read_bool(&cmp, &val);
 }
+inline bool msgpack_parser(cmp_ctx_t &cmp, fmc_decimal128_t &val) {
+  //TODO: Implement
+  return false;
+}
 
 template <class T> auto base_reader(fm_field_t offset) {
   return [offset](cmp_ctx_t &cmp, fm_frame_t *frame, int row) -> bool {
@@ -263,6 +274,9 @@ inline fm_frame_reader_p fm_type_to_mp_reader(fm_type_decl_cp decl,
       break;
     case FM_TYPE_DECIMAL64:
       return base_reader<DECIMAL64>(offset);
+      break;
+    case FM_TYPE_DECIMAL128:
+      return base_reader<DECIMAL128>(offset);
       break;
     case FM_TYPE_TIME64:
       return base_reader<TIME64>(offset);

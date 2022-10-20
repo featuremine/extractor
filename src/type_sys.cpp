@@ -619,6 +619,9 @@ int fm_arg_stack_build(fm_type_decl_cp td, fm_arg_stack_t *s, va_list *args) {
             case FM_TYPE_DECIMAL64:
               return fm_stack_push_arg<DECIMAL64, DECIMAL64>(s, args);
               break;
+            case FM_TYPE_DECIMAL128:
+              return fm_stack_push_arg<DECIMAL128, DECIMAL128>(s, args);
+              break;
             case FM_TYPE_TIME64:
               return fm_stack_push_arg<TIME64, TIME64>(s, args);
               break;
