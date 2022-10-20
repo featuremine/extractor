@@ -33,7 +33,6 @@ extern "C" {
 
 #include "extractor/comp_def.hpp"
 #include "extractor/decimal64.hpp"
-#include "extractor/decimal128.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/strings.hpp"
@@ -77,21 +76,6 @@ struct the_convert_field_exec_2_0<fm_decimal64_t, T> : convert_field_exec {
 };
 
 template <class T>
-struct the_convert_field_exec_2_0<fm_decimal128_t, T> : convert_field_exec {
-  the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
-            fm_exec_ctx_t *ctx) override {
-    auto val0 = *(const fm_decimal128_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    char str[FMC_DECIMAL128_STR_SIZE];
-    fmc_decimal128_to_str(&val0, str);
-    char *ptr = nullptr;
-    *(T *)fm_frame_get_ptr1(result, field_, 0) =
-        T(strtod(str, &ptr));
-  }
-  fm_field_t field_;
-};
-
-template <class T>
 struct the_convert_field_exec_2_0<T, fm_decimal64_t> : convert_field_exec {
   the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
   void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
@@ -99,19 +83,6 @@ struct the_convert_field_exec_2_0<T, fm_decimal64_t> : convert_field_exec {
     auto &val0 = *(const T *)fm_frame_get_cptr1(argv[0], field_, 0);
     *(fm_decimal64_t *)fm_frame_get_ptr1(result, field_, 0) =
         fm_decimal64_from_double(val0);
-  }
-  fm_field_t field_;
-};
-
-template <class T>
-struct the_convert_field_exec_2_0<T, fm_decimal128_t> : convert_field_exec {
-  the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
-            fm_exec_ctx_t *ctx) override {
-    auto &val0 = *(const T *)fm_frame_get_cptr1(argv[0], field_, 0);
-    char str[FMC_DECIMAL128_STR_SIZE];
-    snprintf(str, FMC_DECIMAL128_STR_SIZE, "%.15g", double(val0));
-    fmc_decimal128_from_str((fm_decimal64_t *)fm_frame_get_ptr1(result, field_, 0), str);
   }
   fm_field_t field_;
 };

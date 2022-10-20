@@ -71,7 +71,7 @@ inline bool msgpack_writer(cmp_ctx_t &cmp, bool val) {
 }
 inline bool msgpack_writer(cmp_ctx_t &cmp, fmc_decimal128_t val) {
   char buf[FMC_DECIMAL128_STR_SIZE];
-  fmc_decimal128_to_str(&val, buf);
+  fmc_decimal128_to_str(buf, &val);
   return cmp_write_str(&cmp, buf, strlen(buf));
 }
 

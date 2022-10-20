@@ -130,31 +130,6 @@ template <> struct the_constant_field_exec_2_0<DECIMAL64> : op_field_exec {
   DECIMAL64 val_;
 };
 
-template <> struct the_constant_field_exec_2_0<DECIMAL128> : op_field_exec {
-  the_constant_field_exec_2_0(fm_field_t field, fm_type_decl_cp arg_type,
-                              fm_arg_stack_t &plist)
-      : field_(field) {
-    if (fm_type_is_decimal128(arg_type)) {
-      val_ = STACK_POP(plist, DECIMAL128);
-    } else {
-      double val;
-      fmc_runtime_error_unless(fm_arg_try_float64(arg_type, &plist, &val))
-          << "could not read a float value";
-      char str[FMC_DECIMAL128_STR_SIZE];
-      snprintf(str, FMC_DECIMAL128_STR_SIZE, "%.15g", val);
-      fmc_decimal128_from_str(&val_, str);
-    }
-  }
-
-  void exec(fm_frame_t *result, size_t args,
-            const fm_frame_t *const argv[]) override {
-    *(DECIMAL128 *)fm_frame_get_ptr1(result, field_, 0) = val_;
-  }
-
-  fm_field_t field_;
-  DECIMAL128 val_;
-};
-
 struct constant_comp_cl {
   ~constant_comp_cl() {
     for (auto *ptr : calls) {
