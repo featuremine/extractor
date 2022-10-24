@@ -55,9 +55,6 @@ if __name__ == "__main__":
             "binstring_col": s16,
             # Bool
             "bool_col": b,
-            # Decimal128
-            "decimal128_from_float32_col": f32,
-            "decimal128_from_float64_col": f64,
             # Decimal
             "decimal_from_float32_col": f32,
             "decimal_from_float64_col": f64,
@@ -96,8 +93,6 @@ if __name__ == "__main__":
             df,
             (("binstring_col", extr.Array(extr.Char, 16)),
              ("bool_col", extr.Bool),
-             ("decimal128_from_float32_col", extr.Decimal128),
-             ("decimal128_from_float64_col", extr.Decimal128),
              ("decimal_from_float32_col", extr.Decimal64),
              ("decimal_from_float64_col", extr.Decimal64),
              ("float32_col", extr.Float32),
@@ -193,8 +188,6 @@ if __name__ == "__main__":
                               dtype={"binstring_col": "S16",
                                      "bool_col": "bool",
 
-                                     "decimal128_from_float32_col": "float32",
-                                     "decimal128_from_float64_col": "float64",
                                      "decimal_from_float32_col": "float32",
                                      "decimal_from_float64_col": "float64",
                                      "float32_col": "float32",
@@ -240,8 +233,6 @@ if __name__ == "__main__":
                                        "uint64_from_uint32_col": "uint32", "uint64_from_uint8_col": "uint8",
                                        "uint8_col": "uint8"})
         df_2 = df.drop([
-            "decimal128_from_float32_col",
-            "decimal128_from_float64_col",
             "decimal_from_float32_col",
             "decimal_from_float64_col",
             "float32_col",
