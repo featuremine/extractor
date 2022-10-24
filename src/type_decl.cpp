@@ -285,7 +285,7 @@ size_t fm_base_type_sizeof(FM_BASE_TYPE t) {
     return sizeof(WCHAR);
     break;
   case FM_TYPE_BOOL:
-    return sizeof(int32_t);
+    return sizeof(BOOL);
     break;
   case FM_TYPE_LAST:
     return 0;
