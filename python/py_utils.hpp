@@ -114,9 +114,7 @@ df_type_check get_df_type_checker(fm_type_decl_cp decl) {
       };
       break;
     case FM_TYPE_DECIMAL128:
-      return [](int fdtype) {
-        return fdtype == NPY_OBJECT;
-      };
+      return [](int fdtype) { return fdtype == NPY_OBJECT; };
       break;
     case FM_TYPE_TIME64:
       return [](int fdtype) { return fdtype == NPY_DATETIME; };
@@ -265,7 +263,8 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
       break;
     case FM_TYPE_DECIMAL128:
       return [](void *ptr, PyObject *obj) {
-        if (!PyObject_IsInstance(obj, (PyObject*)&ExtractorBaseTypeDecimal128Type))
+        if (!PyObject_IsInstance(obj,
+                                 (PyObject *)&ExtractorBaseTypeDecimal128Type))
           return false;
         ExtractorBaseTypeDecimal128 *dec = (ExtractorBaseTypeDecimal128 *)obj;
         *(DECIMAL128 *)ptr = dec->val;
@@ -783,7 +782,7 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
         break;
       case FM_TYPE_DECIMAL128:
         type = NPY_OBJECT;
-        elem_size = sizeof(PyObject*);
+        elem_size = sizeof(PyObject *);
         break;
       case FM_TYPE_TIME64:
         type = NPY_DATETIME;

@@ -403,10 +403,13 @@ bool pandas_parse_one(fm_exec_ctx_t *ctx, pandas_play_exec_cl *cl,
           PyTuple_GetItem(cl->curr.get_ref(), cl->parsers[p_off + 2] + 1));
       if (!bool(item))
         return field_error();
-      if (!PyObject_IsInstance(item.get_ref(), (PyObject*)&ExtractorBaseTypeDecimal128Type))
+      if (!PyObject_IsInstance(item.get_ref(),
+                               (PyObject *)&ExtractorBaseTypeDecimal128Type))
         return field_error();
-      ExtractorBaseTypeDecimal128 *dec = (ExtractorBaseTypeDecimal128 *)item.get_ref();
-      *(DECIMAL128 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row) = dec->val;
+      ExtractorBaseTypeDecimal128 *dec =
+          (ExtractorBaseTypeDecimal128 *)item.get_ref();
+      *(DECIMAL128 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row) =
+          dec->val;
       p_off += 3;
     } break;
     default:
