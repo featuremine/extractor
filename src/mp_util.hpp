@@ -224,11 +224,14 @@ inline bool msgpack_parser(cmp_ctx_t &cmp, bool &val) {
   return cmp_read_bool(&cmp, &val);
 }
 inline bool msgpack_parser(cmp_ctx_t &cmp, fmc_decimal128_t &val) {
-  std::string buf;
-  if (!cmp_read_string(&cmp, buf)) {
+  uint32_t size = 0;
+  if (!cmp_read_str_size(&cmp, &size) || size >= FMC_DECIMAL128_STR_SIZE)
     return false;
-  }
-  fmc_decimal128_from_str(&val, buf.c_str());
+  char buf[FMC_DECIMAL128_STR_SIZE];
+  if (!cmp.read(&cmp, buf, size))
+    return false;
+  buf[size] = '\0';
+  fmc_decimal128_from_str(&val, buf);
   return true;
 }
 
