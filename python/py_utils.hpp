@@ -115,7 +115,7 @@ df_type_check get_df_type_checker(fm_type_decl_cp decl) {
       break;
     case FM_TYPE_DECIMAL128:
       return [](int fdtype) {
-        return fdtype == NPY_FLOAT64 || fdtype == NPY_FLOAT32;
+        return fdtype == NPY_OBJECT;
       };
       break;
     case FM_TYPE_TIME64:
@@ -265,11 +265,10 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
       break;
     case FM_TYPE_DECIMAL128:
       return [](void *ptr, PyObject *obj) {
-        char str[FMC_DECIMAL128_STR_SIZE];
-        snprintf(str, FMC_DECIMAL128_STR_SIZE, "%.15g", PyFloat_AsDouble(obj));
-        if (PyErr_Occurred())
+        if (!PyObject_IsInstance(obj, (PyObject*)&ExtractorBaseTypeDecimal128Type))
           return false;
-        fmc_decimal128_from_str((DECIMAL128 *)ptr, str);
+        ExtractorBaseTypeDecimal128 *dec = (ExtractorBaseTypeDecimal128 *)obj;
+        *(DECIMAL128 *)ptr = dec->val;
         return true;
       };
       break;
@@ -400,10 +399,7 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
       return PyFloat_FromDouble(fm_decimal64_to_double(*(DECIMAL64 *)ptr));
       break;
     case FM_TYPE_DECIMAL128: {
-      char str[FMC_DECIMAL128_STR_SIZE];
-      fmc_decimal128_to_str(str, (DECIMAL128 *)ptr);
-      char *ptr = nullptr;
-      return PyFloat_FromDouble(strtod(str, &ptr));
+      return ExtractorBaseTypeDecimal128::py_new(*(DECIMAL128 *)ptr);
     } break;
     case FM_TYPE_CHAR:
       return PyUnicode_FromStringAndSize((const char *)ptr, 1);
@@ -496,10 +492,7 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
           fm_decimal64_to_double(STACK_POP(plist, DECIMAL64)));
       break;
     case FM_TYPE_DECIMAL128: {
-      char str[FMC_DECIMAL128_STR_SIZE];
-      fmc_decimal128_to_str(str, &STACK_POP(plist, DECIMAL128));
-      char *ptr = nullptr;
-      return PyFloat_FromDouble(strtod(str, &ptr));
+      return ExtractorBaseTypeDecimal128::py_new(STACK_POP(plist, DECIMAL128));
     } break;
     case FM_TYPE_TIME64: {
       using days = typename chrono::duration<long int, std::ratio<86400>>;
@@ -789,8 +782,8 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
         elem_size = sizeof(int64_t);
         break;
       case FM_TYPE_DECIMAL128:
-        type = NPY_FLOAT64;
-        elem_size = sizeof(double);
+        type = NPY_OBJECT;
+        elem_size = sizeof(PyObject*);
         break;
       case FM_TYPE_TIME64:
         type = NPY_DATETIME;
@@ -1003,7 +996,7 @@ inline short type_size(fm_type_decl_cp decl) {
       return 20;
       break;
     case FM_TYPE_DECIMAL128:
-      return 20;
+      return FMC_DECIMAL128_STR_SIZE;
       break;
     case FM_TYPE_CHAR:
       return 1;

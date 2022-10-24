@@ -173,8 +173,8 @@ static bool add_column_parser(fm_exec_ctx_t *ctx, fm_frame_t *frame,
       type = 11;
       break;
     case FM_TYPE_DECIMAL128:
-      if (fdtype != NPY_FLOAT64 && fdtype != NPY_FLOAT32)
-        return error("float64, float32.");
+      if (fdtype != NPY_OBJECT)
+        return error("object.");
       type = 16;
       break;
     case FM_TYPE_TIME64:
@@ -403,12 +403,10 @@ bool pandas_parse_one(fm_exec_ctx_t *ctx, pandas_play_exec_cl *cl,
           PyTuple_GetItem(cl->curr.get_ref(), cl->parsers[p_off + 2] + 1));
       if (!bool(item))
         return field_error();
-      double val = PyFloat_AsDouble(item.get_ref());
-      char str[FMC_DECIMAL128_STR_SIZE];
-      snprintf(str, FMC_DECIMAL128_STR_SIZE, "%.15g", val);
-      fmc_decimal128_from_str(
-          (DECIMAL128 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row),
-          str);
+      if (!PyObject_IsInstance(item.get_ref(), (PyObject*)&ExtractorBaseTypeDecimal128Type))
+        return field_error();
+      ExtractorBaseTypeDecimal128 *dec = (ExtractorBaseTypeDecimal128 *)item.get_ref();
+      *(DECIMAL128 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row) = dec->val;
       p_off += 3;
     } break;
     default:
