@@ -107,7 +107,8 @@ template <class T> struct py_type_convert {
       const char *temp = NULL;
       Py_ssize_t sz = 0;
       if (!PyArg_ParseTuple(args, "s#", &temp, &sz) ||
-          sz > numeric_limits<fmc::decimal128>::max() || sz < numeric_limits<fmc::decimal128>::min()) {
+          sz > numeric_limits<fmc::decimal128>::max() ||
+          sz < numeric_limits<fmc::decimal128>::min()) {
         PyErr_SetString(PyExc_TypeError, "expecting a valid string value");
         return false;
       }
