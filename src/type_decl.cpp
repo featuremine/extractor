@@ -285,7 +285,7 @@ size_t fm_base_type_sizeof(FM_BASE_TYPE t) {
     return sizeof(WCHAR);
     break;
   case FM_TYPE_BOOL:
-    return sizeof(int32_t);
+    return sizeof(BOOL);
     break;
   case FM_TYPE_LAST:
     return 0;
@@ -376,7 +376,7 @@ bool decimal64_fwriter(FILE *file, const void *val, const char *fmt) {
 bool decimal128_fwriter(FILE *file, const void *val, const char *fmt) {
   char buf[FMC_DECIMAL128_STR_SIZE];
   fmc_decimal128_to_str(buf, (fmc_decimal128_t *)val);
-  return fprintf(file, "%g", buf) > 0;
+  return fprintf(file, "%s", buf) > 0;
 }
 
 bool bool_fwriter(FILE *file, const void *val, const char *fmt) {
