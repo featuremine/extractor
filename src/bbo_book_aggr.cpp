@@ -28,12 +28,12 @@ extern "C" {
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
-#include "extractor/decimal64.h"
+#include "fmc/decimal128.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
 }
 
-#include "extractor/rprice.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/side.hpp"
 
 #include <utility>
@@ -45,8 +45,8 @@ using namespace std;
 struct bbo_book_aggr_exec_cl {
   bbo_book_aggr_exec_cl(fm_book_shared_t *book, unsigned argc)
       : book_(book),
-        data_(argc, {make_pair(FM_DECIMAL64_MAX, fm_decimal64_t{0}),
-                     make_pair(FM_DECIMAL64_MIN, fm_decimal64_t{0})}) {
+        data_(argc, {make_pair(std::numeric_limits<fmc::decimal128>::max(), fmc_decimal128_t{0}),
+                     make_pair(std::numeric_limits<fmc::decimal128>::min(), fmc_decimal128_t{0})}) {
     fm_book_shared_inc(book);
   }
 
@@ -86,14 +86,14 @@ struct bbo_book_aggr_exec_cl {
       auto &oldpx = sided_data.first;
       auto &oldqty = sided_data.second;
       auto isbid = is_bid(side);
-      if (oldqty != fm_decimal64_t{0}) {
+      if (oldqty != fmc_decimal128_t{0}) {
         fm_book_mod(book, idx, oldpx, oldqty, isbid);
       }
 
-      auto px = *(fm_decimal64_t *)fm_frame_get_cptr1(frame, pxs_idx, 0);
-      fm_decimal64_t qty =
-          *(fm_decimal64_t *)fm_frame_get_cptr1(frame, qts_idx, 0);
-      if (qty != fm_decimal64_t{0}) {
+      auto px = *(fmc_decimal128_t *)fm_frame_get_cptr1(frame, pxs_idx, 0);
+      fmc_decimal128_t qty =
+          *(fmc_decimal128_t *)fm_frame_get_cptr1(frame, qts_idx, 0);
+      if (qty != fmc_decimal128_t{0}) {
         auto ven = *(fmc_time64_t *)fm_frame_get_cptr1(frame, recv_idx, 0);
         fm_book_add(book, now, ven, 0, idx, px, qty, isbid);
       }
@@ -110,8 +110,8 @@ struct bbo_book_aggr_exec_cl {
     for (auto side : trade_side::all()) {
       fm_levels_t *lvls = fm_book_levels(book, is_bid(side));
 
-      fm_decimal64_t qty = {0};
-      fm_decimal64_t px = is_bid(side) ? FM_DECIMAL64_MIN : FM_DECIMAL64_MAX;
+      fmc_decimal128_t qty = {0};
+      fmc_decimal128_t px = is_bid(side) ? std::numeric_limits<fmc::decimal128>::min() : std::numeric_limits<fmc::decimal128>::max();
 
       if (fm_book_levels_size(lvls) != 0) {
         fm_level_t *lvl = fm_book_level(lvls, 0);
@@ -120,8 +120,8 @@ struct bbo_book_aggr_exec_cl {
       }
 
       *(fmc_time64_t *)fm_frame_get_ptr1(result, rec_, 0) = now;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, out_pxs_[side], 0) = px;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, out_qts_[side], 0) = qty;
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, out_pxs_[side], 0) = px;
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, out_qts_[side], 0) = qty;
     }
   }
 
@@ -132,7 +132,7 @@ struct bbo_book_aggr_exec_cl {
   sided<fm_field_t> qts_;
   sided<fm_field_t> out_pxs_;
   sided<fm_field_t> out_qts_;
-  vector<sided<pair<rprice, fm_decimal64_t>>> data_;
+  vector<sided<pair<fmc_decimal128_t, fmc_decimal128_t>>> data_;
   vector<const fm_frame_t *> inps_;
 };
 
@@ -181,10 +181,10 @@ fm_ctx_def_t *fm_comp_bbo_book_aggr_gen(fm_comp_sys_t *csys,
 
   auto *type = fm_frame_type_get(
       sys, 5, 1, "receive", fm_base_type_get(sys, FM_TYPE_TIME64), "bidprice",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL64), "askprice",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL64), "bidqty",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL64), "askqty",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL64), 1);
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "askprice",
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "bidqty",
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "askqty",
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128), 1);
 
   fm_type_decl_cp input = nullptr;
   for (size_t i = 0; i < argc; ++i) {

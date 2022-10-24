@@ -34,7 +34,7 @@ extern "C" {
 }
 
 #include "extractor/book/updates.hpp"
-#include "extractor/decimal64.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/time.hpp"
 
@@ -66,8 +66,8 @@ public:
         fm_base_type_get(sys, FM_TYPE_TIME64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
         fm_base_type_get(sys, FM_TYPE_UINT16),
         fm_base_type_get(sys, FM_TYPE_UINT16),
     };
@@ -85,10 +85,8 @@ public:
         fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = 0UL;
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
-        fm_decimal64_from_raw(0);
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
-        fm_decimal64_from_raw(0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0), 0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0), 0);
     *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = 0;
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
   }
@@ -98,9 +96,9 @@ public:
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = pval->id;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0) =
           pval->price;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
       *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = pval->is_bid;
       *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = pval->batch;
       return true;
@@ -123,8 +121,8 @@ public:
         fm_base_type_get(sys, FM_TYPE_UINT64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
         fm_base_type_get(sys, FM_TYPE_UINT16),
         fm_base_type_get(sys, FM_TYPE_UINT16),
     };
@@ -144,10 +142,8 @@ public:
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, prio_field_, 0) = 0UL;
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
-        fm_decimal64_from_raw(0);
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
-        fm_decimal64_from_raw(0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0), 0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0), 0);
     *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = 0;
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
   }
@@ -158,9 +154,9 @@ public:
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = pval->id;
       *(uint64_t *)fm_frame_get_ptr1(result, prio_field_, 0) = pval->prio;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0) =
           pval->price;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
       *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = pval->is_bid;
       *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = pval->batch;
       return true;
@@ -182,9 +178,9 @@ public:
         fm_base_type_get(sys, FM_TYPE_TIME64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
         fm_base_type_get(sys, FM_TYPE_UINT32),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
         fm_base_type_get(sys, FM_TYPE_UINT16),
         fm_base_type_get(sys, FM_TYPE_UINT16),
     };
@@ -203,11 +199,9 @@ public:
         fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = 0UL;
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
-        fm_decimal64_from_raw(0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0), 0);
     *(uint32_t *)fm_frame_get_ptr1(result, pos_field_, 0) = 0;
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
-        fm_decimal64_from_raw(0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0), 0);
     *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = 0;
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
   }
@@ -217,10 +211,10 @@ public:
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = pval->id;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0) =
           pval->price;
       *(uint32_t *)fm_frame_get_ptr1(result, pos_field_, 0) = pval->pos;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
       *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = pval->is_bid;
       *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = pval->batch;
       return true;
@@ -242,8 +236,8 @@ public:
         fm_base_type_get(sys, FM_TYPE_TIME64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
         fm_base_type_get(sys, FM_TYPE_UINT16),
         fm_base_type_get(sys, FM_TYPE_UINT16),
     };
@@ -261,10 +255,8 @@ public:
         fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = 0UL;
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
-        fm_decimal64_from_raw(0);
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
-        fm_decimal64_from_raw(0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0), 0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0), 0);
     *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = 0;
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
   }
@@ -274,9 +266,9 @@ public:
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = pval->id;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0) =
           pval->price;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
       *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = pval->is_bid;
       *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = pval->batch;
       return true;
@@ -298,9 +290,9 @@ public:
         fm_base_type_get(sys, FM_TYPE_TIME64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
         fm_base_type_get(sys, FM_TYPE_UINT16),
         fm_base_type_get(sys, FM_TYPE_UINT16),
     };
@@ -319,12 +311,9 @@ public:
         fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = 0UL;
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
-        fm_decimal64_from_raw(0);
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, trade_price_field_, 0) =
-        fm_decimal64_from_raw(0);
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
-        fm_decimal64_from_raw(0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0), 0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_, 0), 0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0), 0);
     *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = 0;
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
   }
@@ -334,11 +323,11 @@ public:
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = pval->id;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0) =
           pval->price;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, trade_price_field_, 0) =
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_, 0) =
           pval->trade_price;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
       *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = pval->is_bid;
       *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = pval->batch;
       return true;
@@ -359,8 +348,8 @@ public:
     fm_type_decl_cp types[nf] = {
         fm_base_type_get(sys, FM_TYPE_TIME64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
         fm_base_type_get(sys, FM_TYPE_UINT16),
         fm_array_type_get(sys, fm_base_type_get(sys, FM_TYPE_CHAR), 8)};
     type_ = fm_frame_type_get1(sys, nf, names, types, 1, dims);
@@ -375,9 +364,8 @@ public:
     *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
         fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, trade_price_field_, 0) =
-        fm_decimal64_from_raw(0);
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) = {0};
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_, 0), 0);
+    *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) = {0};
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
     memset((char *)fm_frame_get_ptr1(result, decoration_field_, 0), 0,
            sizeof(char) * 8);
@@ -387,9 +375,9 @@ public:
       *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, trade_price_field_, 0) =
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_, 0) =
           pval->trade_price;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
       *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = pval->batch;
       memcpy((char *)fm_frame_get_ptr1(result, decoration_field_, 0),
              pval->decoration, sizeof(char) * 8);
@@ -412,7 +400,7 @@ public:
         fm_base_type_get(sys, FM_TYPE_TIME64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
         fm_base_type_get(sys, FM_TYPE_UINT32),
         fm_base_type_get(sys, FM_TYPE_UINT16),
         fm_base_type_get(sys, FM_TYPE_UINT16),
@@ -432,8 +420,7 @@ public:
         fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = 0UL;
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
-        fm_decimal64_from_raw(0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0), 0);
     *(uint32_t *)fm_frame_get_ptr1(result, state_field_, 0) = 0;
     *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = 0;
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
@@ -444,7 +431,7 @@ public:
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
       *(uint64_t *)fm_frame_get_ptr1(result, id_field_, 0) = pval->id;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0) =
           pval->price;
       *(uint32_t *)fm_frame_get_ptr1(result, state_field_, 0) = pval->state;
       *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = pval->is_bid;
@@ -509,8 +496,8 @@ public:
     fm_type_decl_cp types[nf] = {
         fm_base_type_get(sys, FM_TYPE_TIME64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
-        fm_base_type_get(sys, FM_TYPE_DECIMAL64),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
+        fm_base_type_get(sys, FM_TYPE_DECIMAL128),
         fm_base_type_get(sys, FM_TYPE_UINT16),
         fm_base_type_get(sys, FM_TYPE_UINT16),
     };
@@ -526,10 +513,8 @@ public:
     *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
         fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
-        fm_decimal64_from_raw(0);
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
-        fm_decimal64_from_raw(0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0), 0);
+    fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0), 0);
     *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = 0;
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
   }
@@ -538,9 +523,9 @@ public:
       *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
           pval->vendor;
       *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = pval->seqn;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, price_field_, 0) =
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, price_field_, 0) =
           pval->price;
-      *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
+      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
       *(uint16_t *)fm_frame_get_ptr1(result, is_bid_field_, 0) = pval->is_bid;
       *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = pval->batch;
       return true;

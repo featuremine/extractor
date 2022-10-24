@@ -23,7 +23,7 @@
 
 #pragma once
 
-#include "extractor/decimal64.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/time.hpp"
 
 #include <optional>
@@ -38,8 +38,8 @@ struct add {
   fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
-  fm_decimal64_t price;
-  fm_decimal64_t qty;
+  fmc_decimal128_t price;
+  fmc_decimal128_t qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -49,8 +49,8 @@ struct insert {
   uint64_t seqn;
   uint64_t id;
   uint64_t prio;
-  fm_decimal64_t price;
-  fm_decimal64_t qty;
+  fmc_decimal128_t price;
+  fmc_decimal128_t qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -59,9 +59,9 @@ struct position {
   fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
-  fm_decimal64_t price;
+  fmc_decimal128_t price;
   uint32_t pos;
-  fm_decimal64_t qty;
+  fmc_decimal128_t qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -70,8 +70,8 @@ struct cancel {
   fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
-  fm_decimal64_t price;
-  fm_decimal64_t qty;
+  fmc_decimal128_t price;
+  fmc_decimal128_t qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -80,9 +80,9 @@ struct execute {
   fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
-  fm_decimal64_t price;
-  fm_decimal64_t trade_price;
-  fm_decimal64_t qty;
+  fmc_decimal128_t price;
+  fmc_decimal128_t trade_price;
+  fmc_decimal128_t qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -90,8 +90,8 @@ struct execute {
 struct trade {
   fmc_time64_t vendor;
   uint64_t seqn;
-  fm_decimal64_t trade_price;
-  fm_decimal64_t qty;
+  fmc_decimal128_t trade_price;
+  fmc_decimal128_t qty;
   uint16_t batch;
   char decoration[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 };
@@ -100,7 +100,7 @@ struct state {
   fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
-  fm_decimal64_t price;
+  fmc_decimal128_t price;
   uint32_t state;
   uint16_t is_bid;
   uint16_t batch;
@@ -117,8 +117,8 @@ struct control {
 struct set {
   fmc_time64_t vendor;
   uint64_t seqn;
-  fm_decimal64_t price;
-  fm_decimal64_t qty;
+  fmc_decimal128_t price;
+  fmc_decimal128_t qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -142,8 +142,8 @@ using message = std::variant<updates::add, updates::insert, updates::position,
                              updates::state, updates::control, updates::set,
                              updates::announce, updates::time, updates::none>;
 
-static_assert(sizeof(message) <= 64, "expecting book update message to be less "
-                                     "than 64B");
+static_assert(sizeof(message) <= 128, "expecting book update message to be less "
+                                      "than 128B");
 
 } // namespace book
 } // namespace fm
