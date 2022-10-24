@@ -72,8 +72,8 @@ struct order_info {
 };
 using orders_t = unordered_map<uint64_t, order_info>;
 struct imnt_info {
-  fmc::decimal128 px_denum;
-  fmc::decimal128 qty_denum = fmc::decimal128(1);
+  int32_t px_denum;
+  int32_t qty_denum = 1;
   int32_t index;
   orders_t orders;
 };
@@ -199,10 +199,10 @@ inline result parser::parse_add(cmp_ctx_t *ctx, uint32_t &left) {
   if (!cmp_read_many(ctx, &left, &msg.id, &msg.price, &msg.qty, &is_bid))
     return result::ERR;
   msg.is_bid = is_bid;
-  if (imnt->px_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.price, &msg.price, &imnt->px_denum);
-  if (imnt->qty_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.qty, &msg.qty, &imnt->qty_denum);
+  if (imnt->px_denum != 1)
+    msg.price = msg.price / imnt->px_denum;
+  if (imnt->qty_denum != 1)
+    msg.qty = msg.qty / imnt->qty_denum;
   add_order(imnt, msg);
   this->msg = msg;
   return result::SUCCESS;
@@ -218,10 +218,10 @@ inline result parser::parse_ins(cmp_ctx_t *ctx, uint32_t &left) {
                      &is_bid))
     return result::ERR;
   msg.is_bid = is_bid;
-  if (imnt->px_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.price, &msg.price, &imnt->px_denum);
-  if (imnt->qty_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.qty, &msg.qty, &imnt->qty_denum);
+  if (imnt->px_denum != 1)
+    msg.price = msg.price / imnt->px_denum;
+  if (imnt->qty_denum != 1)
+    msg.qty = msg.qty / imnt->qty_denum;
   add_order(imnt, msg);
   this->msg = msg;
   return result::SUCCESS;
@@ -236,10 +236,10 @@ inline result parser::parse_pos(cmp_ctx_t *ctx, uint32_t &left) {
   if (!cmp_read_many(ctx, &left, &msg.id, &msg.pos, &msg.price, &msg.qty, &is_bid))
     return result::ERR;
   msg.is_bid = is_bid;
-  if (imnt->px_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.price, &msg.price, &imnt->px_denum);
-  if (imnt->qty_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.qty, &msg.qty, &imnt->qty_denum);
+  if (imnt->px_denum != 1)
+    msg.price = msg.price / imnt->px_denum;
+  if (imnt->qty_denum != 1)
+    msg.qty = msg.qty / imnt->qty_denum;
   add_order(imnt, msg);
   this->msg = msg;
   return result::SUCCESS;
@@ -272,8 +272,8 @@ inline result parser::parse_cxl(cmp_ctx_t *ctx, uint32_t &left) {
 
   if (!cmp_read_many(ctx, &left, &msg.id, &msg.qty))
     return result::ERR;
-  if (imnt->qty_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.qty, &msg.qty, &imnt->qty_denum);
+  if (imnt->qty_denum != 1)
+    msg.qty = msg.qty / imnt->qty_denum;
   auto &ords = imnt->orders;
   if (auto it = ords.find(msg.id); it == ords.end()) {
     return result::SKIP;
@@ -312,10 +312,10 @@ inline result parser::parse_mod(cmp_ctx_t *ctx, uint32_t &left) {
   add.batch = cancel.batch;
   if (!cmp_read_many(ctx, &left, &cancel.id, &add.id, &add.price, &add.qty))
     return result::ERR;
-  if (imnt->px_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&add.price, &add.price, &imnt->px_denum);
-  if (imnt->qty_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&add.qty, &add.qty, &imnt->qty_denum);
+  if (imnt->px_denum != 1)
+    add.price = add.price / imnt->px_denum;
+  if (imnt->qty_denum != 1)
+    add.qty = add.qty / imnt->qty_denum;
   auto &ords = imnt->orders;
   if (auto it = ords.find(cancel.id); it == ords.end()) {
     return result::SKIP;
@@ -360,8 +360,8 @@ inline result parser::parse_epx(cmp_ctx_t *ctx, uint32_t &left) {
   }
   if (!cmp_read_many(ctx, &left, &msg.id, &msg.price))
     return result::ERR;
-  if (imnt->px_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.trade_price, &msg.trade_price, &imnt->px_denum);
+  if (imnt->px_denum != 1)
+    msg.trade_price = msg.trade_price / imnt->px_denum;
   auto &ords = imnt->orders;
   if (auto it = ords.find(msg.id); it == ords.end()) {
     return result::SKIP;
@@ -379,8 +379,8 @@ inline result parser::parse_fld(cmp_ctx_t *ctx, uint32_t &left) {
   }
   if (!cmp_read_many(ctx, &left, &msg.id, &msg.qty))
     return result::ERR;
-  if (imnt->qty_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.qty, &msg.qty, &imnt->qty_denum);
+  if (imnt->qty_denum != 1)
+    msg.qty = msg.qty / imnt->qty_denum;
   auto &ords = imnt->orders;
   if (auto it = ords.find(msg.id); it == ords.end()) {
     return result::SKIP;
@@ -399,10 +399,10 @@ inline result parser::parse_fpx(cmp_ctx_t *ctx, uint32_t &left) {
   }
   if (!cmp_read_many(ctx, &left, &msg.id, &msg.price, &msg.qty))
     return result::ERR;
-  if (imnt->px_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.trade_price, &msg.trade_price, &imnt->px_denum);
-  if (imnt->qty_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.qty, &msg.qty, &imnt->qty_denum);
+  if (imnt->px_denum != 1)
+    msg.trade_price = msg.trade_price / imnt->px_denum;
+  if (imnt->qty_denum != 1)
+    msg.qty = msg.qty / imnt->qty_denum;
   auto &ords = imnt->orders;
   if (auto it = ords.find(msg.id); it == ords.end()) {
     return result::SKIP;
@@ -420,10 +420,10 @@ inline result parser::parse_trd(cmp_ctx_t *ctx, uint32_t &left) {
   }
   if (!cmp_read_many(ctx, &left, &msg.trade_price, &msg.qty))
     return result::ERR;
-  if (imnt->px_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.trade_price, &msg.trade_price, &imnt->px_denum);
-  if (imnt->qty_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.qty, &msg.qty, &imnt->qty_denum);
+  if (imnt->px_denum != 1)
+    msg.trade_price = msg.trade_price / imnt->px_denum;
+  if (imnt->qty_denum != 1)
+    msg.qty = msg.qty / imnt->qty_denum;
 
   if (left == 0) {
     this->msg = msg;
@@ -453,8 +453,8 @@ inline result parser::parse_sta(cmp_ctx_t *ctx, uint32_t &left) {
   if (!cmp_read_many(ctx, &left, &msg.id, &msg.price, &msg.state, &is_bid))
     return result::ERR;
   msg.is_bid = is_bid;
-  if (imnt->px_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.price, &msg.price, &imnt->px_denum);
+  if (imnt->px_denum != 1)
+    msg.price = msg.price / imnt->px_denum;
   this->msg = msg;
   return result::SUCCESS;
 }
@@ -483,10 +483,10 @@ inline result parser::parse_set(cmp_ctx_t *ctx, uint32_t &left) {
   if (!cmp_read_many(ctx, &left, &msg.price, &msg.qty, &is_bid))
     return result::ERR;
   msg.is_bid = is_bid;
-  if (imnt->px_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.price, &msg.price, &imnt->px_denum);
-  if (imnt->qty_denum != fmc::decimal128(1))
-    fmc_decimal128_div(&msg.qty, &msg.qty, &imnt->qty_denum);
+  if (imnt->px_denum != 1)
+    msg.price = msg.price / imnt->px_denum;
+  if (imnt->qty_denum != 1)
+    msg.qty = msg.qty / imnt->qty_denum;
   this->msg = msg;
   return result::SUCCESS;
 }
