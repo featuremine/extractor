@@ -21,6 +21,8 @@
  * This file contains Python C extention for extractor library
  */
 
+#define PY_SSIZE_T_CLEAN
+
 extern "C" {
 #include "extractor/python/py_extractor.h"
 #include "book/py_book.h"

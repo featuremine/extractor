@@ -103,6 +103,16 @@ template <class T> struct py_type_convert {
       }
       val = temp;
       return true;
+    } else if constexpr (is_same_v<T, DECIMAL128>) {
+      const char *temp = NULL;
+      Py_ssize_t sz = 0;
+      if (!PyArg_ParseTuple(args, "s#", &temp, &sz) ||
+          sz > numeric_limits<fmc::decimal128>::max() || sz < numeric_limits<fmc::decimal128>::min()) {
+        PyErr_SetString(PyExc_TypeError, "expecting a valid string value");
+        return false;
+      }
+      fmc_decimal128_from_str(&val, temp);
+      return true;
     }
     PyErr_SetString(PyExc_TypeError, "unknown type");
     return false;

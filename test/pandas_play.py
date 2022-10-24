@@ -39,6 +39,7 @@ if __name__ == "__main__":
         ts = pd.to_datetime([65811153, 3513518183, 6111135331], unit='s')
         f32 = pd.Series([514541811.9, 9.999945, 3.4458], dtype='float32')
         f64 = pd.Series([3.64, 0.664, 9.3645], dtype='float64')
+        d128 = pd.Series([extr.Decimal128("3.64"), extr.Decimal128("0.664"), extr.Decimal128("9.3645")], dtype='object')
         i16 = pd.Series([-943, -153, 536], dtype='int16')
         i32 = pd.Series([-64883, 4, -82], dtype='int32')
         i64 = pd.Series([3, 0, -9], dtype='int64')
@@ -55,6 +56,8 @@ if __name__ == "__main__":
             "binstring_col": s16,
             # Bool
             "bool_col": b,
+            # Decimal128
+            "decimal128_col": d128,
             # Decimal
             "decimal_from_float32_col": f32,
             "decimal_from_float64_col": f64,
@@ -93,6 +96,7 @@ if __name__ == "__main__":
             df,
             (("binstring_col", extr.Array(extr.Char, 16)),
              ("bool_col", extr.Bool),
+             ("decimal128_col", extr.Decimal128),
              ("decimal_from_float32_col", extr.Decimal64),
              ("decimal_from_float64_col", extr.Decimal64),
              ("float32_col", extr.Float32),
@@ -135,6 +139,7 @@ if __name__ == "__main__":
             df,
             (("binstring_col", extr.Array(extr.Char, 16)),
              ("bool_col", extr.Bool),
+             ("decimal128_col", extr.Decimal128),
              ("int64_from_int16_col", extr.Int64),
              ("int64_from_int32_col", extr.Int64),
              ("int64_from_int8_col", extr.Int64),
@@ -187,7 +192,7 @@ if __name__ == "__main__":
         extr_df = pd.read_csv(tmp_file, parse_dates=True, sep=',', header=0,
                               dtype={"binstring_col": "S16",
                                      "bool_col": "bool",
-
+                                     "decimal128_col": "str",
                                      "decimal_from_float32_col": "float32",
                                      "decimal_from_float64_col": "float64",
                                      "float32_col": "float32",
@@ -214,12 +219,14 @@ if __name__ == "__main__":
                                      "uint8_col": "uint8"})
 
         extr_df["timestamp_col"] = pd.to_datetime(extr_df["timestamp_col"], unit='ns')
+        extr_df["decimal128_col"] = [extr.Decimal128(val) for val in extr_df["decimal128_col"]]
 
         pd.testing.assert_frame_equal(df, extr_df)
 
         extr_df_2 = pd.read_csv(tmp_file_2, parse_dates=True, sep=',', header=0,
                                 dtype={"binstring_col": "S16",
                                        "bool_col": "bool",
+                                       "decimal128_col":"str",
                                        "int64_from_int16_col": "int16",
                                        "int64_from_int32_col": "int32",
                                        "int64_from_int8_col": "int8",
@@ -232,6 +239,9 @@ if __name__ == "__main__":
                                        "uint64_col": "uint64", "uint64_from_uint16_col": "uint16",
                                        "uint64_from_uint32_col": "uint32", "uint64_from_uint8_col": "uint8",
                                        "uint8_col": "uint8"})
+
+        extr_df_2["decimal128_col"] = [extr.Decimal128(val) for val in extr_df_2["decimal128_col"]]
+
         df_2 = df.drop([
             "decimal_from_float32_col",
             "decimal_from_float64_col",
