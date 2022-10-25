@@ -58,6 +58,10 @@ extern "C" {
 
 static py_ytp_sequence_api_v1 *ytp_; // py_ytp_api
 
+PyObject *ExtractorDecimal128_new(const fmc_decimal128_t val) {
+  return ExtractorBaseTypeDecimal128::py_new(val);
+}
+
 static PyObject *Extractor_fflush(PyObject *self, PyObject *args) {
   fmc_fflush();
   Py_RETURN_NONE;

@@ -32,6 +32,7 @@
 #include "extractor/comp_sys.h"
 #include "extractor/frame_base.h"
 #include "fmc/platform.h"
+#include "fmc/decimal128.h"
 
 /**
  * @brief creates extractor frame object
@@ -71,5 +72,10 @@ FMMODFUNC bool fm_comp_sys_py_comp(fm_comp_sys_t *sys);
  * @brief main module init function
  */
 PyMODINIT_FUNC fm_extractor_py_init(void) FMMODFUNC;
+
+/**
+ * @brief creates extractor decimal 128 object
+ */
+FMMODFUNC PyObject *ExtractorDecimal128_new(const fmc_decimal128_t val);
 
 #endif // __FM_PY_EXTRACTOR_H__
