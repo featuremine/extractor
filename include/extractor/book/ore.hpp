@@ -357,7 +357,7 @@ inline result parser::parse_epx(cmp_ctx_t *ctx, uint32_t &left) {
   if (auto res = parse_hdr(ctx, msg, left); !res.is_success()) {
     return res;
   }
-  if (!cmp_read_many(ctx, &left, &msg.id, &msg.price))
+  if (!cmp_read_many(ctx, &left, &msg.id, &msg.trade_price))
     return result::ERR;
   if (imnt->px_denum != 1)
     msg.trade_price = msg.trade_price / imnt->px_denum;
@@ -396,7 +396,7 @@ inline result parser::parse_fpx(cmp_ctx_t *ctx, uint32_t &left) {
   if (auto res = parse_hdr(ctx, msg, left); !res.is_success()) {
     return res;
   }
-  if (!cmp_read_many(ctx, &left, &msg.id, &msg.price, &msg.qty))
+  if (!cmp_read_many(ctx, &left, &msg.id, &msg.trade_price, &msg.qty))
     return result::ERR;
   if (imnt->px_denum != 1)
     msg.trade_price = msg.trade_price / imnt->px_denum;
