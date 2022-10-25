@@ -365,7 +365,7 @@ public:
         fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     fmc_decimal128_from_int((fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_, 0), 0);
-    *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) = {0};
+    *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) = fmc::decimal128(0);
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
     memset((char *)fm_frame_get_ptr1(result, decoration_field_, 0), 0,
            sizeof(char) * 8);

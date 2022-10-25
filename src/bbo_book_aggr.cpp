@@ -110,7 +110,7 @@ struct bbo_book_aggr_exec_cl {
     for (auto side : trade_side::all()) {
       fm_levels_t *lvls = fm_book_levels(book, is_bid(side));
 
-      fmc_decimal128_t qty = {0};
+      fmc_decimal128_t qty = fmc::decimal128(0);
       fmc_decimal128_t px = is_bid(side) ? std::numeric_limits<fmc::decimal128>::min() : std::numeric_limits<fmc::decimal128>::max();
 
       if (fm_book_levels_size(lvls) != 0) {
