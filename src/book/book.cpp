@@ -42,7 +42,7 @@ using namespace std;
 struct fm_order {
   uint64_t prio = 0;
   uint64_t id = 0;
-  fmc_decimal128_t qty = {0};
+  fmc_decimal128_t qty = fmc::decimal128(0);
   fmc_time64_t rec = {0};
   fmc_time64_t ven = {0};
   uint64_t seq = 0;
@@ -51,8 +51,8 @@ struct fm_order {
 using fm_orders = vector<fm_order>;
 
 struct fm_level {
-  fmc_decimal128_t price = {0};
-  fmc_decimal128_t qty = {0};
+  fmc_decimal128_t price = fmc::decimal128(0);
+  fmc_decimal128_t qty = fmc::decimal128(0);
   fm_orders orders;
 };
 
@@ -109,7 +109,7 @@ template <class Pool>
 vector_levels::iterator create_level(vector_levels &lvls, Pool &pool,
                                      vector_levels::iterator it,
                                      fmc_decimal128_t price) {
-  auto where = lvls.insert(it, {price, {0}});
+  auto where = lvls.insert(it, {price, fmc::decimal128(0)});
   source_pool(pool, where->orders);
   return where;
 }
@@ -310,7 +310,7 @@ bool fm_book_exe(fm_book_t *book, uint64_t id, fmc_decimal128_t price,
 bool fm_book_pla(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
                  uint64_t seq, fmc_decimal128_t price, fmc_decimal128_t qty,
                  bool is_bid) {
-  if (qty > fmc_decimal128_t{0}) {
+  if (fmc::decimal128::upcast(qty) > fmc::decimal128(0)) {
     auto &level = find_or_add(book, price, is_bid);
     fmc::decimal128::upcast(level.qty) = qty;
     level.orders.resize(1);
