@@ -27,7 +27,7 @@ extern "C" {
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
-#include "extractor/decimal64.h"
+#include "fmc/decimal128.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
 }
@@ -136,8 +136,8 @@ fm_ctx_def_t *fm_comp_bbo_aggr_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   auto *type = fm_frame_type_get(
       sys, 5, 1, "receive", fm_base_type_get(sys, FM_TYPE_TIME64), "bidprice",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL64), "askprice",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL64), "bidqty",
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "askprice",
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "bidqty",
       fm_base_type_get(sys, FM_TYPE_INT32), "askqty",
       fm_base_type_get(sys, FM_TYPE_INT32), 1);
 

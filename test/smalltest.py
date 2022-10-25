@@ -65,7 +65,15 @@ if __name__ == "__main__":
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")))
 
-    bbo_split = op.split(bbos_in, "market", tuple(markets))
+    converted_bbos_in = op.combine(bbos_in.receive, tuple(),
+                                   bbos_in.ticker, tuple(),
+                                   bbos_in.market, tuple(),
+                                   op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
+                                   op.convert(bbos_in.askprice, extr.Decimal128), tuple(),
+                                   bbos_in.bidqty, tuple(),
+                                   bbos_in.askqty, tuple());
+
+    bbo_split = op.split(converted_bbos_in, "market", tuple(markets))
 
     bbos = []
     for mkt in markets:

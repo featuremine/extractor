@@ -45,8 +45,8 @@ END_FRAME(nbbo_frame);
 
 FRAME(bbo_frame, 1);
 FIELD(receive, TIME64);
-FIELD(bidprice, DECIMAL64);
-FIELD(askprice, DECIMAL64);
+FIELD(bidprice, DECIMAL128);
+FIELD(askprice, DECIMAL128);
 FIELD(bidqty, INT32);
 FIELD(askqty, INT32);
 FIELDS(receive, bidprice, askprice, bidqty, askqty);

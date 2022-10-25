@@ -33,6 +33,7 @@ extern "C" {
 
 #include "extractor/comp_def.hpp"
 #include "extractor/decimal64.hpp"
+#include "fmc++/decimal128.hpp"
 #include "extractor/frame.hpp"
 #include "extractor/rational64.hpp"
 #include "fmc++/mpl.hpp"
@@ -173,7 +174,7 @@ fm_ctx_def_t *fm_comp_greater_equal_gen(fm_comp_sys_t *csys,
   //@todo need to add strings as well
   using supported_types =
       fmc::type_list<INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64,
-                     FLOAT32, FLOAT64, DECIMAL64, TIME64, RATIONAL64>;
+                     FLOAT32, FLOAT64, DECIMAL64, DECIMAL128, TIME64, RATIONAL64>;
 
   auto inp = argv[0];
 
