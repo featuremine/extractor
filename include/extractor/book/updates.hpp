@@ -38,8 +38,8 @@ struct add {
   fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
-  fmc_decimal128_t price;
-  fmc_decimal128_t qty;
+  fmc::decimal128 price;
+  fmc::decimal128 qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -49,8 +49,8 @@ struct insert {
   uint64_t seqn;
   uint64_t id;
   uint64_t prio;
-  fmc_decimal128_t price;
-  fmc_decimal128_t qty;
+  fmc::decimal128 price;
+  fmc::decimal128 qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -59,9 +59,9 @@ struct position {
   fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
-  fmc_decimal128_t price;
+  fmc::decimal128 price;
   uint32_t pos;
-  fmc_decimal128_t qty;
+  fmc::decimal128 qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -70,8 +70,8 @@ struct cancel {
   fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
-  fmc_decimal128_t price;
-  fmc_decimal128_t qty;
+  fmc::decimal128 price;
+  fmc::decimal128 qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -80,9 +80,9 @@ struct execute {
   fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
-  fmc_decimal128_t price;
-  fmc_decimal128_t trade_price;
-  fmc_decimal128_t qty;
+  fmc::decimal128 price;
+  fmc::decimal128 trade_price;
+  fmc::decimal128 qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -90,8 +90,8 @@ struct execute {
 struct trade {
   fmc_time64_t vendor;
   uint64_t seqn;
-  fmc_decimal128_t trade_price;
-  fmc_decimal128_t qty;
+  fmc::decimal128 trade_price;
+  fmc::decimal128 qty;
   uint16_t batch;
   char decoration[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 };
@@ -100,7 +100,7 @@ struct state {
   fmc_time64_t vendor;
   uint64_t seqn;
   uint64_t id;
-  fmc_decimal128_t price;
+  fmc::decimal128 price;
   uint32_t state;
   uint16_t is_bid;
   uint16_t batch;
@@ -117,8 +117,8 @@ struct control {
 struct set {
   fmc_time64_t vendor;
   uint64_t seqn;
-  fmc_decimal128_t price;
-  fmc_decimal128_t qty;
+  fmc::decimal128 price;
+  fmc::decimal128 qty;
   uint16_t is_bid;
   uint16_t batch;
 };

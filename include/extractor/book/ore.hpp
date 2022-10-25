@@ -24,7 +24,7 @@
 #pragma once
 
 #include "extractor/book/updates.hpp"
-#include "extractor/decimal64.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/serialization.hpp"
 #include "fmc++/time.hpp"
 
@@ -66,8 +66,8 @@ struct result {
   result_enum value;
 };
 struct order_info {
-  fmc_decimal128_t price = fmc::decimal128(0);
-  fmc_decimal128_t qty = fmc::decimal128(0);
+  fmc::decimal128 price;
+  fmc::decimal128 qty;
   bool is_bid = 0;
 };
 using orders_t = unordered_map<uint64_t, order_info>;
@@ -94,7 +94,6 @@ struct parser {
   int32_t parse_hdr0(cmp_ctx_t *ctx, Msg &msg, uint32_t &left);
   template <class Msg>
   result parse_hdr(cmp_ctx_t *ctx, Msg &msg, uint32_t &left);
-  bool parse_decimal(cmp_ctx_t *ctx, uint32_t &left, fmc_decimal128_t &decimal, int32_t denum);
   result skip_msg(cmp_ctx_t *ctx, uint32_t &left);
   result parse_tme(cmp_ctx_t *ctx, uint32_t &left);
   result parse_add(cmp_ctx_t *ctx, uint32_t &left);

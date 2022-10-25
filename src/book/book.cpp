@@ -42,7 +42,7 @@ using namespace std;
 struct fm_order {
   uint64_t prio = 0;
   uint64_t id = 0;
-  fmc_decimal128_t qty = fmc::decimal128(0);
+  fmc::decimal128 qty = fmc::decimal128(0);
   fmc_time64_t rec = {0};
   fmc_time64_t ven = {0};
   uint64_t seq = 0;
@@ -51,8 +51,8 @@ struct fm_order {
 using fm_orders = vector<fm_order>;
 
 struct fm_level {
-  fmc_decimal128_t price = fmc::decimal128(0);
-  fmc_decimal128_t qty = fmc::decimal128(0);
+  fmc::decimal128 price = fmc::decimal128(0);
+  fmc::decimal128 qty = fmc::decimal128(0);
   fm_orders orders;
 };
 
@@ -153,7 +153,7 @@ vector_levels::iterator front_level(vector_levels &levels, fmc_decimal128_t pric
                                     uint64_t &uncrossed) {
   compare_levels better(is_bid);
   auto where = levels.end();
-  if (where != levels.begin() && (where - 1)->price == price) {
+  if (where != levels.begin() && (where - 1)->price == fmc::decimal128::upcast(price)) {
     return where - 1;
   }
   if (uncross) {
@@ -208,7 +208,7 @@ void fm_book_add(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
                  uint64_t seq, uint64_t id, fmc_decimal128_t price,
                  fmc_decimal128_t qty, bool is_bid) {
   auto &level = find_or_add(book, price, is_bid);
-  fmc::decimal128::upcast(level.qty) += qty;
+  level.qty += qty;
   auto &order = append_order(level.orders);
   order.prio = 0;
   order.id = id;
@@ -222,7 +222,7 @@ void fm_book_ins(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
                  uint64_t seq, uint64_t id, uint64_t prio, fmc_decimal128_t price,
                  fmc_decimal128_t qty, bool is_bid) {
   auto &level = find_or_add(book, price, is_bid);
-  fmc::decimal128::upcast(level.qty) += qty;
+  level.qty += qty;
   auto &order = insert_order(level.orders, prio);
   order.prio = prio;
   order.id = id;
@@ -236,7 +236,7 @@ void fm_book_pos(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
                  uint64_t seq, uint64_t id, uint32_t pos, fmc_decimal128_t price,
                  fmc_decimal128_t qty, bool is_bid) {
   auto &level = find_or_add(book, price, is_bid);
-  fmc::decimal128::upcast(level.qty) += qty;
+  level.qty += qty;
   auto &order = position_order(level.orders, pos);
   order.prio = 0;
   order.id = id;
@@ -262,12 +262,12 @@ bool fm_book_mod(fm_book_t *book, uint64_t id, fmc_decimal128_t price,
     return false;
   }
   auto &order = *order_it;
-  if (qty < order.qty) {
-    fmc::decimal128::upcast(level.qty) -= qty;
-    fmc::decimal128::upcast(order.qty) -= qty;
+  if (fmc::decimal128::upcast(qty) < order.qty) {
+    level.qty -= qty;
+    order.qty -= qty;
     return true;
   }
-  fmc::decimal128::upcast(level.qty) -= order.qty;
+  level.qty -= order.qty;
   orders.erase(order_it);
   if (orders.empty()) {
     recycle_pool(book->pool, level.orders);
@@ -293,12 +293,12 @@ bool fm_book_exe(fm_book_t *book, uint64_t id, fmc_decimal128_t price,
     return false;
   }
   auto &order = *order_it;
-  if (qty < order.qty) {
-    fmc::decimal128::upcast(level.qty) -= qty;
-    fmc::decimal128::upcast(order.qty) -= qty;
+  if (fmc::decimal128::upcast(qty) < order.qty) {
+    level.qty -= qty;
+    order.qty -= qty;
     return true;
   }
-  fmc::decimal128::upcast(level.qty) -= order.qty;
+  level.qty -= order.qty;
   orders.erase(order_it);
   if (orders.empty()) {
     recycle_pool(book->pool, level.orders);
@@ -312,7 +312,7 @@ bool fm_book_pla(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
                  bool is_bid) {
   if (fmc::decimal128::upcast(qty) > fmc::decimal128(0)) {
     auto &level = find_or_add(book, price, is_bid);
-    fmc::decimal128::upcast(level.qty) = qty;
+    level.qty = qty;
     level.orders.resize(1);
     auto &order = level.orders.back();
     order.prio = 0;

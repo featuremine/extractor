@@ -45,8 +45,8 @@ using namespace std;
 struct bbo_book_aggr_exec_cl {
   bbo_book_aggr_exec_cl(fm_book_shared_t *book, unsigned argc)
       : book_(book),
-        data_(argc, {make_pair(std::numeric_limits<fmc::decimal128>::max(), fmc_decimal128_t{0}),
-                     make_pair(std::numeric_limits<fmc::decimal128>::min(), fmc_decimal128_t{0})}) {
+        data_(argc, {make_pair(std::numeric_limits<fmc::decimal128>::max(), fmc::decimal128(0)),
+                     make_pair(std::numeric_limits<fmc::decimal128>::min(), fmc::decimal128(0))}) {
     fm_book_shared_inc(book);
   }
 
@@ -86,14 +86,14 @@ struct bbo_book_aggr_exec_cl {
       auto &oldpx = sided_data.first;
       auto &oldqty = sided_data.second;
       auto isbid = is_bid(side);
-      if (oldqty != fmc_decimal128_t{0}) {
+      if (fmc::decimal128::upcast(oldqty) != fmc::decimal128(0)) {
         fm_book_mod(book, idx, oldpx, oldqty, isbid);
       }
 
       auto px = *(fmc_decimal128_t *)fm_frame_get_cptr1(frame, pxs_idx, 0);
       fmc_decimal128_t qty =
           *(fmc_decimal128_t *)fm_frame_get_cptr1(frame, qts_idx, 0);
-      if (qty != fmc_decimal128_t{0}) {
+      if (fmc::decimal128::upcast(qty) != fmc::decimal128(0)) {
         auto ven = *(fmc_time64_t *)fm_frame_get_cptr1(frame, recv_idx, 0);
         fm_book_add(book, now, ven, 0, idx, px, qty, isbid);
       }
