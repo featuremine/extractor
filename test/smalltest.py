@@ -41,7 +41,6 @@ def compute_diff(nbbo):
 
 
 if __name__ == "__main__":
-    extr.set_license("../test/test.lic")
     graph = extr.system.comp_graph()
 
     bbo_file = "test/extractor/sip_quotes_20171018.base.mp"

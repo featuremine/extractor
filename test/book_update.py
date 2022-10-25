@@ -33,7 +33,7 @@ import os
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
 if __name__ == "__main__":
-    extr.set_license(os.path.join(src_dir, "test.lic"))
+
     graph = extr.system.comp_graph()
     op = graph.features
 
@@ -65,17 +65,17 @@ if __name__ == "__main__":
     assert_array_equal(pd_book["ask_ord_1"].values,
                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
-    assert_array_equal(pd_book["ask_prx_0"].values, [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-                       0.0, 0.0, 0.0, 0.0, 0.0, 54.0 / 256, 54.0 / 256, 54.0 / 256, 0.0])
+    assert_array_equal(pd_book["ask_prx_0"].values, [extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"),
+                       extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0")])
 
     assert_array_equal(pd_book["ask_prx_1"].values,
-                       [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+                       [extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0")])
 
     assert_array_equal(pd_book["ask_shr_0"].values,
-                       [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 200.0, 200.0, 200.0, 0.0])
+                       [extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("200.0"), extr.Decimal128("200.0"), extr.Decimal128("200.0"), extr.Decimal128("0")])
 
     assert_array_equal(pd_book["ask_shr_1"].values,
-                       [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+                       [extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0")])
 
     assert_array_equal(pd_book["bid_ord_0"].values,
                        [1, 2, 3, 2, 1, 1, 0, 1, 0, 1, 1, 1, 2, 2, 2, 1, 0])
@@ -84,14 +84,14 @@ if __name__ == "__main__":
                        [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
 
     assert_array_equal(pd_book["bid_prx_0"].values,
-                       [54.0 / 256, 54.0 / 256, 54.0 / 256, 54.0 / 256, 54.0 / 256, 54.0 / 256, 0.0, 54.0 / 256, 0.0,
-                        54.0 / 256, 54.0 / 256, 54.0 / 256, 54.0 / 256, 54.0 / 256, 54.0 / 256, 54.0 / 256, 0.0])
+                       [extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0"), extr.Decimal128("0.2109375"), extr.Decimal128("0"),
+                        extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0")])
 
     assert_array_equal(pd_book["bid_prx_1"].values,
-                       [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+                       [extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0")])
 
-    assert_array_equal(pd_book["bid_shr_0"].values, [200.0, 400.0, 600.0, 400.0, 200.0, 250.0,
-                       0.0, 200.0, 0.0, 200.0, 100.0, 50.0, 250.0, 250.0, 250.0, 100.0, 0.0])
+    assert_array_equal(pd_book["bid_shr_0"].values, [extr.Decimal128("200"), extr.Decimal128("400"), extr.Decimal128("600"), extr.Decimal128("400"), extr.Decimal128("200"), extr.Decimal128("250"),
+                       extr.Decimal128("0"), extr.Decimal128("200"), extr.Decimal128("0"), extr.Decimal128("200"), extr.Decimal128("100"), extr.Decimal128("50"), extr.Decimal128("250"), extr.Decimal128("250"), extr.Decimal128("250"), extr.Decimal128("100"), extr.Decimal128("0")])
 
     assert_array_equal(pd_book["bid_shr_1"].values,
-                       [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0])
+                       [extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0"), extr.Decimal128("0")])

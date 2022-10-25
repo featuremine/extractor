@@ -40,13 +40,8 @@ if __name__ == '__main__':
         default=['1COV.DE', 'A2.MI', 'AA4.MI'],
         nargs='*',
         help="Instruments markets specified in format instrument:market (default to '['1COV.DE','A2.MI','AA4.MI']' if not provided)")
-    parser.add_argument(
-        '--license',
-        default="../test/test.lic",
-        help="Extractor license (defaults to '../test/test.lic' if not provided)")
     args = parser.parse_args()
 
-    extr.set_license(args.license)
     graph = extr.system.comp_graph()
     op = graph.features
 

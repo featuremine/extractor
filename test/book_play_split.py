@@ -255,7 +255,7 @@ def parse_error_3():
 
 
 if __name__ == "__main__":
-    extr.set_license(os.path.join(src_dir, "test.lic"))
+
     normal()
     header_error()
     header_error_2()

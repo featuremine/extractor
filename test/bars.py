@@ -126,7 +126,6 @@ def compute_bar(nbbo, trades, ctrdt, name=None):
 
 
 if __name__ == "__main__":
-    extr.set_license(src_dir + "/test.lic")
     graph = extr.system.comp_graph()
 
     bbo_file = src_dir + "/data/sip_quotes_20171018.mp"
@@ -172,7 +171,14 @@ if __name__ == "__main__":
          ("qty", extr.Int32, ""),
          ("side", extr.Int32, "")))
 
-    trade_split = op.split(trades_in, "market", tuple(markets))
+    converted_trades_in = op.combine(trades_in.receive, tuple(),
+                                   trades_in.ticker, tuple(),
+                                   trades_in.market, tuple(),
+                                   op.convert(trades_in.price, extr.Decimal128), tuple(),
+                                   trades_in.qty, tuple(),
+                                   trades_in.side, tuple());
+
+    trade_split = op.split(converted_trades_in, "market", tuple(markets))
 
     bbos = []
     ctrds = []

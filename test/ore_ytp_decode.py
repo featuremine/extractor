@@ -61,7 +61,7 @@ def print_bbos(x):
 
 
 if __name__ == "__main__":
-    extr.set_license(os.path.join(src_dir, "test.lic"))
+
     graph = extr.system.comp_graph()
     op = graph.features
 

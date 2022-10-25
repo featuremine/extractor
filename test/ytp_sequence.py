@@ -34,7 +34,7 @@ src_dir = os.path.dirname(os.path.realpath(__file__))
 
 
 def timeout_test():
-    extr.set_license(os.path.join(src_dir, "test.lic"))
+
     graph = extr.system.comp_graph()
     op = graph.features
     try:

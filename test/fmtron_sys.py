@@ -95,7 +95,6 @@ def test_frame(frame):
 
 
 if __name__ == "__main__":
-    extr.set_license(src_dir + "/test.lic")
     extr.system.load_ext("ext_lib", sys.argv[1])
 
     graph = extr.system.comp_graph()

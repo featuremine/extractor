@@ -27,7 +27,7 @@ import os
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
 if __name__ == "__main__":
-    extr.set_license(os.path.join(src_dir, "test.lic"))
+
     graph = extr.system.comp_graph()
 
     data_in = graph.features.csv_play(

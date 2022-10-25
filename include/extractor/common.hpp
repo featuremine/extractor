@@ -54,7 +54,7 @@ END_FRAME(bbo_frame);
 
 FRAME(short_trade_frame, 1);
 FIELD(receive, TIME64);
-FIELD(price, DECIMAL64);
+FIELD(price, DECIMAL128);
 FIELD(qty, INT32);
 FIELDS(receive, price, qty);
 END_FRAME(short_trade_frame);

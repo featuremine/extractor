@@ -63,7 +63,7 @@ def unique_nan(value, op):
 
 
 if __name__ == "__main__":
-    extr.set_license(os.path.join(src_dir, "test.lic"))
+
 
     trade_file = os.path.join(src_dir, "data/sum_input.csv")
     np.testing.assert_array_equal(sum_test(unique),

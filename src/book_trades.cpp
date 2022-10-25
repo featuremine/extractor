@@ -161,8 +161,8 @@ fm_ctx_def_t *fm_comp_book_trades_gen(fm_comp_sys_t *csys,
   fm_type_decl_cp types[nf] = {
       fm_base_type_get(sys, FM_TYPE_TIME64),
       fm_base_type_get(sys, FM_TYPE_UINT64),
-      fm_base_type_get(sys, FM_TYPE_DECIMAL64),
-      fm_base_type_get(sys, FM_TYPE_DECIMAL64),
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128),
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128),
       fm_base_type_get(sys, FM_TYPE_UINT16),
       fm_array_type_get(sys, fm_base_type_get(sys, FM_TYPE_CHAR), 8)};
   int dims[1] = {1};

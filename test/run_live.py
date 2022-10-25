@@ -40,7 +40,7 @@ def run_live_test(
         total_time=0,
         subject=None,
 ):
-    extr.set_license(os.path.join(src_dir, "test.lic"))
+
     graph = extr.system.comp_graph()
     op = graph.features
 

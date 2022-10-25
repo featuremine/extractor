@@ -83,7 +83,7 @@ def main(ore_path, symbols, out_path):
 
 
 if __name__ == "__main__":
-    extr.set_license(os.path.join(src_dir, "test.lic"))
+
     with tempfile.NamedTemporaryFile() as out_file:
         main(os.path.join(src_dir, "data/synthetic_announcements.ore"), ("BTC-USD", "ETH-USD"), out_file.name)
         extr.flush()

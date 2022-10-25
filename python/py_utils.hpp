@@ -397,9 +397,9 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
     case FM_TYPE_DECIMAL64:
       return PyFloat_FromDouble(fm_decimal64_to_double(*(DECIMAL64 *)ptr));
       break;
-    case FM_TYPE_DECIMAL128: {
+    case FM_TYPE_DECIMAL128:
       return ExtractorBaseTypeDecimal128::py_new(*(DECIMAL128 *)ptr);
-    } break;
+      break;
     case FM_TYPE_CHAR:
       return PyUnicode_FromStringAndSize((const char *)ptr, 1);
       break;
@@ -1003,7 +1003,7 @@ inline short type_size(fm_type_decl_cp decl) {
       return 20;
       break;
     case FM_TYPE_DECIMAL128:
-      return FMC_DECIMAL128_STR_SIZE;
+      return 20;
       break;
     case FM_TYPE_CHAR:
       return 1;

@@ -158,7 +158,6 @@ def run(test_case, post, m):
 
 
 if __name__ == "__main__":
-    extr.set_license(src_dir + "/test.lic")
 
     m = module_compute_bar()
 
