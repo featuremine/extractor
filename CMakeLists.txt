@@ -63,6 +63,15 @@ install(
     FILES "${PROJECT_BINARY_DIR}/extractor.pc"
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
 )
+configure_file(
+    ${PROJECT_SOURCE_DIR}/lib/pkgconfig/py_extractor.pc.in
+    ${PROJECT_BINARY_DIR}/py_extractor.pc
+    @ONLY
+)
+install(
+    FILES "${PROJECT_BINARY_DIR}/py_extractor.pc"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
+)
 
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/extractor/__init__.py"
