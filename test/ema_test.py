@@ -40,7 +40,6 @@ def New_York_time(year, mon, day, h=0, m=0, s=0):
 
 
 if __name__ == "__main__":
-    extr.set_license(src_dir + "/test.lic")
     extr.system.load_ext("ema", sys.argv[1])
     graph = extr.system.comp_graph()
     op = graph.features

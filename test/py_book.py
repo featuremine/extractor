@@ -84,7 +84,6 @@ def iterate_and_validate(book, levellimit, levelcount, ordcount, ordtotal):
 
 if __name__ == "__main__":
     create_and_delete()
-    extr.set_license(os.path.join(src_dir, "test.lic"))
     graph = extr.system.comp_graph()
     op = graph.features
     upds = op.book_play_split(os.path.join(src_dir, "data/book.base.ore"), ("2_YEAR", "3_YEAR", "10_YEAR"))

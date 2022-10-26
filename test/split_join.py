@@ -22,7 +22,6 @@ from datetime import datetime, timedelta
 import extractor as extr
 
 if __name__ == "__main__":
-    extr.set_license("../test/test.lic")
     graph = extr.system.comp_graph()
     op = graph.features
 

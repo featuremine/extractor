@@ -155,7 +155,6 @@ def compute_bar(nbbo, trades, ctrdt):
 
 
 if __name__ == "__main__":
-    extr.set_license(src_dir + "/test.lic")
     graph = extr.system.comp_graph()
 
     bbo_file = str(src_dir + "/data/book.itch.20150901.csv")

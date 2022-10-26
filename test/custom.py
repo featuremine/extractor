@@ -142,7 +142,6 @@ class PyCharArray(object):
 
 
 if __name__ == "__main__":
-    extr.set_license(os.path.join(src_dir, "test.lic"))
     sys = extr.system
     sys.extend(PyClass, "pyclassop")
     graph = sys.comp_graph()

@@ -27,7 +27,6 @@ import sys
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
 if __name__ == "__main__":
-    extr.set_license(src_dir + "/test.lic")
     extr.system.load_ext("ext_lib", sys.argv[1])
     #extr.system.load_ext("ext_lib", src_dir + "libext_lib.so")
     graph = extr.system.comp_graph()

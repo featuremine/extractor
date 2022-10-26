@@ -126,7 +126,6 @@ def compute_bar(nbbo, trades, ctrdt, name=None):
 
 
 if __name__ == "__main__":
-    extr.set_license(src_dir + "/test.lic")
     graph = extr.system.comp_graph()
 
     bbo_file = src_dir + "/data/sip_quotes_20171018.mp"

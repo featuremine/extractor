@@ -72,9 +72,6 @@ if __name__ == "__main__":
         "--bootstrap_servers",
         nargs='*',
         help="'host[:port]' string (or list of 'host[:port]' strings) that the producer should contact to bootstrap initial cluster metadata. This does not have to be the full node list. It just needs to have at least one broker that will respond to a Metadata API Request. Default port is 9092. If no servers are specified, will default to localhost:9092.")
-    parser.add_argument(
-        "--license",
-        help="Extractor license (defaults to '../test/test.lic' if not provided)")
     args = parser.parse_args()
 
     quotes = consume("quotes", prepare=prep_quotes, servers=args.bootstrap_servers)
@@ -83,11 +80,6 @@ if __name__ == "__main__":
     markets = ["NYSEMKT", "NASDAQOMX", "NYSEArca"]
     tickers = ["A", "AA", "BA"]
 
-    if args.license:
-        extr.set_license(args.license)
-    else:
-        extr.set_license("../test/test.lic")
-    graph = extr.system.comp_graph()
     op = graph.features
 
     bbos_in = op.immediate_play(

@@ -430,8 +430,6 @@ def book_cross_validation(file, imnts, *args):
     builder = BookBuilder(file, imnts, *args)
     builder.build_book()
 
-    extr.set_license(os.path.join(src_dir, "../test/test.lic"))
-
     graph = extr.system.comp_graph()
     op = graph.features
     upds = op.book_play_split(file, tuple(imnts))
