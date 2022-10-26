@@ -139,6 +139,14 @@ if __name__ == "__main__":
     out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
                          tuple([x["NASDAQOMX"] for x in tickers]))
 
+    stream_fields = op.fields(out_stream, ("end_askqty","end_bidqty","end_receive","end_time","notional","shares","start_askqty","start_bidqty","start_receive","ticker","vwap"))
+    out_stream = op.combine(stream_fields, tuple(),
+                            op.convert(out_stream.end_askprice, extr.Decimal64), tuple(),
+                            op.convert(out_stream.end_bidprice, extr.Decimal64), tuple(),
+                            op.convert(out_stream.start_askprice, extr.Decimal64), tuple(),
+                            op.convert(out_stream.start_bidprice, extr.Decimal64), tuple()
+                            )
+
     op.csv_record(out_stream, bar_file)
 
     graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
