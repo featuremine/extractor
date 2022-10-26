@@ -47,6 +47,13 @@ include(GNUInstallDirs)
 add_subdirectory(src)
 add_subdirectory(python)
 
+install(
+    DIRECTORY "${PROJECT_SOURCE_DIR}/include/extractor"
+    DESTINATION "./include"
+    FILES_MATCHING
+    PATTERN "*.h"
+    PATTERN "*.hpp"
+)
 configure_file(
     ${PROJECT_SOURCE_DIR}/lib/pkgconfig/extractor.pc.in
     ${PROJECT_BINARY_DIR}/extractor.pc
