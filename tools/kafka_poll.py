@@ -91,6 +91,7 @@ if __name__ == "__main__":
     markets = ["NYSEMKT", "NASDAQOMX", "NYSEArca"]
     tickers = ["A", "AA", "BA"]
 
+    graph = extr.system.comp_graph()
     op = graph.features
 
     data_in = op.live_poll(poller, timedelta(milliseconds=1))
