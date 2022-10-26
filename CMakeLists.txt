@@ -48,6 +48,16 @@ add_subdirectory(src)
 add_subdirectory(python)
 
 configure_file(
+    ${PROJECT_SOURCE_DIR}/lib/pkgconfig/extractor.pc.in
+    ${PROJECT_BINARY_DIR}/extractor.pc
+    @ONLY
+)
+install(
+    FILES "${PROJECT_BINARY_DIR}/extractor.pc"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
+)
+
+configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/extractor/__init__.py"
     "${CMAKE_BINARY_DIR}/python_dist/extractor/__init__.py"
     COPYONLY
