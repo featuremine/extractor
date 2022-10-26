@@ -28,6 +28,8 @@ extern "C" {
 #include "extractor/decimal64.h"
 }
 
+#include <functional>
+
 inline double operator/(fm_decimal64_t a, fm_decimal64_t b) {
   return fm_decimal64_div(a, b);
 }
@@ -84,4 +86,15 @@ inline fm_decimal64_t operator*(fm_decimal64_t a, int64_t b) {
 
 inline fm_decimal64_t operator*(int64_t a, fm_decimal64_t b) {
   return fm_decimal64_mul(b, a);
+}
+
+namespace std {
+
+template <> struct hash<fm_decimal64_t> {
+  std::size_t operator()(const fm_decimal64_t &val) const {
+    return fmc_hash_combine(std::hash<int64_t>{}(val.value),
+                            std::hash<int64_t>{}(DECIMAL64_FRACTION));
+  }
+};
+
 }

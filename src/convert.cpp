@@ -179,6 +179,17 @@ struct the_convert_field_exec_2_0<fm_decimal64_t, fmc_decimal128_t> : convert_fi
   fmc_decimal128_t divisor_;
 };
 
+template <>
+struct the_convert_field_exec_2_0<fmc_decimal128_t, fm_decimal64_t> : convert_field_exec {
+  the_convert_field_exec_2_0(fm_field_t field) : field_(field) { }
+  void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
+            fm_exec_ctx_t *ctx) override {
+    auto &val0 = *(const fmc_decimal128_t *)fm_frame_get_cptr1(argv[0], field_, 0);
+    *(fm_decimal64_t *)fm_frame_get_ptr1(result, field_, 0) = fm_decimal64_from_double(fmc::conversion<fmc_decimal128_t, double>()(val0));
+  }
+  fm_field_t field_;
+};
+
 template <class T>
 struct the_convert_field_exec_2_0<char *, T> : convert_field_exec {
   the_convert_field_exec_2_0(fm_field_t field, size_t strlen)
@@ -308,6 +319,7 @@ fm_ctx_def_t *fm_comp_convert_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       pair<FLOAT32, DECIMAL128>, pair<FLOAT64, DECIMAL128>, pair<INT8, DECIMAL128>,
       pair<INT16, DECIMAL128>, pair<INT32, DECIMAL128>, pair<INT64, DECIMAL128>,
       pair<DECIMAL128, RATIONAL64>, pair<DECIMAL64, DECIMAL128>,
+      pair<DECIMAL128, DECIMAL64>, pair<DECIMAL128, INT32>,
       pair<RATIONAL64, FLOAT64>, pair<INT8, RATIONAL64>,
       pair<INT16, RATIONAL64>, pair<INT32, RATIONAL64>, pair<INT64, RATIONAL64>,
       pair<UINT8, RATIONAL64>, pair<UINT16, RATIONAL64>,

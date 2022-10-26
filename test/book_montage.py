@@ -48,8 +48,8 @@ class ValidationBook:
     def proc_bbo(self, bbo, idx):
         bidqty = bbo[0].bidqty
         askqty = bbo[0].askqty
-        bidprice = bbo[0].bidprice
-        askprice = bbo[0].askprice
+        bidprice = float(str(bbo[0].bidprice))
+        askprice = float(str(bbo[0].askprice))
 
         if (idx in self.oldbidpx) and (bidprice != self.oldbidpx[idx][0]):
             if self.oldbidpx[idx][1] != 0:
@@ -130,7 +130,7 @@ if __name__ == "__main__":
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")))
 
-    converted_bbos_in = op.combine(bbos_in.receive, tuple(),
+    bbos_in = op.combine(bbos_in.receive, tuple(),
                                    bbos_in.ticker, tuple(),
                                    bbos_in.market, tuple(),
                                    op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
@@ -138,7 +138,7 @@ if __name__ == "__main__":
                                    bbos_in.bidqty, tuple(),
                                    bbos_in.askqty, tuple());
 
-    bbo_split = op.split(converted_bbos_in, "market", tuple(markets))
+    bbo_split = op.split(bbos_in, "market", tuple(markets))
 
     bbos = []
     decimal_bbos = []
@@ -208,6 +208,8 @@ if __name__ == "__main__":
 
     ctx.run()
     book_nbbos_aggr_df = result_as_pandas(book_nbbos_aggr)
+    book_nbbos_aggr_df.bidqty = book_nbbos_aggr_df.bidqty.astype('str')
+    book_nbbos_aggr_df.askqty = book_nbbos_aggr_df.askqty.astype('str')
     book_nbbos_aggr_df.bidqty = book_nbbos_aggr_df.bidqty.astype('int32')
     book_nbbos_aggr_df.askqty = book_nbbos_aggr_df.askqty.astype('int32')
     assert_frame_equal(result_as_pandas(nbbos_aggr), book_nbbos_aggr_df)
