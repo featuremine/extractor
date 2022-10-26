@@ -101,7 +101,7 @@ add_custom_target(
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python_dist
 
-    DEPENDS extractor_module
+    DEPENDS extractor extractor_module
 )
 
 if(BUILD_TESTING)

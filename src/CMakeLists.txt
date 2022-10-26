@@ -142,5 +142,5 @@ set_target_properties(
     extractor
     PROPERTIES
     OUTPUT_NAME "extractor"
-    LIBRARY_OUTPUT_DIRECTORY "${EXTRACTOR_LIB_DIR}"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/python_dist/extractor"
 )
