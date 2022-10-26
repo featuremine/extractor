@@ -139,11 +139,5 @@ inline bool isnan(fm_rational64_t x) { return fm_rational64_isnan(x); }
 inline string to_string(const fm_rational64_t &x) {
   return to_string(x.num) + "/" + to_string(x.den);
 }
-template <> struct hash<fm_rational64_t> {
-  std::size_t operator()(const fm_rational64_t &val) const {
-    return fmc_hash_combine(std::hash<int32_t>{}(val.num),
-                            std::hash<int32_t>{}(val.den));
-  }
-};
 
 }; // namespace std

@@ -133,7 +133,6 @@ template <class T> struct py_type_convert {
                             PyObject *kwds);                                   \
     static PyObject *py_new(T t);                                              \
     static PyObject *tp_str(PyObject *self);                                   \
-    static Py_hash_t tp_hash(PyObject *self);                                  \
     static bool init(PyObject *m);                                             \
   };                                                                           \
   static PyTypeObject ExtractorBaseType##name##Type = {                        \
@@ -149,7 +148,7 @@ template <class T> struct py_type_convert {
       0,                                                 /* tp_as_number */    \
       0,                                                 /* tp_as_sequence */  \
       0,                                                 /* tp_as_mapping */   \
-      (hashfunc)ExtractorBaseType##name::tp_hash,        /* tp_hash  */        \
+      0,                                                 /* tp_hash  */        \
       0,                                                 /* tp_call */         \
       (reprfunc)ExtractorBaseType##name::tp_str,         /* tp_str */          \
       0,                                                 /* tp_getattro */     \
@@ -202,9 +201,6 @@ template <class T> struct py_type_convert {
   PyObject *ExtractorBaseType##name::tp_str(PyObject *self) {                  \
     std::string str = std::to_string(((ExtractorBaseType##name *)self)->val);  \
     return PyUnicode_FromString(str.c_str());                                  \
-  }                                                                            \
-  Py_hash_t ExtractorBaseType##name::tp_hash(PyObject *self) {                 \
-    return std::hash<T>{}(((ExtractorBaseType##name *)self)->val);             \
   }                                                                            \
                                                                                \
   bool ExtractorBaseType##name::init(PyObject *m) {                            \
