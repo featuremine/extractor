@@ -92,15 +92,13 @@ if __name__ == "__main__":
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")))
 
-    converted_bbos_in = op.combine(bbos_in.receive, tuple(),
-                                   bbos_in.ticker, tuple(),
-                                   bbos_in.market, tuple(),
-                                   op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
-                                   op.convert(bbos_in.askprice, extr.Decimal128), tuple(),
-                                   bbos_in.bidqty, tuple(),
-                                   bbos_in.askqty, tuple());
+    bbo_fields = op.fields(bbos_in, ("receive", "ticker", "market", "bidqty", "askqty"))
 
-    bbo_split = op.split(converted_bbos_in, "market", tuple(markets))
+    bbos_in = op.combine(bbo_fields, tuple(),
+                         op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
+                         op.convert(bbos_in.askprice, extr.Decimal128), tuple())
+
+    bbo_split = op.split(bbos_in, "ticker", tuple(imnts))
 
     trades_in = op.mp_play(
         trade_file,
@@ -111,14 +109,12 @@ if __name__ == "__main__":
          ("qty", extr.Int32, ""),
          ("side", extr.Int32, "")))
 
-    converted_trades_in = op.combine(trades_in.receive, tuple(),
-                                   trades_in.ticker, tuple(),
-                                   trades_in.market, tuple(),
-                                   op.convert(trades_in.price, extr.Decimal128), tuple(),
-                                   trades_in.qty, tuple(),
-                                   trades_in.side, tuple());
+    trade_fields = op.fields(trades_in, ("receive", "ticker", "market", "qty", "side"))
 
-    trade_split = op.split(converted_trades_in, "market", tuple(markets))
+    trades_in = op.combine(trade_fields, tuple(),
+                           op.convert(trades_in.price, extr.Decimal128), tuple())
+
+    trade_split = op.split(trades_in, "ticker", tuple(imnts))
 
     bbos = {k: [] for k in markets}
     ctrds = {k: [] for k in markets}
@@ -142,14 +138,6 @@ if __name__ == "__main__":
     bars = [compute_bar(nbbo, ctrdt) for nbbo, ctrdt in zip(nbbos, ctrdts)]
     out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
                          tuple([x["NASDAQOMX"] for x in tickers]))
-
-    stream_fields = op.fields(out_stream, ("end_askqty","end_bidqty","end_receive","end_time","notional","shares","start_askqty","start_bidqty","start_receive","ticker","vwap"))
-    out_stream = op.combine(stream_fields, tuple(),
-                            op.convert(out_stream.end_askprice, extr.Decimal64), tuple(),
-                            op.convert(out_stream.end_bidprice, extr.Decimal64), tuple(),
-                            op.convert(out_stream.start_askprice, extr.Decimal64), tuple(),
-                            op.convert(out_stream.start_bidprice, extr.Decimal64), tuple()
-                            )
 
     op.csv_record(out_stream, bar_file)
 
