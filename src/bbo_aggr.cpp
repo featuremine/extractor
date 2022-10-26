@@ -27,8 +27,8 @@ extern "C" {
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
-#include "fmc/decimal128.h"
 #include "extractor/stream_ctx.h"
+#include "fmc/decimal128.h"
 #include "fmc/time.h"
 }
 
@@ -68,10 +68,12 @@ bool fm_comp_bbo_aggr_call_stream_init(fm_frame_t *result, size_t args,
   exec_cl->out_qts[trade_side::BID] = fm_frame_field(result, "bidqty");
   exec_cl->out_qts[trade_side::ASK] = fm_frame_field(result, "askqty");
 
-  *(fmc::decimal128 *)fm_frame_get_ptr1(
-      result, exec_cl->out_pxs[trade_side::BID], 0) = std::numeric_limits<fmc::decimal128>::min();
-  *(fmc::decimal128 *)fm_frame_get_ptr1(
-      result, exec_cl->out_pxs[trade_side::ASK], 0) = std::numeric_limits<fmc::decimal128>::max();
+  *(fmc::decimal128 *)fm_frame_get_ptr1(result,
+                                        exec_cl->out_pxs[trade_side::BID], 0) =
+      std::numeric_limits<fmc::decimal128>::min();
+  *(fmc::decimal128 *)fm_frame_get_ptr1(result,
+                                        exec_cl->out_pxs[trade_side::ASK], 0) =
+      std::numeric_limits<fmc::decimal128>::max();
 
   *cl = exec_cl;
   return true;
@@ -97,7 +99,7 @@ bool fm_comp_bbo_aggr_stream_exec(fm_frame_t *result, size_t argc,
     for (size_t i = 0; i < argc; ++i) {
       auto qt = *(int32_t *)fm_frame_get_cptr1(argv[i], qt_idx, 0);
       auto px = *(fmc::decimal128 *)fm_frame_get_cptr1(argv[i], px_idx, 0);
-      if ((qt != 0) && cmp(px, best_px)){
+      if ((qt != 0) && cmp(px, best_px)) {
         best_px = px;
       }
     }

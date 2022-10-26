@@ -232,7 +232,8 @@ inline result parser::parse_pos(cmp_ctx_t *ctx, uint32_t &left) {
     return res;
   }
   bool is_bid = false;
-  if (!cmp_read_many(ctx, &left, &msg.id, &msg.pos, &msg.price, &msg.qty, &is_bid))
+  if (!cmp_read_many(ctx, &left, &msg.id, &msg.pos, &msg.price, &msg.qty,
+                     &is_bid))
     return result::ERR;
   msg.is_bid = is_bid;
   if (imnt->px_denum != 1)

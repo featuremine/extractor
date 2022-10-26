@@ -28,8 +28,8 @@ extern "C" {
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
-#include "fmc/decimal128.h"
 #include "extractor/stream_ctx.h"
+#include "fmc/decimal128.h"
 #include "fmc/time.h"
 }
 
@@ -45,8 +45,10 @@ using namespace std;
 struct bbo_book_aggr_exec_cl {
   bbo_book_aggr_exec_cl(fm_book_shared_t *book, unsigned argc)
       : book_(book),
-        data_(argc, {make_pair(std::numeric_limits<fmc::decimal128>::max(), fmc::decimal128(0)),
-                     make_pair(std::numeric_limits<fmc::decimal128>::min(), fmc::decimal128(0))}) {
+        data_(argc, {make_pair(std::numeric_limits<fmc::decimal128>::max(),
+                               fmc::decimal128(0)),
+                     make_pair(std::numeric_limits<fmc::decimal128>::min(),
+                               fmc::decimal128(0))}) {
     fm_book_shared_inc(book);
   }
 
@@ -111,7 +113,9 @@ struct bbo_book_aggr_exec_cl {
       fm_levels_t *lvls = fm_book_levels(book, is_bid(side));
 
       fmc_decimal128_t qty = fmc::decimal128(0);
-      fmc_decimal128_t px = is_bid(side) ? std::numeric_limits<fmc::decimal128>::min() : std::numeric_limits<fmc::decimal128>::max();
+      fmc_decimal128_t px = is_bid(side)
+                                ? std::numeric_limits<fmc::decimal128>::min()
+                                : std::numeric_limits<fmc::decimal128>::max();
 
       if (fm_book_levels_size(lvls) != 0) {
         fm_level_t *lvl = fm_book_level(lvls, 0);

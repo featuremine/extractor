@@ -837,9 +837,10 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
       }
     } else if (fm_type_base_enum(decl) == FM_TYPE_DECIMAL128) {
       for (int item = 0; item < f_dims[0]; ++item) {
-        auto *val = ExtractorBaseTypeDecimal128::py_new(*(DECIMAL128 *)fm_frame_get_cptr1(frame, i, item));
+        auto *val = ExtractorBaseTypeDecimal128::py_new(
+            *(DECIMAL128 *)fm_frame_get_cptr1(frame, i, item));
         PyArray_SETITEM((PyArrayObject *)array,
-                        (char*)PyArray_GETPTR1((PyArrayObject *)array, item),
+                        (char *)PyArray_GETPTR1((PyArrayObject *)array, item),
                         val);
         Py_XDECREF(val);
       }
