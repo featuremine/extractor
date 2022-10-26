@@ -73,9 +73,4 @@ FMMODFUNC bool fm_comp_sys_py_comp(fm_comp_sys_t *sys);
  */
 PyMODINIT_FUNC fm_extractor_py_init(void) FMMODFUNC;
 
-/**
- * @brief creates extractor decimal 128 object
- */
-FMMODFUNC PyObject *ExtractorDecimal128_new(const fmc_decimal128_t val);
-
 #endif // __FM_PY_EXTRACTOR_H__
