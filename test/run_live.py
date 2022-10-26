@@ -40,7 +40,6 @@ def run_live_test(
         total_time=0,
         subject=None,
 ):
-
     graph = extr.system.comp_graph()
     op = graph.features
 

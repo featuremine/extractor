@@ -70,7 +70,6 @@ def generate_nanos_data(r):
 
 
 if __name__ == "__main__":
-
     graph = extr.system.comp_graph()
     op = graph.features
 

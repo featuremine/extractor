@@ -142,7 +142,6 @@ class PyCharArray(object):
 
 
 if __name__ == "__main__":
-
     sys = extr.system
     sys.extend(PyClass, "pyclassop")
     graph = sys.comp_graph()

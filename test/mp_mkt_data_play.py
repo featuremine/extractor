@@ -27,7 +27,6 @@ import os
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
 if __name__ == "__main__":
-
     graph = extr.system.comp_graph()
 
     quotes_in = graph.features.mp_play(

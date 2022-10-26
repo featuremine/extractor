@@ -33,7 +33,6 @@ def run(
     expected_output=[],
     with_time_lag=False,
 ):
-
     graph = extr.system.comp_graph()
     op = graph.features
 

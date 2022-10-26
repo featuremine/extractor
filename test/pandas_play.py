@@ -32,7 +32,6 @@ if __name__ == "__main__":
     with tempfile.TemporaryDirectory() as tmp:
         tmp_file = 'tmp_file_pandas_play_test'
         tmp_file_2 = 'tmp_file_pandas_play_test_2'
-    
         graph = extr.system.comp_graph()
         op = graph.features
 

@@ -72,7 +72,6 @@ def fill_graph_out_of_scope(graph):
 
 
 if __name__ == "__main__":
-
     graph = extr.system.comp_graph()
     op = graph.features
 

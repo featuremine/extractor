@@ -255,7 +255,6 @@ def parse_error_3():
 
 
 if __name__ == "__main__":
-
     normal()
     header_error()
     header_error_2()

@@ -34,7 +34,6 @@ src_dir = os.path.dirname(os.path.realpath(__file__))
 
 
 def timeout_test():
-
     graph = extr.system.comp_graph()
     op = graph.features
     try:

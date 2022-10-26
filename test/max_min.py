@@ -79,7 +79,6 @@ def compute_bar(nbbo, ctrdt):
 
 
 if __name__ == "__main__":
-
     graph = extr.system.comp_graph()
 
     bbo_file = os.path.join(src_dir, "data/sip_quotes_20171018.mp")

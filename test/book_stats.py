@@ -58,7 +58,6 @@ def cancel_print_lambda(year_label, side):
 
 
 if __name__ == "__main__":
-
     graph = extr.system.comp_graph()
     op = graph.features
 

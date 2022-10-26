@@ -64,7 +64,6 @@ def unique_nan(value, op):
 
 if __name__ == "__main__":
 
-
     trade_file = os.path.join(src_dir, "data/sum_input.csv")
     np.testing.assert_array_equal(sum_test(unique),
                                   np.array([16, 12, 21, 21, 124, 0, 321, 197, 225, 62, 113, 96, 98]))

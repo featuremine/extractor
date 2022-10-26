@@ -54,7 +54,6 @@ def validate(op, string_op, op_one):
 
 
 if __name__ == "__main__":
-
     graph = extr.system.comp_graph()
     other_graph = extr.system.comp_graph()
     op = graph.features

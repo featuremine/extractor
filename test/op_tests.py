@@ -164,7 +164,6 @@ def ar(op, data):
 
 if __name__ == "__main__":
 
-
     np.testing.assert_array_equal(run_test(def_data, zero_ident, elapsed_on_tick)['val1'].astype(np.int64),
                                   np.array([9223372036854775807, 200, 300, 400, 500, 600, 700, 800, 900, 1000]))
     np.testing.assert_array_equal(run_test(def_data, zero_ident, elapsed_on_time)['val1'].astype(np.int64),
