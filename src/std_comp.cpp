@@ -93,6 +93,7 @@ extern "C" {
 #include "unique.h"
 #include "ytp_sequence.h"
 #include "zero.h"
+}
 
 #include "activated_timer.hpp"
 #include "ar.hpp"
