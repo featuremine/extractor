@@ -34,7 +34,7 @@ setuptools.setup (
         'Programming Language :: Python :: 3 :: Only',
     ],
     package_data={
-        'extractor': ['extractor.so']
+        'extractor': ['extractor.so', 'libextractor*']
     },
     license='COPYRIGHT (c) 2022 by Featuremine Corporation',
     packages=['extractor', 'extractor.tests'],

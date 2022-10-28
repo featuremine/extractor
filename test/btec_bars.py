@@ -195,8 +195,9 @@ if __name__ == "__main__":
         trades_in,
         (('time', 'receive'),
          ('ticker', 'ticker'),
-         ('price', 'price'),
-         ('size', 'qty'))
+         ('size', 'qty')),
+        op.convert(trades_in.price, extr.Decimal128),
+        tuple()
     )
 
     trade_split = op.split(trades_in, "ticker", tuple(tickers))
