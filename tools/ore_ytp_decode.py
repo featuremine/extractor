@@ -33,14 +33,8 @@ if __name__ == "__main__":
     parser.add_argument("--peer", help="YTP Peer", required=False, default="peer_writer")
     parser.add_argument("--channel", help="YTP channel to extract data", required=True)
     parser.add_argument("--levels", help="Number of levels to display", type=int, required=False, default=5)
-    parser.add_argument(
-        "--license",
-        help="Extractor license (defaults to '../test/test.lic' if not provided)",
-        required=False,
-        default="../test/test.lic")
     args = parser.parse_args()
 
-    extr.set_license(args.license)
     graph = extr.system.comp_graph()
     op = graph.features
 

@@ -34,7 +34,7 @@ extern "C" {
 }
 
 #include "extractor/book/updates.hpp"
-#include "extractor/decimal64.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/time.hpp"
 
@@ -61,10 +61,11 @@ public:
     *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
         fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, trade_price_field_, 0) =
-        fm_decimal64_from_raw(0);
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
-        fm_decimal64_from_raw(0);
+    fmc_decimal128_from_int(
+        (fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_, 0),
+        0);
+    fmc_decimal128_from_int(
+        (fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0), 0);
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
     memset((char *)fm_frame_get_ptr1(result, decoration_field_, 0), 0,
            sizeof(char) * 8);
@@ -76,9 +77,9 @@ public:
               *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
                   m.vendor;
               *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = m.seqn;
-              *(fm_decimal64_t *)fm_frame_get_ptr1(result, trade_price_field_,
-                                                   0) = m.trade_price;
-              *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
+              *(fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_,
+                                                     0) = m.trade_price;
+              *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
                   m.qty;
               *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = m.batch;
               memcpy((char *)fm_frame_get_ptr1(result, decoration_field_, 0),
@@ -89,9 +90,9 @@ public:
               *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
                   m.vendor;
               *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = m.seqn;
-              *(fm_decimal64_t *)fm_frame_get_ptr1(result, trade_price_field_,
-                                                   0) = m.trade_price;
-              *(fm_decimal64_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
+              *(fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_,
+                                                     0) = m.trade_price;
+              *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
                   m.qty;
               *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = m.batch;
               memset((char *)fm_frame_get_ptr1(result, decoration_field_, 0), 0,
@@ -163,8 +164,8 @@ fm_ctx_def_t *fm_comp_book_trades_gen(fm_comp_sys_t *csys,
   fm_type_decl_cp types[nf] = {
       fm_base_type_get(sys, FM_TYPE_TIME64),
       fm_base_type_get(sys, FM_TYPE_UINT64),
-      fm_base_type_get(sys, FM_TYPE_DECIMAL64),
-      fm_base_type_get(sys, FM_TYPE_DECIMAL64),
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128),
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128),
       fm_base_type_get(sys, FM_TYPE_UINT16),
       fm_array_type_get(sys, fm_base_type_get(sys, FM_TYPE_CHAR), 8)};
   int dims[1] = {1};

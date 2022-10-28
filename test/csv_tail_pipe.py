@@ -46,7 +46,6 @@ def test_frame(frame):
 
 
 if __name__ == "__main__":
-    extr.set_license(src_dir + "/test.lic")
 
     graph = extr.system.comp_graph()
     data_in = graph.features.csv_tail(

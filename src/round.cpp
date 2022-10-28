@@ -34,6 +34,7 @@ extern "C" {
 #include "extractor/comp_def.hpp"
 #include "extractor/decimal64.hpp"
 #include "extractor/frame.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/time.hpp"
 
@@ -71,6 +72,19 @@ struct the_round_field_exec_2_0<fm_decimal64_t, T> : round_field_exec {
 };
 
 template <class T>
+struct the_round_field_exec_2_0<fmc_decimal128_t, T> : round_field_exec {
+  the_round_field_exec_2_0(fm_field_t field, int64_t divisor) : field_(field) {}
+  void exec(fm_frame_t *result, size_t,
+            const fm_frame_t *const argv[]) override {
+    const T &val0 = *(const T *)fm_frame_get_cptr1(argv[0], field_, 0);
+    auto decval = fmc::conversion<fmc_decimal128_t, double>()(val0);
+    fmc_decimal128_round(
+        (fmc_decimal128_t *)fm_frame_get_ptr1(result, field_, 0), &decval);
+  }
+  fm_field_t field_;
+};
+
+template <class T>
 struct the_round_field_exec_2_0<int64_t, T> : round_field_exec {
   the_round_field_exec_2_0(fm_field_t field, int64_t divisor) : field_(field) {}
   void exec(fm_frame_t *result, size_t,
@@ -90,6 +104,22 @@ struct the_round_field_exec_2_0<int64_t, fm_decimal64_t> : round_field_exec {
     const fm_decimal64_t &val0 =
         *(const fm_decimal64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
     *(int64_t *)fm_frame_get_ptr1(result, field_, 0) = fm_decimal64_round(val0);
+  }
+  fm_field_t field_;
+};
+
+template <>
+struct the_round_field_exec_2_0<int64_t, fmc_decimal128_t> : round_field_exec {
+  the_round_field_exec_2_0(fm_field_t field, int64_t divisor) : field_(field) {}
+  void exec(fm_frame_t *result, size_t,
+            const fm_frame_t *const argv[]) override {
+    const fmc_decimal128_t &val0 =
+        *(const fmc_decimal128_t *)fm_frame_get_cptr1(argv[0], field_, 0);
+    // Do we need to explicitly round?
+    fmc_decimal128_t ret;
+    fmc_decimal128_round(&ret, &val0);
+    fmc_decimal128_to_int((int64_t *)fm_frame_get_ptr1(result, field_, 0),
+                          &ret);
   }
   fm_field_t field_;
 };
@@ -248,7 +278,8 @@ fm_ctx_def_t *fm_comp_round_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     auto ctx_cl = make_unique<round_comp_cl>();
     auto &calls = ctx_cl->calls;
 
-    using supported_types = fmc::type_list<FLOAT32, FLOAT64, DECIMAL64>;
+    using supported_types =
+        fmc::type_list<FLOAT32, FLOAT64, DECIMAL64, DECIMAL128>;
 
     auto inp = argv[0];
     int nf = fm_type_frame_nfields(inp);

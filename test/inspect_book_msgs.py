@@ -30,7 +30,6 @@ from numpy.testing import assert_array_equal, assert_array_almost_equal
 from time import sleep
 
 if __name__ == "__main__":
-    extr.set_license("../test/test.lic")
     graph = extr.system.comp_graph()
     op = graph.features
 

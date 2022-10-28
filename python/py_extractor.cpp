@@ -21,6 +21,8 @@
  * This file contains Python C extention for extractor library
  */
 
+#define PY_SSIZE_T_CLEAN
+
 extern "C" {
 #include "extractor/python/py_extractor.h"
 #include "book/py_book.h"
@@ -58,16 +60,6 @@ static py_ytp_sequence_api_v1 *ytp_; // py_ytp_api
 
 static PyObject *Extractor_fflush(PyObject *self, PyObject *args) {
   fmc_fflush();
-  Py_RETURN_NONE;
-}
-
-static PyObject *Extractor_set_license(PyObject *self, PyObject *args) {
-  const char *file_name;
-  if (!PyArg_ParseTuple(args, "s", &file_name)) {
-    PyErr_SetString(PyExc_RuntimeError, "expecting license file");
-    return nullptr;
-  }
-  license_file_unit(file_name);
   Py_RETURN_NONE;
 }
 
@@ -157,12 +149,6 @@ static PyMethodDef extractorMethods[] = {
     {"assert_numdiff", Extractor_assert_numdiff, METH_VARARGS,
      "Compares two files with numdiff.\n"
      "Expects the paths of the files to compare to be passed as arguments."},
-    {"set_license", Extractor_set_license, METH_VARARGS,
-     "Set Extractor license.\n"
-     "Expects as a single argument the path of the license or a command to "
-     "pipe the license.\n"
-     "When the license is piped with a command, the string to specify the "
-     "command must end with the pipe character '|'."},
     {"result_as_pandas", (PyCFunction)Extractor_result_as_pandas,
      METH_VARARGS | METH_KEYWORDS,
      "Returns the result frame of the specified feature as a pandas "

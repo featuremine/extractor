@@ -33,7 +33,6 @@ def run(
     expected_output=[],
     with_time_lag=False,
 ):
-    extr.set_license(os.path.join(src_dir, "test.lic"))
     graph = extr.system.comp_graph()
     op = graph.features
 

@@ -27,12 +27,12 @@ extern "C" {
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
-#include "extractor/decimal64.h"
 #include "extractor/stream_ctx.h"
+#include "fmc/decimal128.h"
 #include "fmc/time.h"
 }
 
-#include "extractor/rprice.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/side.hpp"
 
 #include <utility>
@@ -68,10 +68,12 @@ bool fm_comp_bbo_aggr_call_stream_init(fm_frame_t *result, size_t args,
   exec_cl->out_qts[trade_side::BID] = fm_frame_field(result, "bidqty");
   exec_cl->out_qts[trade_side::ASK] = fm_frame_field(result, "askqty");
 
-  *(fm_decimal64_t *)fm_frame_get_ptr1(
-      result, exec_cl->out_pxs[trade_side::BID], 0) = FM_DECIMAL64_MIN;
-  *(fm_decimal64_t *)fm_frame_get_ptr1(
-      result, exec_cl->out_pxs[trade_side::ASK], 0) = FM_DECIMAL64_MAX;
+  *(fmc::decimal128 *)fm_frame_get_ptr1(result,
+                                        exec_cl->out_pxs[trade_side::BID], 0) =
+      std::numeric_limits<fmc::decimal128>::min();
+  *(fmc::decimal128 *)fm_frame_get_ptr1(result,
+                                        exec_cl->out_pxs[trade_side::ASK], 0) =
+      std::numeric_limits<fmc::decimal128>::max();
 
   *cl = exec_cl;
   return true;
@@ -90,23 +92,24 @@ bool fm_comp_bbo_aggr_stream_exec(fm_frame_t *result, size_t argc,
   auto now = fm_stream_ctx_now((fm_stream_ctx_t *)ctx->exec);
   *(fmc_time64_t *)fm_frame_get_ptr1(result, exec_cl->rec, 0) = now;
   for (auto side : trade_side::all()) {
-    better<rprice> cmp(side);
-    auto best_px = sided<rprice>()[side];
+    better<fmc::decimal128> cmp(side);
+    auto best_px = sided<fmc::decimal128>()[side];
     auto px_idx = exec_cl->pxs[side];
     auto qt_idx = exec_cl->qts[side];
     for (size_t i = 0; i < argc; ++i) {
       auto qt = *(int32_t *)fm_frame_get_cptr1(argv[i], qt_idx, 0);
-      auto px = *(fm_decimal64_t *)fm_frame_get_cptr1(argv[i], px_idx, 0);
-      if ((qt != 0) && cmp(px, best_px))
+      auto px = *(fmc::decimal128 *)fm_frame_get_cptr1(argv[i], px_idx, 0);
+      if ((qt != 0) && cmp(px, best_px)) {
         best_px = px;
+      }
     }
     int32_t qt_tot = 0;
     for (size_t i = 0; i < argc; ++i) {
-      auto px = *(fm_decimal64_t *)fm_frame_get_cptr1(argv[i], px_idx, 0);
+      auto px = *(fmc::decimal128 *)fm_frame_get_cptr1(argv[i], px_idx, 0);
       if (best_px == px)
         qt_tot += *(int32_t *)fm_frame_get_cptr1(argv[i], qt_idx, 0);
     }
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, exec_cl->out_pxs[side], 0) =
+    *(fmc::decimal128 *)fm_frame_get_ptr1(result, exec_cl->out_pxs[side], 0) =
         best_px;
     *(int32_t *)fm_frame_get_ptr1(result, exec_cl->out_qts[side], 0) = qt_tot;
   }
@@ -136,8 +139,8 @@ fm_ctx_def_t *fm_comp_bbo_aggr_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   auto *type = fm_frame_type_get(
       sys, 5, 1, "receive", fm_base_type_get(sys, FM_TYPE_TIME64), "bidprice",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL64), "askprice",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL64), "bidqty",
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "askprice",
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "bidqty",
       fm_base_type_get(sys, FM_TYPE_INT32), "askqty",
       fm_base_type_get(sys, FM_TYPE_INT32), 1);
 

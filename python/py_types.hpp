@@ -27,6 +27,8 @@ extern "C" {
 #include "extractor/comp_def.hpp"
 #include "extractor/decimal64.hpp"
 #include "extractor/rational64.hpp"
+#include "extractor/rprice.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/time.hpp"
 
 #include <Python.h>
@@ -102,6 +104,17 @@ template <class T> struct py_type_convert {
       }
       val = temp;
       return true;
+    } else if constexpr (is_same_v<T, DECIMAL128>) {
+      const char *temp = NULL;
+      Py_ssize_t sz = 0;
+      if (!PyArg_ParseTuple(args, "s#", &temp, &sz) ||
+          sz > numeric_limits<fmc::decimal128>::max() ||
+          sz < numeric_limits<fmc::decimal128>::min()) {
+        PyErr_SetString(PyExc_TypeError, "expecting a valid string value");
+        return false;
+      }
+      fmc_decimal128_from_str(&val, temp);
+      return true;
     }
     PyErr_SetString(PyExc_TypeError, "unknown type");
     return false;
@@ -119,6 +132,7 @@ template <class T> struct py_type_convert {
     static PyObject *tp_new(PyTypeObject *subtype, PyObject *args,             \
                             PyObject *kwds);                                   \
     static PyObject *py_new(T t);                                              \
+    static PyObject *tp_str(PyObject *self);                                   \
     static bool init(PyObject *m);                                             \
   };                                                                           \
   static PyTypeObject ExtractorBaseType##name##Type = {                        \
@@ -136,7 +150,7 @@ template <class T> struct py_type_convert {
       0,                                                 /* tp_as_mapping */   \
       0,                                                 /* tp_hash  */        \
       0,                                                 /* tp_call */         \
-      0,                                                 /* tp_str */          \
+      (reprfunc)ExtractorBaseType##name::tp_str,         /* tp_str */          \
       0,                                                 /* tp_getattro */     \
       0,                                                 /* tp_setattro */     \
       0,                                                 /* tp_as_buffer */    \
@@ -183,6 +197,10 @@ template <class T> struct py_type_convert {
     }                                                                          \
     PyErr_SetString(PyExc_RuntimeError, "Could not convert to type " /*##T*/); \
     return nullptr;                                                            \
+  }                                                                            \
+  PyObject *ExtractorBaseType##name::tp_str(PyObject *self) {                  \
+    std::string str = std::to_string(((ExtractorBaseType##name *)self)->val);  \
+    return PyUnicode_FromString(str.c_str());                                  \
   }                                                                            \
                                                                                \
   bool ExtractorBaseType##name::init(PyObject *m) {                            \
@@ -598,6 +616,7 @@ BASE_TYPE_WRAPPER(Float32, FLOAT32);
 BASE_TYPE_WRAPPER(Float64, FLOAT64);
 BASE_TYPE_WRAPPER(Rational64, RATIONAL64);
 BASE_TYPE_WRAPPER(Decimal64, DECIMAL64);
+BASE_TYPE_WRAPPER(Decimal128, DECIMAL128);
 // BASE_TYPE_WRAPPER(Time64, TIME64);
 BASE_TYPE_WRAPPER(Char, CHAR);
 BASE_TYPE_WRAPPER(Wchar, WCHAR);
@@ -648,6 +667,9 @@ fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj) {
   } else if (PyType_IsSubtype((PyTypeObject *)obj,
                               &ExtractorBaseTypeDecimal64Type)) {
     return fm_base_type_get(tsys, FM_TYPE_DECIMAL64);
+  } else if (PyType_IsSubtype((PyTypeObject *)obj,
+                              &ExtractorBaseTypeDecimal128Type)) {
+    return fm_base_type_get(tsys, FM_TYPE_DECIMAL128);
   } else if (PyType_IsSubtype((PyTypeObject *)obj,
                               &ExtractorBaseTypeTime64Type)) {
     return fm_base_type_get(tsys, FM_TYPE_TIME64);
@@ -759,6 +781,10 @@ PyTypeObject *py_type_from_fm_type(fm_type_decl_cp decl) {
       Py_INCREF(&ExtractorBaseTypeDecimal64Type);
       return &ExtractorBaseTypeDecimal64Type;
       break;
+    case FM_TYPE_DECIMAL128:
+      Py_INCREF(&ExtractorBaseTypeDecimal128Type);
+      return &ExtractorBaseTypeDecimal128Type;
+      break;
     case FM_TYPE_RATIONAL64:
       Py_INCREF(&ExtractorBaseTypeRational64Type);
       return &ExtractorBaseTypeRational64Type;
@@ -795,6 +821,7 @@ bool init_type_wrappers(PyObject *m) {
          ExtractorBaseTypeTime64::init(m) &&
          ExtractorBaseTypeRational64::init(m) &&
          ExtractorBaseTypeDecimal64::init(m) &&
+         ExtractorBaseTypeDecimal128::init(m) &&
          ExtractorBaseTypeChar::init(m) && ExtractorBaseTypeWchar::init(m) &&
          ExtractorArrayType::init(m) && ExtractorBaseTypeBool::init(m);
   return false;

@@ -26,6 +26,7 @@
 
 #include "extractor/comp_def.hpp"
 #include "extractor/frame.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
 
 namespace fm {

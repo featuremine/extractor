@@ -37,15 +37,7 @@ if __name__ == "__main__":
     parser.add_argument("--yamal", help="Yamal file", required=True)
     parser.add_argument("--imnts", help="Comma separated instrument list", required=True)
     parser.add_argument("--levels", help="Number of levels to display", type=int, required=False, default=5)
-    parser.add_argument(
-        "--license",
-        help="Extractor license (defaults to '../test/test.lic' if not provided)")
     args = parser.parse_args()
-
-    if args.license:
-        extr.set_license(args.license)
-    else:
-        extr.set_license("../test/test.lic")
 
     imnts = tuple(args.imnts.split(','))
 

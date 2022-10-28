@@ -1,5 +1,0 @@
-[wrap-git]
-directory=asio
-url=https://git-codecommit.us-east-1.amazonaws.com/v1/repos/asio
-push-url=https://git-codecommit.us-east-1.amazonaws.com/v1/repos/asio
-revision=master
