@@ -145,6 +145,9 @@ extr_py_unit_test(
     bars
 )
 extr_py_unit_test(
+    decbars
+)
+extr_py_unit_test(
     btec_bars
 )
 extr_py_unit_test(
@@ -542,8 +545,6 @@ add_test(
 
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo.py"
-    "--license"
-    "${CMAKE_CURRENT_SOURCE_DIR}/data/test.lic"
     "--ytp"
     "${CMAKE_CURRENT_SOURCE_DIR}/data/ytpseq_ore_bbo.ytp"
 
@@ -562,8 +563,6 @@ add_test(
 
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo.py"
-    "--license"
-    "${CMAKE_CURRENT_SOURCE_DIR}/data/test.lic"
     "--ytp"
     "${CMAKE_CURRENT_SOURCE_DIR}/data/ytpseq_ore_trades.ytp"
 

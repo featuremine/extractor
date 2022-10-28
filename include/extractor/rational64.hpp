@@ -135,4 +135,9 @@ inline istream &operator>>(istream &s, fm_rational64_t &x) {
 }
 
 inline bool isnan(fm_rational64_t x) { return fm_rational64_isnan(x); }
+
+inline string to_string(const fm_rational64_t &x) {
+  return to_string(x.num) + "/" + to_string(x.den);
+}
+
 }; // namespace std

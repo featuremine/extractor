@@ -32,7 +32,6 @@ import os
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
 if __name__ == "__main__":
-    extr.set_license(os.path.join(src_dir, "test.lic"))
     graph = extr.system.comp_graph()
     op = graph.features
 
@@ -70,8 +69,6 @@ if __name__ == "__main__":
     set_msgs = op.book_msg(synth[0], "set")
 
     def validate_non_empty_book(frame):
-        print(len(book[extr.trade_side.BID()]))
-        print(len(book[extr.trade_side.ASK()]))
         assert len(book[extr.trade_side.BID()]) != 0
         assert len(book[extr.trade_side.ASK()]) != 0
 
@@ -95,8 +92,8 @@ if __name__ == "__main__":
     assert_array_equal(add_pd["batch"].values, [0, 0, 0, 0, 0, 0])
     assert_array_equal(add_pd["id"].values, [300, 303, 304, 305, 306, 307])
     assert_array_equal(add_pd["is_bid"].values, [1, 1, 1, 1, 1, 0])
-    assert_array_almost_equal(add_pd["price"].values, [0.210938, 0.210938, 0.210938, 0.210938, 0.210938, 0.210938])
-    assert_array_equal(add_pd["qty"].values, [200, 250, 200, 200, 200, 200])
+    assert_array_equal(add_pd["price"].values, [extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375")])
+    assert_array_equal(add_pd["qty"].values, [extr.Decimal128("200"), extr.Decimal128("250"), extr.Decimal128("200"), extr.Decimal128("200"), extr.Decimal128("200"), extr.Decimal128("200")])
     assert_array_equal(add_pd["seqn"].values, [0, 0, 0, 0, 0, 0])
     assert_array_equal(add_pd["vendor"].values,
                        pd.to_datetime(['1970-01-09T08:01:49.000000000', '1970-01-09T08:01:54.000000000',
@@ -109,9 +106,9 @@ if __name__ == "__main__":
     assert_array_equal(insrt_pd["batch"].values, [0])
     assert_array_equal(insrt_pd["id"].values, [301])
     assert_array_equal(insrt_pd["is_bid"].values, [1])
-    assert_array_almost_equal(insrt_pd["price"].values, [0.210938])
+    assert_array_equal(insrt_pd["price"].values, [extr.Decimal128("0.2109375")])
     assert_array_equal(insrt_pd["prio"].values, [5])
-    assert_array_equal(insrt_pd["qty"].values, [200])
+    assert_array_equal(insrt_pd["qty"].values, [extr.Decimal128("200")])
     assert_array_equal(insrt_pd["seqn"].values, [0])
     assert_array_equal(insrt_pd["vendor"].values,
                        pd.to_datetime(['1970-01-09T08:01:50.000000000']))
@@ -123,8 +120,8 @@ if __name__ == "__main__":
     assert_array_equal(pos_pd["id"].values, [302])
     assert_array_equal(pos_pd["is_bid"].values, [1])
     assert_array_equal(pos_pd["pos"].values, [0])
-    assert_array_almost_equal(pos_pd["price"].values, [0.210938])
-    assert_array_equal(pos_pd["qty"].values, [200])
+    assert_array_equal(pos_pd["price"].values, [extr.Decimal128("0.2109375")])
+    assert_array_equal(pos_pd["qty"].values, [extr.Decimal128("200")])
     assert_array_equal(pos_pd["seqn"].values, [0])
     assert_array_equal(pos_pd["vendor"].values,
                        pd.to_datetime(['1970-01-09T08:01:51.000000000']))
@@ -137,8 +134,8 @@ if __name__ == "__main__":
     assert_array_equal(cancel_pd["batch"].values, [0, 0, 1])
     assert_array_equal(cancel_pd["id"].values, [300, 301, 302])
     assert_array_equal(cancel_pd["is_bid"].values, [1, 1, 1])
-    assert_array_almost_equal(cancel_pd["price"].values, [0.210938, 0.210938, 0.210938])
-    assert_array_equal(cancel_pd["qty"].values, [200, 200, 200])
+    assert_array_equal(cancel_pd["price"].values, [extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375")])
+    assert_array_equal(cancel_pd["qty"].values, [extr.Decimal128("200"), extr.Decimal128("200"), extr.Decimal128("200")])
     assert_array_equal(cancel_pd["seqn"].values, [0, 0, 0])
     assert_array_equal(cancel_pd["vendor"].values,
                        pd.to_datetime(['1970-01-09T08:01:52.000000000', '1970-01-09T08:01:53.000000000',
@@ -151,8 +148,8 @@ if __name__ == "__main__":
     assert_array_equal(execute_pd["batch"].values, [0, 0, 0, 0])
     assert_array_equal(execute_pd["id"].values, [303, 304, 305, 305])
     assert_array_equal(execute_pd["is_bid"].values, [1, 1, 1, 1])
-    assert_array_almost_equal(execute_pd["price"].values, [0.210938, 0.210938, 0.210938, 0.210938])
-    assert_array_equal(execute_pd["qty"].values, [250, 200, 100, 50])
+    assert_array_equal(execute_pd["price"].values, [extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375")])
+    assert_array_equal(execute_pd["qty"].values, [extr.Decimal128("250"), extr.Decimal128("200"), extr.Decimal128("100"), extr.Decimal128("50")])
     assert_array_equal(execute_pd["seqn"].values, [0, 0, 0, 0])
     assert_array_equal(execute_pd["vendor"].values,
                        pd.to_datetime(['1970-01-09T08:01:55.000000000', '1970-01-09T08:01:57.000000000',
@@ -162,8 +159,8 @@ if __name__ == "__main__":
     assert_array_equal(trade_pd["Timestamp"].values,
                        pd.to_datetime(['1970-01-09T08:01:59.000000000', '1970-01-09T08:02:00.000000000']))
     assert_array_equal(trade_pd["batch"].values, [0, 0])
-    assert_array_almost_equal(trade_pd["trade_price"].values, [0.210938, 0.210938])
-    assert_array_equal(trade_pd["qty"].values, [25, 25])
+    assert_array_equal(trade_pd["trade_price"].values, [extr.Decimal128("0.2109375"), extr.Decimal128("0.2109375")])
+    assert_array_equal(trade_pd["qty"].values, [extr.Decimal128("25"), extr.Decimal128("25")])
     assert_array_equal(trade_pd["seqn"].values, [0, 0])
     assert_array_equal(trade_pd["vendor"].values,
                        pd.to_datetime(['1970-01-09T08:01:59.000000000', '1970-01-09T08:02:00.000000000']))
@@ -174,7 +171,7 @@ if __name__ == "__main__":
     assert_array_equal(state_pd["batch"].values, [0])
     assert_array_equal(state_pd["id"].values, [306])
     assert_array_equal(state_pd["is_bid"].values, [1])
-    assert_array_almost_equal(state_pd["price"].values, [0.210938])
+    assert_array_equal(state_pd["price"].values, [extr.Decimal128("0.2109375")])
     assert_array_equal(state_pd["seqn"].values, [0])
     assert_array_equal(state_pd["state"].values, [3])
     assert_array_equal(state_pd["vendor"].values,
@@ -197,8 +194,8 @@ if __name__ == "__main__":
                        pd.to_datetime(['1970-01-09T08:02:04.000000000']))
     assert_array_equal(set_pd["batch"].values, [0])
     assert_array_equal(set_pd["is_bid"].values, [1])
-    assert_array_almost_equal(set_pd["price"].values, [0.210938])
-    assert_array_equal(set_pd["qty"].values, [100])
+    assert_array_equal(set_pd["price"].values, [extr.Decimal128("0.2109375")])
+    assert_array_equal(set_pd["qty"].values, [extr.Decimal128("100")])
     assert_array_equal(set_pd["seqn"].values, [0])
     assert_array_equal(set_pd["vendor"].values,
                        pd.to_datetime(['1970-01-09T08:02:04.000000000']))
