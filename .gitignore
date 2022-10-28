@@ -8,8 +8,6 @@
 *.pem
 debug
 release
-subprojects/asio/
-subprojects/fmtron-lib/
 .format/*
 *.pyc
 doc
