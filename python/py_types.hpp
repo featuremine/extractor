@@ -105,16 +105,36 @@ template <class T> struct py_type_convert {
       val = temp;
       return true;
     } else if constexpr (is_same_v<T, DECIMAL128>) {
-      const char *temp = NULL;
-      Py_ssize_t sz = 0;
-      if (!PyArg_ParseTuple(args, "s#", &temp, &sz) ||
-          sz > numeric_limits<fmc::decimal128>::max() ||
-          sz < numeric_limits<fmc::decimal128>::min()) {
-        PyErr_SetString(PyExc_TypeError, "expecting a valid string value");
+      PyObject *temp;
+      if (!PyArg_ParseTuple(args, "O", &temp)) {
+        PyErr_SetString(PyExc_TypeError, "Expect single argument");
         return false;
       }
-      fmc_decimal128_from_str(&val, temp);
-      return true;
+      if (PyUnicode_Check(temp)) {
+        Py_ssize_t sz = 0;
+        const char *str = PyUnicode_AsUTF8AndSize(temp, &sz);
+        if (sz > FMC_DECIMAL128_STR_SIZE) {
+          PyErr_SetString(PyExc_TypeError, "expecting a valid string value");
+          return false;
+        }
+        fmc_decimal128_from_str(&val, str);
+        return true;
+      } else if (PyLong_Check(temp)) {
+        uint64_t u = PyLong_AsUnsignedLongLong(temp);
+        if (PyErr_Occurred()) {
+          PyErr_Clear();
+          int64_t i = PyLong_AsLongLong(temp);
+          if (PyErr_Occurred()) {
+            return false;
+          } else {
+            fmc_decimal128_from_int(&val, i);
+            return true;
+          }
+        } else {
+          fmc_decimal128_from_uint(&val, u);
+          return true;
+        }
+      }
     }
     PyErr_SetString(PyExc_TypeError, "unknown type");
     return false;

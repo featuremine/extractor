@@ -201,9 +201,11 @@ if __name__ == "__main__":
     for book_nbbo, nbbo in zip(book_nbbo_refs, nbbo_refs):
         assert book_nbbo[0].receive == nbbo[0].receive
         assert book_nbbo[0].askprice == nbbo[0].askprice
-        assert book_nbbo[0].askqty == extr.Decimal128(str(nbbo[0].askqty))
+        assert isinstance(nbbo[0].askqty, int)
+        assert book_nbbo[0].askqty == extr.Decimal128(nbbo[0].askqty)
         assert book_nbbo[0].bidprice == nbbo[0].bidprice
-        assert book_nbbo[0].bidqty == extr.Decimal128(str(nbbo[0].bidqty))
+        assert isinstance(nbbo[0].bidqty, int)
+        assert book_nbbo[0].bidqty == extr.Decimal128(nbbo[0].bidqty)
 
     ctx.run()
     book_nbbos_aggr_df = result_as_pandas(book_nbbos_aggr)
