@@ -50,8 +50,15 @@ def compute_bar(op, bbo, trade):
     high_quote = op.left_lim(op.asof(quote, op.max(quote_ask, close)), close)
     low_quote = op.left_lim(op.asof(quote, op.min(quote_bid, close)), close)
 
+    quote = op.combine(op.fields(quote, ("bidprice", "askprice")), tuple(),
+                       op.convert(quote.bidqty, extr.Decimal128), tuple(),
+                       op.convert(quote.askqty, extr.Decimal128), tuple())
+
     tw_quote = op.average_tw(quote, close)
-    trade = op.fields(trade, ("price", "qty", "market"))
+
+    trade = op.combine(op.fields(trade, ("price", "market")), tuple(),
+                       op.convert(trade.qty, extr.Decimal128), tuple())
+
     trade_px = trade.price
     trade_qty = trade.qty
     first_trade = op.first_after(trade, close)
@@ -103,6 +110,7 @@ def compute_bar(op, bbo, trade):
         notional, ("notional",),
         shares, ("shares",),
         close, (("actual", "close_time"),))
+    combined = op.perf_timer_stop(combined, "bars")
     return combined
 
 
@@ -133,7 +141,7 @@ if __name__ == "__main__":
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")))
 
-    converted_bbos_in = op.combine(bbos_in.receive, tuple(),
+    bbos_in = op.combine(bbos_in.receive, tuple(),
                                    bbos_in.ticker, tuple(),
                                    bbos_in.market, tuple(),
                                    op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
@@ -141,7 +149,7 @@ if __name__ == "__main__":
                                    bbos_in.bidqty, tuple(),
                                    bbos_in.askqty, tuple());
 
-    bbo_split = op.split(converted_bbos_in, "market", tuple(markets))
+    bbo_split = op.split(bbos_in, "market", tuple(markets))
 
     trades_in = op.mp_play(
         trade_file,
@@ -152,34 +160,27 @@ if __name__ == "__main__":
          ("qty", extr.Int32, ""),
          ("side", extr.Int32, "")))
 
-    converted_trades_in = op.combine(trades_in.receive, tuple(),
+    trades_in = op.combine(trades_in.receive, tuple(),
                                    trades_in.ticker, tuple(),
                                    trades_in.market, tuple(),
                                    op.convert(trades_in.price, extr.Decimal128), tuple(),
                                    trades_in.qty, tuple(),
                                    trades_in.side, tuple());
 
-    trade_split = op.split(converted_trades_in, "market", tuple(markets))
+    trade_split = op.split(trades_in, "market", tuple(markets))
 
     bbos = []
-    ctrds = []
     mkt_idx = 0
     for mkt in markets:
         mkt_tickers = [x[mkt] for x in tickers]
         mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
-        mkt_trade_split = op.split(trade_split[mkt_idx], "ticker", tuple(mkt_tickers))
         mkt_bbos = []
-        mkt_ctrds = []
         ticker_idx = 0
         for _ in tickers:
             bbo = mkt_bbo_split[ticker_idx]
-            trade = mkt_trade_split[ticker_idx]
-            cum_trade = op.cum_trade(trade)
             mkt_bbos.append(bbo)
-            mkt_ctrds.append(cum_trade)
             ticker_idx = ticker_idx + 1
         bbos.append(mkt_bbos)
-        ctrds.append(mkt_ctrds)
         mkt_idx = mkt_idx + 1
 
     nbbos = [op.bbo_aggr(*x) for x in zip(*bbos)]
@@ -187,8 +188,6 @@ if __name__ == "__main__":
     trade_imnt_split = op.split(trades_in, "ticker", tuple([x["NASDAQOMX"] for x in tickers]))
 
     bars = [compute_bar(op, nbbo, trd) for nbbo, trd in zip(nbbos, trade_imnt_split)]
-
-    bars = [compute_bar(nbbo, trd, ctrdt) for nbbo, trd, ctrdt in zip(nbbos, trade_imnt_split, ctrdts)]
 
     out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
                          tuple([x["NASDAQOMX"] for x in tickers]))
