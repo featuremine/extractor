@@ -15,7 +15,8 @@ find_package(Subproject REQUIRED)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subproject(
     NAME yamal
-    GIT_REVISION "decimal_interface_improvements"
+    VERSION "7.2.23"
+    GIT_REVISION "v7.2.23"
     GIT_URL "https://github.com/featuremine/yamal.git"
     TARGETS fmc++ ytp
 )

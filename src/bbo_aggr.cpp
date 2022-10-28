@@ -70,10 +70,10 @@ bool fm_comp_bbo_aggr_call_stream_init(fm_frame_t *result, size_t args,
 
   *(fmc::decimal128 *)fm_frame_get_ptr1(result,
                                         exec_cl->out_pxs[trade_side::BID], 0) =
-      std::numeric_limits<fmc::decimal128>::min();
+      sided<fmc::decimal128>()[trade_side::BID];
   *(fmc::decimal128 *)fm_frame_get_ptr1(result,
                                         exec_cl->out_pxs[trade_side::ASK], 0) =
-      std::numeric_limits<fmc::decimal128>::max();
+      sided<fmc::decimal128>()[trade_side::ASK];
 
   *cl = exec_cl;
   return true;

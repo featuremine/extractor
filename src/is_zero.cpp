@@ -32,6 +32,7 @@ extern "C" {
 
 #include "extractor/decimal64.hpp"
 #include "extractor/frame.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/time.hpp"
 #include "op_util.hpp"
@@ -86,6 +87,23 @@ template <> struct the_is_zero_field_exec_2_0<fm_decimal64_t> : op_field_exec {
   }
 
   fm_field_t field_;
+};
+
+template <>
+struct the_is_zero_field_exec_2_0<fmc_decimal128_t> : op_field_exec {
+  the_is_zero_field_exec_2_0(fm_field_t field) : field_(field) {}
+
+  void exec(fm_frame_t *result, size_t args,
+            const fm_frame_t *const argv[]) override {
+    const fmc_decimal128_t &decimal =
+        *(const fmc_decimal128_t *)fm_frame_get_cptr1(argv[0], field_, 0);
+    bool res = fmc::decimal128::upcast(decimal) == zero_;
+
+    *(bool *)fm_frame_get_ptr1(result, field_, 0) = res;
+  }
+
+  fm_field_t field_;
+  fmc::decimal128 zero_;
 };
 
 struct is_zero_comp_cl {
@@ -164,7 +182,7 @@ fm_ctx_def_t *fm_comp_is_zero_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   using supported_types =
       fmc::type_list<INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64,
-                     FLOAT32, FLOAT64, TIME64, DECIMAL64>;
+                     FLOAT32, FLOAT64, TIME64, DECIMAL64, DECIMAL128>;
 
   auto inp = argv[0];
 
