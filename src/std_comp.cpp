@@ -93,10 +93,6 @@ extern "C" {
 #include "unique.h"
 #include "ytp_sequence.h"
 #include "zero.h"
-
-#ifdef FMTRON
-#include "fmtron_sys.h"
-#endif
 }
 
 #include "activated_timer.hpp"
@@ -179,9 +175,6 @@ bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
          fm_comp_type_add(sys, &fm_comp_delayed) &&
          fm_comp_type_add(sys, &fm_comp_heartbeat) &&
          fm_comp_type_add(sys, &fm_comp_ytp_sequence) &&
-#ifdef FMTRON
-         fm_comp_type_add(sys, &fm_comp_fmtron) &&
-#endif
          fm_comp_type_add(sys, &fm_comp_is_nan) && fm_comp_split_by_add(sys) &&
          fm_comp_type_add(sys, &fm_comp_nan) && fm_comp_sample_add_all(sys) &&
          fm_comp_average_tw_add(sys) && fm_comp_delta_add(sys) &&
