@@ -215,17 +215,17 @@ if __name__ == "__main__":
                                      "uint32_from_uint8_col": "uint8",
                                      "uint64_col": "uint64", "uint64_from_uint16_col": "uint16",
                                      "uint64_from_uint32_col": "uint32", "uint64_from_uint8_col": "uint8",
-                                     "uint8_col": "uint8"})
+                                     "uint8_col": "uint8"},
+                                converters= {"decimal128_col": lambda val: extr.Decimal128(val)})
 
         extr_df["timestamp_col"] = pd.to_datetime(extr_df["timestamp_col"], unit='ns')
-        extr_df["decimal128_col"] = [extr.Decimal128(val) for val in extr_df["decimal128_col"]]
 
         pd.testing.assert_frame_equal(df, extr_df)
 
         extr_df_2 = pd.read_csv(tmp_file_2, parse_dates=True, sep=',', header=0,
                                 dtype={"binstring_col": "S16",
                                        "bool_col": "bool",
-                                       "decimal128_col":"str",
+                                       "decimal128_col": "str",
                                        "int64_from_int16_col": "int16",
                                        "int64_from_int32_col": "int32",
                                        "int64_from_int8_col": "int8",
@@ -237,9 +237,8 @@ if __name__ == "__main__":
                                        "uint32_from_uint8_col": "uint8",
                                        "uint64_col": "uint64", "uint64_from_uint16_col": "uint16",
                                        "uint64_from_uint32_col": "uint32", "uint64_from_uint8_col": "uint8",
-                                       "uint8_col": "uint8"})
-
-        extr_df_2["decimal128_col"] = [extr.Decimal128(val) for val in extr_df_2["decimal128_col"]]
+                                       "uint8_col": "uint8"},
+                                converters= {"decimal128_col": lambda val: extr.Decimal128(val)})
 
         df_2 = df.drop([
             "decimal_from_float32_col",
