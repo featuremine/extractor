@@ -140,13 +140,9 @@ template <template <class> class Comp> struct fm_comp_tw : fm_comp_sample_2_0 {
   fm_type_decl_cp ret_type = nullptr;
 };
 
-template<class T>
-struct storage {
-  using type = T;
-};
+template <class T> struct storage { using type = T; };
 
-template<>
-struct storage<fmc_decimal128_t> {
+template <> struct storage<fmc_decimal128_t> {
   using type = typename fmc::decimal128;
 };
 
