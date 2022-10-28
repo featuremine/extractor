@@ -109,7 +109,6 @@ def main_sim(yamal_path, symbols, with_time):
 
 
 if __name__ == "__main__":
-    extr.set_license(os.path.join(src_dir, "test.lic"))
     with tempfile.NamedTemporaryFile() as yamal_file:
         ore_to_ytp(os.path.join(src_dir, "data/synth_book.ore"), yamal_file.name)
         main_sim(yamal_file.name, ("2_YEAR", "3_YEAR"), False)

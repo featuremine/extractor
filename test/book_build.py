@@ -61,7 +61,6 @@ def ore_to_ytp(ore_path, yamal_path):
 
 
 if __name__ == "__main__":
-    extr.set_license(os.path.join(src_dir, "test.lic"))
 
     def book_play_split(op, in_file):
         return op.book_play_split(in_file, ("2_YEAR", "3_YEAR", "10_YEAR"))

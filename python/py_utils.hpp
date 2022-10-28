@@ -32,9 +32,9 @@ extern "C" {
 #include "py_types.hpp"
 
 #include "extractor/type_sys.h"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
 #include "py_wrapper.hpp"
-
 #include <cassert>
 #include <errno.h>
 #include <functional>
@@ -112,6 +112,9 @@ df_type_check get_df_type_checker(fm_type_decl_cp decl) {
       return [](int fdtype) {
         return fdtype == NPY_FLOAT64 || fdtype == NPY_FLOAT32;
       };
+      break;
+    case FM_TYPE_DECIMAL128:
+      return [](int fdtype) { return fdtype == NPY_OBJECT; };
       break;
     case FM_TYPE_TIME64:
       return [](int fdtype) { return fdtype == NPY_DATETIME; };
@@ -258,6 +261,16 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
         return true;
       };
       break;
+    case FM_TYPE_DECIMAL128:
+      return [](void *ptr, PyObject *obj) {
+        if (!PyObject_IsInstance(obj,
+                                 (PyObject *)&ExtractorBaseTypeDecimal128Type))
+          return false;
+        ExtractorBaseTypeDecimal128 *dec = (ExtractorBaseTypeDecimal128 *)obj;
+        *(DECIMAL128 *)ptr = dec->val;
+        return true;
+      };
+      break;
 
     case FM_TYPE_CHAR:
       return [](void *ptr, PyObject *obj) {
@@ -384,6 +397,9 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
     case FM_TYPE_DECIMAL64:
       return PyFloat_FromDouble(fm_decimal64_to_double(*(DECIMAL64 *)ptr));
       break;
+    case FM_TYPE_DECIMAL128:
+      return ExtractorBaseTypeDecimal128::py_new(*(DECIMAL128 *)ptr);
+      break;
     case FM_TYPE_CHAR:
       return PyUnicode_FromStringAndSize((const char *)ptr, 1);
       break;
@@ -474,6 +490,9 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       return PyFloat_FromDouble(
           fm_decimal64_to_double(STACK_POP(plist, DECIMAL64)));
       break;
+    case FM_TYPE_DECIMAL128: {
+      return ExtractorBaseTypeDecimal128::py_new(STACK_POP(plist, DECIMAL128));
+    } break;
     case FM_TYPE_TIME64: {
       using days = typename chrono::duration<long int, std::ratio<86400>>;
       auto t = nanoseconds(fmc_time64_to_nanos(STACK_POP(plist, TIME64)));
@@ -515,7 +534,6 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
     auto args_sz = fm_type_tuple_size(decl);
     auto args = PyTuple_New(args_sz);
     for (unsigned i = 0; i < args_sz; ++i) {
-      auto sz = fm_type_array_size(decl);
       auto arg_type = fm_type_tuple_arg(decl, i);
       PyTuple_SET_ITEM(args, i, get_py_obj_from_arg_stack(arg_type, plist));
     }
@@ -543,7 +561,8 @@ py_field_parse get_df_column_parse(string col, fm_type_decl_cp decl,
       return false;
     }
     if (!convert(fm_frame_get_ptr1(result, idx, 0), obj.get_ref())) {
-      auto *py_tp = obj.str().c_str();
+      auto str = obj.str();
+      auto *py_tp = str.c_str();
       fm_exec_ctx_error_set(ctx->exec,
                             "could not convert %s to %s for column %s", py_tp,
                             tp_name.c_str(), name);
@@ -761,6 +780,10 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
         type = NPY_INT64;
         elem_size = sizeof(int64_t);
         break;
+      case FM_TYPE_DECIMAL128:
+        type = NPY_OBJECT;
+        elem_size = sizeof(PyObject *);
+        break;
       case FM_TYPE_TIME64:
         type = NPY_DATETIME;
         elem_size = sizeof(int64_t);
@@ -811,6 +834,15 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
       for (int item = 0; item < f_dims[0]; ++item) {
         *(char *)PyArray_GETPTR1((PyArrayObject *)array, item) =
             char(*(BOOL *)fm_frame_get_cptr1(frame, i, item));
+      }
+    } else if (fm_type_base_enum(decl) == FM_TYPE_DECIMAL128) {
+      for (int item = 0; item < f_dims[0]; ++item) {
+        auto *val = ExtractorBaseTypeDecimal128::py_new(
+            *(DECIMAL128 *)fm_frame_get_cptr1(frame, i, item));
+        PyArray_SETITEM((PyArrayObject *)array,
+                        (char *)PyArray_GETPTR1((PyArrayObject *)array, item),
+                        val);
+        Py_XDECREF(val);
       }
     } else {
       memcpy(PyArray_GETPTR1((PyArrayObject *)array, 0),
@@ -971,6 +1003,9 @@ inline short type_size(fm_type_decl_cp decl) {
     case FM_TYPE_DECIMAL64:
       return 20;
       break;
+    case FM_TYPE_DECIMAL128:
+      return 20;
+      break;
     case FM_TYPE_CHAR:
       return 1;
       break;
@@ -1038,6 +1073,11 @@ string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
       auto view = fmc::to_string_view_double(
           buf, fm_decimal64_to_double(*(DECIMAL64 *)ptr), 9);
       return string(view.data(), view.size());
+    } break;
+    case FM_TYPE_DECIMAL128: {
+      char str[FMC_DECIMAL128_STR_SIZE];
+      fmc_decimal128_to_str(str, (DECIMAL128 *)ptr);
+      return string(str);
     } break;
     case FM_TYPE_CHAR:
       return string((const char *)ptr, 1);

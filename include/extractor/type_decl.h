@@ -32,10 +32,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "fmc/time.h"
-//#include "time32.h"
 #include "extractor/decimal64.h"
 #include "extractor/rational64.h"
+#include "fmc/decimal128.h"
+#include "fmc/time.h"
 
 /**
  * @brief type declaration object
@@ -63,6 +63,7 @@ typedef float FLOAT32;
 typedef double FLOAT64;
 typedef fm_rational64_t RATIONAL64;
 typedef fm_decimal64_t DECIMAL64;
+typedef fmc_decimal128_t DECIMAL128;
 typedef fmc_time64_t TIME64;
 typedef char CHAR;
 typedef wchar_t WCHAR;
@@ -85,6 +86,7 @@ typedef enum {
   FM_TYPE_FLOAT64,
   FM_TYPE_RATIONAL64,
   FM_TYPE_DECIMAL64,
+  FM_TYPE_DECIMAL128,
   FM_TYPE_TIME64,
   FM_TYPE_CHAR,
   FM_TYPE_WCHAR,

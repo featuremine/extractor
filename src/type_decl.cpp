@@ -151,6 +151,12 @@ const char *decimal64_parser(const char *begin, const char *end, void *data,
   return ret;
 }
 
+const char *decimal128_parser(const char *begin, const char *end, void *data,
+                              const char *fmt) {
+  fmc_decimal128_from_str((fmc_decimal128_t *)data, begin);
+  return end;
+}
+
 template <class T>
 const char *char_parser(const char *begin, const char *end, void *data,
                         const char *fmt) {
@@ -206,6 +212,9 @@ fm_base_type_parser fm_base_type_parser_get(FM_BASE_TYPE t) {
   case FM_TYPE_DECIMAL64:
     return &decimal64_parser;
     break;
+  case FM_TYPE_DECIMAL128:
+    return &decimal128_parser;
+    break;
   case FM_TYPE_TIME64:
     return &nano_parser;
     break;
@@ -258,13 +267,16 @@ size_t fm_base_type_sizeof(FM_BASE_TYPE t) {
     return sizeof(FLOAT64);
     break;
   case FM_TYPE_RATIONAL64:
-    return sizeof(fm_rational64_t);
+    return sizeof(RATIONAL64);
     break;
   case FM_TYPE_DECIMAL64:
-    return sizeof(fm_decimal64_t);
+    return sizeof(DECIMAL64);
+    break;
+  case FM_TYPE_DECIMAL128:
+    return sizeof(DECIMAL128);
     break;
   case FM_TYPE_TIME64:
-    return sizeof(fmc_time64_t);
+    return sizeof(TIME64);
     break;
   case FM_TYPE_CHAR:
     return sizeof(CHAR);
@@ -273,7 +285,7 @@ size_t fm_base_type_sizeof(FM_BASE_TYPE t) {
     return sizeof(WCHAR);
     break;
   case FM_TYPE_BOOL:
-    return sizeof(int32_t);
+    return sizeof(BOOL);
     break;
   case FM_TYPE_LAST:
     return 0;
@@ -320,6 +332,9 @@ constexpr const char *format_str(FM_BASE_TYPE type) {
   case FM_TYPE_DECIMAL64:
     return "";
     break;
+  case FM_TYPE_DECIMAL128:
+    return "";
+    break;
   case FM_TYPE_TIME64:
     return "";
     break;
@@ -356,6 +371,12 @@ bool rational64_fwriter(FILE *file, const void *val, const char *fmt) {
 bool decimal64_fwriter(FILE *file, const void *val, const char *fmt) {
   auto value = fm_decimal64_to_double(*(fm_decimal64_t *)val);
   return fprintf(file, "%.15lg", value) > 0;
+}
+
+bool decimal128_fwriter(FILE *file, const void *val, const char *fmt) {
+  char buf[FMC_DECIMAL128_STR_SIZE];
+  fmc_decimal128_to_str(buf, (fmc_decimal128_t *)val);
+  return fprintf(file, "%s", buf) > 0;
 }
 
 bool bool_fwriter(FILE *file, const void *val, const char *fmt) {
@@ -400,6 +421,9 @@ fm_base_type_fwriter fm_base_type_fwriter_get(FM_BASE_TYPE t) {
     break;
   case FM_TYPE_DECIMAL64:
     return &decimal64_fwriter;
+    break;
+  case FM_TYPE_DECIMAL128:
+    return &decimal128_fwriter;
     break;
   case FM_TYPE_TIME64:
     return &nano_fwriter;
@@ -446,6 +470,8 @@ const char *fm_base_type_name(FM_BASE_TYPE t) {
     return "RATIONAL64";
   case FM_TYPE_DECIMAL64:
     return "DECIMAL64";
+  case FM_TYPE_DECIMAL128:
+    return "DECIMAL128";
   case FM_TYPE_TIME64:
     return "TIME64";
   case FM_TYPE_CHAR:

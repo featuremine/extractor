@@ -41,22 +41,9 @@ typedef struct {
   bool to_delete;
 } ExtractorSystem;
 
-const char *license_file_unit(const char *name = nullptr) {
-  static std::unique_ptr<std::string> file_name;
-  if (name != nullptr) {
-    file_name.reset(new std::string(name));
-  }
-  return bool(file_name) ? file_name->c_str() : nullptr;
-}
-
 ExtractorSystem *ExtractorSystem_lazy(ExtractorSystem *obj) {
   auto *self = (ExtractorSystem *)obj;
   if (self->sys == nullptr) {
-    auto *file_name = license_file_unit();
-    if (!file_name) {
-      PyErr_SetString(PyExc_RuntimeError, "the license file is not set");
-      return nullptr;
-    }
     char *errmsg;
     self->sys = fm_comp_sys_new(&errmsg);
     if (!self->sys) {
@@ -295,10 +282,9 @@ bool ExtractorSystem_Check(PyObject *obj) {
   return PyObject_TypeCheck(obj, &ExtractorSystemType);
 }
 
-fm_comp_sys_t *ExtractorSystem_get(PyObject *obj, const char *license) {
+fm_comp_sys_t *ExtractorSystem_get(PyObject *obj) {
   if (!ExtractorSystem_Check(obj))
     return nullptr;
-  license_file_unit(license);
   auto *py_sys = ExtractorSystem_lazy((ExtractorSystem *)obj);
   if (!py_sys)
     return nullptr;

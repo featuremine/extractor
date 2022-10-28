@@ -37,7 +37,7 @@ extern "C" {
 #include <signal.h>
 #include <time.h>
 
-typedef struct {
+typedef struct fm_call_timer_t {
   using item = std::pair<fmc_time64_t, fm_call_handle_t>;
   using container = std::vector<item>;
   struct compare {

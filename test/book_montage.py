@@ -48,8 +48,8 @@ class ValidationBook:
     def proc_bbo(self, bbo, idx):
         bidqty = bbo[0].bidqty
         askqty = bbo[0].askqty
-        bidprice = bbo[0].bidprice
-        askprice = bbo[0].askprice
+        bidprice = float(str(bbo[0].bidprice))
+        askprice = float(str(bbo[0].askprice))
 
         if (idx in self.oldbidpx) and (bidprice != self.oldbidpx[idx][0]):
             if self.oldbidpx[idx][1] != 0:
@@ -106,7 +106,6 @@ class ValidationBook:
 
 
 if __name__ == "__main__":
-    extr.set_license(os.path.join(src_dir, "test.lic"))
     graph = extr.system.comp_graph()
 
     bbo_file = os.path.join(src_dir, "data/sip_quotes_20171018.mp")
@@ -130,6 +129,14 @@ if __name__ == "__main__":
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")))
 
+    bbos_in = op.combine(bbos_in.receive, tuple(),
+                                   bbos_in.ticker, tuple(),
+                                   bbos_in.market, tuple(),
+                                   op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
+                                   op.convert(bbos_in.askprice, extr.Decimal128), tuple(),
+                                   bbos_in.bidqty, tuple(),
+                                   bbos_in.askqty, tuple());
+
     bbo_split = op.split(bbos_in, "market", tuple(markets))
 
     bbos = []
@@ -146,8 +153,8 @@ if __name__ == "__main__":
             bbo = mkt_bbo_split[ticker_idx]
             mkt_bbos.append(bbo)
             decimal_bbo = op.combine(op.fields(bbo, ("receive", "bidprice", "askprice")), tuple(),
-                                     op.convert(bbo.bidqty, extr.Decimal64), tuple(),
-                                     op.convert(bbo.askqty, extr.Decimal64), tuple())
+                                     op.convert(bbo.bidqty, extr.Decimal128), tuple(),
+                                     op.convert(bbo.askqty, extr.Decimal128), tuple())
             mkt_decimal_bbos.append(decimal_bbo)
             ticker_idx = ticker_idx + 1
         bbos.append(mkt_bbos)
@@ -194,12 +201,14 @@ if __name__ == "__main__":
     for book_nbbo, nbbo in zip(book_nbbo_refs, nbbo_refs):
         assert book_nbbo[0].receive == nbbo[0].receive
         assert book_nbbo[0].askprice == nbbo[0].askprice
-        assert book_nbbo[0].askqty == nbbo[0].askqty
+        assert book_nbbo[0].askqty == extr.Decimal128(str(nbbo[0].askqty))
         assert book_nbbo[0].bidprice == nbbo[0].bidprice
-        assert book_nbbo[0].bidqty == nbbo[0].bidqty
+        assert book_nbbo[0].bidqty == extr.Decimal128(str(nbbo[0].bidqty))
 
     ctx.run()
     book_nbbos_aggr_df = result_as_pandas(book_nbbos_aggr)
+    book_nbbos_aggr_df.bidqty = book_nbbos_aggr_df.bidqty.astype('str')
+    book_nbbos_aggr_df.askqty = book_nbbos_aggr_df.askqty.astype('str')
     book_nbbos_aggr_df.bidqty = book_nbbos_aggr_df.bidqty.astype('int32')
     book_nbbos_aggr_df.askqty = book_nbbos_aggr_df.askqty.astype('int32')
     assert_frame_equal(result_as_pandas(nbbos_aggr), book_nbbos_aggr_df)

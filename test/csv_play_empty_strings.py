@@ -27,7 +27,6 @@ import os
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
 if __name__ == "__main__":
-    extr.set_license(src_dir + "/test.lic")
     graph = extr.system.comp_graph()
     data_in = graph.features.csv_play(src_dir + "/data/csv_play_file_empty_strings.csv",
                                       (("timestamp", extr.Time64, ""),

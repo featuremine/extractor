@@ -172,6 +172,11 @@ static bool add_column_parser(fm_exec_ctx_t *ctx, fm_frame_t *frame,
         return error("float64, float32.");
       type = 11;
       break;
+    case FM_TYPE_DECIMAL128:
+      if (fdtype != NPY_OBJECT)
+        return error("object.");
+      type = 16;
+      break;
     case FM_TYPE_TIME64:
       if (fdtype != NPY_DATETIME)
         return error("datetime64[ns].");
@@ -391,6 +396,20 @@ bool pandas_parse_one(fm_exec_ctx_t *ctx, pandas_play_exec_cl *cl,
       Py_ssize_t size;
       *(CHAR *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row) =
           *PyUnicode_AsUTF8AndSize(item.get_ref(), &size);
+      p_off += 3;
+    } break;
+    case 16: {
+      auto item = object::from_borrowed(
+          PyTuple_GetItem(cl->curr.get_ref(), cl->parsers[p_off + 2] + 1));
+      if (!bool(item))
+        return field_error();
+      if (!PyObject_IsInstance(item.get_ref(),
+                               (PyObject *)&ExtractorBaseTypeDecimal128Type))
+        return field_error();
+      ExtractorBaseTypeDecimal128 *dec =
+          (ExtractorBaseTypeDecimal128 *)item.get_ref();
+      *(DECIMAL128 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row) =
+          dec->val;
       p_off += 3;
     } break;
     default:
@@ -643,7 +662,7 @@ fm_ctx_def_t *fm_comp_pandas_play_gen(fm_comp_sys_t *csys,
   vector<fm_type_decl_cp> types(size);
   int dims[1] = {1};
 
-  auto field_error = [sys, error](size_t field_idx, const char *str) {
+  auto field_error = [sys](size_t field_idx, const char *str) {
     string errstr = str;
     errstr.append(" for field ");
     errstr.append(to_string(field_idx));
