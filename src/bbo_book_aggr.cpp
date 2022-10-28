@@ -45,11 +45,10 @@ using namespace std;
 struct bbo_book_aggr_exec_cl {
   bbo_book_aggr_exec_cl(fm_book_shared_t *book, unsigned argc)
       : book_(book),
-        data_(argc,
-              {make_pair(sided<fmc::decimal128>()[trade_side::ASK],
-                         fmc::decimal128(0)),
-               make_pair(sided<fmc::decimal128>()[trade_side::BID],
-                         fmc::decimal128(0))}) {
+        data_(argc, {make_pair(sided<fmc::decimal128>()[trade_side::ASK],
+                               fmc::decimal128(0)),
+                     make_pair(sided<fmc::decimal128>()[trade_side::BID],
+                               fmc::decimal128(0))}) {
     fm_book_shared_inc(book);
   }
 
