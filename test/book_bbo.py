@@ -97,10 +97,10 @@ def setup_prod_sip(universe, symbology, graph, ytpfile):
             bbo_book_combined = op.combine(
                 bbo_book, (
                     ("bid_prx_0", "bidprice"),
-                    ("ask_prx_0", "askprice")
+                    ("ask_prx_0", "askprice"),
+                    ("bid_shr_0", "bidqty"),
+                    ("ask_shr_0", "askqty")
                 ),
-                bidqty_int32, (("bid_shr_0", "bidqty"),),
-                askqty_int32, (("ask_shr_0", "askqty"),),
                 bbo_receive, (("time", "receive"),)
             )
             graph.callback(bbo_book_combined, print_bbos)
@@ -116,12 +116,9 @@ def setup_prod_sip(universe, symbology, graph, ytpfile):
                 bid_val, ask_val, unk_val, 'decoration', extractor.Array(
                     extractor.Char, 1), ('b', 'a', 'u')).side
 
-            qty_decimal64 = op.round(trade.qty)
-            qty_int32 = op.convert(qty_decimal64, extractor.Int32)
-
             trade_combined = op.combine(
                 trade, (("trade_price", "price"),),
-                qty_int32, (("qty", "qty"),),
+                trade.qty, (("qty", "qty"),),
                 trade_receive, (("time", "receive"),),
                 side, (("side", "side"),)
             )
