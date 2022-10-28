@@ -46,9 +46,9 @@ struct bbo_book_aggr_exec_cl {
   bbo_book_aggr_exec_cl(fm_book_shared_t *book, unsigned argc)
       : book_(book),
         data_(argc,
-              {make_pair(std::numeric_limits<fmc::decimal128>::infinity(),
+              {make_pair(sided<fmc::decimal128>()[trade_side::ASK],
                          fmc::decimal128(0)),
-               make_pair(-std::numeric_limits<fmc::decimal128>::infinity(),
+               make_pair(sided<fmc::decimal128>()[trade_side::BID],
                          fmc::decimal128(0))}) {
     fm_book_shared_inc(book);
   }
@@ -114,9 +114,7 @@ struct bbo_book_aggr_exec_cl {
       fm_levels_t *lvls = fm_book_levels(book, is_bid(side));
 
       fmc_decimal128_t qty = fmc::decimal128(0);
-      fmc_decimal128_t px =
-          is_bid(side) ? -std::numeric_limits<fmc::decimal128>::infinity()
-                       : std::numeric_limits<fmc::decimal128>::infinity();
+      fmc_decimal128_t px = sided<fmc::decimal128>()[side];
 
       if (fm_book_levels_size(lvls) != 0) {
         fm_level_t *lvl = fm_book_level(lvls, 0);
