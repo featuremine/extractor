@@ -60,7 +60,7 @@ FMMODFUNC PyObject *ExtractorGraph_py_new(PyObject *py_sys, fm_comp_sys_t *sys,
 /**
  * @brief checks whether python object is of Extractor System type
  */
-FMMODFUNC fm_comp_sys_t *ExtractorSystem_get(PyObject *, const char *license);
+FMMODFUNC fm_comp_sys_t *ExtractorSystem_get(PyObject *);
 
 /**
  * @brief Adds python specific computations to extractor system

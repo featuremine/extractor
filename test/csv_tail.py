@@ -69,7 +69,6 @@ def remove_test_data():
 
 
 if __name__ == "__main__":
-    extr.set_license(src_dir + "/test.lic")
 
     remove_test_data()
     with open(path, "w") as f:

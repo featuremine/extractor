@@ -68,7 +68,6 @@ def main(args):
     parser.add_argument("--password", help="password used to authenticate")
     parser.add_argument("--host", help="database host address (defaults to UNIX socket if not provided)")
     parser.add_argument("--port", help="connection port number (defaults to 5432 if not provided)")
-    parser.add_argument("--license", help="Extractor license (defaults to '../test/test.lic' if not provided)")
     args = parser.parse_args()
 
     if args.user:
@@ -99,12 +98,6 @@ def main(args):
     else:
         conn = psycopg2.connect(dbname=args.dbname)
 
-    license = "../test/test.lic"
-
-    if args.license:
-        license = args.license
-
-    extr.set_license(license)
     graph = extr.system.comp_graph()
     op = graph.features
 

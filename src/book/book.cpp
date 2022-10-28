@@ -24,11 +24,11 @@
 
 extern "C" {
 #include "book/book.h"
-#include "extractor/decimal64.h"
+#include "fmc/decimal128.h"
 #include "fmc/time.h"
 }
 
-#include "extractor/decimal64.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/time.hpp"
 
 #include <algorithm>
@@ -42,7 +42,7 @@ using namespace std;
 struct fm_order {
   uint64_t prio = 0;
   uint64_t id = 0;
-  fm_decimal64_t qty = {0};
+  fmc::decimal128 qty = fmc::decimal128(0);
   fmc_time64_t rec = {0};
   fmc_time64_t ven = {0};
   uint64_t seq = 0;
@@ -51,8 +51,8 @@ struct fm_order {
 using fm_orders = vector<fm_order>;
 
 struct fm_level {
-  fm_decimal64_t price = {0};
-  fm_decimal64_t qty = {0};
+  fmc::decimal128 price = fmc::decimal128(0);
+  fmc::decimal128 qty = fmc::decimal128(0);
   fm_orders orders;
 };
 
@@ -81,7 +81,7 @@ vector<fm_level> &levels_vector(fm_book_t *book, bool is_bid) {
 
 struct compare_levels {
   compare_levels(bool is_bid) : bid_(is_bid) {}
-  bool operator()(fm_decimal64_t a, fm_decimal64_t b) const {
+  bool operator()(fmc_decimal128_t a, fmc_decimal128_t b) const {
     return bid_ ? a > b : b > a;
   }
   bool bid_;
@@ -108,14 +108,14 @@ template <class Pool> void recycle_pool(Pool &pool, fm_orders &orders) {
 template <class Pool>
 vector_levels::iterator create_level(vector_levels &lvls, Pool &pool,
                                      vector_levels::iterator it,
-                                     fm_decimal64_t price) {
-  auto where = lvls.insert(it, {price, {0}});
+                                     fmc_decimal128_t price) {
+  auto where = lvls.insert(it, {price, fmc::decimal128(0)});
   source_pool(pool, where->orders);
   return where;
 }
 
 auto bounding_level(vector_levels &levels, compare_levels better,
-                    fm_decimal64_t price) {
+                    fmc_decimal128_t price) {
   auto where = levels.end();
   unsigned idx = 0;
   for (; where != levels.begin() && idx < 4; ++idx, --where) {
@@ -124,14 +124,14 @@ auto bounding_level(vector_levels &levels, compare_levels better,
   }
   if (idx == 4) {
     where = lower_bound(levels.begin(), where, price,
-                        [=](const fm_level &lvl, fm_decimal64_t a) {
+                        [=](const fm_level &lvl, fmc_decimal128_t a) {
                           return better(a, lvl.price);
                         });
   }
   return where;
 }
 
-fm_level &find_or_add(fm_book_t *book, fm_decimal64_t price, bool is_bid) {
+fm_level &find_or_add(fm_book_t *book, fmc_decimal128_t price, bool is_bid) {
   auto &levels = levels_vector(book, is_bid);
   compare_levels better(is_bid);
   auto where = bounding_level(levels, better, price);
@@ -140,20 +140,21 @@ fm_level &find_or_add(fm_book_t *book, fm_decimal64_t price, bool is_bid) {
              : *where;
 }
 
-vector_levels::iterator find_level(vector_levels &levels, fm_decimal64_t price,
-                                   bool is_bid) {
+vector_levels::iterator find_level(vector_levels &levels,
+                                   fmc_decimal128_t price, bool is_bid) {
   compare_levels better(is_bid);
   auto where = bounding_level(levels, better, price);
   return where == levels.end() || better(where->price, price) ? levels.end()
                                                               : where;
 }
 
-vector_levels::iterator front_level(vector_levels &levels, fm_decimal64_t price,
-                                    bool is_bid, bool uncross,
-                                    uint64_t &uncrossed) {
+vector_levels::iterator front_level(vector_levels &levels,
+                                    fmc_decimal128_t price, bool is_bid,
+                                    bool uncross, uint64_t &uncrossed) {
   compare_levels better(is_bid);
   auto where = levels.end();
-  if (where != levels.begin() && (where - 1)->price == price) {
+  if (where != levels.begin() &&
+      (where - 1)->price == fmc::decimal128::upcast(price)) {
     return where - 1;
   }
   if (uncross) {
@@ -205,8 +206,8 @@ fm_orders::iterator front_find(fm_orders &orders, uint64_t id) {
 }
 
 void fm_book_add(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
-                 uint64_t seq, uint64_t id, fm_decimal64_t price,
-                 fm_decimal64_t qty, bool is_bid) {
+                 uint64_t seq, uint64_t id, fmc_decimal128_t price,
+                 fmc_decimal128_t qty, bool is_bid) {
   auto &level = find_or_add(book, price, is_bid);
   level.qty += qty;
   auto &order = append_order(level.orders);
@@ -219,8 +220,8 @@ void fm_book_add(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
 }
 
 void fm_book_ins(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
-                 uint64_t seq, uint64_t id, uint64_t prio, fm_decimal64_t price,
-                 fm_decimal64_t qty, bool is_bid) {
+                 uint64_t seq, uint64_t id, uint64_t prio,
+                 fmc_decimal128_t price, fmc_decimal128_t qty, bool is_bid) {
   auto &level = find_or_add(book, price, is_bid);
   level.qty += qty;
   auto &order = insert_order(level.orders, prio);
@@ -233,8 +234,8 @@ void fm_book_ins(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
 }
 
 void fm_book_pos(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
-                 uint64_t seq, uint64_t id, uint32_t pos, fm_decimal64_t price,
-                 fm_decimal64_t qty, bool is_bid) {
+                 uint64_t seq, uint64_t id, uint32_t pos,
+                 fmc_decimal128_t price, fmc_decimal128_t qty, bool is_bid) {
   auto &level = find_or_add(book, price, is_bid);
   level.qty += qty;
   auto &order = position_order(level.orders, pos);
@@ -246,8 +247,8 @@ void fm_book_pos(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
   order.seq = seq;
 }
 
-bool fm_book_mod(fm_book_t *book, uint64_t id, fm_decimal64_t price,
-                 fm_decimal64_t qty, bool is_bid) {
+bool fm_book_mod(fm_book_t *book, uint64_t id, fmc_decimal128_t price,
+                 fmc_decimal128_t qty, bool is_bid) {
   auto &levels = levels_vector(book, is_bid);
   auto level_it = find_level(levels, price, is_bid);
   if (level_it == levels.end()) {
@@ -262,7 +263,7 @@ bool fm_book_mod(fm_book_t *book, uint64_t id, fm_decimal64_t price,
     return false;
   }
   auto &order = *order_it;
-  if (qty < order.qty) {
+  if (fmc::decimal128::upcast(qty) < order.qty) {
     level.qty -= qty;
     order.qty -= qty;
     return true;
@@ -276,8 +277,8 @@ bool fm_book_mod(fm_book_t *book, uint64_t id, fm_decimal64_t price,
   return true;
 }
 
-bool fm_book_exe(fm_book_t *book, uint64_t id, fm_decimal64_t price,
-                 fm_decimal64_t qty, bool is_bid) {
+bool fm_book_exe(fm_book_t *book, uint64_t id, fmc_decimal128_t price,
+                 fmc_decimal128_t qty, bool is_bid) {
   auto &levels = levels_vector(book, is_bid);
   auto level_it =
       front_level(levels, price, is_bid, book->uncross, book->uncrossed);
@@ -293,7 +294,7 @@ bool fm_book_exe(fm_book_t *book, uint64_t id, fm_decimal64_t price,
     return false;
   }
   auto &order = *order_it;
-  if (qty < order.qty) {
+  if (fmc::decimal128::upcast(qty) < order.qty) {
     level.qty -= qty;
     order.qty -= qty;
     return true;
@@ -308,9 +309,9 @@ bool fm_book_exe(fm_book_t *book, uint64_t id, fm_decimal64_t price,
 }
 
 bool fm_book_pla(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
-                 uint64_t seq, fm_decimal64_t price, fm_decimal64_t qty,
+                 uint64_t seq, fmc_decimal128_t price, fmc_decimal128_t qty,
                  bool is_bid) {
-  if (qty > fm_decimal64_t{0}) {
+  if (fmc::decimal128::upcast(qty) > fmc::decimal128(0)) {
     auto &level = find_or_add(book, price, is_bid);
     level.qty = qty;
     level.orders.resize(1);
@@ -354,9 +355,9 @@ fm_level_t *fm_book_level(fm_levels_t *lvls, unsigned idx) {
   return &(*(lvls->levels.end() - 1 - idx));
 }
 
-fm_decimal64_t fm_book_level_prx(fm_level_t *lvl) { return lvl->price; }
+fmc_decimal128_t fm_book_level_prx(fm_level_t *lvl) { return lvl->price; }
 
-fm_decimal64_t fm_book_level_shr(fm_level_t *lvl) { return lvl->qty; }
+fmc_decimal128_t fm_book_level_shr(fm_level_t *lvl) { return lvl->qty; }
 
 uint32_t fm_book_level_ord(fm_level_t *lvl) { return lvl->orders.size(); }
 
@@ -368,7 +369,7 @@ uint64_t fm_book_order_prio(fm_order_t *ord) { return ord->prio; }
 
 uint64_t fm_book_order_id(fm_order_t *ord) { return ord->id; }
 
-fm_decimal64_t fm_book_order_qty(fm_order_t *ord) { return ord->qty; }
+fmc_decimal128_t fm_book_order_qty(fm_order_t *ord) { return ord->qty; }
 
 fmc_time64_t fm_book_order_rec(fm_order_t *ord) { return ord->rec; }
 

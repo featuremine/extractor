@@ -158,14 +158,8 @@ class Symbology:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--ytp", help="YTP file", required=True)
-    parser.add_argument(
-        "--license",
-        help="Extractor license (defaults to '../test/test.lic' if not provided)",
-        required=False,
-        default="../test/test.lic")
     args = parser.parse_args()
 
-    extractor.set_license(args.license)
     graph = extractor.system.comp_graph()
     op = graph.features
 
