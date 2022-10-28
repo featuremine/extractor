@@ -89,7 +89,8 @@ template <> struct the_is_zero_field_exec_2_0<fm_decimal64_t> : op_field_exec {
   fm_field_t field_;
 };
 
-template <> struct the_is_zero_field_exec_2_0<fmc_decimal128_t> : op_field_exec {
+template <>
+struct the_is_zero_field_exec_2_0<fmc_decimal128_t> : op_field_exec {
   the_is_zero_field_exec_2_0(fm_field_t field) : field_(field) {}
 
   void exec(fm_frame_t *result, size_t args,
