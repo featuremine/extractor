@@ -144,3 +144,7 @@ set_target_properties(
     OUTPUT_NAME "extractor"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/python_dist/extractor"
 )
+install(
+    TARGETS
+    extractor
+)

@@ -74,6 +74,10 @@ set_target_properties(
     OUTPUT_NAME "py_extractor"
     LIBRARY_OUTPUT_DIRECTORY "${EXTRACTOR_LIB_DIR}"
 )
+install(
+    TARGETS
+    py_extractor
+)
 
 add_library(
     extractor_module
