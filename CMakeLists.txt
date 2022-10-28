@@ -47,6 +47,32 @@ include(GNUInstallDirs)
 add_subdirectory(src)
 add_subdirectory(python)
 
+install(
+    DIRECTORY "${PROJECT_SOURCE_DIR}/include/extractor"
+    DESTINATION "./include"
+    FILES_MATCHING
+    PATTERN "*.h"
+    PATTERN "*.hpp"
+)
+configure_file(
+    ${PROJECT_SOURCE_DIR}/lib/pkgconfig/extractor.pc.in
+    ${PROJECT_BINARY_DIR}/extractor.pc
+    @ONLY
+)
+install(
+    FILES "${PROJECT_BINARY_DIR}/extractor.pc"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
+)
+configure_file(
+    ${PROJECT_SOURCE_DIR}/lib/pkgconfig/py_extractor.pc.in
+    ${PROJECT_BINARY_DIR}/py_extractor.pc
+    @ONLY
+)
+install(
+    FILES "${PROJECT_BINARY_DIR}/py_extractor.pc"
+    DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
+)
+
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/extractor/__init__.py"
     "${CMAKE_BINARY_DIR}/python_dist/extractor/__init__.py"
@@ -101,7 +127,7 @@ add_custom_target(
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python_dist
 
-    DEPENDS extractor_module
+    DEPENDS extractor extractor_module
 )
 
 if(BUILD_TESTING)
@@ -124,3 +150,10 @@ if(BUILD_TESTING)
         TIMEOUT 100
     )
 endif()
+
+set(CPACK_PACKAGE_VENDOR "Featuremine")
+set(CPACK_PACKAGE_CONTACT "support@featuremine.com")
+set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
+set(CPACK_INCLUDE_TOPLEVEL_DIRECTORY OFF)
+
+include(CPack)

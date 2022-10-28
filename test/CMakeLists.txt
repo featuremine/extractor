@@ -145,6 +145,9 @@ extr_py_unit_test(
     bars
 )
 extr_py_unit_test(
+    decbars
+)
+extr_py_unit_test(
     btec_bars
 )
 extr_py_unit_test(
