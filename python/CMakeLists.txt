@@ -100,7 +100,24 @@ set_target_properties(
     PREFIX ""
     SUFFIX ".so"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/python_dist/extractor"
+    BUILD_WITH_INSTALL_RPATH TRUE
+    CMAKE_SKIP_BUILD_RPATH FALSE
 )
+
+if (${CMAKE_SYSTEM_NAME} MATCHES "Darwin")
+set_target_properties(
+    extractor_module
+    PROPERTIES
+    INSTALL_RPATH @loader_path
+)
+else()
+set_target_properties(
+    extractor_module
+    PROPERTIES
+    INSTALL_RPATH $ORIGIN
+)
+endif()
+
 target_include_directories(
     extractor_module
     PRIVATE
