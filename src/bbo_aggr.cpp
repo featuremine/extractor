@@ -141,8 +141,8 @@ fm_ctx_def_t *fm_comp_bbo_aggr_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       sys, 5, 1, "receive", fm_base_type_get(sys, FM_TYPE_TIME64), "bidprice",
       fm_base_type_get(sys, FM_TYPE_DECIMAL128), "askprice",
       fm_base_type_get(sys, FM_TYPE_DECIMAL128), "bidqty",
-      fm_base_type_get(sys, FM_TYPE_INT32), "askqty",
-      fm_base_type_get(sys, FM_TYPE_INT32), 1);
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "askqty",
+      fm_base_type_get(sys, FM_TYPE_DECIMAL128), 1);
 
   fm_type_decl_cp input = nullptr;
   for (size_t i = 0; i < argc; ++i) {

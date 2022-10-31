@@ -45,10 +45,11 @@ using namespace std;
 struct bbo_book_aggr_exec_cl {
   bbo_book_aggr_exec_cl(fm_book_shared_t *book, unsigned argc)
       : book_(book),
-        data_(argc, {make_pair(sided<fmc::decimal128>()[trade_side::ASK],
-                               fmc::decimal128(0)),
-                     make_pair(sided<fmc::decimal128>()[trade_side::BID],
-                               fmc::decimal128(0))}) {
+        data_(argc,
+              {make_pair(sided<fmc::decimal128>()[trade_side::BID],
+                         fmc::decimal128()),
+               make_pair(sided<fmc::decimal128>()[trade_side::ASK],
+                         fmc::decimal128())}) {
     fm_book_shared_inc(book);
   }
 
@@ -88,14 +89,14 @@ struct bbo_book_aggr_exec_cl {
       auto &oldpx = sided_data.first;
       auto &oldqty = sided_data.second;
       auto isbid = is_bid(side);
-      if (fmc::decimal128::upcast(oldqty) != fmc::decimal128(0)) {
+      if (fmc::decimal128::upcast(oldqty) != fmc::decimal128()) {
         fm_book_mod(book, idx, oldpx, oldqty, isbid);
       }
 
       auto px = *(fmc_decimal128_t *)fm_frame_get_cptr1(frame, pxs_idx, 0);
       fmc_decimal128_t qty =
           *(fmc_decimal128_t *)fm_frame_get_cptr1(frame, qts_idx, 0);
-      if (fmc::decimal128::upcast(qty) != fmc::decimal128(0)) {
+      if (fmc::decimal128::upcast(qty) != fmc::decimal128()) {
         auto ven = *(fmc_time64_t *)fm_frame_get_cptr1(frame, recv_idx, 0);
         fm_book_add(book, now, ven, 0, idx, px, qty, isbid);
       }
@@ -112,7 +113,7 @@ struct bbo_book_aggr_exec_cl {
     for (auto side : trade_side::all()) {
       fm_levels_t *lvls = fm_book_levels(book, is_bid(side));
 
-      fmc_decimal128_t qty = fmc::decimal128(0);
+      fmc_decimal128_t qty = fmc::decimal128();
       fmc_decimal128_t px = sided<fmc::decimal128>()[side];
 
       if (fm_book_levels_size(lvls) != 0) {

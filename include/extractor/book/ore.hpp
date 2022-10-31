@@ -66,8 +66,8 @@ struct result {
   result_enum value;
 };
 struct order_info {
-  fmc::decimal128 price = fmc::decimal128(0);
-  fmc::decimal128 qty = fmc::decimal128(0);
+  fmc::decimal128 price;
+  fmc::decimal128 qty;
   bool is_bid = 0;
 };
 using orders_t = unordered_map<uint64_t, order_info>;
