@@ -1,9 +1,6 @@
 find_package(PkgConfig)
 pkg_check_modules(GTEST REQUIRED IMPORTED_TARGET gtest)
-pkg_check_modules(PYTHON IMPORTED_TARGET python3-embed)
-if (NOT PYTHON_FOUND)
-    pkg_check_modules(PYTHON REQUIRED IMPORTED_TARGET python3)
-endif (NOT PYTHON_FOUND)
+find_package(Python COMPONENTS Development REQUIRED)
 
 macro(extr_unit_test)
     set(oneValueArgs NAME)
@@ -24,6 +21,7 @@ macro(extr_unit_test)
         PUBLIC
         "${EXTRACTOR_INC_DIR}"
         "${EXTRACTOR_SRC_DIR}"
+        ${Python_INCLUDE_DIRS}
     )
     target_link_libraries(
         ${ARG_NAME}
@@ -31,7 +29,7 @@ macro(extr_unit_test)
         fmc++
         ytp
         PkgConfig::GTEST
-        PkgConfig::PYTHON
+        ${Python_LIBRARIES}
     )
     add_test(NAME ${ARG_NAME} COMMAND ${ARG_NAME} ${CMAKE_CURRENT_SOURCE_DIR})
 endmacro()

@@ -1,8 +1,5 @@
 find_package(PkgConfig)
-pkg_check_modules(PYTHON IMPORTED_TARGET python3-embed)
-if (NOT PYTHON_FOUND)
-    pkg_check_modules(PYTHON REQUIRED IMPORTED_TARGET python3)
-endif (NOT PYTHON_FOUND)
+find_package(Python COMPONENTS Development REQUIRED)
 
 find_program(PYTHON3_BIN "python3" REQUIRED)
 execute_process(COMMAND ${PYTHON3_BIN} -c
@@ -21,7 +18,7 @@ target_link_libraries(
     PUBLIC
     fmc++
     ytp
-    PkgConfig::PYTHON
+    ${Python_LIBRARIES}
     extractor
 )
 target_include_directories(
@@ -32,6 +29,7 @@ target_include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${NUMPY_INCLUDE_DIR}"
     "${yamal-python-incdir}"
+     ${Python_INCLUDE_DIRS}
 )
 target_compile_definitions(
     py_extractor_obj
@@ -49,13 +47,14 @@ target_link_libraries(
     INTERFACE
     fmc++
     ytp
-    PkgConfig::PYTHON
+    ${Python_LIBRARIES}
     extractor
 )
 target_include_directories(
     py_extractor_dep
     INTERFACE
     "${EXTRACTOR_INC_DIR}"
+    ${Python_INCLUDE_DIRS}
 )
 
 add_library(
@@ -91,7 +90,7 @@ target_link_libraries(
     ytp
     extractor
     py_extractor
-    PkgConfig::PYTHON
+    ${Python_LIBRARIES}
 )
 set_target_properties(
     extractor_module
@@ -106,4 +105,5 @@ target_include_directories(
     PRIVATE
     "${EXTRACTOR_INC_DIR}"
     "${EXTRACTOR_SRC_DIR}"
+    ${Python_INCLUDE_DIRS}
 )
