@@ -49,7 +49,7 @@ jobs:
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@test-targz
+      uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         git_credentials_url: 'https://fm-ci-bot:${{secrets.CIBOT_TOKEN}}@github.com/'
@@ -83,7 +83,7 @@ jobs:
       shell: bash
 
     - name: Test ${{ github.event.repository.name }} release
-      uses: featuremine/actions/package/test@test-targz
+      uses: featuremine/actions/package/test@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.20'
