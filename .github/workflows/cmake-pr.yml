@@ -54,6 +54,7 @@ jobs:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         git_credentials_url: 'https://fm-ci-bot:${{secrets.CIBOT_TOKEN}}@github.com/'
         yamal_version: '7.2.20'
+        cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
 
   test-centos:
