@@ -1,0 +1,80 @@
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   0             0                   0                   1             0.0001              100                 2017-10-14 13:25:27.465219721 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             199999              100                 1             0.0001              100                 2017-10-14 13:25:27.465240240 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             199999              100                 1             0.0001              500                 2017-10-14 13:30:00.104734711 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             199999              100                 1             0.0001              600                 2017-10-14 13:30:00.412032462 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             22.38               100                 1             0.0001              600                 2017-10-14 13:45:02.281407833 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             22.38               200                 1             0.0001              600                 2017-10-14 13:45:02.281426101 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             22.38               300                 1             0.0001              600                 2017-10-14 13:45:02.281447306 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             22.38               400                 1             0.0001              600                 2017-10-14 13:45:02.281473502 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             22.38               500                 1             0.0001              600                 2017-10-14 13:45:02.281497336 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               100                 1             0.0001              600                 2017-10-14 13:45:02.281528882 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               200                 1             0.0001              600                 2017-10-14 13:45:02.281558558 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               300                 1             0.0001              600                 2017-10-14 13:45:02.281585238 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               400                 1             0.0001              600                 2017-10-14 13:45:02.281629748 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               500                 1             0.0001              600                 2017-10-14 13:45:02.281650371 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               500                 1             0.0001              700                 2017-10-14 15:02:43.413651511 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               600                 1             0.0001              700                 2017-10-14 15:02:43.433077484 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               600                 1             0.0001              800                 2017-10-14 15:09:54.965667538 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               700                 1             0.0001              800                 2017-10-14 15:09:54.985076569 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               700                 1             0.0001              900                 2017-10-14 15:11:56.175443358 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              900                 2017-10-14 15:11:56.194802962 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              1000                2017-10-14 15:38:30.411666691 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              1100                2017-10-14 15:41:34.019723072 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              1200                2017-10-14 15:44:37.383780404 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              1100                2017-10-14 16:00:00.128100171 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              1000                2017-10-14 16:00:00.128141902 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              900                 2017-10-14 16:00:00.128166757 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              800                 2017-10-14 16:00:00.128183946 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              700                 2017-10-14 16:00:00.128225445 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              600                 2017-10-14 16:00:00.128240451 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              500                 2017-10-14 16:00:00.128278329 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              400                 2017-10-14 16:00:00.128308974 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              300                 2017-10-14 16:00:00.128334432 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              200                 2017-10-14 16:00:00.128362983 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               800                 1             0.0001              100                 2017-10-14 16:00:00.128385275 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               700                 1             0.0001              100                 2017-10-14 16:00:00.128447100 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               600                 1             0.0001              100                 2017-10-14 16:00:00.128468535 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               500                 1             0.0001              100                 2017-10-14 16:00:00.128502398 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               400                 1             0.0001              100                 2017-10-14 16:00:00.128591358 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               300                 1             0.0001              100                 2017-10-14 16:00:00.128627412 
+idx ask_ord_0     ask_prx_0           ask_shr_0           bid_ord_0     bid_prx_0           bid_shr_0           time                          
+0   1             20.89               200                 1             0.0001              100                 2017-10-14 16:00:00.128647647 

@@ -1,0 +1,4 @@
+timestamp,text,val1,val2,tag
+10,row1,21,34,jumbo
+34,row2,-12,32,
+43,,1,9,mini
