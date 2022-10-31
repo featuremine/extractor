@@ -157,8 +157,8 @@ if __name__ == "__main__":
                                    bbos_in.market, tuple(),
                                    op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
                                    op.convert(bbos_in.askprice, extr.Decimal128), tuple(),
-                                   bbos_in.bidqty, tuple(),
-                                   bbos_in.askqty, tuple());
+                                   op.convert(bbos_in.bidqty, extr.Decimal128), tuple(),
+                                   op.convert(bbos_in.askqty, extr.Decimal128), tuple());
 
     bbo_split = op.split(converted_bbos_in, "market", tuple(markets))
 
@@ -175,7 +175,7 @@ if __name__ == "__main__":
                                    trades_in.ticker, tuple(),
                                    trades_in.market, tuple(),
                                    op.convert(trades_in.price, extr.Decimal128), tuple(),
-                                   trades_in.qty, tuple(),
+                                   op.convert(trades_in.qty, extr.Decimal128), tuple(),
                                    trades_in.side, tuple());
 
     trade_split = op.split(converted_trades_in, "market", tuple(markets))
