@@ -398,7 +398,7 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
       return PyFloat_FromDouble(fm_decimal64_to_double(*(DECIMAL64 *)ptr));
       break;
     case FM_TYPE_DECIMAL128:
-      return ExtractorBaseTypeDecimal128::py_new(*(DECIMAL128 *)ptr);
+      return ExtractorDecimal128_new(*(DECIMAL128 *)ptr);
       break;
     case FM_TYPE_CHAR:
       return PyUnicode_FromStringAndSize((const char *)ptr, 1);
@@ -491,7 +491,7 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
           fm_decimal64_to_double(STACK_POP(plist, DECIMAL64)));
       break;
     case FM_TYPE_DECIMAL128: {
-      return ExtractorBaseTypeDecimal128::py_new(STACK_POP(plist, DECIMAL128));
+      return ExtractorDecimal128_new(STACK_POP(plist, DECIMAL128));
     } break;
     case FM_TYPE_TIME64: {
       using days = typename chrono::duration<long int, std::ratio<86400>>;
@@ -837,7 +837,7 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
       }
     } else if (fm_type_base_enum(decl) == FM_TYPE_DECIMAL128) {
       for (int item = 0; item < f_dims[0]; ++item) {
-        auto *val = ExtractorBaseTypeDecimal128::py_new(
+        auto *val = ExtractorDecimal128_new(
             *(DECIMAL128 *)fm_frame_get_cptr1(frame, i, item));
         PyArray_SETITEM((PyArrayObject *)array,
                         (char *)PyArray_GETPTR1((PyArrayObject *)array, item),

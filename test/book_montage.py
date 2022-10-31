@@ -18,9 +18,8 @@
 @brief File contains extractor python sample
 """
 
-import pandas as pd
 from pandas.testing import assert_frame_equal
-from datetime import datetime, timedelta
+from datetime import datetime
 import extractor as extr
 from extractor import result_as_pandas
 import pytz
@@ -38,6 +37,8 @@ def New_York_time(year, mon, day, h=0, m=0, s=0):
                        localize(datetime(year, mon, day, h, m, s)))
 
 
+ZERO = extr.Decimal128(0)
+
 class ValidationBook:
     def __init__(self):
         self.bids = {}
@@ -48,30 +49,30 @@ class ValidationBook:
     def proc_bbo(self, bbo, idx):
         bidqty = bbo[0].bidqty
         askqty = bbo[0].askqty
-        bidprice = float(str(bbo[0].bidprice))
-        askprice = float(str(bbo[0].askprice))
+        bidprice = bbo[0].bidprice
+        askprice = bbo[0].askprice
 
         if (idx in self.oldbidpx) and (bidprice != self.oldbidpx[idx][0]):
-            if self.oldbidpx[idx][1] != 0:
+            if self.oldbidpx[idx][1] != ZERO:
                 oldpx = self.oldbidpx[idx][0]
                 del self.bids[oldpx][idx]
                 if len(self.bids[oldpx]) == 0:
                     del self.bids[oldpx]
 
         if (idx in self.oldaskpx) and (askprice != self.oldaskpx[idx][0]):
-            if self.oldaskpx[idx][1] != 0:
+            if self.oldaskpx[idx][1] != ZERO:
                 oldpx = self.oldaskpx[idx][0]
                 del self.asks[oldpx][idx]
                 if len(self.asks[oldpx]) == 0:
                     del self.asks[oldpx]
 
-        if askqty != 0:
+        if askqty != ZERO:
             if askprice in self.asks:
                 self.asks[askprice][idx] = askqty
             else:
                 self.asks[askprice] = {idx: askqty}
 
-        if bidqty != 0:
+        if bidqty != ZERO:
             if bidprice in self.bids:
                 self.bids[bidprice][idx] = bidqty
             else:
@@ -109,7 +110,6 @@ if __name__ == "__main__":
     graph = extr.system.comp_graph()
 
     bbo_file = os.path.join(src_dir, "data/sip_quotes_20171018.mp")
-    trade_file = os.path.join(src_dir, "data/sip_trades_20171018.mp")
 
     markets = ["NYSEMKT", "NASDAQOMX", "NYSEArca"]
     tickers = [
@@ -130,35 +130,28 @@ if __name__ == "__main__":
          ("askqty", extr.Int32, "")))
 
     bbos_in = op.combine(bbos_in.receive, tuple(),
-                                   bbos_in.ticker, tuple(),
-                                   bbos_in.market, tuple(),
-                                   op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
-                                   op.convert(bbos_in.askprice, extr.Decimal128), tuple(),
-                                   bbos_in.bidqty, tuple(),
-                                   bbos_in.askqty, tuple());
+                         bbos_in.ticker, tuple(),
+                         bbos_in.market, tuple(),
+                         op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
+                         op.convert(bbos_in.askprice, extr.Decimal128), tuple(),
+                         op.convert(bbos_in.bidqty, extr.Decimal128), tuple(),
+                         op.convert(bbos_in.askqty, extr.Decimal128), tuple());
 
     bbo_split = op.split(bbos_in, "market", tuple(markets))
 
     bbos = []
-    decimal_bbos = []
     ctrds = []
     mkt_idx = 0
     for mkt in markets:
         mkt_tickers = [x[mkt] for x in tickers]
         mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
         mkt_bbos = []
-        mkt_decimal_bbos = []
         ticker_idx = 0
         for _ in tickers:
             bbo = mkt_bbo_split[ticker_idx]
             mkt_bbos.append(bbo)
-            decimal_bbo = op.combine(op.fields(bbo, ("receive", "bidprice", "askprice")), tuple(),
-                                     op.convert(bbo.bidqty, extr.Decimal128), tuple(),
-                                     op.convert(bbo.askqty, extr.Decimal128), tuple())
-            mkt_decimal_bbos.append(decimal_bbo)
             ticker_idx = ticker_idx + 1
         bbos.append(mkt_bbos)
-        decimal_bbos.append(mkt_decimal_bbos)
         mkt_idx = mkt_idx + 1
 
     books = [extr.Book() for _ in tickers]
@@ -175,7 +168,7 @@ if __name__ == "__main__":
             graph.callback(bbo, gen_clbck(valbook, i))
             i += 1
 
-    book_nbbos = [op.bbo_book_aggr(*x, b) for b, x in zip(books, zip(*decimal_bbos))]
+    book_nbbos = [op.bbo_book_aggr(*x, b) for b, x in zip(books, zip(*bbos))]
     book_nbbo_refs = [graph.get_ref(comp) for comp in book_nbbos]
     for valbook, book_nbbo, book in zip(validation_books, book_nbbos, books):
         def gen_clbck(v, b):
@@ -201,16 +194,10 @@ if __name__ == "__main__":
     for book_nbbo, nbbo in zip(book_nbbo_refs, nbbo_refs):
         assert book_nbbo[0].receive == nbbo[0].receive
         assert book_nbbo[0].askprice == nbbo[0].askprice
-        assert isinstance(nbbo[0].askqty, int)
-        assert book_nbbo[0].askqty == extr.Decimal128(nbbo[0].askqty)
+        assert book_nbbo[0].askqty == nbbo[0].askqty
         assert book_nbbo[0].bidprice == nbbo[0].bidprice
-        assert isinstance(nbbo[0].bidqty, int)
-        assert book_nbbo[0].bidqty == extr.Decimal128(nbbo[0].bidqty)
+        assert book_nbbo[0].bidqty == nbbo[0].bidqty
 
     ctx.run()
     book_nbbos_aggr_df = result_as_pandas(book_nbbos_aggr)
-    book_nbbos_aggr_df.bidqty = book_nbbos_aggr_df.bidqty.astype('str')
-    book_nbbos_aggr_df.askqty = book_nbbos_aggr_df.askqty.astype('str')
-    book_nbbos_aggr_df.bidqty = book_nbbos_aggr_df.bidqty.astype('int32')
-    book_nbbos_aggr_df.askqty = book_nbbos_aggr_df.askqty.astype('int32')
     assert_frame_equal(result_as_pandas(nbbos_aggr), book_nbbos_aggr_df)

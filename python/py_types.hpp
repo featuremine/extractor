@@ -152,6 +152,7 @@ template <class T> struct py_type_convert {
     static PyObject *tp_new(PyTypeObject *subtype, PyObject *args,             \
                             PyObject *kwds);                                   \
     static PyObject *py_new(T t);                                              \
+    static Py_hash_t tp_hash(PyObject* self);                                  \
     static PyObject *tp_str(PyObject *self);                                   \
     static bool init(PyObject *m);                                             \
   };                                                                           \
@@ -168,7 +169,7 @@ template <class T> struct py_type_convert {
       0,                                                 /* tp_as_number */    \
       0,                                                 /* tp_as_sequence */  \
       0,                                                 /* tp_as_mapping */   \
-      0,                                                 /* tp_hash  */        \
+      (hashfunc)ExtractorBaseType##name::tp_hash,        /* tp_hash  */        \
       0,                                                 /* tp_call */         \
       (reprfunc)ExtractorBaseType##name::tp_str,         /* tp_str */          \
       0,                                                 /* tp_getattro */     \
@@ -217,6 +218,9 @@ template <class T> struct py_type_convert {
     }                                                                          \
     PyErr_SetString(PyExc_RuntimeError, "Could not convert to type " /*##T*/); \
     return nullptr;                                                            \
+  }                                                                            \
+  Py_hash_t ExtractorBaseType##name::tp_hash(PyObject* self) {                 \
+    return std::hash<T>{}(((ExtractorBaseType##name *)self)->val);             \
   }                                                                            \
   PyObject *ExtractorBaseType##name::tp_str(PyObject *self) {                  \
     std::string str = std::to_string(((ExtractorBaseType##name *)self)->val);  \
@@ -641,6 +645,10 @@ BASE_TYPE_WRAPPER(Decimal128, DECIMAL128);
 BASE_TYPE_WRAPPER(Char, CHAR);
 BASE_TYPE_WRAPPER(Wchar, WCHAR);
 BASE_TYPE_WRAPPER(Bool, bool);
+
+PyObject *ExtractorDecimal128_new(fmc_decimal128_t val) {
+  return ExtractorBaseTypeDecimal128::py_new(val);
+}
 
 fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj) {
   if (PyObject_TypeCheck(obj, &ExtractorArrayTypeType)) {

@@ -32,6 +32,7 @@ extern "C" {
 #include <iostream>
 #include <limits>
 #include <string>
+#include <functional>
 
 inline fm_rational64_t operator/(fm_rational64_t a, fm_rational64_t b) {
   return fm_rational64_div(a, b);
@@ -139,5 +140,15 @@ inline bool isnan(fm_rational64_t x) { return fm_rational64_isnan(x); }
 inline string to_string(const fm_rational64_t &x) {
   return to_string(x.num) + "/" + to_string(x.den);
 }
+
+template <>
+struct hash<fm_rational64_t>
+{
+  size_t operator()(const fm_rational64_t& k) const
+  {
+    return fmc_hash_combine(std::hash<int32_t>{}(k.num),
+                            std::hash<int32_t>{}(k.den));
+  }
+};
 
 }; // namespace std

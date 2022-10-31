@@ -97,21 +97,21 @@ bool fm_comp_bbo_aggr_stream_exec(fm_frame_t *result, size_t argc,
     auto px_idx = exec_cl->pxs[side];
     auto qt_idx = exec_cl->qts[side];
     for (size_t i = 0; i < argc; ++i) {
-      auto qt = *(int32_t *)fm_frame_get_cptr1(argv[i], qt_idx, 0);
+      auto qt = *(fmc::decimal128 *)fm_frame_get_cptr1(argv[i], qt_idx, 0);
       auto px = *(fmc::decimal128 *)fm_frame_get_cptr1(argv[i], px_idx, 0);
       if ((qt != 0) && cmp(px, best_px)) {
         best_px = px;
       }
     }
-    int32_t qt_tot = 0;
+    fmc::decimal128 qt_tot;
     for (size_t i = 0; i < argc; ++i) {
       auto px = *(fmc::decimal128 *)fm_frame_get_cptr1(argv[i], px_idx, 0);
       if (best_px == px)
-        qt_tot += *(int32_t *)fm_frame_get_cptr1(argv[i], qt_idx, 0);
+        qt_tot += *(fmc::decimal128 *)fm_frame_get_cptr1(argv[i], qt_idx, 0);
     }
     *(fmc::decimal128 *)fm_frame_get_ptr1(result, exec_cl->out_pxs[side], 0) =
         best_px;
-    *(int32_t *)fm_frame_get_ptr1(result, exec_cl->out_qts[side], 0) = qt_tot;
+    *(fmc::decimal128 *)fm_frame_get_ptr1(result, exec_cl->out_qts[side], 0) = qt_tot;
   }
 
   return true;
