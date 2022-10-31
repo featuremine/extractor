@@ -1,0 +1,18 @@
+pandas_play_0
+              receive         val1  val2
+0 1972-02-01 16:52:33  514541811.9  3.64
+pandas_play_1
+              receive         val1  val2
+0 1972-02-01 16:52:33  514541811.9  3.64
+pandas_play_0
+              receive      val1   val2
+0 2081-05-03 17:16:23  9.999945  0.664
+pandas_play_1
+              receive      val1   val2
+0 2081-05-03 17:16:23  9.999945  0.664
+pandas_play_0
+              receive    val1    val2
+0 2163-08-27 17:35:31  3.4458  9.3645
+pandas_play_1
+              receive    val1    val2
+0 2163-08-27 17:35:31  3.4458  9.3645

@@ -1,0 +1,3 @@
+ticker,imbalanceSide,type,matchPrice,matchQty,imbalanceQuantity,receive,Exchange
+RNN,0,Open,0.000000,0,0,1508333280141000000,NASDAQ
+RNN,0,Open,0.000000,0,0,1508333285131000000,NASDAQ
