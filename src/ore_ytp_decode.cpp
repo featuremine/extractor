@@ -150,7 +150,7 @@ bool fm_comp_ore_ytp_decode_stream_exec(fm_frame_t *result, size_t args,
                                     // .orders;
                                 });
     } else if (!res.is_skip()) {
-      fm_exec_ctx_error_set(ctx->exec, "error reading ytp channel");
+      fm_exec_ctx_error_set(ctx->exec, "error reading ytp channel: %s", parser.error.c_str());
       return false;
     }
   }
