@@ -77,38 +77,13 @@ struct the_convert_field_exec_2_0<fm_decimal64_t, T> : convert_field_exec {
 };
 
 template <class T>
-struct the_convert_field_exec_2_0<fmc_decimal128_t, T> : convert_field_exec {
-  the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
-            fm_exec_ctx_t *ctx) override {
-    auto val0 =
-        *(const fmc_decimal128_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    *(T *)fm_frame_get_ptr1(result, field_, 0) =
-        T(fmc::conversion<fmc_decimal128_t, double>()(val0));
-  }
-  fm_field_t field_;
-};
-
-template <class T>
 struct the_convert_field_exec_2_0<T, fm_decimal64_t> : convert_field_exec {
   the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
   void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
             fm_exec_ctx_t *ctx) override {
     auto &val0 = *(const T *)fm_frame_get_cptr1(argv[0], field_, 0);
     *(fm_decimal64_t *)fm_frame_get_ptr1(result, field_, 0) =
-        fm_decimal64_from_double(val0);
-  }
-  fm_field_t field_;
-};
-
-template <class T>
-struct the_convert_field_exec_2_0<T, fmc_decimal128_t> : convert_field_exec {
-  the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
-            fm_exec_ctx_t *ctx) override {
-    auto &val0 = *(const T *)fm_frame_get_cptr1(argv[0], field_, 0);
-    *(fmc_decimal128_t *)fm_frame_get_ptr1(result, field_, 0) =
-        fmc::conversion<double, fmc_decimal128_t>()(val0);
+        fm_decimal64_from_double(double(val0));
   }
   fm_field_t field_;
 };
@@ -138,21 +113,6 @@ struct the_convert_field_exec_2_0<fm_decimal64_t, fm_rational64_t>
   fm_field_t field_;
 };
 
-template <>
-struct the_convert_field_exec_2_0<fmc_decimal128_t, fm_rational64_t>
-    : convert_field_exec {
-  the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
-            fm_exec_ctx_t *ctx) override {
-    auto val0 =
-        *(const fmc_decimal128_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    *(fm_rational64_t *)fm_frame_get_ptr1(result, field_, 0) =
-        fm_rational64_from_double(
-            fmc::conversion<fmc_decimal128_t, double>()(val0), 32);
-  }
-  fm_field_t field_;
-};
-
 template <class T>
 struct the_convert_field_exec_2_0<fm_rational64_t, T> : convert_field_exec {
   the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
@@ -162,39 +122,6 @@ struct the_convert_field_exec_2_0<fm_rational64_t, T> : convert_field_exec {
         *(const fm_rational64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
     *(T *)fm_frame_get_ptr1(result, field_, 0) =
         T(fm_rational64_to_double(val0));
-  }
-  fm_field_t field_;
-};
-
-template <>
-struct the_convert_field_exec_2_0<fm_decimal64_t, fmc_decimal128_t>
-    : convert_field_exec {
-  the_convert_field_exec_2_0(fm_field_t field) : field_(field) {
-    fmc_decimal128_from_int(&divisor_, DECIMAL64_FRACTION);
-  }
-  void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
-            fm_exec_ctx_t *ctx) override {
-    auto &val0 =
-        *(const fm_decimal64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    auto *res = (fmc_decimal128_t *)fm_frame_get_ptr1(result, field_, 0);
-    fmc_decimal128_from_int(res, val0.value);
-    fmc_decimal128_div(res, res, &divisor_);
-  }
-  fm_field_t field_;
-  fmc_decimal128_t divisor_;
-};
-
-template <>
-struct the_convert_field_exec_2_0<fmc_decimal128_t, fm_decimal64_t>
-    : convert_field_exec {
-  the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
-            fm_exec_ctx_t *ctx) override {
-    auto &val0 =
-        *(const fmc_decimal128_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, field_, 0) =
-        fm_decimal64_from_double(
-            fmc::conversion<fmc_decimal128_t, double>()(val0));
   }
   fm_field_t field_;
 };
@@ -256,6 +183,12 @@ fm_call_def *fm_comp_convert_stream_call(fm_comp_def_cl comp_cl,
   return def;
 }
 
+template <class T> struct storage { using type = T; };
+
+template <> struct storage<fmc_decimal128_t> {
+  using type = typename fmc::decimal128;
+};
+
 template <class... Ts>
 convert_field_exec *get_convert_field_exec(fmc::type_list<Ts...>,
                                            fm_type_decl_cp from_type,
@@ -265,19 +198,21 @@ convert_field_exec *get_convert_field_exec(fmc::type_list<Ts...>,
     using Tt = decltype(t);
     using Tn = typename Tt::type;
     using From = typename Tn::first_type;
+    using FromS = typename storage<From>::type;
     using To = typename Tn::second_type;
+    using ToS = typename storage<To>::type;
     auto obj_to = fm::frame_field_type<To>();
     if constexpr (std::is_same<From, char *>::value) {
       if (!result && fm_type_is_array(from_type) &&
           fm_type_base_enum(fm_type_array_of(from_type)) == FM_TYPE_CHAR &&
           obj_to.validate(to_type)) {
-        result = new the_convert_field_exec_2_0<From, To>(
+        result = new the_convert_field_exec_2_0<FromS, ToS>(
             idx, fm_type_array_size(from_type));
       }
     } else {
       auto obj_from = fm::frame_field_type<From>();
       if (!result && obj_from.validate(from_type) && obj_to.validate(to_type)) {
-        result = new the_convert_field_exec_2_0<From, To>(idx);
+        result = new the_convert_field_exec_2_0<FromS, ToS>(idx);
       }
     }
   };
@@ -327,7 +262,7 @@ fm_ctx_def_t *fm_comp_convert_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       pair<DECIMAL128, FLOAT32>, pair<DECIMAL128, FLOAT64>,
       pair<FLOAT32, DECIMAL128>, pair<FLOAT64, DECIMAL128>,
       pair<INT8, DECIMAL128>, pair<INT16, DECIMAL128>, pair<INT32, DECIMAL128>,
-      pair<INT64, DECIMAL128>, pair<DECIMAL128, RATIONAL64>,
+      pair<INT64, DECIMAL128>,
       pair<DECIMAL64, DECIMAL128>, pair<DECIMAL128, DECIMAL64>,
       pair<DECIMAL128, INT32>, pair<RATIONAL64, FLOAT64>,
       pair<INT8, RATIONAL64>, pair<INT16, RATIONAL64>, pair<INT32, RATIONAL64>,

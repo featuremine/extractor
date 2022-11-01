@@ -15,7 +15,7 @@ find_package(Subproject REQUIRED)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subproject(
     NAME yamal
-    GIT_REVISION "hash_additions"
+    GIT_REVISION "error_handling_syntax_sugar"
     GIT_URL "https://github.com/featuremine/yamal.git"
     TARGETS fmc++ ytp
 )

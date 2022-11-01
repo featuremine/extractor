@@ -117,8 +117,9 @@ template <class T> struct py_type_convert {
           PyErr_SetString(PyExc_TypeError, "expecting a valid string value");
           return false;
         }
-        fmc_decimal128_from_str(&val, str);
-        return true;
+        fmc_error_t *err;
+        fmc_decimal128_from_str(&val, str, &err);
+        return !bool(err);
       } else if (PyLong_Check(temp)) {
         uint64_t u = PyLong_AsUnsignedLongLong(temp);
         if (PyErr_Occurred()) {
