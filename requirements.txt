@@ -1,0 +1,5 @@
+setuptools
+pkgconfig
+wheel
+numpy
+msgpack

@@ -31,10 +31,6 @@ jobs:
         submodules: recursive
         token: ${{ secrets.CIBOT_TOKEN }}
 
-    - name: Install python dependencies
-      run: pip3 install numpy msgpack pandas
-      shell: bash
-
     - name: Install numdiff
       working-directory: /tmp
       run: |
@@ -68,6 +64,19 @@ jobs:
 
     - name: Install dependencies
       run: brew install pkg-config cmake googletest python
+
+    - name: Install numdiff
+      working-directory: /tmp
+      run: |
+        wget http://mirror.cedia.org.ec/nongnu/numdiff/numdiff-5.9.0.tar.gz
+        tar -xvzf numdiff-5.9.0.tar.gz
+        cd numdiff-5.9.0
+        ./configure
+        make
+        make install
+        cd ..
+        rm -rf numdiff-5.9.0*
+      shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
       uses: featuremine/actions/package/build@main
