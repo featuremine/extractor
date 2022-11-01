@@ -98,6 +98,23 @@ configure_file(
     COPYONLY
 )
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(PYTHON_PLATFORM "manylinux_2_17_${CMAKE_SYSTEM_PROCESSOR}")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin") # optional block, can be repeated
+    execute_process(COMMAND sw_vers -productVersion
+                    OUTPUT_VARIABLE MACOS_VERSION
+                    OUTPUT_STRIP_TRAILING_WHITESPACE)
+    string(REGEX REPLACE "^([0-9]+)\\.([0-9]+)\\.([0-9]+).*$" "\\1"
+           MACOS_VERSION_MAJOR "${MACOS_VERSION}")
+    string(REGEX REPLACE "^([0-9]+)\\.([0-9]+)\\.([0-9]+).*$" "\\2"
+           MACOS_VERSION_MINOR "${MACOS_VERSION}")
+    set(PYTHON_PLATFORM "macosx_${MACOS_VERSION_MAJOR}_${MACOS_VERSION_MINOR}_${CMAKE_SYSTEM_PROCESSOR}")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")              # optional block
+    set(PYTHON_PLATFORM "win_${CMAKE_SYSTEM_PROCESSOR}")
+else()
+    message(FATAL_ERROR "Platform not supported")
+endif()
+
 add_custom_target(
     extractor-whl ALL
 
@@ -114,6 +131,8 @@ add_custom_target(
     "bdist_wheel"
     "--bdist-dir=${CMAKE_CURRENT_BINARY_DIR}/python_dist/bdist"
     "--dist-dir=${CMAKE_BINARY_DIR}/output"
+
+    "--plat-name=${PYTHON_PLATFORM}"
 
     COMMAND
     "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"

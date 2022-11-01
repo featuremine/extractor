@@ -52,7 +52,27 @@ jobs:
       uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        git_credentials_url: 'https://fm-ci-bot:${{secrets.CIBOT_TOKEN}}@github.com/'
+        yamal_version: '7.2.20'
+        cpack: TGZ
+        upload: ${{ needs.utility.outputs.release-check == 'release' }}
+
+  build-macos:
+    needs: utility
+    runs-on: macos-12
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+        token: ${{ secrets.CIBOT_TOKEN }}
+
+    - name: Install dependencies
+      run: brew install pkg-config cmake googletest python
+
+    - name: Build ${{ github.event.repository.name }} with fm gcc
+      uses: featuremine/actions/package/build@main
+      with:
+        gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.20'
         cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
