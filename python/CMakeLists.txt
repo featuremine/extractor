@@ -21,7 +21,6 @@ target_link_libraries(
     PUBLIC
     fmc++
     ytp
-    PkgConfig::PYTHON
     extractor
 )
 target_include_directories(
@@ -32,6 +31,7 @@ target_include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${NUMPY_INCLUDE_DIR}"
     "${yamal-python-incdir}"
+    "${PYTHON_INCLUDE_DIRS}"
 )
 target_compile_definitions(
     py_extractor_obj
@@ -49,13 +49,13 @@ target_link_libraries(
     INTERFACE
     fmc++
     ytp
-    PkgConfig::PYTHON
     extractor
 )
 target_include_directories(
     py_extractor_dep
     INTERFACE
     "${EXTRACTOR_INC_DIR}"
+    "${PYTHON_INCLUDE_DIRS}"
 )
 
 add_library(
@@ -91,7 +91,6 @@ target_link_libraries(
     ytp
     extractor
     py_extractor
-    PkgConfig::PYTHON
 )
 set_target_properties(
     extractor_module
@@ -106,4 +105,5 @@ target_include_directories(
     PRIVATE
     "${EXTRACTOR_INC_DIR}"
     "${EXTRACTOR_SRC_DIR}"
+    "${PYTHON_INCLUDE_DIRS}"
 )
