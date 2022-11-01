@@ -51,6 +51,7 @@ if __name__ == "__main__":
     rounded_4 = op.round(data_in, 4)
     rounded_2 = op.round(data_in, 2)
     rounded_1 = op.round(data_in, 1)
+    rounded_1_128 = op.round(data_in, 1, extr.Decimal128)
 
     try:
         rounded_fail = op.round(data_in, 3)
@@ -64,6 +65,7 @@ if __name__ == "__main__":
     four = op.accumulate(rounded_4)
     two = op.accumulate(rounded_2)
     one = op.accumulate(rounded_1)
+    one128 = op.accumulate(rounded_1_128)
 
     graph.stream_ctx().run()
 
@@ -89,6 +91,10 @@ if __name__ == "__main__":
     as_pd = result_as_pandas(one)
     np.testing.assert_array_almost_equal(np.array(as_pd['val1']),
                                          np.array([514541812.0, 10.0, 3.0]))
+
+    as_pd = result_as_pandas(one128)
+    np.testing.assert_array_equal(np.array(as_pd['val1']),
+                                  np.array([extr.Decimal128(514541812), extr.Decimal128(10), extr.Decimal128(3)]))
 
     ts = pd.to_datetime([65811153, 3513518183, 6111135331], unit='s')
     val1 = pd.Series([11.44, 200.06, 399.55], dtype='float64')
