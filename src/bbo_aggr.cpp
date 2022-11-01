@@ -90,7 +90,7 @@ struct bbo_aggr_exec_cl_impl: bbo_aggr_exec_cl {
       for (size_t i = 0; i < argc; ++i) {
         auto qt = *(Quantity *)fm_frame_get_cptr1(argv[i], qt_idx, 0);
         auto px = *(Price *)fm_frame_get_cptr1(argv[i], px_idx, 0);
-        if ((qt != 0) && cmp(px, best_px)) {
+        if ((qt != zero_) && cmp(px, best_px)) {
           best_px = px;
         }
       }
