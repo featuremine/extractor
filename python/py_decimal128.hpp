@@ -217,7 +217,6 @@ PyObject *ExtractorBaseTypeDecimal128::py_richcmp(PyObject *obj1,
     }
     Py_RETURN_FALSE;
   }
-  PyObject *result;
   int c = 0;
   fmc_decimal128_t t1;
   fmc_decimal128_t t2;
@@ -243,14 +242,9 @@ PyObject *ExtractorBaseTypeDecimal128::py_richcmp(PyObject *obj1,
     c = t1 >= t2;
     break;
   }
-  result = c ? Py_True : Py_False;
-  Py_INCREF(result);
-  return result;
+  return PyBool_FromLong(c);
 }
 
 PyObject *ExtractorBaseTypeDecimal128::is_nan(PyObject *self, PyObject *args) {
-  if (fmc_decimal128_is_nan(&((ExtractorBaseTypeDecimal128 *)self)->val)) {
-    Py_RETURN_TRUE;
-  }
-  Py_RETURN_FALSE;
+  return PyBool_FromLong(fmc_decimal128_is_nan(&((ExtractorBaseTypeDecimal128 *)self)->val));
 }
