@@ -14,7 +14,7 @@ jobs:
     steps:
     - name: Utility tasks
       id: release-check
-      uses: featuremine/actions/utility@publish-wheel
+      uses: featuremine/actions/utility@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         utility_token: ${{ secrets.UTILITY_COMMIT_TOKEN }}
@@ -30,7 +30,6 @@ jobs:
     - uses: actions/checkout@v3
       with:
         submodules: recursive
-        token: ${{ secrets.CIBOT_TOKEN }}
 
     - name: Install numdiff
       working-directory: /tmp
@@ -46,10 +45,10 @@ jobs:
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@publish-wheel
+      uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.20'
+        yamal_version: '7.2.22'
         cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
         test_pypi_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
@@ -62,7 +61,6 @@ jobs:
     - uses: actions/checkout@v3
       with:
         submodules: recursive
-        token: ${{ secrets.CIBOT_TOKEN }}
 
     - name: Install dependencies
       run: brew install pkg-config cmake googletest python
@@ -86,10 +84,10 @@ jobs:
         python-version: '3.10'
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@publish-wheel
+      uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.20'
+        yamal_version: '7.2.22'
         cpack: TGZ
 
   test-centos:
@@ -121,4 +119,4 @@ jobs:
       uses: featuremine/actions/package/test@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.20'
+        yamal_version: '7.2.22'
