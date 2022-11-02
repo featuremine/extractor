@@ -18,6 +18,7 @@ jobs:
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         utility_token: ${{ secrets.UTILITY_COMMIT_TOKEN }}
+        mypy: true
 
   build-manylinux:
     needs: utility
@@ -29,11 +30,6 @@ jobs:
     - uses: actions/checkout@v3
       with:
         submodules: recursive
-        token: ${{ secrets.CIBOT_TOKEN }}
-
-    - name: Install python dependencies
-      run: pip3 install numpy msgpack pandas
-      shell: bash
 
     - name: Install numdiff
       working-directory: /tmp
@@ -52,10 +48,47 @@ jobs:
       uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        git_credentials_url: 'https://fm-ci-bot:${{secrets.CIBOT_TOKEN}}@github.com/'
-        yamal_version: '7.2.20'
+        yamal_version: '7.2.22'
         cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
+        test_pypi_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
+
+  build-macos:
+    needs: utility
+    runs-on: macos-12
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: brew install pkg-config cmake googletest python
+
+    - name: Install numdiff
+      working-directory: /tmp
+      run: |
+        wget http://mirror.cedia.org.ec/nongnu/numdiff/numdiff-5.9.0.tar.gz
+        tar -xvzf numdiff-5.9.0.tar.gz
+        cd numdiff-5.9.0
+        ./configure
+        make
+        make install
+        cd ..
+        rm -rf numdiff-5.9.0*
+      shell: bash
+
+      #TODO: Fix and remove this so it works with native python
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
+    - name: Build ${{ github.event.repository.name }} with fm gcc
+      uses: featuremine/actions/package/build@main
+      with:
+        gh_token: ${{ secrets.GITHUB_TOKEN }}
+        yamal_version: '7.2.22'
+        cpack: TGZ
 
   test-centos:
     needs: [utility, build-manylinux]
@@ -86,4 +119,4 @@ jobs:
       uses: featuremine/actions/package/test@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.20'
+        yamal_version: '7.2.22'

@@ -107,3 +107,6 @@ target_include_directories(
     "${EXTRACTOR_SRC_DIR}"
     "${PYTHON_INCLUDE_DIRS}"
 )
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    target_link_options(extractor_module PRIVATE -undefined dynamic_lookup)
+endif()
