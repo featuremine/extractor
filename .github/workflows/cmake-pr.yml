@@ -80,6 +80,10 @@ jobs:
         rm -rf numdiff-5.9.0*
       shell: bash
 
+    - uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+
     - name: Build ${{ github.event.repository.name }} with fm gcc
       uses: featuremine/actions/package/build@publish-wheel
       with:
