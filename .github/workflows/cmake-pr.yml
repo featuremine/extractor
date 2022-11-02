@@ -52,7 +52,7 @@ jobs:
         yamal_version: '7.2.20'
         cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
-        #TODO: test_pypi_token
+        test_pypi_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
   build-macos:
     needs: utility
@@ -80,6 +80,7 @@ jobs:
         rm -rf numdiff-5.9.0*
       shell: bash
 
+      #TODO: Fix and remove this so it works with native python
     - uses: actions/setup-python@v4
       with:
         python-version: '3.10'
@@ -90,7 +91,6 @@ jobs:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.20'
         cpack: TGZ
-        upload: ${{ needs.utility.outputs.release-check == 'release' }}
 
   test-centos:
     needs: [utility, build-manylinux]

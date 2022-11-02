@@ -15,4 +15,4 @@ jobs:
       uses: featuremine/actions/release@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        #TODO: pypi_token
+        pypi_token: ${{ secrets.PYPI_API_TOKEN }}
