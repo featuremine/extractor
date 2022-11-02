@@ -245,3 +245,10 @@ PyObject *ExtractorBaseTypeDecimal128::py_richcmp(PyObject *obj1,
   Py_INCREF(result);
   return result;
 }
+
+PyObject *is_nan(PyObject *self, PyObject *args) {
+  if (fmc_decimal128_is_nan(&((ExtractorBaseTypeDecimal128 *)self)->val)) {
+    PyRETURN_TRUE;
+  }
+  PyRETURN_FALSE;
+}
