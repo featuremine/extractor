@@ -185,10 +185,10 @@ PyObject *ExtractorBaseTypeDecimal128::py_new(fmc_decimal128_t t) {
 }
 PyObject *ExtractorBaseTypeDecimal128::tp_new(PyTypeObject *subtype,
                                           PyObject *args, PyObject *kwds) {
-  // PyObject *input = NULL;
-  // if (PyArg_ParseTuple(args, "O", &input) &&
-  //     ExtractorComputation_type_check(input))
-  //   return create(subtype, args, kwds);
+  PyObject *input = NULL;
+  if (PyArg_ParseTuple(args, "O", &input) &&
+      ExtractorComputation_type_check(input))
+    return create(subtype, args, kwds);
   fmc_decimal128_t val;
   if (py_type_convert<fmc_decimal128_t>::convert(val, args)) {
     return py_new(val);
