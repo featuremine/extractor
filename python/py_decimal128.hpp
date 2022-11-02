@@ -22,6 +22,7 @@
 
 #include <Python.h>
 #include "fmc/decimal128.h"
+#include <py_type_utils.hpp>
 
 struct ExtractorBaseTypeDecimal128 {
   PyObject_HEAD;
@@ -188,10 +189,10 @@ PyObject *ExtractorBaseTypeDecimal128::tp_new(PyTypeObject *subtype,
   // if (PyArg_ParseTuple(args, "O", &input) &&
   //     ExtractorComputation_type_check(input))
   //   return create(subtype, args, kwds);
-  // fmc_decimal128_t val;
-  // if (py_type_convert<fmc_decimal128_t>::convert(val, args)) {
-  //   return py_new(val);
-  // }
+  fmc_decimal128_t val;
+  if (py_type_convert<fmc_decimal128_t>::convert(val, args)) {
+    return py_new(val);
+  }
   PyErr_SetString(PyExc_RuntimeError, "Could not convert to type Decimal128");
   return nullptr;
 }
@@ -212,10 +213,7 @@ PyObject *ExtractorBaseTypeDecimal128::py_richcmp(PyObject *obj1,
                                               PyObject *obj2, int op) {
   auto type = &ExtractorBaseTypeDecimal128Type;
   if (!PyObject_TypeCheck(obj1, type) || !PyObject_TypeCheck(obj2, type)) {
-    if (op == Py_NE) {
-      Py_RETURN_TRUE;
-    }
-    Py_RETURN_FALSE;
+    return PyBool_FromLong(op == Py_NE);
   }
   int c = 0;
   fmc_decimal128_t t1;
