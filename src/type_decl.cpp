@@ -153,8 +153,9 @@ const char *decimal64_parser(const char *begin, const char *end, void *data,
 
 const char *decimal128_parser(const char *begin, const char *end, void *data,
                               const char *fmt) {
-  fmc_decimal128_from_str((fmc_decimal128_t *)data, begin);
-  return end;
+  fmc_error_t *err;
+  fmc_decimal128_from_str((fmc_decimal128_t *)data, begin, &err);
+  return err ? begin : end;
 }
 
 template <class T>
