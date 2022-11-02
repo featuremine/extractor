@@ -14,10 +14,11 @@ jobs:
     steps:
     - name: Utility tasks
       id: release-check
-      uses: featuremine/actions/utility@main
+      uses: featuremine/actions/utility@publish-wheel
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         utility_token: ${{ secrets.UTILITY_COMMIT_TOKEN }}
+        mypy: true
 
   build-manylinux:
     needs: utility
