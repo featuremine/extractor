@@ -21,17 +21,18 @@
 #pragma once
 
 #include <Python.h>
+#include "fmc/decimal128.h"
 
 struct ExtractorBaseTypeDecimal128 {
   PyObject_HEAD;
-  T val;
+  fmc_decimal128_t val;
   static void py_dealloc(ExtractorBaseTypeDecimal128 *self) {
     Py_TYPE(self)->tp_free((PyObject *)self);
   }
   static PyObject *py_richcmp(PyObject *obj1, PyObject *obj2, int op);
   static PyObject *tp_new(PyTypeObject *subtype, PyObject *args,
                           PyObject *kwds);
-  static PyObject *py_new(T t);
+  static PyObject *py_new(fmc_decimal128_t t);
   static PyObject *tp_str(PyObject *self);
   static bool init(PyObject *m);
 
@@ -69,7 +70,7 @@ struct ExtractorBaseTypeDecimal128 {
     // { "is_canonical", dec_mpd_iscanonical, METH_NOARGS, doc_is_canonical },
     // { "is_finite", dec_mpd_isfinite, METH_NOARGS, doc_is_finite },
     // { "is_infinite", dec_mpd_isinfinite, METH_NOARGS, doc_is_infinite },
-    { "is_nan", is_nan, METH_NOARGS, doc_is_nan },
+    { "is_nan", &ExtractorBaseTypeDecimal128::is_nan, METH_NOARGS, NULL },
     // { "is_qnan", dec_mpd_isqnan, METH_NOARGS, doc_is_qnan },
     // { "is_snan", dec_mpd_issnan, METH_NOARGS, doc_is_snan },
     // { "is_signed", dec_mpd_issigned, METH_NOARGS, doc_is_signed },
@@ -130,7 +131,7 @@ struct ExtractorBaseTypeDecimal128 {
   };
 
 };
-static PyTypeObject ExtractorBaseTypeDecimal128##Type = {
+static PyTypeObject ExtractorBaseTypeDecimal128 = {
     PyVarObject_HEAD_INIT(NULL, 0) "extractor.Decimal128", /* tp_name */
     sizeof(ExtractorBaseTypeDecimal128),                   /* tp_basicsize */
     0,                                                 /* tp_itemsize */
@@ -169,8 +170,8 @@ static PyTypeObject ExtractorBaseTypeDecimal128##Type = {
     0,                               /* tp_alloc */
     ExtractorBaseTypeDecimal128::tp_new, /* tp_new */
 };
-PyObject *ExtractorBaseTypeDecimal128::py_new(T t) {
-  PyTypeObject *type = (PyTypeObject *)&ExtractorBaseTypeDecimal128##Type;
+PyObject *ExtractorBaseTypeDecimal128::py_new(fmc_decimal128_t t) {
+  PyTypeObject *type = (PyTypeObject *)&ExtractorBaseTypeDecimal128;
   ExtractorBaseTypeDecimal128 *self;
 
   self = (ExtractorBaseTypeDecimal128 *)type->tp_alloc(type, 0);
@@ -186,11 +187,11 @@ PyObject *ExtractorBaseTypeDecimal128::tp_new(PyTypeObject *subtype,
   if (PyArg_ParseTuple(args, "O", &input) &&
       ExtractorComputation_type_check(input))
     return create(subtype, args, kwds);
-  T val;
-  if (py_type_convert<T>::convert(val, args)) {
+  fmc_decimal128_t val;
+  if (py_type_convert<fmc_decimal128_t>::convert(val, args)) {
     return py_new(val);
   }
-  PyErr_SetString(PyExc_RuntimeError, "Could not convert to type " /*##T*/);
+  PyErr_SetString(PyExc_RuntimeError, "Could not convert to type Decimal128");
   return nullptr;
 }
 PyObject *ExtractorBaseTypeDecimal128::tp_str(PyObject *self) {
@@ -199,16 +200,16 @@ PyObject *ExtractorBaseTypeDecimal128::tp_str(PyObject *self) {
 }
 
 bool ExtractorBaseTypeDecimal128::init(PyObject *m) {
-  if (PyType_Ready(&ExtractorBaseTypeDecimal128##Type) < 0)
+  if (PyType_Ready(&ExtractorBaseTypeDecimal128) < 0)
     return false;
-  Py_INCREF(&ExtractorBaseTypeDecimal128##Type);
-  PyModule_AddObject(m, "Decimal128", (PyObject *)&ExtractorBaseTypeDecimal128##Type);
+  Py_INCREF(&ExtractorBaseTypeDecimal128);
+  PyModule_AddObject(m, "Decimal128", (PyObject *)&ExtractorBaseTypeDecimal128);
   return true;
 }
 
 PyObject *ExtractorBaseTypeDecimal128::py_richcmp(PyObject *obj1,
                                               PyObject *obj2, int op) {
-  auto type = &ExtractorBaseTypeDecimal128##Type;
+  auto type = &ExtractorBaseTypeDecimal128;
   if (!PyObject_TypeCheck(obj1, type) || !PyObject_TypeCheck(obj2, type)) {
     if (op == Py_NE) {
       Py_RETURN_TRUE;
@@ -217,8 +218,8 @@ PyObject *ExtractorBaseTypeDecimal128::py_richcmp(PyObject *obj1,
   }
   PyObject *result;
   int c = 0;
-  T t1;
-  T t2;
+  fmc_decimal128_t t1;
+  fmc_decimal128_t t2;
   t1 = ((ExtractorBaseTypeDecimal128 *)obj1)->val;
   t2 = ((ExtractorBaseTypeDecimal128 *)obj2)->val;
   switch (op) {

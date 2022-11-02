@@ -38,6 +38,8 @@ extern "C" {
 #include <py_wrapper.hpp>
 #include <type_traits>
 
+#include <py_decimal128.hpp>
+
 fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj);
 
 static PyObject *create(PyTypeObject *type, PyObject *args, PyObject *kwds) {
