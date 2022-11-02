@@ -45,12 +45,13 @@ jobs:
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@main
+      uses: featuremine/actions/package/build@publish-wheel
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.20'
         cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
+        #TODO: test_pypi_token
 
   build-macos:
     needs: utility
@@ -79,7 +80,7 @@ jobs:
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@main
+      uses: featuremine/actions/package/build@publish-wheel
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.20'
