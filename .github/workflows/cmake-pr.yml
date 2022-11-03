@@ -119,6 +119,9 @@ jobs:
     - name: Test pip3 debug
       run: curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py --force-reinstall && pip3 debug --verbose
 
+    - name: Test user
+      run: whoami
+
     - name: Test ${{ github.event.repository.name }} release
       uses: featuremine/actions/package/test@fix-release
       with:
@@ -137,6 +140,9 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python_version }}
+
+      - name: print python location
+        run: echo ${pythonLocation}
 
       - name: Install python dependencies
         run: pip3 install numpy msgpack pandas
