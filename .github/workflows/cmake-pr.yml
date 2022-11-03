@@ -138,6 +138,9 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
 
+      - name: Install python dependencies
+        run: pip3 install numpy msgpack pandas
+
       - name: Test ${{ github.event.repository.name }} release for python version ${{ matrix.python_version }}
         uses: featuremine/actions/package/test@fix-release
         with:
