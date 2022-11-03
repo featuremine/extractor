@@ -92,26 +92,26 @@ jobs:
         cpack: TGZ
 
   test-centos:
-    #needs: [utility, build-manylinux]
-    #if: needs.utility.outputs.release-check == 'release'
+    needs: [utility, build-manylinux]
+    if: needs.utility.outputs.release-check == 'release'
     runs-on: ubuntu-20.04
     container:
       image: public.ecr.aws/p0w8t0l8/ci-hosted-gh-centos7-gcc10.2.0
     
     steps:
     - name: Test ${{ github.event.repository.name }} release
-      uses: featuremine/actions/package/test@fix-release
+      uses: featuremine/actions/package/test@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.22'
 
   test-pythons:
-    #needs: [utility, build-manylinux]
-    #if: needs.utility.outputs.release-check == 'release'
+    needs: [utility, build-manylinux]
+    if: needs.utility.outputs.release-check == 'release'
     strategy:
       matrix:
         #TODO: add macos-12
-        os: [ubuntu-20.04, macos-12]
+        os: [ubuntu-20.04]
         python_version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
     runs-on: ${{ matrix.os }}
     steps:
@@ -120,7 +120,7 @@ jobs:
           python-version: ${{ matrix.python_version }}
 
       - name: Test ${{ github.event.repository.name }} release for python version ${{ matrix.python_version }}
-        uses: featuremine/actions/package/test@fix-release
+        uses: featuremine/actions/package/test@main
         with:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           yamal_version: '7.2.22'
