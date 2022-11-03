@@ -104,30 +104,11 @@ jobs:
       shell: bash
 
     - name: Test ${{ github.event.repository.name }} release
-      uses: featuremine/actions/package/test@main
-      with:
-        gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.22'
-
-  test-ubuntu:
-    runs-on: ubuntu-20.04
-    permissions: write-all
-    steps:
-    - name: Install python dependencies
-      run: pip3 install numpy msgpack pandas
-
-    - name: Test pip3 debug
-      run: curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py --force-reinstall && pip3 debug --verbose
-
-    - name: Test user
-      run: whoami
-
-    - name: Test ${{ github.event.repository.name }} release
       uses: featuremine/actions/package/test@fix-release
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.22'
-        sudo: true
+
 
   test-pythons:
     #needs: [utility, build-manylinux]
@@ -141,9 +122,6 @@ jobs:
       - uses: actions/setup-python@v4
         with:
           python-version: ${{ matrix.python_version }}
-
-      - name: print python location
-        run: echo ${pythonLocation}
 
       - name: Install python dependencies
         run: pip3 install numpy msgpack pandas
