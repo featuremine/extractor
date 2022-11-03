@@ -12,7 +12,7 @@ jobs:
     
     steps:
     - name: Publish release
-      uses: featuremine/actions/release@fix-release
+      uses: featuremine/actions/release@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         #TODO: Add pypi_token when extractor name is available
