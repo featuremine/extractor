@@ -178,8 +178,7 @@ struct the_convert_field_exec_2_0<fm_decimal64_t, fmc_decimal128_t>
         *(const fm_decimal64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
     auto *res = (fmc_decimal128_t *)fm_frame_get_ptr1(result, field_, 0);
     fmc_decimal128_from_int(res, val0.value);
-    fmc_error_t *err;
-    fmc_decimal128_div(res, res, &divisor_, &err);
+    fmc_decimal128_div(res, res, &divisor_);
   }
   fm_field_t field_;
   fmc_decimal128_t divisor_;

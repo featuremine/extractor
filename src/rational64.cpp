@@ -31,19 +31,17 @@ extern "C" {
 fm_rational64_t fm_rational64_zero() { return fm_rational64_t{0, 1}; }
 
 fm_rational64_t fm_rational64_new(int32_t num, int32_t den) {
-  if (den < 0) {
-    den = -1 * den;
-    num = -1 * num;
-  }
+  auto mult = -1 * (den < 0);
+  den *= mult;
+  num *= mult;
   auto div = std::gcd(num, den);
   return div ? fm_rational64_t{num / div, den / div} : fm_rational64_t{0, 0};
 }
 
 fm_rational64_t fm_rational64_new2(int64_t num, int64_t den) {
-  if (den < 0) {
-    den = -1 * den;
-    num = -1 * num;
-  }
+  auto mult = -1 * (den < 0);
+  den *= mult;
+  num *= mult;
   auto div = std::gcd(num, den);
 
   if (!div)
@@ -56,6 +54,7 @@ fm_rational64_t fm_rational64_new2(int64_t num, int64_t den) {
       den_n > std::numeric_limits<int32_t>::max()) {
     num_n = 0;
     den_n = 0;
+    // TODO: set overflow exception here
   }
   return fm_rational64_t{int32_t(num_n), int32_t(den_n)};
 }

@@ -5,6 +5,7 @@ extern "C" {
 }
 
 #include <Python.h>
+#include <fenv.h>
 
 template <bool B> struct integral_value { typedef long long type; };
 template <> struct integral_value<true> { typedef unsigned long long type; };
@@ -52,8 +53,13 @@ template <class T> struct py_type_convert {
           return false;
         }
         fmc_error_t *err;
+        feclearexcept(FE_ALL_EXCEPT);
         fmc_decimal128_from_str(&val, str, &err);
-        return !bool(err);
+        if (err && !fetestexcept(FE_INEXACT)) {
+          PyErr_SetString(PyExc_TypeError, "error converting from string");
+          return false;
+        }
+        return true;
       } else if (PyLong_Check(temp)) {
         uint64_t u = PyLong_AsUnsignedLongLong(temp);
         if (PyErr_Occurred()) {

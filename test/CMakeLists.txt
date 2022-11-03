@@ -396,6 +396,9 @@ extr_py_unit_test(
 extr_py_unit_test(
     coinbase
 )
+extr_py_unit_test(
+    numerical
+)
 
 add_library(
     ema_ext
