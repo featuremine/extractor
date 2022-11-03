@@ -129,26 +129,8 @@ jobs:
     - name: Install python dependencies
       run: pip3 install numpy msgpack pandas
 
-    - name: Test lib64
-      run: ls -las /lib64
-
-    - name: Test lib
-      run: ls -las /usr/local/lib
-
     - name: Test pip3 debug
       run: curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py --force-reinstall && pip3 debug --verbose
-
-    - name: Install numdiff
-      working-directory: /tmp
-      run: |
-        wget http://mirror.cedia.org.ec/nongnu/numdiff/numdiff-5.9.0.tar.gz
-        tar -xvzf numdiff-5.9.0.tar.gz
-        cd numdiff-5.9.0
-        ./configure
-        make
-        sudo make install
-        cd ..
-        rm -rf numdiff-5.9.0*
 
     - name: Test ${{ github.event.repository.name }} release
       uses: featuremine/actions/package/test@fix-release
@@ -156,21 +138,21 @@ jobs:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.22'
 
-  test-pythons:
-    #needs: [utility, build-manylinux]
-    #if: needs.utility.outputs.release-check == 'release'
-    strategy:
-      matrix:
-        os: [ubuntu-20.04]
-        python_version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
-    runs-on: ${{ matrix.os }}
-    steps:
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python_version }}
+  # test-pythons:
+  #   #needs: [utility, build-manylinux]
+  #   #if: needs.utility.outputs.release-check == 'release'
+  #   strategy:
+  #     matrix:
+  #       os: [ubuntu-20.04]
+  #       python_version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
+  #   runs-on: ${{ matrix.os }}
+  #   steps:
+  #     - uses: actions/setup-python@v4
+  #       with:
+  #         python-version: ${{ matrix.python_version }}
 
-      - name: Test ${{ github.event.repository.name }} release for python version ${{ matrix.python_version }}
-        uses: featuremine/actions/package/test@fix-release
-        with:
-          gh_token: ${{ secrets.GITHUB_TOKEN }}
-          yamal_version: '7.2.22'
+  #     - name: Test ${{ github.event.repository.name }} release for python version ${{ matrix.python_version }}
+  #       uses: featuremine/actions/package/test@fix-release
+  #       with:
+  #         gh_token: ${{ secrets.GITHUB_TOKEN }}
+  #         yamal_version: '7.2.22'
