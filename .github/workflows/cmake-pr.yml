@@ -128,7 +128,9 @@ jobs:
     steps:
     - name: Install python dependencies
       run: pip3 install numpy msgpack pandas
-      shell: bash
+
+    - name: Test dirs
+      run: ls -las /usr; ls -las /usr/local/; ls -las /usr/local/lib
 
     - name: Install numdiff
       working-directory: /tmp
@@ -141,7 +143,6 @@ jobs:
         make install
         cd ..
         rm -rf numdiff-5.9.0*
-      shell: bash
 
     - name: Test ${{ github.event.repository.name }} release
       uses: featuremine/actions/package/test@main
