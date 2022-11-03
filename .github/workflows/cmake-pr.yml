@@ -129,6 +129,9 @@ jobs:
     - name: Install python dependencies
       run: pip3 install numpy msgpack pandas
 
+    - name: Test pip3 debug
+      run: pip3 debug --verbose
+
     - name: Install numdiff
       working-directory: /tmp
       run: |
