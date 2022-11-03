@@ -127,6 +127,7 @@ jobs:
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.22'
+        sudo: true
 
   test-pythons:
     #needs: [utility, build-manylinux]
@@ -152,3 +153,4 @@ jobs:
         with:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           yamal_version: '7.2.22'
+          sudo: true
