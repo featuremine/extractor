@@ -124,7 +124,7 @@ jobs:
 
   test-ubuntu:
     runs-on: ubuntu-20.04
-    
+    permissions: read-all|write-all
     steps:
     - name: Install python dependencies
       run: pip3 install numpy msgpack pandas
