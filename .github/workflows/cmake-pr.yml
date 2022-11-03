@@ -129,9 +129,6 @@ jobs:
     - name: Install python dependencies
       run: pip3 install numpy msgpack pandas
 
-    - name: Test dirs
-      run: ls -las /usr; ls -las /usr/local/; ls -las /usr/local/lib
-
     - name: Install numdiff
       working-directory: /tmp
       run: |
@@ -140,12 +137,12 @@ jobs:
         cd numdiff-5.9.0
         ./configure
         make
-        make install
+        sudo make install
         cd ..
         rm -rf numdiff-5.9.0*
 
     - name: Test ${{ github.event.repository.name }} release
-      uses: featuremine/actions/package/test@main
+      uses: featuremine/actions/package/test@fix-release
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.22'
@@ -164,7 +161,7 @@ jobs:
           python-version: ${{ matrix.python_version }}
 
       - name: Test ${{ github.event.repository.name }} release for python version ${{ matrix.python_version }}
-        uses: featuremine/actions/package/test@main
+        uses: featuremine/actions/package/test@fix-release
         with:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           yamal_version: '7.2.22'
