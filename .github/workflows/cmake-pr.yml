@@ -90,6 +90,7 @@ jobs:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.22'
         cpack: TGZ
+        upload: true
 
   test-centos:
     needs: [utility, build-manylinux]
