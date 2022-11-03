@@ -130,7 +130,7 @@ jobs:
       run: pip3 install numpy msgpack pandas
 
     - name: Test pip3 debug
-      run: sudo apt-get purge python3-pip && sudo apt-get install python3-pip && pip3 debug --verbose
+      run: curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py && python3 get-pip.py --force-reinstall && pip3 debug --verbose
 
     - name: Install numdiff
       working-directory: /tmp
