@@ -55,7 +55,7 @@ jobs:
   #       #test_pypi_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
   build-macos:
-    needs: utility
+    #needs: utility
     runs-on: macos-12
 
     steps:
