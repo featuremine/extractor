@@ -2,7 +2,7 @@ name: Release Publication
 
 on:
   pull_request:
-    #types: closed
+    types: closed
 
 permissions: write-all
 
@@ -15,4 +15,5 @@ jobs:
       uses: featuremine/actions/release@fix-release
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        pypi_token: ${{ secrets.PYPI_API_TOKEN }}
+        #TODO: Add pypi_token when extractor name is available
+        #pypi_token: ${{ secrets.PYPI_API_TOKEN }}

@@ -51,6 +51,7 @@ jobs:
         yamal_version: '7.2.22'
         cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
+        #TODO: Add test_pypi_token when extractor name is available
         #test_pypi_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
   build-macos:
