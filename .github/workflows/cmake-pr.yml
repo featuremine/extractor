@@ -121,6 +121,9 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
 
+      - name: test
+        run: ls /usr && ls /usr/local
+
       - name: Test ${{ github.event.repository.name }} release for python version ${{ matrix.python_version }}
         uses: featuremine/actions/package/test@test-macos
         with:
