@@ -125,9 +125,6 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
 
-      - name: patch
-        run: pip3 install --upgrade setuptools pip
-
       - name: test pip
         run: pip3 debug --verbose
 
