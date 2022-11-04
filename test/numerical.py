@@ -21,8 +21,7 @@
 import extractor as extr
 import math
 
-if __name__ == "__main__":
-
+def decimal128():
     from_int = extr.Decimal128(0)
     assert isinstance(from_int, extr.Decimal128)
     assert int(from_int) == 0
@@ -90,3 +89,7 @@ if __name__ == "__main__":
 
     v1 = extr.Decimal128.from_float(2.35)
     assert float(v1) == 2.35, float(v1)
+
+if __name__ == "__main__":
+
+    decimal128()
