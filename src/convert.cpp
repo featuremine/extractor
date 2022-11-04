@@ -113,54 +113,50 @@ struct the_convert_field_exec_2_0<T, fmc_decimal128_t> : convert_field_exec {
 };
 
 template <class T>
-struct the_convert_field_exec_2_0<T, fm_rational64_t> : convert_field_exec {
+struct the_convert_field_exec_2_0<T, fmc_rational64_t> : convert_field_exec {
   the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
   void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
             fm_exec_ctx_t *ctx) override {
     auto val0 = *(const T *)fm_frame_get_cptr1(argv[0], field_, 0);
-    *(fm_rational64_t *)fm_frame_get_ptr1(result, field_, 0) =
-        fm_rational64_new2(val0, 1);
+    fmc_rational64_new2((fmc_rational64_t *)fm_frame_get_ptr1(result, field_, 0), val0, 1);
   }
   fm_field_t field_;
 };
 
 template <>
-struct the_convert_field_exec_2_0<fmc_rprice_t, fm_rational64_t>
+struct the_convert_field_exec_2_0<fmc_rprice_t, fmc_rational64_t>
     : convert_field_exec {
   the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
   void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
             fm_exec_ctx_t *ctx) override {
     auto val0 = *(const fmc_rprice_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    *(fm_rational64_t *)fm_frame_get_ptr1(result, field_, 0) =
-        fm_rational64_from_rprice(val0);
+    fmc_rational64_from_rprice((fmc_rational64_t *)fm_frame_get_ptr1(result, field_, 0), &val0);
   }
   fm_field_t field_;
 };
 
 template <>
-struct the_convert_field_exec_2_0<fmc_decimal128_t, fm_rational64_t>
+struct the_convert_field_exec_2_0<fmc_decimal128_t, fmc_rational64_t>
     : convert_field_exec {
   the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
   void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
             fm_exec_ctx_t *ctx) override {
     auto val0 =
         *(const fmc_decimal128_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    *(fm_rational64_t *)fm_frame_get_ptr1(result, field_, 0) =
-        fm_rational64_from_double(
+    fmc_rational64_from_double((fmc_rational64_t *)fm_frame_get_ptr1(result, field_, 0),
             fmc::conversion<fmc_decimal128_t, double>()(val0), 32);
   }
   fm_field_t field_;
 };
 
 template <class T>
-struct the_convert_field_exec_2_0<fm_rational64_t, T> : convert_field_exec {
+struct the_convert_field_exec_2_0<fmc_rational64_t, T> : convert_field_exec {
   the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
   void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
             fm_exec_ctx_t *ctx) override {
-    auto val0 =
-        *(const fm_rational64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    *(T *)fm_frame_get_ptr1(result, field_, 0) =
-        T(fm_rational64_to_double(val0));
+    double val0;
+    fmc_rational64_to_double(&val0, (const fmc_rational64_t *)fm_frame_get_cptr1(argv[0], field_, 0));
+    *(T *)fm_frame_get_ptr1(result, field_, 0) = T(val0);
   }
   fm_field_t field_;
 };

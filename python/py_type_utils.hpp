@@ -112,14 +112,14 @@ template <class T> struct py_type_convert {
         val = Rational64_val(temp);
         return !PyErr_Occurred();
       } else if (PyFloat_Check(temp)) {
-        val = fm_rational64_from_double(PyFloat_AsDouble(temp), 32);
+        fmc_rational64_from_double(&val, PyFloat_AsDouble(temp), 32);
         return true;
       } else if (PyLong_Check(temp)) {
         int64_t i = PyLong_AsLongLong(temp);
         if (PyErr_Occurred()) {
           return false;
         } else {
-          val = fm_rational64_from_int(i);
+          fmc_rational64_from_int(&val, i);
           return true;
         }
       }

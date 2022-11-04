@@ -73,7 +73,7 @@ FMMODFUNC bool fm_comp_sys_py_comp(fm_comp_sys_t *sys);
 PyMODINIT_FUNC fm_extractor_py_init(void) FMMODFUNC;
 
 #include <fmc/decimal128.h>
-#include <extractor/rational64.h>
+#include <fmc/rational64.h>
 
 /**
  * @brief Checks for object to be of extractor decimal 128 type
@@ -84,6 +84,6 @@ FMMODFUNC bool Rational64_Check(PyObject *obj);
 
 FMMODFUNC fmc_decimal128_t Decimal128_val(PyObject *obj);
 FMMODFUNC fmc_rprice_t Rprice_val(PyObject *obj);
-FMMODFUNC fm_rational64_t Rational64_val(PyObject *obj);
+FMMODFUNC fmc_rational64_t Rational64_val(PyObject *obj);
 
 #endif // __FM_PY_EXTRACTOR_H__

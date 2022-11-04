@@ -56,7 +56,7 @@ extr_unit_test(
     "${EXTRACTOR_SRC_DIR}/type_space.cpp"
     "${EXTRACTOR_SRC_DIR}/type_error.cpp"
     "${EXTRACTOR_SRC_DIR}/type_decl.cpp"
-    "${EXTRACTOR_SRC_DIR}/rational64.cpp"
+    # "${EXTRACTOR_SRC_DIR}/rational64.cpp"
 )
 extr_unit_test(
     NAME
@@ -99,7 +99,7 @@ extr_unit_test(
     "${EXTRACTOR_SRC_DIR}/type_error.cpp"
     "${EXTRACTOR_SRC_DIR}/type_decl.cpp"
     "${EXTRACTOR_SRC_DIR}/exec_ctx.cpp"
-    "${EXTRACTOR_SRC_DIR}/rational64.cpp"
+    # "${EXTRACTOR_SRC_DIR}/rational64.cpp"
 )
 extr_unit_test(
     NAME
@@ -109,7 +109,7 @@ extr_unit_test(
     "${EXTRACTOR_SRC_DIR}/type_space.cpp"
     "${EXTRACTOR_SRC_DIR}/type_error.cpp"
     "${EXTRACTOR_SRC_DIR}/type_decl.cpp"
-    "${EXTRACTOR_SRC_DIR}/rational64.cpp"
+    # "${EXTRACTOR_SRC_DIR}/rational64.cpp"
 )
 extr_unit_test(
     NAME
@@ -282,9 +282,9 @@ extr_py_unit_test(
 extr_py_unit_test(
     book_update
 )
-extr_py_unit_test(
-    rational64
-)
+# extr_py_unit_test(
+#     rational64
+# )
 extr_py_unit_test(
     perf_timer
 )

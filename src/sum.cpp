@@ -34,7 +34,7 @@ extern "C" {
 #include "extractor/comp_def.hpp"
 #include "fmc++/rprice.hpp"
 #include "extractor/frame.hpp"
-#include "extractor/rational64.hpp"
+#include "fmc++/rational64.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/time.hpp"
 
@@ -61,7 +61,7 @@ template <class T> struct the_sum_field_exec_2_0 : sum_field_exec {
     T val = T();
     for (unsigned i = 0; i < argc; ++i) {
       T curr_val = *(const T *)fm_frame_get_cptr1(argv[i], field_, 0);
-      if constexpr (is_floating_point_v<T> || is_same_v<T, fm_rational64_t>) {
+      if constexpr (is_floating_point_v<T> || is_same_v<T, fmc_rational64_t>) {
         if (!isnan(curr_val))
           val = val + curr_val;
       } else {
@@ -75,7 +75,7 @@ template <class T> struct the_sum_field_exec_2_0 : sum_field_exec {
     auto val_old = *(const T *)fm_frame_get_cptr1(o_val, field_, 0);
     auto val_new = *(const T *)fm_frame_get_cptr1(n_val, field_, 0);
     auto val0 = *(const T *)fm_frame_get_cptr1(result, field_, 0);
-    if constexpr (is_floating_point_v<T> || is_same_v<T, fm_rational64_t>) {
+    if constexpr (is_floating_point_v<T> || is_same_v<T, fmc_rational64_t>) {
       if (!isnan(val_old))
         val0 = val0 - val_old;
       if (!isnan(val_new))

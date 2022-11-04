@@ -117,7 +117,7 @@ const char *rational64_parser(const char *begin, const char *end, void *data,
   }
 
   if (e == end) {
-    *(fm_rational64_t *)data = fm_rational64_new2(num, 1);
+    fmc_rational64_new2((fmc_rational64_t *)data, num, 1);
     return end;
   }
 
@@ -138,7 +138,7 @@ const char *rational64_parser(const char *begin, const char *end, void *data,
     return e;
   }
 
-  *(fm_rational64_t *)data = fm_rational64_new2(num, den);
+  fmc_rational64_new2((fmc_rational64_t *)data, num, den);
 
   return d;
 }
@@ -365,7 +365,7 @@ bool nano_fwriter(FILE *file, const void *val, const char *fmt) {
 }
 
 bool rational64_fwriter(FILE *file, const void *val, const char *fmt) {
-  auto value = (*(fm_rational64_t *)val);
+  auto value = (*(fmc_rational64_t *)val);
   return fprintf(file, "%i/%i", value.num, value.den) > 0;
 }
 

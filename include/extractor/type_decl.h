@@ -33,7 +33,7 @@
 #include <stdlib.h>
 
 #include "fmc/rprice.h"
-#include "extractor/rational64.h"
+#include "fmc/rational64.h"
 #include "fmc/decimal128.h"
 #include "fmc/time.h"
 
@@ -61,7 +61,7 @@ typedef uint32_t UINT32;
 typedef uint64_t UINT64;
 typedef float FLOAT32;
 typedef double FLOAT64;
-typedef fm_rational64_t RATIONAL64;
+typedef fmc_rational64_t RATIONAL64;
 typedef fmc_rprice_t RPRICE;
 typedef fmc_decimal128_t DECIMAL128;
 typedef fmc_time64_t TIME64;

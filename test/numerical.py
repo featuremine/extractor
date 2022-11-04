@@ -251,36 +251,36 @@ def rational64():
 
     inf = extr.Rational64(math.inf)
     assert isinstance(inf, extr.Rational64)
-    # assert float(inf) == math.inf FIX THIS
-    # assert not inf.is_signed()
+    assert float(inf) == math.inf
+    assert not inf.is_signed()
     assert not inf.is_zero()
     assert not math.isnan(inf)
-    # assert math.isinf(inf)
-    # assert not math.isfinite(inf)
+    assert math.isinf(inf)
+    assert not math.isfinite(inf)
 
     inf = extr.Rational64(-math.inf)
     assert isinstance(inf, extr.Rational64)
-    #assert float(inf) == -math.inf FIX THIS
-    #assert inf.is_signed()
-    #assert not inf.is_zero()
+    assert float(inf) == -math.inf
+    assert inf.is_signed()
+    assert not inf.is_zero()
     assert not math.isnan(inf)
-    #assert math.isinf(inf)
-    #assert not math.isfinite(inf)
-    #assert float(inf) == -math.inf
+    assert math.isinf(inf)
+    assert not math.isfinite(inf)
+    assert float(inf) == -math.inf
 
     nan = extr.Rational64(math.nan)
     assert isinstance(nan, extr.Rational64)
-    #assert float(nan) == math.nan
+    #assert float(nan) == math.nan fix this
     assert not nan.is_signed()
-    assert nan.is_zero()
-    assert not math.isnan(nan)
-    assert not math.isnan(nan)
-    assert math.isfinite(nan)
+    assert not nan.is_zero()
+    assert math.isnan(nan)
+    assert not math.isinf(nan)
+    assert not math.isfinite(nan)
 
     assert abs(extr.Rational64(5)) == extr.Rational64(5)
     assert abs(extr.Rational64(-5)) == extr.Rational64(5)
-    #assert abs(extr.Rational64(math.inf)) == extr.Rational64(math.inf)
-    #assert abs(extr.Rational64(-math.inf)) == extr.Rational64(math.inf)
+    # assert abs(extr.Rational64(math.inf)) == extr.Rational64(math.inf)
+    # assert abs(extr.Rational64(-math.inf)) == extr.Rational64(math.inf)
 
     assert extr.Rational64(5) + extr.Rational64(5) == extr.Rational64(10)
     assert extr.Rational64(5) - extr.Rational64(10) == extr.Rational64(-5)

@@ -47,7 +47,7 @@ inline bool msgpack_writer(cmp_ctx_t &cmp, float val) {
 inline bool msgpack_writer(cmp_ctx_t &cmp, double val) {
   return cmp_write_decimal(&cmp, val);
 }
-inline bool msgpack_writer(cmp_ctx_t &cmp, fm_rational64_t val) {
+inline bool msgpack_writer(cmp_ctx_t &cmp, fmc_rational64_t val) {
   if (!cmp_write_array(&cmp, 2))
     return false;
   if (!cmp_write_integer(&cmp, val.num))
@@ -191,7 +191,7 @@ inline bool msgpack_parser(cmp_ctx_t &cmp, float &val) {
 inline bool msgpack_parser(cmp_ctx_t &cmp, double &val) {
   return cmp_read_decimal(&cmp, &val);
 }
-inline bool msgpack_parser(cmp_ctx_t &cmp, fm_rational64_t &val) {
+inline bool msgpack_parser(cmp_ctx_t &cmp, fmc_rational64_t &val) {
   uint32_t arr_len;
   if (!cmp_read_array(&cmp, &arr_len))
     return false;

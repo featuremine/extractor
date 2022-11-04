@@ -45,7 +45,7 @@ std::string src_dir;
 #include "logical_or.hpp"
 #include "module.hpp"
 #include "module_serial.hpp"
-#include "rational.hpp"
+//#include "rational.hpp"
 #include "split_sample.hpp"
 #include "split_sample_capture.hpp"
 #include "string_utils_tests.hpp"

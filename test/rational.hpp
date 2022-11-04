@@ -25,104 +25,104 @@
 
 #include "extractor/comp_def.hpp"
 #include "fmc++/rprice.hpp"
-#include "extractor/rational64.hpp"
+#include "fmc++/rational64.hpp"
 
 #include "fmc++/gtestwrap.hpp"
 #include <sstream>
 
 TEST(rational, api) {
-  auto zero = fm_rational64_zero();
+  auto zero = fmc_rational64_zero();
   ASSERT_EQ(zero.num, 0);
   ASSERT_EQ(zero.den, 1);
 
-  auto sample = fm_rational64_new(31, 32);
+  auto sample = fmc_rational64_new(31, 32);
   ASSERT_EQ(sample.num, 31);
   ASSERT_EQ(sample.den, 32);
 
-  double val = fm_rational64_to_double(sample);
+  double val = fmc_rational64_to_double(sample);
   ASSERT_DOUBLE_EQ(val, 0.96875);
 
-  auto sample_from_double = fm_rational64_from_double(val, 32);
+  auto sample_from_double = fmc_rational64_from_double(val, 32);
   ASSERT_EQ(sample_from_double.num, 31);
   ASSERT_EQ(sample_from_double.den, 32);
 
-  ASSERT_TRUE(fm_rational64_equal(sample, sample_from_double));
+  ASSERT_TRUE(fmc_rational64_equal(sample, sample_from_double));
 
-  auto sample_from_int = fm_rational64_from_int(68);
+  auto sample_from_int = fmc_rational64_from_int(68);
   ASSERT_EQ(sample_from_int.num, 68);
   ASSERT_EQ(sample_from_int.den, 1);
 
-  ASSERT_TRUE(fm_rational64_less(zero, sample));
+  ASSERT_TRUE(fmc_rational64_less(zero, sample));
   ASSERT_TRUE(zero < sample);
   ASSERT_TRUE(zero <= sample);
 
   ASSERT_TRUE(zero <= zero);
   ASSERT_TRUE(zero >= zero);
 
-  ASSERT_TRUE(fm_rational64_greater(sample_from_int, sample));
+  ASSERT_TRUE(fmc_rational64_greater(sample_from_int, sample));
   ASSERT_TRUE(sample_from_int > sample);
   ASSERT_TRUE(sample_from_int >= sample);
 
-  ASSERT_TRUE(fm_rational64_notequal(sample_from_int, sample_from_double));
+  ASSERT_TRUE(fmc_rational64_notequal(sample_from_int, sample_from_double));
   ASSERT_TRUE(sample_from_int != sample_from_double);
 
-  auto res_div = fm_rational64_div(sample_from_int, sample_from_double);
+  auto res_div = fmc_rational64_div(sample_from_int, sample_from_double);
   ASSERT_EQ(res_div.num, 2176);
   ASSERT_EQ(res_div.den, 31);
   ASSERT_EQ(res_div, sample_from_int / sample_from_double);
 
-  auto inf_div = fm_rational64_div(sample_from_int, zero);
+  auto inf_div = fmc_rational64_div(sample_from_int, zero);
   ASSERT_EQ(inf_div.num, 1);
   ASSERT_EQ(inf_div.den, 0);
   ASSERT_TRUE(inf_div == sample_from_int / zero);
 
-  auto res_add = fm_rational64_add(sample, sample_from_double);
+  auto res_add = fmc_rational64_add(sample, sample_from_double);
   ASSERT_EQ(res_add.num, 31);
   ASSERT_EQ(res_add.den, 16);
   ASSERT_EQ(res_add, sample + sample_from_double);
 
-  auto res_mul = fm_rational64_mul(sample_from_int, sample_from_double);
+  auto res_mul = fmc_rational64_mul(sample_from_int, sample_from_double);
   ASSERT_EQ(res_mul.num, 527);
   ASSERT_EQ(res_mul.den, 8);
   ASSERT_EQ(res_mul, sample_from_int * sample_from_double);
 
-  auto res_sub = fm_rational64_sub(res_add, res_mul);
+  auto res_sub = fmc_rational64_sub(res_add, res_mul);
   ASSERT_EQ(res_sub.num, -1023);
   ASSERT_EQ(res_sub.den, 16);
   ASSERT_EQ(res_sub, res_add - res_mul);
 
-  auto nan = fm_rational64_nan();
+  auto nan = fmc_rational64_nan();
   ASSERT_EQ(nan.num, 0);
   ASSERT_EQ(nan.den, 0);
 
-  ASSERT_TRUE(fm_rational64_isnan(nan));
+  ASSERT_TRUE(fmc_rational64_is_nan(nan));
   ASSERT_TRUE(std::isnan(nan));
-  ASSERT_FALSE(fm_rational64_isnan(res_div));
+  ASSERT_FALSE(fmc_rational64_is_nan(res_div));
 
-  auto inf = fm_rational64_inf();
+  auto inf = fmc_rational64_inf();
   ASSERT_EQ(inf.num, 1);
   ASSERT_EQ(inf.den, 0);
 
-  ASSERT_TRUE(fm_rational64_isinf(inf));
-  ASSERT_TRUE(fm_rational64_isinf(inf_div));
-  ASSERT_FALSE(fm_rational64_isinf(res_sub));
+  ASSERT_TRUE(fmc_rational64_isinf(inf));
+  ASSERT_TRUE(fmc_rational64_isinf(inf_div));
+  ASSERT_FALSE(fmc_rational64_isinf(res_sub));
 }
 
 TEST(rational, decimal_conversions) {
   double val = -9 - (31 / 32);
   fmc_rprice_t d;
   fmc_rprice_from_double(&d, val);
-  auto r = fm_rational64_from_double(val, 32);
-  ASSERT_EQ(r, fm_rational64_from_rprice(d));
-  ASSERT_EQ(d, fm_rational64_to_rprice(r));
-  ASSERT_DOUBLE_EQ(fm_rational64_to_double(r), val);
+  auto r = fmc_rational64_from_double(val, 32);
+  ASSERT_EQ(r, fmc_rational64_from_rprice(d));
+  ASSERT_EQ(d, fmc_rational64_to_rprice(r));
+  ASSERT_DOUBLE_EQ(fmc_rational64_to_double(r), val);
   double res;
   fmc_rprice_to_double(&res, &d);
   ASSERT_DOUBLE_EQ(res, val);
 }
 
 TEST(rational, serialization) {
-  auto a = fm_rational64_new(4, 5);
+  auto a = fmc_rational64_new(4, 5);
   std::stringstream s1;
   s1 << a;
   ASSERT_EQ(s1.str().compare("4/5"), 0);
@@ -138,7 +138,7 @@ TEST(rational, serialization) {
   std::stringstream s5;
   s5 << a;
   std::stringstream s6;
-  s6 << fm_rational64_to_double(a);
+  s6 << fmc_rational64_to_double(a);
   ASSERT_EQ(s5.str().compare("3257/1000"), 0);
   ASSERT_EQ(s6.str().compare("3.257"), 0);
 }
