@@ -1,11 +1,10 @@
 #pragma once
 
-extern "C" {
 #include <fmc/decimal128.h>
-}
 
 #include <Python.h>
 #include <fenv.h>
+#include <extractor/python/py_extractor.h>
 
 template <bool B> struct integral_value { typedef long long type; };
 template <> struct integral_value<true> { typedef unsigned long long type; };
@@ -45,7 +44,13 @@ template <class T> struct py_type_convert {
         PyErr_SetString(PyExc_TypeError, "Expect single argument");
         return false;
       }
-      if (PyUnicode_Check(temp)) {
+      if (Decimal128_Check(temp)) {
+        val = Decimal128_val(temp);
+        return !PyErr_Occurred();
+      } else if (PyFloat_Check(temp)) {
+        fmc_decimal128_from_double(&val, PyFloat_AsDouble(temp));
+        return true;
+      } else if (PyUnicode_Check(temp)) {
         Py_ssize_t sz = 0;
         const char *str = PyUnicode_AsUTF8AndSize(temp, &sz);
         if (sz > FMC_DECIMAL128_STR_SIZE) {

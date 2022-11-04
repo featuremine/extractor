@@ -23,6 +23,7 @@
 #include <Python.h>
 #include "fmc/decimal128.h"
 #include <py_type_utils.hpp>
+#include <extractor/python/py_extractor.h>
 
 struct ExtractorBaseTypeDecimal128 {
   PyObject_HEAD;
@@ -43,12 +44,61 @@ struct ExtractorBaseTypeDecimal128 {
   static PyObject *is_qnan(PyObject *self, PyObject *args);
   static PyObject *is_snan(PyObject *self, PyObject *args);
 
+  static PyObject *nb_add(PyObject *lhs, PyObject *rhs);
+  static PyObject *nb_substract(PyObject *lhs, PyObject *rhs);
+  static PyObject *nb_multiply(PyObject *lhs, PyObject *rhs);
+
   static PyObject *nb_absolute(PyObject *self);
+
+  static PyObject *nb_int(PyObject *self);
   static PyObject *nb_float(PyObject *self);
+
+  static PyObject *nb_inplace_add(PyObject *self, PyObject *rhs);
+  static PyObject *nb_inplace_substract(PyObject *self, PyObject *rhs);
+  static PyObject *nb_inplace_multiply(PyObject *self, PyObject *rhs);
+
+  static PyObject *nb_true_divide(PyObject *lhs, PyObject *rhs);
+  static PyObject *nb_inplace_true_divide(PyObject *self, PyObject *rhs);
 
   static PyNumberMethods tp_as_number;
   static PyMethodDef tp_methods [];
 };
+
+PyObject *ExtractorBaseTypeDecimal128::nb_add(PyObject *lhs, PyObject *rhs) {
+  return ExtractorBaseTypeDecimal128::py_new(((ExtractorBaseTypeDecimal128 *)lhs)->val + ((ExtractorBaseTypeDecimal128 *)rhs)->val);
+}
+
+PyObject *ExtractorBaseTypeDecimal128::nb_substract(PyObject *lhs, PyObject *rhs) {
+  return ExtractorBaseTypeDecimal128::py_new(((ExtractorBaseTypeDecimal128 *)lhs)->val - ((ExtractorBaseTypeDecimal128 *)rhs)->val);
+}
+
+PyObject *ExtractorBaseTypeDecimal128::nb_multiply(PyObject *lhs, PyObject *rhs) {
+  return ExtractorBaseTypeDecimal128::py_new(((ExtractorBaseTypeDecimal128 *)lhs)->val * ((ExtractorBaseTypeDecimal128 *)rhs)->val);
+}
+
+PyObject *ExtractorBaseTypeDecimal128::nb_true_divide(PyObject *self, PyObject *rhs) {
+  return ExtractorBaseTypeDecimal128::py_new(((ExtractorBaseTypeDecimal128 *)self)->val / ((ExtractorBaseTypeDecimal128 *)rhs)->val);
+}
+
+PyObject *ExtractorBaseTypeDecimal128::nb_inplace_add(PyObject *self, PyObject *rhs) {
+  fmc::decimal128::upcast(((ExtractorBaseTypeDecimal128 *)self)->val) += ((ExtractorBaseTypeDecimal128 *)rhs)->val;
+  return self;
+}
+
+PyObject *ExtractorBaseTypeDecimal128::nb_inplace_substract(PyObject *self, PyObject *rhs) {
+  fmc::decimal128::upcast(((ExtractorBaseTypeDecimal128 *)self)->val) -= ((ExtractorBaseTypeDecimal128 *)rhs)->val;
+  return self;
+}
+
+PyObject *ExtractorBaseTypeDecimal128::nb_inplace_multiply(PyObject *self, PyObject *rhs) {
+  ((ExtractorBaseTypeDecimal128 *)self)->val = ((ExtractorBaseTypeDecimal128 *)self)->val * ((ExtractorBaseTypeDecimal128 *)rhs)->val;
+  return self;
+}
+
+PyObject *ExtractorBaseTypeDecimal128::nb_inplace_true_divide(PyObject *self, PyObject *rhs) {
+  ((ExtractorBaseTypeDecimal128 *)self)->val = ((ExtractorBaseTypeDecimal128 *)self)->val / ((ExtractorBaseTypeDecimal128 *)rhs)->val;
+  return self;
+}
 
 PyObject *ExtractorBaseTypeDecimal128::nb_absolute(PyObject *self) {
   fmc_decimal128_t absval;
@@ -62,10 +112,21 @@ PyObject *ExtractorBaseTypeDecimal128::nb_float(PyObject *self) {
   return PyFloat_FromDouble(strtod(str, nullptr));
 }
 
+PyObject *ExtractorBaseTypeDecimal128::nb_int(PyObject *self) {
+  int64_t res;
+  fmc_error_t *err;
+  fmc_decimal128_to_int(&res, &((ExtractorBaseTypeDecimal128 *)self)->val, &err);
+  if (err && fetestexcept(FE_ALL_EXCEPT) != FE_INEXACT) {
+    PyErr_SetString(PyExc_RuntimeError, "Error produced attempting to convert to int");
+    return nullptr;
+  }
+  return PyLong_FromLong(res);
+}
+
 PyNumberMethods ExtractorBaseTypeDecimal128::tp_as_number = {
-  0, //  binaryfunc nb_add;
-  0, //  binaryfunc nb_subtract;
-  0, //  binaryfunc nb_multiply;
+  ExtractorBaseTypeDecimal128::nb_add, //  binaryfunc nb_add;
+  ExtractorBaseTypeDecimal128::nb_substract, //  binaryfunc nb_subtract;
+  ExtractorBaseTypeDecimal128::nb_multiply, //  binaryfunc nb_multiply;
   0, //  binaryfunc nb_remainder;
   0, //  binaryfunc nb_divmod;
   0, //  ternaryfunc nb_power;
@@ -79,13 +140,13 @@ PyNumberMethods ExtractorBaseTypeDecimal128::tp_as_number = {
   0, //  binaryfunc nb_and;
   0, //  binaryfunc nb_xor;
   0, //  binaryfunc nb_or;
-  0, //  unaryfunc nb_int;
+  ExtractorBaseTypeDecimal128::nb_int, //  unaryfunc nb_int;
   0, //  void *nb_reserved;
   ExtractorBaseTypeDecimal128::nb_float, //  unaryfunc nb_float;
 
-  0, //  binaryfunc nb_inplace_add;
-  0, //  binaryfunc nb_inplace_subtract;
-  0, //  binaryfunc nb_inplace_multiply;
+  ExtractorBaseTypeDecimal128::nb_inplace_add, //  binaryfunc nb_inplace_add;
+  ExtractorBaseTypeDecimal128::nb_inplace_substract, //  binaryfunc nb_inplace_subtract;
+  ExtractorBaseTypeDecimal128::nb_inplace_multiply, //  binaryfunc nb_inplace_multiply;
   0, //  binaryfunc nb_inplace_remainder;
   0, //  ternaryfunc nb_inplace_power;
   0, //  binaryfunc nb_inplace_lshift;
@@ -95,9 +156,9 @@ PyNumberMethods ExtractorBaseTypeDecimal128::tp_as_number = {
   0, //  binaryfunc nb_inplace_or;
 
   0, //  binaryfunc nb_floor_divide;
-  0, //  binaryfunc nb_true_divide;
+  ExtractorBaseTypeDecimal128::nb_true_divide, //  binaryfunc nb_true_divide;
   0, //  binaryfunc nb_inplace_floor_divide;
-  0, //  binaryfunc nb_inplace_true_divide;
+  ExtractorBaseTypeDecimal128::nb_inplace_true_divide, //  binaryfunc nb_inplace_true_divide;
 
   0, //  unaryfunc nb_index;
 
@@ -293,8 +354,7 @@ bool ExtractorBaseTypeDecimal128::init(PyObject *m) {
 
 PyObject *ExtractorBaseTypeDecimal128::py_richcmp(PyObject *obj1,
                                               PyObject *obj2, int op) {
-  auto type = &ExtractorBaseTypeDecimal128Type;
-  if (!PyObject_TypeCheck(obj1, type) || !PyObject_TypeCheck(obj2, type)) {
+  if (!Decimal128_Check(obj1) || !Decimal128_Check(obj2)) {
     return PyBool_FromLong(op == Py_NE);
   }
   int c = 0;
@@ -343,4 +403,16 @@ PyObject *ExtractorBaseTypeDecimal128::is_qnan(PyObject *self, PyObject *args) {
 
 PyObject *ExtractorBaseTypeDecimal128::is_snan(PyObject *self, PyObject *args) {
   return PyBool_FromLong(fmc_decimal128_is_snan(&((ExtractorBaseTypeDecimal128 *)self)->val));
+}
+
+bool Decimal128_Check(PyObject *obj) {
+  return PyObject_TypeCheck(obj, &ExtractorBaseTypeDecimal128Type);
+}
+
+fmc_decimal128_t Decimal128_val(PyObject *obj) {
+  if (!Decimal128_Check(obj)) {
+    PyErr_SetString(PyExc_RuntimeError, "Object not of type Decimal128");
+    return {};
+  }
+  return ((ExtractorBaseTypeDecimal128 *)obj)->val;
 }
