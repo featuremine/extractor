@@ -276,8 +276,8 @@ def rational64():
 
     assert abs(extr.Rational64(5)) == extr.Rational64(5)
     assert abs(extr.Rational64(-5)) == extr.Rational64(5)
-    # assert abs(extr.Rational64(math.inf)) == extr.Rational64(math.inf)
-    # assert abs(extr.Rational64(-math.inf)) == extr.Rational64(math.inf)
+    assert abs(extr.Rational64(math.inf)) == extr.Rational64(math.inf)
+    assert abs(extr.Rational64(-math.inf)) == extr.Rational64(math.inf)
 
     assert extr.Rational64(5) + extr.Rational64(5) == extr.Rational64(10)
     assert extr.Rational64(5) - extr.Rational64(10) == extr.Rational64(-5)
