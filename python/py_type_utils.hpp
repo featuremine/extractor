@@ -81,6 +81,27 @@ template <class T> struct py_type_convert {
           return true;
         }
       }
+    } else if constexpr (is_same_v<T, RPRICE>) {
+      PyObject *temp;
+      if (!PyArg_ParseTuple(args, "O", &temp)) {
+        PyErr_SetString(PyExc_TypeError, "Expect single argument");
+        return false;
+      }
+      if (Rprice_Check(temp)) {
+        val = Rprice_val(temp);
+        return !PyErr_Occurred();
+      } else if (PyFloat_Check(temp)) {
+        fmc_rprice_from_double(&val, PyFloat_AsDouble(temp));
+        return true;
+      } else if (PyLong_Check(temp)) {
+        int64_t i = PyLong_AsLongLong(temp);
+        if (PyErr_Occurred()) {
+          return false;
+        } else {
+          fmc_rprice_from_int(&val, i);
+          return true;
+        }
+      }
     }
     PyErr_SetString(PyExc_TypeError, "unknown type");
     return false;

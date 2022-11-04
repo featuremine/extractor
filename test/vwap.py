@@ -85,8 +85,8 @@ if __name__ == "__main__":
         (("receive", extr.Time64, ""),
          ("ticker", extr.Array(extr.Char, 16), ""),
          ("market", extr.Array(extr.Char, 32), ""),
-         ("bidprice", extr.Decimal64, ""),
-         ("askprice", extr.Decimal64, ""),
+         ("bidprice", extr.Rprice, ""),
+         ("askprice", extr.Rprice, ""),
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")))
 
@@ -103,7 +103,7 @@ if __name__ == "__main__":
         (("receive", extr.Time64, ""),
          ("ticker", extr.Array(extr.Char, 16), ""),
          ("market", extr.Array(extr.Char, 32), ""),
-         ("price", extr.Decimal64, ""),
+         ("price", extr.Rprice, ""),
          ("qty", extr.Int32, ""),
          ("side", extr.Int32, "")))
 
@@ -144,10 +144,10 @@ if __name__ == "__main__":
 
     stream_fields = op.fields(out_stream, ("end_askqty","end_bidqty","end_receive","end_time","notional","shares","start_askqty","start_bidqty","start_receive","ticker","vwap"))
     out_stream = op.combine(stream_fields, tuple(),
-                            op.convert(out_stream.end_askprice, extr.Decimal64), tuple(),
-                            op.convert(out_stream.end_bidprice, extr.Decimal64), tuple(),
-                            op.convert(out_stream.start_askprice, extr.Decimal64), tuple(),
-                            op.convert(out_stream.start_bidprice, extr.Decimal64), tuple()
+                            op.convert(out_stream.end_askprice, extr.Rprice), tuple(),
+                            op.convert(out_stream.end_bidprice, extr.Rprice), tuple(),
+                            op.convert(out_stream.start_askprice, extr.Rprice), tuple(),
+                            op.convert(out_stream.start_bidprice, extr.Rprice), tuple()
                             )
 
     op.csv_record(out_stream, bar_file)

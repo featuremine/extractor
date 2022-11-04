@@ -85,8 +85,8 @@ if __name__ == "__main__":
         (("receive", extr.Time64, ""),
          ("ticker", extr.Array(extr.Char, 16), ""),
          ("market", extr.Array(extr.Char, 32), ""),
-         ("bidprice", extr.Decimal64, ""),
-         ("askprice", extr.Decimal64, ""),
+         ("bidprice", extr.Rprice, ""),
+         ("askprice", extr.Rprice, ""),
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")))
 
@@ -105,7 +105,7 @@ if __name__ == "__main__":
         (("receive", extr.Time64, ""),
          ("ticker", extr.Array(extr.Char, 16), ""),
          ("market", extr.Array(extr.Char, 32), ""),
-         ("price", extr.Decimal64, ""),
+         ("price", extr.Rprice, ""),
          ("qty", extr.Int32, ""),
          ("side", extr.Int32, "")))
 

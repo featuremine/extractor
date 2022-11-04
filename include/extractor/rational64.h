@@ -29,7 +29,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include "extractor/decimal64.h"
+#include "fmc/rprice.h"
 #include "fmc/platform.h"
 
 typedef struct {
@@ -42,9 +42,9 @@ FMMODFUNC fm_rational64_t fm_rational64_new(int32_t num, int32_t den);
 FMMODFUNC fm_rational64_t fm_rational64_new2(int64_t num, int64_t den);
 FMMODFUNC fm_rational64_t fm_rational64_from_double(double value, int32_t base);
 FMMODFUNC fm_rational64_t fm_rational64_from_int(int value);
-FMMODFUNC fm_rational64_t fm_rational64_from_decimal64(fm_decimal64_t t);
+FMMODFUNC fm_rational64_t fm_rational64_from_rprice(fmc_rprice_t t);
 FMMODFUNC double fm_rational64_to_double(fm_rational64_t t);
-FMMODFUNC fm_decimal64_t fm_rational64_to_decimal64(fm_rational64_t t);
+FMMODFUNC fmc_rprice_t fm_rational64_to_rprice(fm_rational64_t t);
 FMMODFUNC fm_rational64_t fm_rational64_div(fm_rational64_t a,
                                             fm_rational64_t b);
 FMMODFUNC fm_rational64_t fm_rational64_add(fm_rational64_t a,

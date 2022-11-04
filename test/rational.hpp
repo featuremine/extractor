@@ -24,7 +24,7 @@
 #pragma once
 
 #include "extractor/comp_def.hpp"
-#include "extractor/decimal64.hpp"
+#include "fmc++/rprice.hpp"
 #include "extractor/rational64.hpp"
 
 #include "fmc++/gtestwrap.hpp"
@@ -110,12 +110,15 @@ TEST(rational, api) {
 
 TEST(rational, decimal_conversions) {
   double val = -9 - (31 / 32);
-  auto d = fm_decimal64_from_double(val);
+  fmc_rprice_t d;
+  fmc_rprice_from_double(&d, val);
   auto r = fm_rational64_from_double(val, 32);
-  ASSERT_EQ(r, fm_rational64_from_decimal64(d));
-  ASSERT_EQ(d, fm_rational64_to_decimal64(r));
+  ASSERT_EQ(r, fm_rational64_from_rprice(d));
+  ASSERT_EQ(d, fm_rational64_to_rprice(r));
   ASSERT_DOUBLE_EQ(fm_rational64_to_double(r), val);
-  ASSERT_DOUBLE_EQ(fm_decimal64_to_double(d), val);
+  double res;
+  fmc_rprice_to_double(&res, &d);
+  ASSERT_DOUBLE_EQ(res, val);
 }
 
 TEST(rational, serialization) {

@@ -146,12 +146,12 @@ py_field_conv get_py_field_checked_converter(fm_type_decl_cp decl) {
         return true;
       };
       break;
-    case FM_TYPE_DECIMAL64:
+    case FM_TYPE_RPRICE:
       return [](void *ptr, PyObject *obj) {
         if (!PyFloat_Check(obj)) {
           return false;
         }
-        *(DECIMAL64 *)ptr = fm_decimal64_from_double(PyFloat_AsDouble(obj));
+        fmc_rprice_from_double((RPRICE *)ptr, PyFloat_AsDouble(obj));
         return true;
       };
       break;

@@ -36,12 +36,12 @@ if __name__ == "__main__":
     data_in_one = op.csv_play(
         in_file_one,
         (("timestamp", extr.Time64, ""),
-         ("val1", extr.Decimal64, ""),
+         ("val1", extr.Rprice, ""),
          ("val2", extr.Int32, "")))
     data_in_two = op.csv_play(
         in_file_two,
         (("timestamp", extr.Time64, ""),
-         ("val1", extr.Decimal64, ""),
+         ("val1", extr.Rprice, ""),
          ("val2", extr.Int32, "")))
 
     val_one = op.field(data_in_one, "val2")

@@ -32,7 +32,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "extractor/decimal64.h"
+#include "fmc/rprice.h"
 #include "extractor/rational64.h"
 #include "fmc/decimal128.h"
 #include "fmc/time.h"
@@ -62,7 +62,7 @@ typedef uint64_t UINT64;
 typedef float FLOAT32;
 typedef double FLOAT64;
 typedef fm_rational64_t RATIONAL64;
-typedef fm_decimal64_t DECIMAL64;
+typedef fmc_rprice_t RPRICE;
 typedef fmc_decimal128_t DECIMAL128;
 typedef fmc_time64_t TIME64;
 typedef char CHAR;
@@ -85,7 +85,7 @@ typedef enum {
   FM_TYPE_FLOAT32,
   FM_TYPE_FLOAT64,
   FM_TYPE_RATIONAL64,
-  FM_TYPE_DECIMAL64,
+  FM_TYPE_RPRICE,
   FM_TYPE_DECIMAL128,
   FM_TYPE_TIME64,
   FM_TYPE_CHAR,

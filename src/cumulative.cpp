@@ -31,7 +31,7 @@ extern "C" {
 #include "fmc/time.h"
 }
 
-#include "extractor/decimal64.hpp"
+#include "fmc++/rprice.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
@@ -75,16 +75,16 @@ struct the_cumulative_field_exec_2_0 : cumulative_field_exec {
 };
 
 template <>
-struct the_cumulative_field_exec_2_0<fm_decimal64_t> : cumulative_field_exec {
+struct the_cumulative_field_exec_2_0<fmc_rprice_t> : cumulative_field_exec {
   the_cumulative_field_exec_2_0(fm_field_t field) : field_(field) {}
   void init(fm_frame_t *result, const fm_frame_t *const argv[]) override {
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, field_, 0) =
-        *(const fm_decimal64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
+    *(fmc_rprice_t *)fm_frame_get_ptr1(result, field_, 0) =
+        *(const fmc_rprice_t *)fm_frame_get_cptr1(argv[0], field_, 0);
   }
   void exec(fm_frame_t *result, const fm_frame_t *const argv[]) override {
-    auto val0 = *(const fm_decimal64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    auto val1 = *(const fm_decimal64_t *)fm_frame_get_cptr1(result, field_, 0);
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, field_, 0) = val0 + val1;
+    auto val0 = *(const fmc_rprice_t *)fm_frame_get_cptr1(argv[0], field_, 0);
+    auto val1 = *(const fmc_rprice_t *)fm_frame_get_cptr1(result, field_, 0);
+    *(fmc_rprice_t *)fm_frame_get_ptr1(result, field_, 0) = val0 + val1;
   }
   fm_field_t field_;
 };
@@ -184,7 +184,7 @@ fm_ctx_def_t *fm_comp_cumulative_gen(fm_comp_sys_t *csys,
 
   using supported_types =
       fmc::type_list<INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64,
-                     FLOAT32, FLOAT64, DECIMAL64, DECIMAL128, TIME64>;
+                     FLOAT32, FLOAT64, RPRICE, DECIMAL128, TIME64>;
 
   auto inp = argv[0];
   int nf = fm_type_frame_nfields(inp);

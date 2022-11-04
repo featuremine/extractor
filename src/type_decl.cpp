@@ -147,7 +147,7 @@ const char *decimal64_parser(const char *begin, const char *end, void *data,
                              const char *fmt) {
   double val = 0.0;
   auto ret = type_parser<FLOAT64>(begin, end, &val, "");
-  *(fm_decimal64_t *)data = fm_decimal64_from_double(val);
+  fmc_rprice_from_double((fmc_rprice_t *)data, val);
   return ret;
 }
 
@@ -210,7 +210,7 @@ fm_base_type_parser fm_base_type_parser_get(FM_BASE_TYPE t) {
   case FM_TYPE_RATIONAL64:
     return &rational64_parser;
     break;
-  case FM_TYPE_DECIMAL64:
+  case FM_TYPE_RPRICE:
     return &decimal64_parser;
     break;
   case FM_TYPE_DECIMAL128:
@@ -270,8 +270,8 @@ size_t fm_base_type_sizeof(FM_BASE_TYPE t) {
   case FM_TYPE_RATIONAL64:
     return sizeof(RATIONAL64);
     break;
-  case FM_TYPE_DECIMAL64:
-    return sizeof(DECIMAL64);
+  case FM_TYPE_RPRICE:
+    return sizeof(RPRICE);
     break;
   case FM_TYPE_DECIMAL128:
     return sizeof(DECIMAL128);
@@ -330,7 +330,7 @@ constexpr const char *format_str(FM_BASE_TYPE type) {
   case FM_TYPE_RATIONAL64:
     return "";
     break;
-  case FM_TYPE_DECIMAL64:
+  case FM_TYPE_RPRICE:
     return "";
     break;
   case FM_TYPE_DECIMAL128:
@@ -370,7 +370,8 @@ bool rational64_fwriter(FILE *file, const void *val, const char *fmt) {
 }
 
 bool decimal64_fwriter(FILE *file, const void *val, const char *fmt) {
-  auto value = fm_decimal64_to_double(*(fm_decimal64_t *)val);
+  double value;
+  fmc_rprice_to_double(&value, (fmc_rprice_t *)val);
   return fprintf(file, "%.15lg", value) > 0;
 }
 
@@ -420,7 +421,7 @@ fm_base_type_fwriter fm_base_type_fwriter_get(FM_BASE_TYPE t) {
   case FM_TYPE_RATIONAL64:
     return &rational64_fwriter;
     break;
-  case FM_TYPE_DECIMAL64:
+  case FM_TYPE_RPRICE:
     return &decimal64_fwriter;
     break;
   case FM_TYPE_DECIMAL128:
@@ -469,8 +470,8 @@ const char *fm_base_type_name(FM_BASE_TYPE t) {
     return "FLOAT64";
   case FM_TYPE_RATIONAL64:
     return "RATIONAL64";
-  case FM_TYPE_DECIMAL64:
-    return "DECIMAL64";
+  case FM_TYPE_RPRICE:
+    return "RPRICE";
   case FM_TYPE_DECIMAL128:
     return "DECIMAL128";
   case FM_TYPE_TIME64:

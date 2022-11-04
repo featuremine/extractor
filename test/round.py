@@ -100,8 +100,8 @@ if __name__ == "__main__":
 
     data_in = op.pandas_play(
         df,
-        (("val1", extr.Decimal64),
-         ("val2", extr.Decimal64)))
+        (("val1", extr.Rprice),
+         ("val2", extr.Rprice)))
 
     rounded_dec = op.round(data_in)
 

@@ -24,14 +24,14 @@
 
 extern "C" {
 #include "extractor/rational64.h"
-#include "extractor/decimal64.h"
+#include "fmc/rprice.h"
 }
 #include <numeric>
 
 fm_rational64_t fm_rational64_zero() { return fm_rational64_t{0, 1}; }
 
 fm_rational64_t fm_rational64_new(int32_t num, int32_t den) {
-  auto mult = -1 * (den < 0);
+  auto mult = -2 * (den < 0) + 1;
   den *= mult;
   num *= mult;
   auto div = std::gcd(num, den);
@@ -39,7 +39,7 @@ fm_rational64_t fm_rational64_new(int32_t num, int32_t den) {
 }
 
 fm_rational64_t fm_rational64_new2(int64_t num, int64_t den) {
-  auto mult = -1 * (den < 0);
+  auto mult = -2 * (den < 0) + 1;
   den *= mult;
   num *= mult;
   auto div = std::gcd(num, den);
@@ -63,8 +63,8 @@ fm_rational64_t fm_rational64_from_double(double value, int32_t base) {
   return fm_rational64_t{(int32_t)lround(floor(value * double(base))), base};
 }
 
-fm_rational64_t fm_rational64_from_decimal64(fm_decimal64_t t) {
-  return fm_rational64_new2(t.value, DECIMAL64_FRACTION);
+fm_rational64_t fm_rational64_from_rprice(fmc_rprice_t t) {
+  return fm_rational64_new2(t.value, FMC_RPRICE_FRACTION);
 }
 
 fm_rational64_t fm_rational64_from_int(int value) {
@@ -75,8 +75,10 @@ double fm_rational64_to_double(fm_rational64_t t) {
   return double(t.num) / double(t.den);
 }
 
-fm_decimal64_t fm_rational64_to_decimal64(fm_rational64_t t) {
-  return fm_decimal64_from_ratio(int64_t(t.num), int64_t(t.den));
+fmc_rprice_t fm_rational64_to_rprice(fm_rational64_t t) {
+  fmc_rprice_t ret;
+  fmc_rprice_from_ratio(&ret, int64_t(t.num), int64_t(t.den));
+  return ret;
 }
 
 fm_rational64_t fm_rational64_div(fm_rational64_t a, fm_rational64_t b) {

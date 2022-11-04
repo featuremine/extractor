@@ -116,8 +116,8 @@ def setup_prod_sip(universe, symbology, graph, ytpfile):
                 bid_val, ask_val, unk_val, 'decoration', extractor.Array(
                     extractor.Char, 1), ('b', 'a', 'u')).side
 
-            qty_decimal64 = op.round(trade.qty)
-            qty_int32 = op.convert(qty_decimal64, extractor.Int32)
+            qty_rprice = op.round(trade.qty)
+            qty_int32 = op.convert(qty_rprice, extractor.Int32)
 
             trade_combined = op.combine(
                 trade, (("trade_price", "price"),),

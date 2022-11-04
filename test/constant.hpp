@@ -57,7 +57,7 @@ TEST(constant_comp, single_field) {
       tsys, 1,
       fm_tuple_type_get(tsys, 3, fm_cstring_type_get(tsys),
                         fm_type_type_get(tsys),
-                        fm_base_type_get(tsys, FM_TYPE_DECIMAL64)));
+                        fm_base_type_get(tsys, FM_TYPE_RPRICE)));
 
   auto *constant_float_param_t = fm_tuple_type_get(
       tsys, 1,
@@ -80,18 +80,21 @@ TEST(constant_comp, single_field) {
       fm_comp_decl(sys, g, "csv_play", 0, csv_play_param_t,
                    (src_dir + "/data/logical_op_file_one.csv").c_str(),
                    "timestamp", fm_base_type_get(tsys, FM_TYPE_TIME64), "",
-                   "val1", fm_base_type_get(tsys, FM_TYPE_DECIMAL64), "",
+                   "val1", fm_base_type_get(tsys, FM_TYPE_RPRICE), "",
                    "val2", fm_base_type_get(tsys, FM_TYPE_INT32), "");
   ASSERT_NE(comp_A, nullptr);
 
+  fmc_rprice_t rp;
+  fmc_rprice_from_double(&rp, 1.0);
+
   auto *comp_B = fm_comp_decl(sys, g, "constant", 0, constant_param_t, "val1",
-                              fm_base_type_get(tsys, FM_TYPE_DECIMAL64),
-                              fm_decimal64_from_double(1.0));
+                              fm_base_type_get(tsys, FM_TYPE_RPRICE),
+                              rp);
   ASSERT_NE(comp_B, nullptr);
 
   auto *comp_BF =
       fm_comp_decl(sys, g, "constant", 0, constant_float_param_t, "val1",
-                   fm_base_type_get(tsys, FM_TYPE_DECIMAL64), 1.0);
+                   fm_base_type_get(tsys, FM_TYPE_RPRICE), 1.0);
   ASSERT_NE(comp_BF, nullptr);
 
   auto *comp_AF =
@@ -166,7 +169,7 @@ TEST(constant_comp, multiple_field) {
                         fm_base_type_get(tsys, FM_TYPE_TIME64)),
       fm_tuple_type_get(tsys, 3, fm_cstring_type_get(tsys),
                         fm_type_type_get(tsys),
-                        fm_base_type_get(tsys, FM_TYPE_DECIMAL64)),
+                        fm_base_type_get(tsys, FM_TYPE_RPRICE)),
       fm_tuple_type_get(tsys, 3, fm_cstring_type_get(tsys),
                         fm_type_type_get(tsys),
                         fm_base_type_get(tsys, FM_TYPE_INT32)));
@@ -184,14 +187,17 @@ TEST(constant_comp, multiple_field) {
       fm_comp_decl(sys, g, "csv_play", 0, csv_play_param_t,
                    (src_dir + "/data/logical_op_file_one.csv").c_str(),
                    "timestamp", fm_base_type_get(tsys, FM_TYPE_TIME64), "",
-                   "val1", fm_base_type_get(tsys, FM_TYPE_DECIMAL64), "",
+                   "val1", fm_base_type_get(tsys, FM_TYPE_RPRICE), "",
                    "val2", fm_base_type_get(tsys, FM_TYPE_INT32), "");
   ASSERT_NE(comp_A, nullptr);
+
+  fmc_rprice_t rp;
+  fmc_rprice_from_double(&rp, 1.0);
 
   auto *comp_B = fm_comp_decl(
       sys, g, "constant", 0, constant_param_t, "timestamp",
       fm_base_type_get(tsys, FM_TYPE_TIME64), fmc_time64_from_nanos(20), "val1",
-      fm_base_type_get(tsys, FM_TYPE_DECIMAL64), fm_decimal64_from_double(1.0),
+      fm_base_type_get(tsys, FM_TYPE_RPRICE), rp,
       "val2", fm_base_type_get(tsys, FM_TYPE_INT32), 0);
   ASSERT_NE(comp_B, nullptr);
 

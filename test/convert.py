@@ -63,7 +63,7 @@ if __name__ == "__main__":
         (("signed", extr.Array(extr.Char, 10)),
          ("unsigned", extr.Array(extr.Char, 10))))
 
-    added = op.convert(data_in_one.val1, extr.Decimal64) + op.convert(data_in_two.val1, extr.Decimal64)
+    added = op.convert(data_in_one.val1, extr.Rprice) + op.convert(data_in_two.val1, extr.Rprice)
     addedaggr = op.accumulate(added)
     addedfloat = data_in_one.val1 + data_in_two.val1
     addedfloataggr = op.accumulate(addedfloat)

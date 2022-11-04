@@ -27,23 +27,50 @@ def decimal128():
     assert int(from_int) == 0
     assert not from_int.is_signed()
     assert from_int.is_zero()
+    assert not math.isnan(from_int)
+    assert not math.isinf(from_int)
+    assert math.isfinite(from_int)
 
     from_string = extr.Decimal128("442.21")
     assert isinstance(from_string, extr.Decimal128)
     assert float(from_string) == 442.21
     assert not from_string.is_signed()
     assert not from_string.is_zero()
+    assert not math.isnan(from_string)
+    assert not math.isinf(from_string)
+    assert math.isfinite(from_string)
 
     from_double = extr.Decimal128(-5.442)
     assert isinstance(from_double, extr.Decimal128)
     assert float(from_double) == -5.442
     assert from_double.is_signed()
     assert not from_double.is_zero()
-    
-    assert abs(from_int) == from_int
-    assert not math.isnan(from_int)
-    assert not math.isinf(from_int)
-    assert math.isfinite(from_int)
+    assert not math.isnan(from_double)
+    assert not math.isinf(from_double)
+    assert math.isfinite(from_double)
+
+    from_decimal = extr.Decimal128(from_double)
+    assert isinstance(from_decimal, extr.Decimal128)
+    assert float(from_decimal) == -5.442
+    assert from_decimal.is_signed()
+    assert not from_decimal.is_zero()
+    assert not math.isnan(from_decimal)
+    assert not math.isinf(from_decimal)
+    assert math.isfinite(from_decimal)
+
+    inf = extr.Decimal128(math.inf)
+    assert not inf.is_signed()
+    assert not inf.is_zero()
+    assert not math.isnan(inf)
+    assert math.isinf(inf)
+    assert not math.isfinite(inf)
+
+    inf = extr.Decimal128(-math.inf)
+    assert inf.is_signed()
+    assert not inf.is_zero()
+    assert not math.isnan(inf)
+    assert math.isinf(inf)
+    assert not math.isfinite(inf)
 
     inf = extr.Decimal128("inf")
     assert not math.isnan(inf)
@@ -65,6 +92,11 @@ def decimal128():
     assert not math.isfinite(nan)
     assert not nan.is_signed()
     assert not nan.is_zero()
+
+    assert abs(extr.Decimal128(5)) == extr.Decimal128(5)
+    assert abs(extr.Decimal128(-5)) == extr.Decimal128(5)
+    assert abs(extr.Decimal128(math.inf)) == extr.Decimal128(math.inf)
+    assert abs(extr.Decimal128(-math.inf)) == extr.Decimal128(math.inf)
 
     assert extr.Decimal128(5) + extr.Decimal128(5) == extr.Decimal128(10)
     assert extr.Decimal128(5) - extr.Decimal128(10) == extr.Decimal128(-5)
@@ -90,6 +122,86 @@ def decimal128():
     v1 = extr.Decimal128.from_float(2.35)
     assert float(v1) == 2.35, float(v1)
 
+def rprice():
+    from_int = extr.Rprice(0)
+    assert isinstance(from_int, extr.Rprice)
+    assert int(from_int) == 0
+    assert not from_int.is_signed()
+    assert from_int.is_zero()
+    assert not math.isnan(from_int)
+    assert not math.isinf(from_int)
+    assert math.isfinite(from_int)
+
+    from_double = extr.Rprice(-5.442)
+    assert isinstance(from_double, extr.Rprice)
+    assert float(from_double) == -5.442
+    assert from_double.is_signed()
+    assert not from_double.is_zero()
+    assert not math.isnan(from_double)
+    assert not math.isinf(from_double)
+    assert math.isfinite(from_double)
+
+    from_decimal = extr.Rprice(from_double)
+    assert isinstance(from_decimal, extr.Rprice)
+    assert float(from_decimal) == -5.442
+    assert from_decimal.is_signed()
+    assert not from_decimal.is_zero()
+    assert not math.isnan(from_decimal)
+    assert not math.isinf(from_decimal)
+    assert math.isfinite(from_decimal)
+
+    inf = extr.Rprice(math.inf)
+    assert not inf.is_signed()
+    assert not inf.is_zero()
+    assert not math.isnan(inf)
+    assert not math.isinf(inf)
+    assert math.isfinite(inf)
+    assert float(inf) == 9223372036.854776
+
+    inf = extr.Rprice(-math.inf)
+    assert inf.is_signed()
+    assert not inf.is_zero()
+    assert not math.isnan(inf)
+    assert not math.isinf(inf)
+    assert math.isfinite(inf)
+    assert float(inf) == -9223372036.854776
+
+    nan = extr.Rprice(-math.nan)
+    assert not nan.is_signed()
+    assert nan.is_zero()
+    assert not math.isnan(nan)
+    assert not math.isnan(nan)
+    assert math.isfinite(nan)
+    assert float(nan) == 0.0
+
+    assert abs(extr.Rprice(5)) == extr.Rprice(5)
+    assert abs(extr.Rprice(-5)) == extr.Rprice(5)
+
+    assert extr.Rprice(5) + extr.Rprice(5) == extr.Rprice(10)
+    assert extr.Rprice(5) - extr.Rprice(10) == extr.Rprice(-5)
+    assert extr.Rprice(5) * extr.Rprice(2) == extr.Rprice(10)
+    assert extr.Rprice(10) / extr.Rprice(2) == extr.Rprice(5)
+
+    v1 = extr.Rprice(5)
+    v1 += extr.Rprice(5)
+    assert v1 == extr.Rprice(10)
+    v1 = extr.Rprice(5)
+    v1 -= extr.Rprice(10)
+    assert v1 == extr.Rprice(-5)
+    v1 = extr.Rprice(5)
+    v1 *= extr.Rprice(5)
+    assert v1 == extr.Rprice(25)
+    v1 = extr.Rprice(10)
+    v1 /= extr.Rprice(2)
+    assert v1 == extr.Rprice(5)
+
+    assert max(extr.Rprice(10), extr.Rprice(2), extr.Rprice(5)) == extr.Rprice(10)
+    assert min(extr.Rprice(10), extr.Rprice(2), extr.Rprice(5)) == extr.Rprice(2)
+
+    v1 = extr.Rprice.from_float(2.35)
+    assert float(v1) == 2.35, float(v1)
+
 if __name__ == "__main__":
 
     decimal128()
+    rprice()

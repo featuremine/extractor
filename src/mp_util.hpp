@@ -54,7 +54,7 @@ inline bool msgpack_writer(cmp_ctx_t &cmp, fm_rational64_t val) {
     return false;
   return cmp_write_integer(&cmp, val.den);
 }
-inline bool msgpack_writer(cmp_ctx_t &cmp, fm_decimal64_t val) {
+inline bool msgpack_writer(cmp_ctx_t &cmp, fmc_rprice_t val) {
   return cmp_write_integer(&cmp, val.value);
 }
 inline bool msgpack_writer(cmp_ctx_t &cmp, fmc_time64_t val) {
@@ -120,8 +120,8 @@ inline fm_frame_writer_p fm_type_to_mp_writer(fm_type_decl_cp decl,
     case FM_TYPE_RATIONAL64:
       return base_writer<RATIONAL64>(offset);
       break;
-    case FM_TYPE_DECIMAL64:
-      return base_writer<DECIMAL64>(offset);
+    case FM_TYPE_RPRICE:
+      return base_writer<RPRICE>(offset);
       break;
     case FM_TYPE_DECIMAL128:
       return base_writer<DECIMAL128>(offset);
@@ -201,7 +201,7 @@ inline bool msgpack_parser(cmp_ctx_t &cmp, fm_rational64_t &val) {
     return false;
   return cmp_read_int(&cmp, &val.den);
 }
-inline bool msgpack_parser(cmp_ctx_t &cmp, fm_decimal64_t &val) {
+inline bool msgpack_parser(cmp_ctx_t &cmp, fmc_rprice_t &val) {
   bool result = cmp_read_long(&cmp, &val.value);
   return result;
 }
@@ -282,8 +282,8 @@ inline fm_frame_reader_p fm_type_to_mp_reader(fm_type_decl_cp decl,
     case FM_TYPE_RATIONAL64:
       return base_reader<RATIONAL64>(offset);
       break;
-    case FM_TYPE_DECIMAL64:
-      return base_reader<DECIMAL64>(offset);
+    case FM_TYPE_RPRICE:
+      return base_reader<RPRICE>(offset);
       break;
     case FM_TYPE_DECIMAL128:
       return base_reader<DECIMAL128>(offset);

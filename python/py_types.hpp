@@ -25,9 +25,9 @@ extern "C" {
 #include "extractor/type_decl.h"
 }
 #include "extractor/comp_def.hpp"
-#include "extractor/decimal64.hpp"
+#include "fmc++/rprice.hpp"
 #include "extractor/rational64.hpp"
-#include "extractor/rprice.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/time.hpp"
 
@@ -39,6 +39,7 @@ extern "C" {
 #include <type_traits>
 
 #include <py_decimal128.hpp>
+#include <py_rprice.hpp>
 #include <py_type_utils.hpp>
 
 #define BASE_TYPE_WRAPPER(name, T)                                             \
@@ -535,7 +536,6 @@ BASE_TYPE_WRAPPER(Uint64, UINT64);
 BASE_TYPE_WRAPPER(Float32, FLOAT32);
 BASE_TYPE_WRAPPER(Float64, FLOAT64);
 BASE_TYPE_WRAPPER(Rational64, RATIONAL64);
-BASE_TYPE_WRAPPER(Decimal64, DECIMAL64);
 BASE_TYPE_WRAPPER(Char, CHAR);
 BASE_TYPE_WRAPPER(Wchar, WCHAR);
 BASE_TYPE_WRAPPER(Bool, bool);
@@ -583,8 +583,8 @@ fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj) {
                               &ExtractorBaseTypeRational64Type)) {
     return fm_base_type_get(tsys, FM_TYPE_RATIONAL64);
   } else if (PyType_IsSubtype((PyTypeObject *)obj,
-                              &ExtractorBaseTypeDecimal64Type)) {
-    return fm_base_type_get(tsys, FM_TYPE_DECIMAL64);
+                              &ExtractorBaseTypeRpriceType)) {
+    return fm_base_type_get(tsys, FM_TYPE_RPRICE);
   } else if (PyType_IsSubtype((PyTypeObject *)obj,
                               &ExtractorBaseTypeDecimal128Type)) {
     return fm_base_type_get(tsys, FM_TYPE_DECIMAL128);
@@ -695,9 +695,9 @@ PyTypeObject *py_type_from_fm_type(fm_type_decl_cp decl) {
       Py_INCREF(&ExtractorBaseTypeFloat64Type);
       return &ExtractorBaseTypeFloat64Type;
       break;
-    case FM_TYPE_DECIMAL64:
-      Py_INCREF(&ExtractorBaseTypeDecimal64Type);
-      return &ExtractorBaseTypeDecimal64Type;
+    case FM_TYPE_RPRICE:
+      Py_INCREF(&ExtractorBaseTypeRpriceType);
+      return &ExtractorBaseTypeRpriceType;
       break;
     case FM_TYPE_DECIMAL128:
       Py_INCREF(&ExtractorBaseTypeDecimal128Type);
@@ -738,7 +738,7 @@ bool init_type_wrappers(PyObject *m) {
          ExtractorBaseTypeFloat64::init(m) &&
          ExtractorBaseTypeTime64::init(m) &&
          ExtractorBaseTypeRational64::init(m) &&
-         ExtractorBaseTypeDecimal64::init(m) &&
+         ExtractorBaseTypeRprice::init(m) &&
          ExtractorBaseTypeDecimal128::init(m) &&
          ExtractorBaseTypeChar::init(m) && ExtractorBaseTypeWchar::init(m) &&
          ExtractorArrayType::init(m) && ExtractorBaseTypeBool::init(m);

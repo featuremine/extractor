@@ -32,7 +32,7 @@ extern "C" {
 }
 
 #include "extractor/comp_def.hpp"
-#include "extractor/decimal64.hpp"
+#include "fmc++/rprice.hpp"
 #include "extractor/frame.hpp"
 #include "extractor/rational64.hpp"
 #include "fmc++/mpl.hpp"
@@ -90,27 +90,27 @@ template <class T> struct the_sum_field_exec_2_0 : sum_field_exec {
   fm_field_t field_;
 };
 
-template <> struct the_sum_field_exec_2_0<fm_decimal64_t> : sum_field_exec {
+template <> struct the_sum_field_exec_2_0<fmc_rprice_t> : sum_field_exec {
   the_sum_field_exec_2_0(fm_field_t field) : field_(field) {}
   void init(fm_frame_t *result, size_t argc,
             const fm_frame_t *const argv[]) override {
-    fm_decimal64_t val = fm_decimal64_t();
+    fmc_rprice_t val = fmc_rprice_t();
     for (unsigned i = 0; i < argc; ++i) {
       val =
-          val + *(const fm_decimal64_t *)fm_frame_get_cptr1(argv[i], field_, 0);
+          val + *(const fmc_rprice_t *)fm_frame_get_cptr1(argv[i], field_, 0);
     }
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, field_, 0) = val;
+    *(fmc_rprice_t *)fm_frame_get_ptr1(result, field_, 0) = val;
   }
   void exec(fm_frame_t *result, fm_frame_t *o_val,
             const fm_frame_t *n_val) override {
     auto val_old =
-        *(const fm_decimal64_t *)fm_frame_get_cptr1(o_val, field_, 0);
+        *(const fmc_rprice_t *)fm_frame_get_cptr1(o_val, field_, 0);
     auto val_new =
-        *(const fm_decimal64_t *)fm_frame_get_cptr1(n_val, field_, 0);
-    auto val0 = *(const fm_decimal64_t *)fm_frame_get_cptr1(result, field_, 0);
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, field_, 0) =
+        *(const fmc_rprice_t *)fm_frame_get_cptr1(n_val, field_, 0);
+    auto val0 = *(const fmc_rprice_t *)fm_frame_get_cptr1(result, field_, 0);
+    *(fmc_rprice_t *)fm_frame_get_ptr1(result, field_, 0) =
         val0 - val_old + val_new;
-    *(fm_decimal64_t *)fm_frame_get_ptr1(o_val, field_, 0) = val_new;
+    *(fmc_rprice_t *)fm_frame_get_ptr1(o_val, field_, 0) = val_new;
   }
   fm_field_t field_;
 };
@@ -260,7 +260,7 @@ fm_ctx_def_t *fm_comp_sum_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   using supported_types =
       fmc::type_list<INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64,
-                     FLOAT32, FLOAT64, DECIMAL64, TIME64, RATIONAL64>;
+                     FLOAT32, FLOAT64, RPRICE, TIME64, RATIONAL64>;
 
   auto inp = argv[0];
   int nf = fm_type_frame_nfields(inp);

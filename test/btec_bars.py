@@ -167,8 +167,8 @@ if __name__ == "__main__":
     bbos_in = op.csv_play(bbo_file,
                           (("time", extr.Time64, ""),
                            ("ticker", extr.Array(extr.Char, 16), ""),
-                              ("bid_prx_0", extr.Decimal64, ""),
-                              ("ask_prx_0", extr.Decimal64, ""),
+                              ("bid_prx_0", extr.Rprice, ""),
+                              ("ask_prx_0", extr.Rprice, ""),
                               ("bid_shr_0", extr.Int32, ""),
                               ("ask_shr_0", extr.Int32, "")))
 
@@ -188,7 +188,7 @@ if __name__ == "__main__":
     trades_in = op.csv_play(trade_file,
                             (("time", extr.Time64, ""),
                              ("ticker", extr.Array(extr.Char, 16), ""),
-                                ("price", extr.Decimal64, ""),
+                                ("price", extr.Rprice, ""),
                                 ("size", extr.Int32, "")))
 
     trades_in = op.combine(

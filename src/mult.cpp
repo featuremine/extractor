@@ -31,7 +31,7 @@ extern "C" {
 #include "fmc/time.h"
 }
 
-#include "extractor/decimal64.hpp"
+#include "fmc++/rprice.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
