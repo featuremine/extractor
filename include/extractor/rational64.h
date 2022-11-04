@@ -61,5 +61,6 @@ FMMODFUNC fm_rational64_t fm_rational64_inf();
 FMMODFUNC fm_rational64_t fm_rational64_nan();
 FMMODFUNC bool fm_rational64_isnan(fm_rational64_t a);
 FMMODFUNC bool fm_rational64_isinf(fm_rational64_t a);
+FMMODFUNC fm_rational64_t fm_rational64_abs(fm_rational64_t a);
 
 #endif // __FM_RATIONAL64_H__

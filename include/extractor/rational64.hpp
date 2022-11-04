@@ -73,6 +73,16 @@ inline fm_rational64_t operator*(fm_rational64_t a, fm_rational64_t b) {
   return fm_rational64_mul(a, b);
 }
 
+inline fm_rational64_t &operator+=(fm_rational64_t &a, fm_rational64_t b) {
+  a = fm_rational64_add(a, b);
+  return a;
+}
+
+inline fm_rational64_t &operator-=(fm_rational64_t &a, fm_rational64_t b) {
+  a = fm_rational64_sub(a, b);
+  return a;
+}
+
 namespace std {
 template <> class numeric_limits<fm_rational64_t> {
   static constexpr bool is_specialized = true;

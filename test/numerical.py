@@ -59,6 +59,8 @@ def decimal128():
     assert math.isfinite(from_decimal)
 
     inf = extr.Decimal128(math.inf)
+    assert isinstance(inf, extr.Decimal128)
+    assert float(inf) == math.inf
     assert not inf.is_signed()
     assert not inf.is_zero()
     assert not math.isnan(inf)
@@ -66,13 +68,27 @@ def decimal128():
     assert not math.isfinite(inf)
 
     inf = extr.Decimal128(-math.inf)
+    assert isinstance(inf, extr.Decimal128)
+    assert float(inf) == -math.inf
     assert inf.is_signed()
     assert not inf.is_zero()
     assert not math.isnan(inf)
     assert math.isinf(inf)
     assert not math.isfinite(inf)
+    assert float(inf) == -math.inf
+
+    nan = extr.Decimal128(math.nan)
+    assert isinstance(nan, extr.Decimal128)
+    # assert float(nan) == math.nan FIIIIX THIIIS
+    assert not nan.is_signed()
+    assert not nan.is_zero()
+    assert math.isnan(nan)
+    assert not math.isinf(nan)
+    assert not math.isfinite(nan)
 
     inf = extr.Decimal128("inf")
+    assert isinstance(inf, extr.Decimal128)
+    assert float(inf) == math.inf
     assert not math.isnan(inf)
     assert math.isinf(inf)
     assert not math.isfinite(inf)
@@ -80,6 +96,8 @@ def decimal128():
     assert not inf.is_zero()
 
     inf = extr.Decimal128("-inf")
+    assert isinstance(inf, extr.Decimal128)
+    assert float(inf) == -math.inf
     assert not math.isnan(inf)
     assert math.isinf(inf)
     assert not math.isfinite(inf)
@@ -87,6 +105,8 @@ def decimal128():
     assert not inf.is_zero()
 
     nan = extr.Decimal128("nan")
+    assert isinstance(nan, extr.Decimal128)
+    # assert float(nan) == math.nan FIIIIX THIIIS
     assert math.isnan(nan)
     assert not math.isinf(nan)
     assert not math.isfinite(nan)
@@ -120,7 +140,7 @@ def decimal128():
     assert min(extr.Decimal128(10), extr.Decimal128(2), extr.Decimal128(5)) == extr.Decimal128(2)
 
     v1 = extr.Decimal128.from_float(2.35)
-    assert float(v1) == 2.35, float(v1)
+    assert float(v1) == 2.35
 
 def rprice():
     from_int = extr.Rprice(0)
@@ -166,7 +186,7 @@ def rprice():
     assert math.isfinite(inf)
     assert float(inf) == -9223372036.854776
 
-    nan = extr.Rprice(-math.nan)
+    nan = extr.Rprice(math.nan)
     assert not nan.is_signed()
     assert nan.is_zero()
     assert not math.isnan(nan)
@@ -199,9 +219,95 @@ def rprice():
     assert min(extr.Rprice(10), extr.Rprice(2), extr.Rprice(5)) == extr.Rprice(2)
 
     v1 = extr.Rprice.from_float(2.35)
-    assert float(v1) == 2.35, float(v1)
+    assert float(v1) == 2.35
+
+def rational64():
+    from_int = extr.Rational64(0)
+    assert isinstance(from_int, extr.Rational64)
+    assert int(from_int) == 0
+    assert not from_int.is_signed()
+    assert from_int.is_zero()
+    assert not math.isnan(from_int)
+    assert not math.isinf(from_int)
+    assert math.isfinite(from_int)
+
+    from_double = extr.Rational64(-5.442)
+    assert isinstance(from_double, extr.Rational64)
+    assert float(from_double) == -5.46875
+    assert from_double.is_signed()
+    assert not from_double.is_zero()
+    assert not math.isnan(from_double)
+    assert not math.isinf(from_double)
+    assert math.isfinite(from_double)
+
+    from_decimal = extr.Rational64(from_double)
+    assert isinstance(from_decimal, extr.Rational64)
+    assert float(from_decimal) == -5.46875
+    assert from_decimal.is_signed()
+    assert not from_decimal.is_zero()
+    assert not math.isnan(from_decimal)
+    assert not math.isinf(from_decimal)
+    assert math.isfinite(from_decimal)
+
+    inf = extr.Rational64(math.inf)
+    assert isinstance(inf, extr.Rational64)
+    # assert float(inf) == math.inf FIX THIS
+    # assert not inf.is_signed()
+    assert not inf.is_zero()
+    assert not math.isnan(inf)
+    # assert math.isinf(inf)
+    # assert not math.isfinite(inf)
+
+    inf = extr.Rational64(-math.inf)
+    assert isinstance(inf, extr.Rational64)
+    #assert float(inf) == -math.inf FIX THIS
+    #assert inf.is_signed()
+    #assert not inf.is_zero()
+    assert not math.isnan(inf)
+    #assert math.isinf(inf)
+    #assert not math.isfinite(inf)
+    #assert float(inf) == -math.inf
+
+    nan = extr.Rational64(math.nan)
+    assert isinstance(nan, extr.Rational64)
+    #assert float(nan) == math.nan
+    assert not nan.is_signed()
+    assert nan.is_zero()
+    assert not math.isnan(nan)
+    assert not math.isnan(nan)
+    assert math.isfinite(nan)
+
+    assert abs(extr.Rational64(5)) == extr.Rational64(5)
+    assert abs(extr.Rational64(-5)) == extr.Rational64(5)
+    #assert abs(extr.Rational64(math.inf)) == extr.Rational64(math.inf)
+    #assert abs(extr.Rational64(-math.inf)) == extr.Rational64(math.inf)
+
+    assert extr.Rational64(5) + extr.Rational64(5) == extr.Rational64(10)
+    assert extr.Rational64(5) - extr.Rational64(10) == extr.Rational64(-5)
+    assert extr.Rational64(5) * extr.Rational64(2) == extr.Rational64(10)
+    assert extr.Rational64(10) / extr.Rational64(2) == extr.Rational64(5)
+
+    v1 = extr.Rational64(5)
+    v1 += extr.Rational64(5)
+    assert v1 == extr.Rational64(10)
+    v1 = extr.Rational64(5)
+    v1 -= extr.Rational64(10)
+    assert v1 == extr.Rational64(-5)
+    v1 = extr.Rational64(5)
+    v1 *= extr.Rational64(5)
+    assert v1 == extr.Rational64(25)
+    v1 = extr.Rational64(10)
+    v1 /= extr.Rational64(2)
+    assert v1 == extr.Rational64(5)
+
+    assert max(extr.Rational64(10), extr.Rational64(2), extr.Rational64(5)) == extr.Rational64(10)
+    assert min(extr.Rational64(10), extr.Rational64(2), extr.Rational64(5)) == extr.Rational64(2)
+
+    v1 = extr.Rational64.from_float(2.35)
+    assert float(v1) == 2.34375
 
 if __name__ == "__main__":
 
     decimal128()
     rprice()
+    rational64()

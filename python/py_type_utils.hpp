@@ -102,6 +102,27 @@ template <class T> struct py_type_convert {
           return true;
         }
       }
+    } else if constexpr (is_same_v<T, RATIONAL64>) {
+      PyObject *temp;
+      if (!PyArg_ParseTuple(args, "O", &temp)) {
+        PyErr_SetString(PyExc_TypeError, "Expect single argument");
+        return false;
+      }
+      if (Rational64_Check(temp)) {
+        val = Rational64_val(temp);
+        return !PyErr_Occurred();
+      } else if (PyFloat_Check(temp)) {
+        val = fm_rational64_from_double(PyFloat_AsDouble(temp), 32);
+        return true;
+      } else if (PyLong_Check(temp)) {
+        int64_t i = PyLong_AsLongLong(temp);
+        if (PyErr_Occurred()) {
+          return false;
+        } else {
+          val = fm_rational64_from_int(i);
+          return true;
+        }
+      }
     }
     PyErr_SetString(PyExc_TypeError, "unknown type");
     return false;

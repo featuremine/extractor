@@ -40,6 +40,7 @@ extern "C" {
 
 #include <py_decimal128.hpp>
 #include <py_rprice.hpp>
+#include <py_rational64.hpp>
 #include <py_type_utils.hpp>
 
 #define BASE_TYPE_WRAPPER(name, T)                                             \
@@ -535,7 +536,6 @@ BASE_TYPE_WRAPPER(Uint32, UINT32);
 BASE_TYPE_WRAPPER(Uint64, UINT64);
 BASE_TYPE_WRAPPER(Float32, FLOAT32);
 BASE_TYPE_WRAPPER(Float64, FLOAT64);
-BASE_TYPE_WRAPPER(Rational64, RATIONAL64);
 BASE_TYPE_WRAPPER(Char, CHAR);
 BASE_TYPE_WRAPPER(Wchar, WCHAR);
 BASE_TYPE_WRAPPER(Bool, bool);

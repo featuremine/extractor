@@ -130,3 +130,8 @@ bool fm_rational64_isnan(fm_rational64_t a) { return a.num == 0 && a.den == 0; }
 bool fm_rational64_isinf(fm_rational64_t a) {
   return (a.num == 1 || a.num == -1) && a.den == 0;
 }
+
+fm_rational64_t fm_rational64_abs(fm_rational64_t a) {
+  a.num = std::abs(a.num);
+  return a;
+}
