@@ -111,6 +111,7 @@ struct parser {
   result parse_ctl(cmp_ctx_t *ctx, uint32_t &left);
   result parse_set(cmp_ctx_t *ctx, uint32_t &left);
   result parse_ann(cmp_ctx_t *ctx, uint32_t &left);
+  result parse_hbt(cmp_ctx_t *ctx, uint32_t &left);
 
   template <class Msg>
   void process_reduce(orders_t &ords, orders_t::iterator it, Msg &msg);
@@ -514,6 +515,18 @@ inline result parser::parse_ann(cmp_ctx_t *ctx, uint32_t &left) {
   }
   this->msg = msg;
   return result::ANNOUNCE;
+}
+
+inline result parser::parse_hbt(cmp_ctx_t *ctx, uint32_t &left) {
+  int64_t sec = 0;
+  if (!cmp_read_many(ctx, &left, &sec)) {
+    return result::ERR;
+  }
+  seconds = fmc_time64_from_seconds(sec);
+
+  book::updates::time msg{seconds};
+  this->msg = msg;
+  return result::TIME;
 }
 
 inline result parser::parse(cmp_ctx_t *ctx) {
