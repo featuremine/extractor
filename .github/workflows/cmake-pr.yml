@@ -125,7 +125,7 @@ jobs:
         with:
           python-version: ${{ matrix.python_version }}
 
-      - uses: patch
+      - name: patch
         run: pip3 install --upgrade setuptools pip
 
       - name: Test ${{ github.event.repository.name }} release for python version ${{ matrix.python_version }}
