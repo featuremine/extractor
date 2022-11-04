@@ -108,7 +108,7 @@ jobs:
       matrix:
         os: [ubuntu-20.04, macos-12]
         python_version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
-        exclude:
+        #exclude:
           #- os: macos-12
           #  python_version: '3.6'
           #- os: macos-12
