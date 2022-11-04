@@ -118,9 +118,9 @@ jobs:
         #python_version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ matrix.python_version }}
+      # - uses: actions/setup-python@v4
+      #   with:
+      #     python-version: ${{ matrix.python_version }}
 
       - name: test
         run: ls /usr && ls /usr/local
@@ -130,4 +130,4 @@ jobs:
         with:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           yamal_version: '7.2.23'
-          sudo: true
+          #sudo: true
