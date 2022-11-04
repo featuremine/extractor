@@ -79,7 +79,6 @@ def decimal128():
 
     nan = extr.Decimal128(math.nan)
     assert isinstance(nan, extr.Decimal128)
-    # assert float(nan) == math.nan FIIIIX THIIIS
     assert not nan.is_signed()
     assert not nan.is_zero()
     assert math.isnan(nan)
@@ -106,7 +105,6 @@ def decimal128():
 
     nan = extr.Decimal128("nan")
     assert isinstance(nan, extr.Decimal128)
-    # assert float(nan) == math.nan FIIIIX THIIIS
     assert math.isnan(nan)
     assert not math.isinf(nan)
     assert not math.isfinite(nan)
@@ -270,7 +268,6 @@ def rational64():
 
     nan = extr.Rational64(math.nan)
     assert isinstance(nan, extr.Rational64)
-    #assert float(nan) == math.nan fix this
     assert not nan.is_signed()
     assert not nan.is_zero()
     assert math.isnan(nan)
