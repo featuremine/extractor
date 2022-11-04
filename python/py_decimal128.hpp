@@ -43,6 +43,12 @@ struct ExtractorBaseTypeDecimal128 {
   static PyObject *is_nan(PyObject *self, PyObject *args);
   static PyObject *is_qnan(PyObject *self, PyObject *args);
   static PyObject *is_snan(PyObject *self, PyObject *args);
+  static PyObject *is_signed(PyObject *self, PyObject *args);
+  static PyObject *is_zero(PyObject *self, PyObject *args);
+  static PyObject *compare(PyObject *self, PyObject *args);
+  static PyObject *max(PyObject *self, PyObject *args);
+  static PyObject *min(PyObject *self, PyObject *args);
+  static PyObject *from_float(PyObject *self, PyObject *args);
 
   static PyObject *nb_add(PyObject *lhs, PyObject *rhs);
   static PyObject *nb_substract(PyObject *lhs, PyObject *rhs);
@@ -82,21 +88,25 @@ PyObject *ExtractorBaseTypeDecimal128::nb_true_divide(PyObject *self, PyObject *
 
 PyObject *ExtractorBaseTypeDecimal128::nb_inplace_add(PyObject *self, PyObject *rhs) {
   fmc::decimal128::upcast(((ExtractorBaseTypeDecimal128 *)self)->val) += ((ExtractorBaseTypeDecimal128 *)rhs)->val;
+  Py_INCREF(self);
   return self;
 }
 
 PyObject *ExtractorBaseTypeDecimal128::nb_inplace_substract(PyObject *self, PyObject *rhs) {
   fmc::decimal128::upcast(((ExtractorBaseTypeDecimal128 *)self)->val) -= ((ExtractorBaseTypeDecimal128 *)rhs)->val;
+  Py_INCREF(self);
   return self;
 }
 
 PyObject *ExtractorBaseTypeDecimal128::nb_inplace_multiply(PyObject *self, PyObject *rhs) {
   ((ExtractorBaseTypeDecimal128 *)self)->val = ((ExtractorBaseTypeDecimal128 *)self)->val * ((ExtractorBaseTypeDecimal128 *)rhs)->val;
+  Py_INCREF(self);
   return self;
 }
 
 PyObject *ExtractorBaseTypeDecimal128::nb_inplace_true_divide(PyObject *self, PyObject *rhs) {
   ((ExtractorBaseTypeDecimal128 *)self)->val = ((ExtractorBaseTypeDecimal128 *)self)->val / ((ExtractorBaseTypeDecimal128 *)rhs)->val;
+  Py_INCREF(self);
   return self;
 }
 
@@ -180,11 +190,11 @@ PyMethodDef ExtractorBaseTypeDecimal128::tp_methods [] = {
   // { "sqrt", _PyCFunction_CAST(dec_mpd_qsqrt), METH_VARARGS|METH_KEYWORDS, doc_sqrt },
 
   // /* Binary arithmetic functions, optional context arg */
-  // { "compare", _PyCFunction_CAST(dec_mpd_qcompare), METH_VARARGS|METH_KEYWORDS, doc_compare },
+  { "compare", (PyCFunction)ExtractorBaseTypeDecimal128::compare, METH_VARARGS|METH_KEYWORDS, NULL },
   // { "compare_signal", _PyCFunction_CAST(dec_mpd_qcompare_signal), METH_VARARGS|METH_KEYWORDS, doc_compare_signal },
-  // { "max", _PyCFunction_CAST(dec_mpd_qmax), METH_VARARGS|METH_KEYWORDS, doc_max },
+  { "max", ExtractorBaseTypeDecimal128::max, METH_VARARGS|METH_KEYWORDS, NULL },
   // { "max_mag", _PyCFunction_CAST(dec_mpd_qmax_mag), METH_VARARGS|METH_KEYWORDS, doc_max_mag },
-  // { "min", _PyCFunction_CAST(dec_mpd_qmin), METH_VARARGS|METH_KEYWORDS, doc_min },
+  { "min", ExtractorBaseTypeDecimal128::min, METH_VARARGS|METH_KEYWORDS, NULL },
   // { "min_mag", _PyCFunction_CAST(dec_mpd_qmin_mag), METH_VARARGS|METH_KEYWORDS, doc_min_mag },
   // { "next_toward", _PyCFunction_CAST(dec_mpd_qnext_toward), METH_VARARGS|METH_KEYWORDS, doc_next_toward },
   // { "quantize", _PyCFunction_CAST(dec_mpd_qquantize), METH_VARARGS|METH_KEYWORDS, doc_quantize },
@@ -200,8 +210,8 @@ PyMethodDef ExtractorBaseTypeDecimal128::tp_methods [] = {
   { "is_nan", ExtractorBaseTypeDecimal128::is_nan, METH_NOARGS, NULL },
   { "is_qnan", ExtractorBaseTypeDecimal128::is_qnan, METH_NOARGS, NULL },
   { "is_snan", ExtractorBaseTypeDecimal128::is_snan, METH_NOARGS, NULL },
-  // { "is_signed", dec_mpd_issigned, METH_NOARGS, doc_is_signed },
-  // { "is_zero", dec_mpd_iszero, METH_NOARGS, doc_is_zero },
+  { "is_signed", ExtractorBaseTypeDecimal128::is_signed, METH_NOARGS, NULL },
+  { "is_zero", ExtractorBaseTypeDecimal128::is_zero, METH_NOARGS, NULL },
 
   // /* Boolean functions, optional context arg */
   // { "is_normal", _PyCFunction_CAST(dec_mpd_isnormal), METH_VARARGS|METH_KEYWORDS, doc_is_normal },
@@ -238,7 +248,7 @@ PyMethodDef ExtractorBaseTypeDecimal128::tp_methods [] = {
   // { "shift", _PyCFunction_CAST(dec_mpd_qshift), METH_VARARGS|METH_KEYWORDS, doc_shift },
 
   // /* Miscellaneous */
-  // { "from_float", dec_from_float, METH_O|METH_CLASS, doc_from_float },
+  { "from_float", ExtractorBaseTypeDecimal128::from_float, METH_O|METH_CLASS, NULL },
   // { "as_tuple", PyDec_AsTuple, METH_NOARGS, doc_as_tuple },
   // { "as_integer_ratio", dec_as_integer_ratio, METH_NOARGS, doc_as_integer_ratio },
 
@@ -403,6 +413,85 @@ PyObject *ExtractorBaseTypeDecimal128::is_qnan(PyObject *self, PyObject *args) {
 
 PyObject *ExtractorBaseTypeDecimal128::is_snan(PyObject *self, PyObject *args) {
   return PyBool_FromLong(fmc_decimal128_is_snan(&((ExtractorBaseTypeDecimal128 *)self)->val));
+}
+
+PyObject *ExtractorBaseTypeDecimal128::is_signed(PyObject *self, PyObject *args) {
+  return PyBool_FromLong(((ExtractorBaseTypeDecimal128 *)self)->val < fmc::decimal128());
+}
+
+PyObject *ExtractorBaseTypeDecimal128::is_zero(PyObject *self, PyObject *args) {
+  return PyBool_FromLong(((ExtractorBaseTypeDecimal128 *)self)->val == fmc::decimal128());
+
+}
+PyObject *ExtractorBaseTypeDecimal128::compare(PyObject *self, PyObject *args) {
+  PyObject *lhs, *rhs;
+  if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
+    return nullptr;
+  }
+  fmc_decimal128_t dlhs;
+  if (py_type_convert<fmc_decimal128_t>::convert(dlhs, lhs)) {
+    return nullptr;
+  }
+  fmc_decimal128_t drhs;
+  if (py_type_convert<fmc_decimal128_t>::convert(drhs, rhs)) {
+    return nullptr;
+  }
+  if (dlhs < drhs) {
+    return PyLong_FromLong(-1);
+  }
+  return PyLong_FromLong(dlhs > drhs);
+}
+
+PyObject *ExtractorBaseTypeDecimal128::max(PyObject *self, PyObject *args) {
+  PyObject *lhs, *rhs;
+  if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
+    return nullptr;
+  }
+  fmc_decimal128_t dlhs;
+  if (py_type_convert<fmc_decimal128_t>::convert(dlhs, lhs)) {
+    return nullptr;
+  }
+  fmc_decimal128_t drhs;
+  if (py_type_convert<fmc_decimal128_t>::convert(drhs, rhs)) {
+    return nullptr;
+  }
+  if (dlhs > drhs) {
+    Py_INCREF(lhs);
+    return lhs;
+  }
+  Py_INCREF(rhs);
+  return rhs;
+}
+
+PyObject *ExtractorBaseTypeDecimal128::min(PyObject *self, PyObject *args) {
+  PyObject *lhs, *rhs;
+  if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
+    return nullptr;
+  }
+  fmc_decimal128_t dlhs;
+  if (py_type_convert<fmc_decimal128_t>::convert(dlhs, lhs)) {
+    return nullptr;
+  }
+  fmc_decimal128_t drhs;
+  if (py_type_convert<fmc_decimal128_t>::convert(drhs, rhs)) {
+    return nullptr;
+  }
+  if (dlhs < drhs) {
+    Py_INCREF(lhs);
+    return lhs;
+  }
+  Py_INCREF(rhs);
+  return rhs;
+}
+
+PyObject *ExtractorBaseTypeDecimal128::from_float(PyObject *type, PyObject *fval) {
+  double src = PyFloat_AsDouble(fval);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+  fmc_decimal128_t res;
+  fmc_decimal128_from_double(&res, src);
+  return ExtractorBaseTypeDecimal128::py_new(res);
 }
 
 bool Decimal128_Check(PyObject *obj) {
