@@ -22,8 +22,8 @@ add_subproject(
 )
 add_subproject(
     NAME yamal-python
-    VERSION "7.2.20"
-    GIT_REVISION "v7.2.20"
+    VERSION "7.2.23"
+    GIT_REVISION "v7.2.23"
     GIT_URL "https://github.com/featuremine/yamal-python.git"
     VARIABLES yamal-python-incdir yamal-python-source
 )
