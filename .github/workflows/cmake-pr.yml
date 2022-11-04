@@ -54,43 +54,43 @@ jobs:
   #       #TODO: Add test_pypi_token when extractor name is available
   #       #test_pypi_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
-  # build-macos:
-  #   #needs: utility
-  #   runs-on: macos-11
+  build-macos:
+    #needs: utility
+    runs-on: macos-11
 
-  #   steps:
-  #   - uses: actions/checkout@v3
-  #     with:
-  #       submodules: recursive
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
 
-  #   - name: Install dependencies
-  #     run: brew install pkg-config cmake googletest python
+    - name: Install dependencies
+      run: brew install pkg-config cmake googletest python
 
-  #   - name: Install numdiff
-  #     working-directory: /tmp
-  #     run: |
-  #       wget http://mirror.cedia.org.ec/nongnu/numdiff/numdiff-5.9.0.tar.gz
-  #       tar -xvzf numdiff-5.9.0.tar.gz
-  #       cd numdiff-5.9.0
-  #       ./configure
-  #       make
-  #       make install
-  #       cd ..
-  #       rm -rf numdiff-5.9.0*
-  #     shell: bash
+    - name: Install numdiff
+      working-directory: /tmp
+      run: |
+        wget http://mirror.cedia.org.ec/nongnu/numdiff/numdiff-5.9.0.tar.gz
+        tar -xvzf numdiff-5.9.0.tar.gz
+        cd numdiff-5.9.0
+        ./configure
+        make
+        make install
+        cd ..
+        rm -rf numdiff-5.9.0*
+      shell: bash
 
-  #   #   #TODO: Fix and remove this so it works with native python
-  #   # - uses: actions/setup-python@v4
-  #   #   with:
-  #   #     python-version: '3.10'
+    #   #TODO: Fix and remove this so it works with native python
+    # - uses: actions/setup-python@v4
+    #   with:
+    #     python-version: '3.10'
 
-  #   - name: Build ${{ github.event.repository.name }} with fm gcc
-  #     uses: featuremine/actions/package/build@test-macos
-  #     with:
-  #       gh_token: ${{ secrets.GITHUB_TOKEN }}
-  #       yamal_version: '7.2.23'
-  #       cpack: TGZ
-  #       upload: true
+    - name: Build ${{ github.event.repository.name }} with fm gcc
+      uses: featuremine/actions/package/build@test-macos
+      with:
+        gh_token: ${{ secrets.GITHUB_TOKEN }}
+        yamal_version: '7.2.23'
+        cpack: TGZ
+        upload: true
 
   test-centos:
     #needs: [utility, build-manylinux]
@@ -114,7 +114,7 @@ jobs:
         #TODO: add macos-12
         #os: [ubuntu-20.04, macos-12]
         os: [macos-12]
-        python_version: ['3.10', '3.11']
+        python_version: ['3.11']
         #python_version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
     runs-on: ${{ matrix.os }}
     steps:
