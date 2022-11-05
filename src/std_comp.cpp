@@ -124,6 +124,7 @@ bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
          fm_comp_type_add(sys, &fm_comp_book_msg) &&
          fm_comp_type_add(sys, &fm_comp_book_trades) &&
          fm_comp_type_add(sys, &fm_comp_book_header) &&
+         fm_comp_type_add(sys, &fm_comp_book_vendor_time) &&
          fm_comp_type_add(sys, &fm_comp_tick_lag) &&
          fm_comp_type_add(sys, &fm_comp_time_lag) &&
          fm_comp_type_add(sys, &fm_comp_field) &&

@@ -519,12 +519,13 @@ inline result parser::parse_ann(cmp_ctx_t *ctx, uint32_t &left) {
 
 inline result parser::parse_hbt(cmp_ctx_t *ctx, uint32_t &left) {
   int64_t sec = 0;
-  if (!cmp_read_many(ctx, &left, &sec)) {
+  int64_t ven = 0;
+  if (!cmp_read_many(ctx, &left, &sec, &ven)) {
     return result::ERR;
   }
-  seconds = fmc_time64_from_seconds(sec);
+  seconds = fmc_time64_from_nanos(sec);
 
-  book::updates::time msg{seconds};
+  book::updates::heartbeat msg{fmc_time64_from_seconds(ven)};
   this->msg = msg;
   return result::TIME;
 }
@@ -591,6 +592,9 @@ inline result parser::parse(cmp_ctx_t *ctx) {
     break;
   case 15:
     res = parse_ann(ctx, left);
+    break;
+  case 16:
+    res = parse_hbt(ctx, left);
     break;
   default:
     res = skip_msg(ctx, left);
