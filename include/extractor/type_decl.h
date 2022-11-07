@@ -32,8 +32,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "fmc/rprice.h"
-#include "fmc/rational64.h"
 #include "fmc/decimal128.h"
 #include "fmc/rational64.h"
 #include "fmc/rprice.h"

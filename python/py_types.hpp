@@ -37,10 +37,10 @@ extern "C" {
 #include <py_wrapper.hpp>
 #include <type_traits>
 
-#include <py_rprice.hpp>
-#include <py_rational64.hpp>
 #include "storage_util.hpp"
 #include <py_decimal128.hpp>
+#include <py_rational64.hpp>
+#include <py_rprice.hpp>
 #include <py_type_utils.hpp>
 
 #define BASE_TYPE_WRAPPER(name, T)                                             \
