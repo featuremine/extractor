@@ -34,6 +34,7 @@ extern "C" {
 #include "frame.hpp"
 #include "types.hpp"
 #include "utils.hpp"
+#include "module.hpp"
 
 #include <Python.h>
 #include <datetime.h>
