@@ -103,7 +103,7 @@ def main(args):
 
     data_in_one = op.immediate_play(
         data_feed(conn),
-        (("px", extr.Decimal64),
+        (("px", extr.Rprice),
          ("qty", extr.Int64)),
         timedelta(milliseconds=10))
 

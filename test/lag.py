@@ -35,7 +35,7 @@ if __name__ == "__main__":
          ("ticker", extr.Array(extr.Char, 16), ""),
          ("imbalanceSide", extr.Int16, ""),
          ("type", extr.Array(extr.Char, 16), ""),
-         ("matchPrice", extr.Decimal64, ""),
+         ("matchPrice", extr.Rprice, ""),
          ("matchQty", extr.Int32, ""),
          ("imbalanceQuantity", extr.Int32, ""),
          ("Exchange", extr.Array(extr.Char, 32), "")),

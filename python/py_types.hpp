@@ -25,11 +25,11 @@ extern "C" {
 #include "extractor/type_decl.h"
 }
 #include "extractor/comp_def.hpp"
-#include "extractor/decimal64.hpp"
-#include "extractor/rational64.hpp"
-#include "extractor/rprice.hpp"
+#include "fmc++/rational64.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/time.hpp"
+#include "storage_util.hpp"
 
 #include <Python.h>
 #include <datetime.h>
@@ -117,7 +117,12 @@ template <class T> struct py_type_convert {
           PyErr_SetString(PyExc_TypeError, "expecting a valid string value");
           return false;
         }
-        fmc_decimal128_from_str(&val, str);
+        fmc_error_t *err;
+        fmc_decimal128_from_str(&val, str, &err);
+        if (err) {
+          PyErr_Format(PyExc_TypeError, "unable to convert string to decimal128 with error: %s", fmc_error_msg(err));
+          return false;
+        }
         return true;
       } else if (PyLong_Check(temp)) {
         uint64_t u = PyLong_AsUnsignedLongLong(temp);
@@ -143,8 +148,9 @@ template <class T> struct py_type_convert {
 
 #define BASE_TYPE_WRAPPER(name, T)                                             \
   struct ExtractorBaseType##name {                                             \
+    using S = typename storage<T>::type;                                       \
     PyObject_HEAD;                                                             \
-    T val;                                                                     \
+    S val;                                                                     \
     static void py_dealloc(ExtractorBaseType##name *self) {                    \
       Py_TYPE(self)->tp_free((PyObject *)self);                                \
     }                                                                          \
@@ -635,7 +641,7 @@ BASE_TYPE_WRAPPER(Uint64, UINT64);
 BASE_TYPE_WRAPPER(Float32, FLOAT32);
 BASE_TYPE_WRAPPER(Float64, FLOAT64);
 BASE_TYPE_WRAPPER(Rational64, RATIONAL64);
-BASE_TYPE_WRAPPER(Decimal64, DECIMAL64);
+BASE_TYPE_WRAPPER(Rprice, RPRICE);
 BASE_TYPE_WRAPPER(Decimal128, DECIMAL128);
 // BASE_TYPE_WRAPPER(Time64, TIME64);
 BASE_TYPE_WRAPPER(Char, CHAR);
@@ -685,8 +691,8 @@ fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj) {
                               &ExtractorBaseTypeRational64Type)) {
     return fm_base_type_get(tsys, FM_TYPE_RATIONAL64);
   } else if (PyType_IsSubtype((PyTypeObject *)obj,
-                              &ExtractorBaseTypeDecimal64Type)) {
-    return fm_base_type_get(tsys, FM_TYPE_DECIMAL64);
+                              &ExtractorBaseTypeRpriceType)) {
+    return fm_base_type_get(tsys, FM_TYPE_RPRICE);
   } else if (PyType_IsSubtype((PyTypeObject *)obj,
                               &ExtractorBaseTypeDecimal128Type)) {
     return fm_base_type_get(tsys, FM_TYPE_DECIMAL128);
@@ -797,9 +803,9 @@ PyTypeObject *py_type_from_fm_type(fm_type_decl_cp decl) {
       Py_INCREF(&ExtractorBaseTypeFloat64Type);
       return &ExtractorBaseTypeFloat64Type;
       break;
-    case FM_TYPE_DECIMAL64:
-      Py_INCREF(&ExtractorBaseTypeDecimal64Type);
-      return &ExtractorBaseTypeDecimal64Type;
+    case FM_TYPE_RPRICE:
+      Py_INCREF(&ExtractorBaseTypeRpriceType);
+      return &ExtractorBaseTypeRpriceType;
       break;
     case FM_TYPE_DECIMAL128:
       Py_INCREF(&ExtractorBaseTypeDecimal128Type);
@@ -840,7 +846,7 @@ bool init_type_wrappers(PyObject *m) {
          ExtractorBaseTypeFloat64::init(m) &&
          ExtractorBaseTypeTime64::init(m) &&
          ExtractorBaseTypeRational64::init(m) &&
-         ExtractorBaseTypeDecimal64::init(m) &&
+         ExtractorBaseTypeRprice::init(m) &&
          ExtractorBaseTypeDecimal128::init(m) &&
          ExtractorBaseTypeChar::init(m) && ExtractorBaseTypeWchar::init(m) &&
          ExtractorArrayType::init(m) && ExtractorBaseTypeBool::init(m);

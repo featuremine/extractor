@@ -32,12 +32,13 @@ extern "C" {
 }
 
 #include "extractor/comp_def.hpp"
-#include "extractor/decimal64.hpp"
+#include "fmc++/rprice.hpp"
 #include "extractor/frame.hpp"
-#include "extractor/rational64.hpp"
+#include "fmc++/rational64.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/time.hpp"
+#include "storage_util.hpp"
 
 #include <memory>
 #include <stdlib.h>
@@ -110,7 +111,8 @@ add_field_exec *get_add_field_exec(fmc::type_list<Ts...>,
     using Tn = typename Tt::type;
     auto obj = fm::frame_field_type<Tn>();
     if (!result && obj.validate(f_type)) {
-      result = new the_add_field_exec_2_0<Tn>(idx);
+      using S = typename storage<Tn>::type;
+      result = new the_add_field_exec_2_0<S>(idx);
     }
   };
   (create(fmc::typify<Ts>()), ...);
@@ -157,7 +159,7 @@ fm_ctx_def_t *fm_comp_add_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   using supported_types =
       fmc::type_list<INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64,
-                     FLOAT32, FLOAT64, DECIMAL64, TIME64, RATIONAL64>;
+                     FLOAT32, FLOAT64, RPRICE, TIME64, RATIONAL64>;
 
   auto inp = argv[0];
   int nf = fm_type_frame_nfields(inp);

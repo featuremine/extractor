@@ -85,7 +85,6 @@ add_library(
     "is_zero.cpp"
     "is_nan.cpp"
     "is_inf.cpp"
-    "rational64.cpp"
     "perf_timer.cpp"
     "split_by.cpp"
     "frame_ytp_encode.cpp"

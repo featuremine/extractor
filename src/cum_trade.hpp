@@ -22,7 +22,7 @@
 #pragma once
 
 #include "extractor/common.hpp"
-#include "extractor/rprice.hpp"
+#include "fmc++/rprice.hpp"
 
 #include "extractor/comp_def.hpp"
 #include "extractor/frame.hpp"

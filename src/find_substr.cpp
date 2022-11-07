@@ -30,7 +30,7 @@ extern "C" {
 #include "substr.h"
 }
 
-#include "extractor/decimal64.hpp"
+#include "fmc++/rprice.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/time.hpp"

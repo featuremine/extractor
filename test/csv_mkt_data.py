@@ -35,8 +35,8 @@ if __name__ == "__main__":
          ("market", extr.Array(extr.Char, 32), ""),
          ("ticker", extr.Array(extr.Char, 16), ""),
          ("type", extr.Char, ""),
-         ("bidprice", extr.Decimal64, ""),
-         ("askprice", extr.Decimal64, ""),
+         ("bidprice", extr.Rprice, ""),
+         ("askprice", extr.Rprice, ""),
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")), name="csv_play_0")
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
          ("ticker", extr.Array(extr.Char, 16), ""),
          ("imbalanceSide", extr.Int16, ""),
          ("type", extr.Array(extr.Char, 16), ""),
-         ("matchPrice", extr.Decimal64, ""),
+         ("matchPrice", extr.Rprice, ""),
          ("matchQty", extr.Int32, ""),
          ("imbalanceQuantity", extr.Int32, ""),
          ("Exchange", extr.Array(extr.Char, 32), "")),
