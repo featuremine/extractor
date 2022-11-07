@@ -113,6 +113,12 @@ target_include_directories(
     "${EXTRACTOR_SRC_DIR}"
     "${PYTHON_INCLUDE_DIRS}"
 )
+file(
+    COPY ${PROJECT_SOURCE_DIR}/python/include
+    DESTINATION "${CMAKE_BINARY_DIR}/python_dist/extractor"
+    FILES_MATCHING
+        PATTERN .h
+)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     target_link_options(extractor_module PRIVATE -Wl,-rpath,@loader_path)
