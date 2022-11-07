@@ -23,8 +23,8 @@
 
 extern "C" {
 #include "book/book.h"
-#include "extractor/python/side.h"
 #include "extractor/python/book.h"
+#include "extractor/python/side.h"
 }
 
 #include "book/py_level.hpp"
