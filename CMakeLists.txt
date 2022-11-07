@@ -35,6 +35,8 @@ option (BUILD_WHEEL "Enable build of the python package." ON)
 option (TEST_EXTENSIONS "Enable testing the extensions." ON)
 
 set(EXTRACTOR_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(EXTRACTOR_PYTHON_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/python/include")
+set(EXTRACTOR_PYTHON_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/python/src")
 set(EXTRACTOR_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(EXTRACTOR_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/package/bin")
 set(EXTRACTOR_LIB_DIR "${CMAKE_CURRENT_BINARY_DIR}/package/lib")

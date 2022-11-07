@@ -25,7 +25,7 @@
 
 extern "C" {
 #include "book/book.h"
-#include "book/py_book.h"
+#include "extractor/python/py_book.h"
 #include "extractor/python/py_side.h"
 }
 
