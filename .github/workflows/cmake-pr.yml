@@ -48,14 +48,15 @@ jobs:
       uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.22'
+        yamal_version: '7.2.23'
         cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
+        #TODO: Add test_pypi_token when extractor name is available
         #test_pypi_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
   build-macos:
     needs: utility
-    runs-on: macos-12
+    runs-on: macos-11
 
     steps:
     - uses: actions/checkout@v3
@@ -78,17 +79,13 @@ jobs:
         rm -rf numdiff-5.9.0*
       shell: bash
 
-      #TODO: Fix and remove this so it works with native python
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
-
     - name: Build ${{ github.event.repository.name }} with fm gcc
       uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.22'
+        yamal_version: '7.2.23'
         cpack: TGZ
+        upload: ${{ needs.utility.outputs.release-check == 'release' }}
 
   test-centos:
     needs: [utility, build-manylinux]
@@ -98,25 +95,33 @@ jobs:
       image: public.ecr.aws/p0w8t0l8/ci-hosted-gh-centos7-gcc10.2.0
     
     steps:
-    - name: Install python dependencies
-      run: pip3 install numpy msgpack pandas
-      shell: bash
-
-    - name: Install numdiff
-      working-directory: /tmp
-      run: |
-        wget http://mirror.cedia.org.ec/nongnu/numdiff/numdiff-5.9.0.tar.gz
-        tar -xvzf numdiff-5.9.0.tar.gz
-        cd numdiff-5.9.0
-        ./configure
-        make
-        make install
-        cd ..
-        rm -rf numdiff-5.9.0*
-      shell: bash
-
     - name: Test ${{ github.event.repository.name }} release
       uses: featuremine/actions/package/test@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.22'
+        yamal_version: '7.2.23'
+
+  test-pythons:
+    needs: [utility, build-manylinux, build-macos]
+    if: needs.utility.outputs.release-check == 'release'
+    strategy:
+      matrix:
+        os: [ubuntu-20.04, macos-12]
+        python_version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
+        exclude:
+          - os: macos-12
+            python_version: '3.6'
+          - os: macos-12
+            python_version: '3.7'
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python_version }}
+
+      - name: Test ${{ github.event.repository.name }} release for python version ${{ matrix.python_version }}
+        uses: featuremine/actions/package/test@main
+        with:
+          gh_token: ${{ secrets.GITHUB_TOKEN }}
+          yamal_version: '7.2.23'
+          sudo: true

@@ -21,8 +21,8 @@ add_subproject(
 )
 add_subproject(
     NAME yamal-python
-    VERSION "7.2.20"
-    GIT_REVISION "v7.2.20"
+    VERSION "7.2.23"
+    GIT_REVISION "v7.2.23"
     GIT_URL "https://github.com/featuremine/yamal-python.git"
     VARIABLES yamal-python-incdir yamal-python-source
 )
@@ -103,7 +103,9 @@ elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     execute_process(COMMAND sw_vers -productVersion
                     OUTPUT_VARIABLE MACOS_VERSION
                     OUTPUT_STRIP_TRAILING_WHITESPACE)
-    set(PYTHON_PLATFORM "macosx_${MACOS_VERSION}_${CMAKE_SYSTEM_PROCESSOR}")
+    STRING(REGEX REPLACE "^([0-9]+)\\.?([0-9]+)\\.?([0-9]+)?$" "\\1" MACOS_VERSION_MAJOR "${MACOS_VERSION}")
+    STRING(REGEX REPLACE "^([0-9]+)\\.?([0-9]+)\\.?([0-9]+)?$" "\\2" MACOS_VERSION_MINOR "${MACOS_VERSION}")
+    set(PYTHON_PLATFORM "macosx_${MACOS_VERSION_MAJOR}_0_${CMAKE_SYSTEM_PROCESSOR}")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
     set(PYTHON_PLATFORM "win_${CMAKE_SYSTEM_PROCESSOR}")
 else()
