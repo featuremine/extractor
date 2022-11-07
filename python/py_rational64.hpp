@@ -27,7 +27,7 @@
 
 struct ExtractorBaseTypeRational64 {
   PyObject_HEAD;
-  fmc_rational64_t val;
+  fmc::rational64 val;
   static void py_dealloc(ExtractorBaseTypeRational64 *self) {
     Py_TYPE(self)->tp_free((PyObject *)self);
   }

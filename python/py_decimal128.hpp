@@ -27,7 +27,7 @@
 
 struct ExtractorBaseTypeDecimal128 {
   PyObject_HEAD;
-  fmc_decimal128_t val;
+  fmc::decimal128 val;
   static void py_dealloc(ExtractorBaseTypeDecimal128 *self) {
     Py_TYPE(self)->tp_free((PyObject *)self);
   }

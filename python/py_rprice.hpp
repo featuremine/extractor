@@ -27,7 +27,7 @@
 
 struct ExtractorBaseTypeRprice {
   PyObject_HEAD;
-  fmc_rprice_t val;
+  fmc::rprice val;
   static void py_dealloc(ExtractorBaseTypeRprice *self) {
     Py_TYPE(self)->tp_free((PyObject *)self);
   }
