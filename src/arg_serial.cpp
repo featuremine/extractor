@@ -31,14 +31,14 @@ extern "C" {
 }
 
 #include "extractor/comp_def.hpp"
-#include "fmc++/rational64.hpp"
-#include "fmc++/rprice.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/rational64.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
 #include "serial_util.hpp"
-#include "type_space.hpp"
 #include "storage_util.hpp"
+#include "type_space.hpp"
 
 #include <iomanip>
 #include <iostream>

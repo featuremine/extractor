@@ -32,10 +32,10 @@ extern "C" {
 }
 
 #include "extractor/comp_def.hpp"
-#include "fmc++/rprice.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
 
 #include <cmath>
@@ -63,7 +63,8 @@ struct the_round_field_exec_2_0<fmc_rprice_t, T> : round_field_exec {
   void exec(fm_frame_t *result, size_t,
             const fm_frame_t *const argv[]) override {
     const T &val0 = *(const T *)fm_frame_get_cptr1(argv[0], field_, 0);
-    fmc_rprice_from_raw((fmc_rprice_t *)fm_frame_get_ptr1(result, field_, 0), llround(val0 * divisor_) * factor_);
+    fmc_rprice_from_raw((fmc_rprice_t *)fm_frame_get_ptr1(result, field_, 0),
+                        llround(val0 * divisor_) * factor_);
   }
   fm_field_t field_;
   int64_t divisor_;
@@ -100,7 +101,9 @@ struct the_round_field_exec_2_0<int64_t, fmc_rprice_t> : round_field_exec {
   the_round_field_exec_2_0(fm_field_t field, int64_t divisor) : field_(field) {}
   void exec(fm_frame_t *result, size_t,
             const fm_frame_t *const argv[]) override {
-    fmc_rprice_round((int64_t *)fm_frame_get_ptr1(result, field_, 0), (const fmc_rprice_t *)fm_frame_get_cptr1(argv[0], field_, 0));
+    fmc_rprice_round(
+        (int64_t *)fm_frame_get_ptr1(result, field_, 0),
+        (const fmc_rprice_t *)fm_frame_get_cptr1(argv[0], field_, 0));
   }
   fm_field_t field_;
 };
@@ -116,8 +119,8 @@ struct the_round_field_exec_2_0<int64_t, fmc_decimal128_t> : round_field_exec {
     fmc_decimal128_t ret;
     fmc_decimal128_round(&ret, &val0);
     fmc_error_t *err;
-    fmc_decimal128_to_int((int64_t *)fm_frame_get_ptr1(result, field_, 0),
-                          &ret, &err);
+    fmc_decimal128_to_int((int64_t *)fm_frame_get_ptr1(result, field_, 0), &ret,
+                          &err);
   }
   fm_field_t field_;
 };

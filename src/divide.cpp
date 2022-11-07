@@ -32,11 +32,11 @@ extern "C" {
 }
 
 #include "extractor/comp_def.hpp"
-#include "fmc++/rprice.hpp"
 #include "extractor/frame.hpp"
-#include "fmc++/rational64.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/rational64.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
 
 #include <memory>
@@ -59,9 +59,10 @@ template <class T> struct the_divide_field_exec_2_0 : divide_field_exec {
             const fm_frame_t *const argv[]) override {
     auto val0 = *(const T *)fm_frame_get_cptr1(argv[0], field_, 0);
     auto val1 = *(const T *)fm_frame_get_cptr1(argv[1], field_, 0);
-    std::cout<<"val0 "<<val0<<" val1 "<<val1<<std::endl;
+    std::cout << "val0 " << val0 << " val1 " << val1 << std::endl;
     *(T *)fm_frame_get_ptr1(result, field_, 0) = val0 / val1;
-    std::cout<<"result is "<<*(T *)fm_frame_get_ptr1(result, field_, 0)<<std::endl;
+    std::cout << "result is " << *(T *)fm_frame_get_ptr1(result, field_, 0)
+              << std::endl;
   }
   fm_field_t field_;
 };

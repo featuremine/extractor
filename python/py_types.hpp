@@ -25,10 +25,9 @@ extern "C" {
 #include "extractor/type_decl.h"
 }
 #include "extractor/comp_def.hpp"
-#include "fmc++/rprice.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/rational64.hpp"
 #include "fmc++/rprice.hpp"
-#include "fmc++/decimal128.hpp"
 #include "fmc++/time.hpp"
 
 #include <Python.h>
@@ -38,9 +37,9 @@ extern "C" {
 #include <py_wrapper.hpp>
 #include <type_traits>
 
+#include "storage_util.hpp"
 #include <py_decimal128.hpp>
 #include <py_type_utils.hpp>
-#include "storage_util.hpp"
 
 #define BASE_TYPE_WRAPPER(name, T)                                             \
   struct ExtractorBaseType##name {                                             \
