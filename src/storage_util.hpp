@@ -21,8 +21,8 @@
  */
 
 #include "fmc++/decimal128.hpp"
-#include "fmc++/rprice.hpp"
 #include "fmc++/rational64.hpp"
+#include "fmc++/rprice.hpp"
 
 template <class T> struct storage { using type = T; };
 
@@ -30,9 +30,7 @@ template <> struct storage<fmc_decimal128_t> {
   using type = typename fmc::decimal128;
 };
 
-template <> struct storage<fmc_rprice_t> {
-  using type = typename fmc::rprice;
-};
+template <> struct storage<fmc_rprice_t> { using type = typename fmc::rprice; };
 
 template <> struct storage<fmc_rational64_t> {
   using type = typename fmc::rational64;
