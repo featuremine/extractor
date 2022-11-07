@@ -32,6 +32,7 @@ extern "C" {
 }
 
 #include "extractor/comp_def.hpp"
+#include "extractor/frame.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/rational64.hpp"
 #include "fmc++/rprice.hpp"
