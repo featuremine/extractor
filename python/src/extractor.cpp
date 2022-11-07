@@ -24,28 +24,29 @@
 #define PY_SSIZE_T_CLEAN
 
 extern "C" {
-#include "extractor/python/book.h"
 #include "extractor/python/extractor.h"
+#include "extractor/python/book.h"
 #include "extractor/python/side.h"
 #include "ytp.h"
 }
 
+#include "comp.hpp"
 #include "custom.hpp"
+#include "frame.hpp"
+#include "graph.hpp"
 #include "live_batch.hpp"
 #include "live_poll.hpp"
+#include "module.hpp"
 #include "pandas_play.hpp"
 #include "comp.hpp"
 #include "sys_def.hpp"
-#include "frame.hpp"
-#include "graph.hpp"
-#include "module.hpp"
 #include "play.hpp"
 #include "side.hpp"
-#include "utils.hpp"
 #include "sim_poll.hpp"
 #include "tuple_msg.hpp"
 #include "tuple_split.hpp"
 #include "wrapper.hpp"
+#include "utils.hpp"
 
 #include "fmc/files.h"
 #include "fmc/platform.h"

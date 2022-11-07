@@ -32,11 +32,11 @@ extern "C" {
 #include "fmc++/time.hpp"
 
 #include <Python.h>
+#include <comp_base.hpp>
 #include <datetime.h>
 #include <limits>
-#include <comp_base.hpp>
-#include <wrapper.hpp>
 #include <type_traits>
+#include <wrapper.hpp>
 
 fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj);
 
