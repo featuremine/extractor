@@ -107,6 +107,10 @@ target_include_directories(
     "${EXTRACTOR_SRC_DIR}"
     "${PYTHON_INCLUDE_DIRS}"
 )
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    target_link_options(extractor_module PRIVATE -Wl,-rpath,@loader_path)
     target_link_options(extractor_module PRIVATE -undefined dynamic_lookup)
+else()
+    set_property(TARGET extractor_module PROPERTY BUILD_RPATH_USE_ORIGIN TRUE)
 endif()
