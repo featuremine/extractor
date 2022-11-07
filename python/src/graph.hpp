@@ -32,9 +32,9 @@ extern "C" {
 
 #include "fmc++/mpl.hpp"
 #include "frame.hpp"
+#include "module.hpp"
 #include "types.hpp"
 #include "utils.hpp"
-#include "module.hpp"
 
 #include <Python.h>
 #include <datetime.h>
