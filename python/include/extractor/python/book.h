@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_book.h
+ * @file book.h
  * @author Andres Rangel
  * @date 2 Mar 2020
  * @brief File contains C definitions of the python book interface

@@ -22,7 +22,7 @@
  */
 
 extern "C" {
-#include "extractor/python/py_extractor.h"
+#include "extractor/python/extractor.h"
 }
 
 #include <Python.h>

@@ -24,9 +24,9 @@
 #define PY_SSIZE_T_CLEAN
 
 extern "C" {
-#include "extractor/python/py_extractor.h"
-#include "extractor/python/py_book.h"
-#include "extractor/python/py_side.h"
+#include "extractor/python/extractor.h"
+#include "extractor/python/book.h"
+#include "extractor/python/side.h"
 #include "ytp.h"
 }
 
