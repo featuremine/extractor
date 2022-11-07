@@ -270,18 +270,18 @@ extr_py_unit_test(
 extr_py_unit_test(
     sum
 )
-extr_py_unit_test(
-    book_build
-)
+# extr_py_unit_test(
+#     book_build
+# )
 extr_py_unit_test(
     book_msg
 )
 extr_py_unit_test(
     book_update
 )
-extr_py_unit_test(
-    rational64
-)
+# extr_py_unit_test(
+#     rational64
+# )
 extr_py_unit_test(
     perf_timer
 )
@@ -363,9 +363,9 @@ extr_py_unit_test(
 extr_py_unit_test(
     time_lag
 )
-extr_py_unit_test(
-    ore_sim_split
-)
+# extr_py_unit_test(
+#     ore_sim_split
+# )
 extr_py_unit_test(
     book_play_split
 )
