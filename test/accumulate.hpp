@@ -117,10 +117,10 @@ TEST(accumulate, accumulate_data) {
           "askqty\n");
   for (int i = 0; i < fm_frame_dim(result, 0); ++i) {
     double dbp, dap;
-    fmc_rprice_to_double(&dbp,
-        (fmc_rprice_t *)fm_frame_get_cptr1(result, bp_field, i));
-    fmc_rprice_to_double(&dap,
-        (fmc_rprice_t *)fm_frame_get_cptr1(result, ap_field, i));
+    fmc_rprice_to_double(
+        &dbp, (fmc_rprice_t *)fm_frame_get_cptr1(result, bp_field, i));
+    fmc_rprice_to_double(
+        &dap, (fmc_rprice_t *)fm_frame_get_cptr1(result, ap_field, i));
     fprintf(
         f, "%ld,%s,%s,%c,%g,%g,%d,%d\n",
         fmc_time64_to_nanos(

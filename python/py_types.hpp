@@ -25,10 +25,9 @@ extern "C" {
 #include "extractor/type_decl.h"
 }
 #include "extractor/comp_def.hpp"
-#include "fmc++/rprice.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/rational64.hpp"
 #include "fmc++/rprice.hpp"
-#include "fmc++/decimal128.hpp"
 #include "fmc++/time.hpp"
 
 #include <Python.h>
@@ -38,15 +37,17 @@ extern "C" {
 #include <py_wrapper.hpp>
 #include <type_traits>
 
-#include <py_decimal128.hpp>
 #include <py_rprice.hpp>
 #include <py_rational64.hpp>
+#include "storage_util.hpp"
+#include <py_decimal128.hpp>
 #include <py_type_utils.hpp>
 
 #define BASE_TYPE_WRAPPER(name, T)                                             \
   struct ExtractorBaseType##name {                                             \
     PyObject_HEAD;                                                             \
-    T val;                                                                     \
+    using S = typename storage<T>::type;                                       \
+    S val;                                                                     \
     static void py_dealloc(ExtractorBaseType##name *self) {                    \
       Py_TYPE(self)->tp_free((PyObject *)self);                                \
     }                                                                          \

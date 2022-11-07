@@ -30,10 +30,10 @@ extern "C" {
 #include "fmc/time.h"
 }
 
-#include "fmc++/rprice.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
 #include "op_util.hpp"
 

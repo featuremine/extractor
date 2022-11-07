@@ -265,7 +265,9 @@ int mp_parse_one(mp_play_exec_cl *cl, fm_frame_t *frame, int row) {
     case 111: {
       fmc_rprice_t value;
       success = msgpack_parser(cl->cmp, value);
-      fmc_rprice_from_old((RPRICE *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row), &value);
+      fmc_rprice_from_old(
+          (RPRICE *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row),
+          &value);
       p_off += 2;
     } break;
     case 12:

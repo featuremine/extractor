@@ -31,11 +31,12 @@ extern "C" {
 #include "fmc/time.h"
 }
 
-#include "fmc++/rprice.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
+#include "storage_util.hpp"
 
 #include <memory>
 #include <stdlib.h>
@@ -108,7 +109,8 @@ diff_field_exec *get_diff_field_exec(fmc::type_list<Ts...>,
     using Tn = typename Tt::type;
     auto obj = fm::frame_field_type<Tn>();
     if (!result && obj.validate(f_type)) {
-      result = new the_diff_field_exec_2_0<Tn>(idx);
+      using S = typename storage<Tn>::type;
+      result = new the_diff_field_exec_2_0<S>(idx);
     }
   };
   (create(fmc::typify<Ts>()), ...);

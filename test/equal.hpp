@@ -68,16 +68,16 @@ TEST(equal_comp, multiple_field) {
       fm_comp_decl(sys, g, "csv_play", 0, csv_play_param_t,
                    (src_dir + "/data/logical_op_file_one.csv").c_str(),
                    "timestamp", fm_base_type_get(tsys, FM_TYPE_TIME64), "",
-                   "val1", fm_base_type_get(tsys, FM_TYPE_RPRICE), "",
-                   "val2", fm_base_type_get(tsys, FM_TYPE_INT32), "");
+                   "val1", fm_base_type_get(tsys, FM_TYPE_RPRICE), "", "val2",
+                   fm_base_type_get(tsys, FM_TYPE_INT32), "");
   ASSERT_NE(comp_A, nullptr);
 
   auto *comp_B =
       fm_comp_decl(sys, g, "csv_play", 0, csv_play_param_t,
                    (src_dir + "/data/logical_op_file_two.csv").c_str(),
                    "timestamp", fm_base_type_get(tsys, FM_TYPE_TIME64), "",
-                   "val1", fm_base_type_get(tsys, FM_TYPE_RPRICE), "",
-                   "val2", fm_base_type_get(tsys, FM_TYPE_INT32), "");
+                   "val1", fm_base_type_get(tsys, FM_TYPE_RPRICE), "", "val2",
+                   fm_base_type_get(tsys, FM_TYPE_INT32), "");
   ASSERT_NE(comp_B, nullptr);
 
   auto *comp_C =
@@ -220,16 +220,16 @@ TEST(equal_comp, single_field) {
       fm_comp_decl(sys, g, "csv_play", 0, csv_play_param_t,
                    (src_dir + "/data/logical_op_file_one.csv").c_str(),
                    "timestamp", fm_base_type_get(tsys, FM_TYPE_TIME64), "",
-                   "val1", fm_base_type_get(tsys, FM_TYPE_RPRICE), "",
-                   "val2", fm_base_type_get(tsys, FM_TYPE_INT32), "");
+                   "val1", fm_base_type_get(tsys, FM_TYPE_RPRICE), "", "val2",
+                   fm_base_type_get(tsys, FM_TYPE_INT32), "");
   ASSERT_NE(comp_A, nullptr);
 
   auto *comp_B =
       fm_comp_decl(sys, g, "csv_play", 0, csv_play_param_t,
                    (src_dir + "/data/logical_op_file_two.csv").c_str(),
                    "timestamp", fm_base_type_get(tsys, FM_TYPE_TIME64), "",
-                   "val1", fm_base_type_get(tsys, FM_TYPE_RPRICE), "",
-                   "val2", fm_base_type_get(tsys, FM_TYPE_INT32), "");
+                   "val1", fm_base_type_get(tsys, FM_TYPE_RPRICE), "", "val2",
+                   fm_base_type_get(tsys, FM_TYPE_INT32), "");
   ASSERT_NE(comp_B, nullptr);
 
   auto *comp_AF =

@@ -829,8 +829,9 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
 
     if (fm_type_base_enum(decl) == FM_TYPE_RATIONAL64) {
       for (int item = 0; item < f_dims[0]; ++item) {
-        fmc_rational64_to_double((double *)PyArray_GETPTR1((PyArrayObject *)array, item),
-                (fmc_rational64_t *)fm_frame_get_cptr1(frame, i, item));
+        fmc_rational64_to_double(
+            (double *)PyArray_GETPTR1((PyArrayObject *)array, item),
+            (fmc_rational64_t *)fm_frame_get_cptr1(frame, i, item));
       }
     } else if (fm_type_base_enum(decl) == FM_TYPE_BOOL) {
       for (int item = 0; item < f_dims[0]; ++item) {

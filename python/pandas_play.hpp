@@ -333,7 +333,9 @@ bool pandas_parse_one(fm_exec_ctx_t *ctx, pandas_play_exec_cl *cl,
           PyTuple_GetItem(cl->curr.get_ref(), cl->parsers[p_off + 2] + 1));
       if (!bool(item))
         return field_error();
-      fmc_rprice_from_double((RPRICE *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row), PyFloat_AsDouble(item.get_ref()));
+      fmc_rprice_from_double(
+          (RPRICE *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row),
+          PyFloat_AsDouble(item.get_ref()));
       p_off += 3;
     } break;
     case 12: {

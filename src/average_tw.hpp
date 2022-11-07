@@ -23,6 +23,7 @@
  */
 
 #include "sample.hpp"
+#include "storage_util.hpp"
 
 #include <limits>
 #include <vector>
@@ -138,12 +139,6 @@ template <template <class> class Comp> struct fm_comp_tw : fm_comp_sample_2_0 {
   vector<exec_cl *> calls;
   fmc_time64_t last_time_;
   fm_type_decl_cp ret_type = nullptr;
-};
-
-template <class T> struct storage { using type = T; };
-
-template <> struct storage<fmc_decimal128_t> {
-  using type = typename fmc::decimal128;
 };
 
 template <class T> struct average_tw_exec_cl : public exec_cl {

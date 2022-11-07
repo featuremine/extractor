@@ -31,11 +31,12 @@ extern "C" {
 #include "fmc/time.h"
 }
 
-#include "fmc++/rprice.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
+#include "storage_util.hpp"
 
 #include <memory>
 #include <stdlib.h>
@@ -70,36 +71,6 @@ struct the_cumulative_field_exec_2_0 : cumulative_field_exec {
     }
     auto val1 = *(const T *)fm_frame_get_cptr1(result, field_, 0);
     *(T *)fm_frame_get_ptr1(result, field_, 0) = val0 + val1;
-  }
-  fm_field_t field_;
-};
-
-template <>
-struct the_cumulative_field_exec_2_0<fmc_rprice_t> : cumulative_field_exec {
-  the_cumulative_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void init(fm_frame_t *result, const fm_frame_t *const argv[]) override {
-    *(fmc_rprice_t *)fm_frame_get_ptr1(result, field_, 0) =
-        *(const fmc_rprice_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-  }
-  void exec(fm_frame_t *result, const fm_frame_t *const argv[]) override {
-    auto val0 = *(const fmc_rprice_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    auto val1 = *(const fmc_rprice_t *)fm_frame_get_cptr1(result, field_, 0);
-    *(fmc_rprice_t *)fm_frame_get_ptr1(result, field_, 0) = val0 + val1;
-  }
-  fm_field_t field_;
-};
-
-template <>
-struct the_cumulative_field_exec_2_0<fmc_time64_t> : cumulative_field_exec {
-  the_cumulative_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void init(fm_frame_t *result, const fm_frame_t *const argv[]) override {
-    *(fmc_time64_t *)fm_frame_get_ptr1(result, field_, 0) =
-        *(const fmc_time64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-  }
-  void exec(fm_frame_t *result, const fm_frame_t *const argv[]) override {
-    auto val0 = *(const fmc_time64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    auto val1 = *(const fmc_time64_t *)fm_frame_get_cptr1(result, field_, 0);
-    *(fmc_time64_t *)fm_frame_get_ptr1(result, field_, 0) = val0 + val1;
   }
   fm_field_t field_;
 };
@@ -152,7 +123,8 @@ cumulative_field_exec *get_cumulative_field_exec(fmc::type_list<Ts...>,
     using Tn = typename Tt::type;
     auto obj = fm::frame_field_type<Tn>();
     if (!result && obj.validate(f_type)) {
-      result = new the_cumulative_field_exec_2_0<Tn>(idx);
+      using S = typename storage<Tn>::type;
+      result = new the_cumulative_field_exec_2_0<S>(idx);
     }
   };
   (create(fmc::typify<Ts>()), ...);

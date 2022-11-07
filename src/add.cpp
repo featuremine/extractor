@@ -37,7 +37,10 @@ extern "C" {
 #include "fmc++/rational64.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/rational64.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
+#include "storage_util.hpp"
 
 #include <memory>
 #include <stdlib.h>
@@ -110,7 +113,8 @@ add_field_exec *get_add_field_exec(fmc::type_list<Ts...>,
     using Tn = typename Tt::type;
     auto obj = fm::frame_field_type<Tn>();
     if (!result && obj.validate(f_type)) {
-      result = new the_add_field_exec_2_0<Tn>(idx);
+      using S = typename storage<Tn>::type;
+      result = new the_add_field_exec_2_0<S>(idx);
     }
   };
   (create(fmc::typify<Ts>()), ...);

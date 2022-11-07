@@ -3,8 +3,8 @@
 #include <fmc/decimal128.h>
 
 #include <Python.h>
-#include <fenv.h>
 #include <extractor/python/py_extractor.h>
+#include <fenv.h>
 
 template <bool B> struct integral_value { typedef long long type; };
 template <> struct integral_value<true> { typedef unsigned long long type; };
