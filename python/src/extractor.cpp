@@ -35,7 +35,7 @@ extern "C" {
 #include "live_poll.hpp"
 #include "pandas_play.hpp"
 #include "comp.hpp"
-#include "py_comp_sys.hpp"
+#include "sys_def.hpp"
 #include "frame.hpp"
 #include "graph.hpp"
 #include "module.hpp"
@@ -45,6 +45,7 @@ extern "C" {
 #include "sim_poll.hpp"
 #include "tuple_msg.hpp"
 #include "tuple_split.hpp"
+#include "wrapper.hpp"
 
 #include "fmc/files.h"
 #include "fmc/platform.h"
@@ -54,7 +55,6 @@ extern "C" {
 
 #include <Python.h>
 #include <numpy/arrayobject.h>
-#include <wrapper.hpp>
 
 static py_ytp_sequence_api_v1 *ytp_; // py_ytp_api
 

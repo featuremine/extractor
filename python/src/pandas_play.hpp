@@ -46,7 +46,7 @@ extern "C" {
 
 #include "fmc++/strings.hpp"
 #include <numpy/arrayobject.h>
-#include <wrapper.hpp>
+#include "wrapper.hpp"
 
 #include "extractor/type_sys.h"
 
