@@ -30,7 +30,7 @@ extern "C" {
 
 #include "custom.hpp"
 #include "pandas_play.hpp"
-#include "py_module.hpp"
+#include "module.hpp"
 #include <Python.h>
 #include <memory>
 #include <string>

@@ -31,7 +31,7 @@ extern "C" {
 
 #include "fmc++/decimal128.hpp"
 #include "fmc++/side.hpp"
-#include "py_wrapper.hpp"
+#include "wrapper.hpp"
 #include <datetime.h>
 
 typedef struct {

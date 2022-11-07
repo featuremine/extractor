@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_comp_sys.hpp
+ * @file comp_sys.hpp
  * @author Maxim Trokhimtchouk
  * @date 5 Oct 2017
  * @brief Python extension for extractor library
@@ -27,7 +27,7 @@ extern "C" {
 #include "extractor/module.h"
 }
 
-#include "py_utils.hpp"
+#include "utils.hpp"
 #include <Python.h>
 
 typedef struct {

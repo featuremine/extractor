@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_types.hpp
+ * @file types.hpp
  * @author Maxim Trokhimtchouk
  * @date 5 Oct 2017
  * @brief Python wrappers for extractor base types
@@ -34,8 +34,8 @@ extern "C" {
 #include <Python.h>
 #include <datetime.h>
 #include <limits>
-#include <py_comp_base.hpp>
-#include <py_wrapper.hpp>
+#include <comp_base.hpp>
+#include <wrapper.hpp>
 #include <type_traits>
 
 fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj);

@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_graph.hpp
+ * @file graph.hpp
  * @author Maxim Trokhimtchouk
  * @date 5 Oct 2017
  * @brief Python extension for extractor library
@@ -31,9 +31,9 @@ extern "C" {
 }
 
 #include "fmc++/mpl.hpp"
-#include "py_frame.hpp"
-#include "py_types.hpp"
-#include "py_utils.hpp"
+#include "frame.hpp"
+#include "types.hpp"
+#include "utils.hpp"
 
 #include <Python.h>
 #include <datetime.h>

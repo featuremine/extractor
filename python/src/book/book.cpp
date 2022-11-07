@@ -27,7 +27,7 @@ extern "C" {
 #include "extractor/python/side.h"
 }
 
-#include "book/py_level.hpp"
+#include "book/level.hpp"
 #include "fmc++/side.hpp"
 
 struct BookStruct {

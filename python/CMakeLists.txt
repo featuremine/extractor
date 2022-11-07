@@ -13,8 +13,8 @@ execute_process(COMMAND ${PYTHON3_BIN} -c
 add_library(
     py_extractor_obj
     STATIC
-    "src/book/py_book.cpp"
-    "src/py_extractor.cpp"
+    "src/book/book.cpp"
+    "src/extractor.cpp"
 )
 target_link_libraries(
     py_extractor_obj
@@ -86,7 +86,7 @@ install(
 add_library(
     extractor_module
     SHARED
-    "src/py_extractor_main.cpp"
+    "src/extractor_main.cpp"
 )
 target_link_libraries(
     extractor_module

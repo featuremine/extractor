@@ -34,14 +34,14 @@ extern "C" {
 #include "live_batch.hpp"
 #include "live_poll.hpp"
 #include "pandas_play.hpp"
-#include "py_comp.hpp"
+#include "comp.hpp"
 #include "py_comp_sys.hpp"
-#include "py_frame.hpp"
-#include "py_graph.hpp"
-#include "py_module.hpp"
-#include "py_play.hpp"
-#include "py_side.hpp"
-#include "py_utils.hpp"
+#include "frame.hpp"
+#include "graph.hpp"
+#include "module.hpp"
+#include "play.hpp"
+#include "side.hpp"
+#include "utils.hpp"
 #include "sim_poll.hpp"
 #include "tuple_msg.hpp"
 #include "tuple_split.hpp"
@@ -54,7 +54,7 @@ extern "C" {
 
 #include <Python.h>
 #include <numpy/arrayobject.h>
-#include <py_wrapper.hpp>
+#include <wrapper.hpp>
 
 static py_ytp_sequence_api_v1 *ytp_; // py_ytp_api
 
