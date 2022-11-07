@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_frame.hpp
+ * @file frame.hpp
  * @author Andres Rangel
  * @date 3 May 2019
  * @brief File contains C++ definition of python frame
@@ -29,8 +29,8 @@ extern "C" {
 #include "extractor/comp_sys.h"
 }
 
-#include "py_utils.hpp"
-#include "py_wrapper.hpp"
+#include "utils.hpp"
+#include "wrapper.hpp"
 #include <Python.h>
 
 using namespace fm;

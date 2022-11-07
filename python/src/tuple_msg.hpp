@@ -34,8 +34,8 @@ extern "C" {
 
 #include "extractor/type_sys.h"
 #include "fmc++/mpl.hpp"
-#include "py_utils.hpp"
-#include "py_wrapper.hpp"
+#include "utils.hpp"
+#include "wrapper.hpp"
 
 #include <cassert>
 #include <errno.h>

@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_graph.hpp
+ * @file utils.hpp
  * @author Maxim Trokhimtchouk
  * @date 5 Oct 2017
  * @brief Python extension for extractor library
@@ -29,12 +29,12 @@ extern "C" {
 #include "extractor/module.h"
 }
 
-#include "py_types.hpp"
+#include "types.hpp"
 
 #include "extractor/type_sys.h"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
-#include "py_wrapper.hpp"
+#include "wrapper.hpp"
 #include <cassert>
 #include <errno.h>
 #include <functional>

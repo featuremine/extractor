@@ -13,20 +13,21 @@
  *****************************************************************************/
 
 /**
- * @file py_extractor.cpp
- * @author Maxim Trokhimtchouk
- * @date 5 Oct 2017
- * @brief Python extension for extractor library
- *
- * This file contains Python C extention for extractor library
+ * @file book.h
+ * @author Andres Rangel
+ * @date 2 Mar 2020
+ * @brief File contains C definitions of the python book interface
  */
 
-extern "C" {
-#include "extractor/python/py_extractor.h"
-}
+#pragma once
 
+#include "book/book.h"
 #include <Python.h>
 
-PyMODINIT_FUNC PyInit_extractor(void) FMMODFUNC FMPYMODPUB;
+typedef struct BookStruct Book;
 
-PyMODINIT_FUNC PyInit_extractor(void) { return fm_extractor_py_init(); }
+FMMODFUNC bool PyBook_Check(PyObject *);
+
+FMMODFUNC fm_book_shared_t *PyBook_SharedBook(PyObject *obj);
+
+FMMODFUNC bool PyBook_AddTypes(PyObject *);

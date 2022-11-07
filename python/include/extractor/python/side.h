@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_side.h
+ * @file side.h
  * @author Andres Rangel
  * @date 9 Mar 2020
  * @brief File contains C declaration of the call context
