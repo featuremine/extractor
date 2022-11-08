@@ -203,7 +203,7 @@ if __name__ == "__main__":
     ticker_idx = 0
     for _ in tickers:
         trade_per_imnt = trade_split[ticker_idx]
-        cum_trade = op.cum_trade(trade_per_imnt)
+        cum_trade = op.cumulative(op.combine(trade_per_imnt.qty, (("qty", "shares"),), op.convert(trade_per_imnt.qty, extr.Rprice) * trade_per_imnt.price, (("qty", "notional",),)))
         ctrds.append(cum_trade)
         ticker_idx += 1
 

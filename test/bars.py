@@ -152,15 +152,7 @@ if __name__ == "__main__":
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")))
 
-    converted_bbos_in = op.combine(bbos_in.receive, tuple(),
-                                   bbos_in.ticker, tuple(),
-                                   bbos_in.market, tuple(),
-                                   op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
-                                   op.convert(bbos_in.askprice, extr.Decimal128), tuple(),
-                                   op.convert(bbos_in.bidqty, extr.Decimal128), tuple(),
-                                   op.convert(bbos_in.askqty, extr.Decimal128), tuple());
-
-    bbo_split = op.split(converted_bbos_in, "market", tuple(markets))
+    bbo_split = op.split(bbos_in, "market", tuple(markets))
 
     trades_in = op.mp_play(
         trade_file,
@@ -171,14 +163,7 @@ if __name__ == "__main__":
          ("qty", extr.Int32, ""),
          ("side", extr.Int32, "")))
 
-    converted_trades_in = op.combine(trades_in.receive, tuple(),
-                                   trades_in.ticker, tuple(),
-                                   trades_in.market, tuple(),
-                                   op.convert(trades_in.price, extr.Decimal128), tuple(),
-                                   op.convert(trades_in.qty, extr.Decimal128), tuple(),
-                                   trades_in.side, tuple());
-
-    trade_split = op.split(converted_trades_in, "market", tuple(markets))
+    trade_split = op.split(trades_in, "market", tuple(markets))
 
     bbos = []
     ctrds = []
@@ -193,7 +178,7 @@ if __name__ == "__main__":
         for _ in tickers:
             bbo = mkt_bbo_split[ticker_idx]
             trade = mkt_trade_split[ticker_idx]
-            cum_trade = op.cumulative(op.combine(trade.qty, (("qty", "shares"),), trade.qty * trade.price, (("qty", "notional",),)))
+            cum_trade = op.cumulative(op.combine(trade.qty, (("qty", "shares"),), op.convert(trade.qty, extr.Rprice) * trade.price, (("qty", "notional",),)))
             mkt_bbos.append(bbo)
             mkt_ctrds.append(cum_trade)
             ticker_idx = ticker_idx + 1
