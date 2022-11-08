@@ -580,3 +580,7 @@ fmc_decimal128_t Decimal128_val(PyObject *obj) {
   }
   return ((ExtractorBaseTypeDecimal128 *)obj)->val;
 }
+
+PyObject *Decimal128_new(fmc_decimal128_t obj) {
+  return ExtractorBaseTypeDecimal128::py_new(obj);  
+}

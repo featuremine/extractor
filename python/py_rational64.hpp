@@ -552,7 +552,7 @@ PyObject *ExtractorBaseTypeRational64::from_float(PyObject *type,
     return nullptr;
   }
   fmc_rational64_t res;
-  fmc_rational64_from_double(&res, src, 32);
+  fmc_rational64_from_double(&res, src);
   return ExtractorBaseTypeRational64::py_new(res);
 }
 

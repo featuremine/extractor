@@ -86,4 +86,6 @@ FMMODFUNC fmc_decimal128_t Decimal128_val(PyObject *obj);
 FMMODFUNC fmc_rprice_t Rprice_val(PyObject *obj);
 FMMODFUNC fmc_rational64_t Rational64_val(PyObject *obj);
 
+FMMODFUNC PyObject *Decimal128_new(fmc_decimal128_t obj);
+
 #endif // __FM_PY_EXTRACTOR_H__
