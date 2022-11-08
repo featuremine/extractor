@@ -131,7 +131,7 @@ if __name__ == "__main__":
         for _ in tickers:
             bbo = op.identity(mkt_bbo_split[ticker_idx])
             trade = op.identity(mkt_trade_split[ticker_idx])
-            cum_trade = op.cum_trade(trade)
+            cum_trade = op.cumulative(op.combine(trade.qty, (("qty", "shares"),), op.convert(trade.qty, extr.Float64) * op.convert(trade.price, extr.Float64), (("qty", "notional",),)))
             mkt_bbos.append(bbo)
             mkt_ctrds.append(cum_trade)
             ticker_idx = ticker_idx + 1
@@ -140,7 +140,7 @@ if __name__ == "__main__":
         mkt_idx = mkt_idx + 1
 
     nbbos = [op.bbo_aggr(*x) for x in zip(*bbos)]
-    ctrdts = [op.cum_trade_total(*x) for x in zip(*ctrds)]
+    ctrdts = [op.sum(*x) for x in zip(*ctrds)]
 
     bars = [compute_bar(nbbo, ctrdt) for nbbo, ctrdt in zip(nbbos, ctrdts)]
     # out_stream = join_sequence(*bars, "market", tuple([x["NASDAQOMX"] for x in tickers]))

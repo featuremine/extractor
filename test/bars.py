@@ -178,7 +178,7 @@ if __name__ == "__main__":
         for _ in tickers:
             bbo = mkt_bbo_split[ticker_idx]
             trade = mkt_trade_split[ticker_idx]
-            cum_trade = op.cumulative(op.combine(trade.qty, (("qty", "shares"),), op.convert(trade.qty, extr.Rprice) * trade.price, (("qty", "notional",),)))
+            cum_trade = op.cumulative(op.combine(trade.qty, (("qty", "shares"),), op.convert(trade.qty, extr.Float64) * op.convert(trade.price, extr.Float64), (("qty", "notional",),)))
             mkt_bbos.append(bbo)
             mkt_ctrds.append(cum_trade)
             ticker_idx = ticker_idx + 1
