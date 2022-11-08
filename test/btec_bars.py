@@ -18,8 +18,6 @@
 @brief File contains extractor python example of generating bars
 """
 
-import pandas as pd
-from pandas.testing import assert_frame_equal
 from datetime import datetime, timedelta
 import extractor as extr
 from extractor import result_as_pandas
@@ -194,8 +192,9 @@ if __name__ == "__main__":
     trades_in = op.combine(
         trades_in,
         (('time', 'receive'),
-         ('ticker', 'ticker'),
-         ('size', 'qty')),
+         ('ticker', 'ticker')),
+        op.convert(trades_in.size, extr.Decimal128),
+        (('size', 'qty'),),
         op.convert(trades_in.price, extr.Decimal128),
         tuple()
     )

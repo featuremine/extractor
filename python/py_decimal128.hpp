@@ -35,6 +35,7 @@ struct ExtractorBaseTypeDecimal128 {
   static PyObject *tp_new(PyTypeObject *subtype, PyObject *args,
                           PyObject *kwds);
   static PyObject *py_new(fmc_decimal128_t t);
+  static Py_hash_t tp_hash(PyObject*);
   static PyObject *tp_str(PyObject *self);
   static bool init(PyObject *m);
 
@@ -344,7 +345,7 @@ static PyTypeObject ExtractorBaseTypeDecimal128Type = {
     &ExtractorBaseTypeDecimal128::tp_as_number,            /* tp_as_number */
     0,                                                     /* tp_as_sequence */
     0,                                                     /* tp_as_mapping */
-    0,                                                     /* tp_hash  */
+    ExtractorBaseTypeDecimal128::tp_hash,                  /* tp_hash  */
     0,                                                     /* tp_call */
     (reprfunc)ExtractorBaseTypeDecimal128::tp_str,         /* tp_str */
     0,                                                     /* tp_getattro */
@@ -394,6 +395,11 @@ PyObject *ExtractorBaseTypeDecimal128::tp_new(PyTypeObject *subtype,
   PyErr_SetString(PyExc_RuntimeError, "Could not convert to type Decimal128");
   return nullptr;
 }
+
+Py_hash_t ExtractorBaseTypeDecimal128::tp_hash(PyObject*self) {
+  return std::hash<fmc_decimal128_t>{}(((ExtractorBaseTypeDecimal128 *)self)->val);
+}
+
 PyObject *ExtractorBaseTypeDecimal128::tp_str(PyObject *self) {
   std::string str = std::to_string(((ExtractorBaseTypeDecimal128 *)self)->val);
   return PyUnicode_FromString(str.c_str());

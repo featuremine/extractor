@@ -40,15 +40,15 @@ public:
   bool init(fm::stream_context &ctx) {
     result().resize(1);
     auto res = result()[0];
-    res.shares() = 0;
+    res.shares() = fmc::decimal128();
     res.notional() = 0;
     return true;
   }
   bool exec(fm::stream_context &ctx) {
     auto trade = get<0>(input())[0];
     auto res = result()[0];
-    res.shares() += trade.qty();
-    res.notional() += trade.qty() * fmc::to<double>(trade.price());
+    fmc::decimal128::upcast(res.shares()) += trade.qty();
+    res.notional() += fmc::to<double>(trade.qty() * trade.price());
     return true;
   }
   bool init(fm::query_context &ctx) { return false; }
@@ -64,17 +64,17 @@ public:
   bool init(fm::stream_context &ctx) {
     result().resize(1);
     auto res = result()[0];
-    res.shares() = 0;
+    res.shares() = fmc::decimal128();
     res.notional() = 0;
     return true;
   }
   bool exec(fm::stream_context &ctx) {
     auto res = result()[0];
-    res.shares() = 0;
+    res.shares() = fmc::decimal128();
     res.notional() = 0;
     for (auto &inp : input()) {
       auto in = inp[0];
-      res.shares() += in.shares();
+      fmc::decimal128::upcast(res.shares()) += in.shares();
       res.notional() += in.notional();
     }
     return true;

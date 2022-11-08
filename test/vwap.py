@@ -90,11 +90,13 @@ if __name__ == "__main__":
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")))
 
-    bbo_fields = op.fields(bbos_in, ("receive", "ticker", "market", "bidqty", "askqty"))
+    bbo_fields = op.fields(bbos_in, ("receive", "ticker", "market"))
 
     bbos_in = op.combine(bbo_fields, tuple(),
                          op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
-                         op.convert(bbos_in.askprice, extr.Decimal128), tuple())
+                         op.convert(bbos_in.askprice, extr.Decimal128), tuple(),
+                         op.convert(bbos_in.bidqty, extr.Decimal128), tuple(),
+                         op.convert(bbos_in.askqty, extr.Decimal128), tuple())
 
     bbo_split = op.split(bbos_in, "market", tuple(markets))
 
@@ -107,10 +109,11 @@ if __name__ == "__main__":
          ("qty", extr.Int32, ""),
          ("side", extr.Int32, "")))
 
-    trade_fields = op.fields(trades_in, ("receive", "ticker", "market", "qty", "side"))
+    trade_fields = op.fields(trades_in, ("receive", "ticker", "market", "side"))
 
     trades_in = op.combine(trade_fields, tuple(),
-                           op.convert(trades_in.price, extr.Decimal128), tuple())
+                           op.convert(trades_in.price, extr.Decimal128), tuple(),
+                           op.convert(trades_in.qty, extr.Decimal128), tuple())
 
     trade_split = op.split(trades_in, "market", tuple(markets))
 

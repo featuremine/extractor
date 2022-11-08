@@ -73,15 +73,20 @@ struct the_round_field_exec_2_0<fmc_rprice_t, T> : round_field_exec {
 
 template <class T>
 struct the_round_field_exec_2_0<fmc_decimal128_t, T> : round_field_exec {
-  the_round_field_exec_2_0(fm_field_t field, int64_t divisor) : field_(field) {}
+  the_round_field_exec_2_0(fm_field_t field, int64_t divisor)
+  : field_(field), divisor_(divisor),
+    factor_(1 / fmc::decimal128(divisor_)) {
+  }
   void exec(fm_frame_t *result, size_t,
             const fm_frame_t *const argv[]) override {
     const T &val0 = *(const T *)fm_frame_get_cptr1(argv[0], field_, 0);
-    auto decval = fmc::conversion<fmc_decimal128_t, double>()(val0);
-    fmc_decimal128_round(
-        (fmc_decimal128_t *)fm_frame_get_ptr1(result, field_, 0), &decval);
+    fmc_decimal128_t &res = *(fmc_decimal128_t *)fm_frame_get_ptr1(result, field_, 0);
+    fmc_decimal128_from_int(&res, llround(val0 * divisor_));
+    res = res * factor_;
   }
   fm_field_t field_;
+  int64_t divisor_;
+  fmc_decimal128_t factor_;
 };
 
 template <class T>
@@ -193,7 +198,7 @@ fm_ctx_def_t *fm_comp_round_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   auto error = [&]() {
     const char *errstr = "expecting either no agruments or the desired divisor "
-                         "as an integer argument";
+                         "as an integer argument and optionally the result type";
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS, errstr);
     return nullptr;
   };
@@ -204,7 +209,7 @@ fm_ctx_def_t *fm_comp_round_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   if (!fm_type_is_tuple(ptype))
     return error();
 
-  if (fm_type_tuple_size(ptype) == 1) {
+  if (fm_type_tuple_size(ptype) == 1 || fm_type_tuple_size(ptype) == 2) {
     uint64_t divisor;
 
     if (!fm_arg_try_uinteger(fm_type_tuple_arg(ptype, 0), &plist, &divisor))
@@ -215,8 +220,22 @@ fm_ctx_def_t *fm_comp_round_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS, errstr.c_str());
       return nullptr;
     }
+    
+    bool is64 = true;
 
-    if (FMC_RPRICE_FRACTION % divisor != 0) {
+    if (fm_type_tuple_size(ptype) == 2) {
+      auto *restype = fm_arg_try_type_decl(fm_type_tuple_arg(ptype, 1), &plist);
+      if (!restype)
+        return error();
+      is64 = fm_type_equal(restype, fm_base_type_get(sys, FM_TYPE_RPRICE));
+      if (!is64 && !fm_type_equal(restype, fm_base_type_get(sys, FM_TYPE_DECIMAL128))) {
+        auto *errstr = "only Decimal64 and Decimal128 types are supported";
+        fm_type_sys_err_custom(sys, FM_TYPE_ERROR_ARGS, errstr);
+        return nullptr;
+      }
+    }
+
+    if (is64 && FMC_RPRICE_FRACTION % divisor != 0) {
       auto errstr = string("provided divisor must be a divisor for ") +
                     to_string(FMC_RPRICE_FRACTION);
       fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS, errstr.c_str());
@@ -240,15 +259,17 @@ fm_ctx_def_t *fm_comp_round_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       dims[idx] = fm_type_frame_dim(inp, idx);
     }
 
-    auto decimal_param_t = fm_base_type_get(sys, FM_TYPE_RPRICE);
+    auto decimal_param_t = is64 ? fm_base_type_get(sys, FM_TYPE_RPRICE)
+                                : fm_base_type_get(sys, FM_TYPE_DECIMAL128);
 
     for (int idx = 0; idx < nf; ++idx) {
       names[idx] = fm_type_frame_field_name(argv[0], idx);
       types[idx] = decimal_param_t;
 
       auto f_type = fm_type_frame_field_type(inp, idx);
-      round_field_exec *call = get_round_field_exec<fmc_rprice_t>(
-          supported_types(), f_type, idx, divisor);
+      round_field_exec *call = is64
+        ? get_round_field_exec<fmc_rprice_t>(supported_types(), f_type, idx, divisor)
+        : get_round_field_exec<fmc_decimal128_t>(supported_types(), f_type, idx, divisor);
       if (!call) {
         ostringstream os;
         auto *str = fm_type_to_str(f_type);

@@ -37,6 +37,8 @@ def New_York_time(year, mon, day, h=0, m=0, s=0):
                        localize(datetime(year, mon, day, h, m, s)))
 
 
+ZERO = extr.Decimal128(0)
+
 class ValidationBook:
     def __init__(self):
         self.bids = {}
@@ -51,26 +53,26 @@ class ValidationBook:
         askprice = bbo[0].askprice
 
         if (idx in self.oldbidpx) and (bidprice != self.oldbidpx[idx][0]):
-            if self.oldbidpx[idx][1] != 0:
+            if self.oldbidpx[idx][1] != ZERO:
                 oldpx = self.oldbidpx[idx][0]
                 del self.bids[oldpx][idx]
                 if len(self.bids[oldpx]) == 0:
                     del self.bids[oldpx]
 
         if (idx in self.oldaskpx) and (askprice != self.oldaskpx[idx][0]):
-            if self.oldaskpx[idx][1] != 0:
+            if self.oldaskpx[idx][1] != ZERO:
                 oldpx = self.oldaskpx[idx][0]
                 del self.asks[oldpx][idx]
                 if len(self.asks[oldpx]) == 0:
                     del self.asks[oldpx]
 
-        if askqty != 0:
+        if askqty != ZERO:
             if askprice in self.asks:
                 self.asks[askprice][idx] = askqty
             else:
                 self.asks[askprice] = {idx: askqty}
 
-        if bidqty != 0:
+        if bidqty != ZERO:
             if bidprice in self.bids:
                 self.bids[bidprice][idx] = bidqty
             else:
@@ -84,7 +86,6 @@ class ValidationBook:
             return False
 
         for price, level in bookside:
-            price = float(price)
             if price not in validationside:
                 return False
             validationlevel = validationside[price]
@@ -95,7 +96,7 @@ class ValidationBook:
             for order in level:
                 if order.id not in validationlevel:
                     return False
-                if validationlevel[order.id] != int(order.qty):
+                if validationlevel[order.id] != order.qty:
                     return False
 
         return True
@@ -127,6 +128,14 @@ if __name__ == "__main__":
          ("askprice", extr.Rprice, ""),
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")))
+
+    bbos_in = op.combine(bbos_in.receive, tuple(),
+                         bbos_in.ticker, tuple(),
+                         bbos_in.market, tuple(),
+                         op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
+                         op.convert(bbos_in.askprice, extr.Decimal128), tuple(),
+                         op.convert(bbos_in.bidqty, extr.Decimal128), tuple(),
+                         op.convert(bbos_in.askqty, extr.Decimal128), tuple());
 
     bbo_split = op.split(bbos_in, "market", tuple(markets))
 

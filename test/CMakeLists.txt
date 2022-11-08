@@ -337,6 +337,9 @@ extr_py_unit_test(
     book_montage
 )
 extr_py_unit_test(
+    book_montage128
+)
+extr_py_unit_test(
     top_book_update
 )
 extr_py_unit_test(
