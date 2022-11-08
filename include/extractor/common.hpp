@@ -55,7 +55,7 @@ END_FRAME(bbo_frame);
 FRAME(short_trade_frame, 1);
 FIELD(receive, TIME64);
 FIELD(price, DECIMAL128);
-FIELD(qty, DECIMAL128);
+FIELD(qty, INT32);
 FIELDS(receive, price, qty);
 END_FRAME(short_trade_frame);
 
@@ -89,7 +89,7 @@ FIELDS(start_time, end_time, first_px, first_qty, first_mkt, first_trade_time,
 END_FRAME(trade_bar_frame);
 
 FRAME(cum_trade_frame, 1);
-FIELD(shares, DECIMAL128);
+FIELD(shares, INT64);
 FIELD(notional, FLOAT64);
 FIELDS(shares, notional);
 END_FRAME(cum_trade_frame);

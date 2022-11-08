@@ -228,11 +228,9 @@ fm_ctx_def_t *fm_comp_bbo_aggr_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   bbo_aggr_exec_cl *cl;
   if (fm_type_equal(used_type, compatibility_type)) {
-    std::cout<<"USING COMPATIBILITY TYPE BBO_AGGR"<<std::endl;
-   cl = new bbo_aggr_exec_cl_impl<fmc::rprice, int32_t>();
+    cl = new bbo_aggr_exec_cl_impl<fmc::rprice, int32_t>();
   } else {
-    std::cout<<"NOT USING COMPATIBILITY TYPE BBO_AGGR"<<std::endl;
-   cl = new bbo_aggr_exec_cl_impl<fmc::decimal128, fmc::decimal128>();
+    cl = new bbo_aggr_exec_cl_impl<fmc::decimal128, fmc::decimal128>();
   }
 
   auto *def = fm_ctx_def_new();

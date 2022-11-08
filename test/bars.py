@@ -193,7 +193,7 @@ if __name__ == "__main__":
         for _ in tickers:
             bbo = mkt_bbo_split[ticker_idx]
             trade = mkt_trade_split[ticker_idx]
-            cum_trade = op.cum_trade(trade)
+            cum_trade = op.cumulative(op.fields(trade, ("qty", "price")))
             mkt_bbos.append(bbo)
             mkt_ctrds.append(cum_trade)
             ticker_idx = ticker_idx + 1
@@ -202,7 +202,7 @@ if __name__ == "__main__":
         mkt_idx = mkt_idx + 1
 
     nbbos = [op.bbo_aggr(*x) for x in zip(*bbos)]
-    ctrdts = [op.cum_trade_total(*x) for x in zip(*ctrds)]
+    ctrdts = [op.sum(*x) for x in zip(*ctrds)]
 
     trade_imnt_split = op.split(trades_in, "ticker", tuple([x["NASDAQOMX"] for x in tickers]))
 
