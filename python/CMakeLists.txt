@@ -117,7 +117,7 @@ file(
     COPY ${PROJECT_SOURCE_DIR}/python/include
     DESTINATION "${CMAKE_BINARY_DIR}/python_dist/extractor"
     FILES_MATCHING
-        PATTERN .h
+        PATTERN "*.h"
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
