@@ -121,14 +121,13 @@ def setup_prod_sip(universe, symbology, graph, ytpfile):
             )
             graph.callback(trade_combined, print_trades)
 
-            cum_trade = op.cum_trade(trade_combined,
-                                     name="cum_trade/{0}/{1}".format(mkt, imnt))
+            cum_trade = op.cumulative(op.combine(trade_combined.qty, (("qty", "shares"),), op.convert(trade_combined.qty, extractor.Float64) * op.convert(trade_combined.price, extractor.Float64), (("qty", "notional",),)))
+
             bbos_book.append(bbo_book_combined)
             trades.append(trade)
             cum_trades.append(cum_trade)
         op.bbo_aggr(*bbos_book, name="nbbo/{0}".format(imnt))
-        op.cum_trade_total(*cum_trades,
-                           name="cum_trade_total/{0}".format(imnt))
+        op.sum(*cum_trades, name="cum_trade_total/{0}".format(imnt))
 
 
 class Universe:

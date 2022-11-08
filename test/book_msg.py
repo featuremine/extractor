@@ -135,7 +135,7 @@ if __name__ == "__main__":
     assert_array_equal(cancel_pd["id"].values, [300, 301, 302])
     assert_array_equal(cancel_pd["is_bid"].values, [1, 1, 1])
     assert_array_equal(cancel_pd["price"].values, [extr.Decimal128(val) for val in [0.2109375, 0.2109375, 0.2109375]])
-    assert_array_equal(cancel_pd["qty"].values, [extr.Decimal128(200, 200, 200)])
+    assert_array_equal(cancel_pd["qty"].values, [extr.Decimal128(val) for val in [200, 200, 200]])
     assert_array_equal(cancel_pd["seqn"].values, [0, 0, 0])
     assert_array_equal(cancel_pd["vendor"].values,
                        pd.to_datetime(['1970-01-09T08:01:52.000000000', '1970-01-09T08:01:53.000000000',
@@ -148,8 +148,8 @@ if __name__ == "__main__":
     assert_array_equal(execute_pd["batch"].values, [0, 0, 0, 0])
     assert_array_equal(execute_pd["id"].values, [303, 304, 305, 305])
     assert_array_equal(execute_pd["is_bid"].values, [1, 1, 1, 1])
-    assert_array_equal(execute_pd["price"].values, [extr.Decimal128(0.2109375, 0.2109375, 0.2109375, 0.2109375)])
-    assert_array_equal(execute_pd["qty"].values, [extr.Decimal128(250, 200, 100, 50)])
+    assert_array_equal(execute_pd["price"].values, [extr.Decimal128(val) for val in [0.2109375, 0.2109375, 0.2109375, 0.2109375]])
+    assert_array_equal(execute_pd["qty"].values, [extr.Decimal128(val) for val in [250, 200, 100, 50]])
     assert_array_equal(execute_pd["seqn"].values, [0, 0, 0, 0])
     assert_array_equal(execute_pd["vendor"].values,
                        pd.to_datetime(['1970-01-09T08:01:55.000000000', '1970-01-09T08:01:57.000000000',
@@ -159,8 +159,8 @@ if __name__ == "__main__":
     assert_array_equal(trade_pd["Timestamp"].values,
                        pd.to_datetime(['1970-01-09T08:01:59.000000000', '1970-01-09T08:02:00.000000000']))
     assert_array_equal(trade_pd["batch"].values, [0, 0])
-    assert_array_equal(trade_pd["trade_price"].values, [extr.Decimal128(0.2109375, 0.2109375)])
-    assert_array_equal(trade_pd["qty"].values, [extr.Decimal128(25, 25)])
+    assert_array_equal(trade_pd["trade_price"].values, [extr.Decimal128(val) for val in [0.2109375, 0.2109375]])
+    assert_array_equal(trade_pd["qty"].values, [extr.Decimal128(val) for val in [25, 25]])
     assert_array_equal(trade_pd["seqn"].values, [0, 0])
     assert_array_equal(trade_pd["vendor"].values,
                        pd.to_datetime(['1970-01-09T08:01:59.000000000', '1970-01-09T08:02:00.000000000']))
