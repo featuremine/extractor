@@ -90,10 +90,10 @@ fm_ctx_def_t *fm_comp_data_bar_gen(fm_comp_sys_t *csys,
   }
 
   if (!ptype || !fm_type_is_tuple(ptype) ||
-      fm_type_tuple_size(ptype) != 1 || fm_type_tuple_size(ptype) != 2) {
+      (fm_type_tuple_size(ptype) != 1 && fm_type_tuple_size(ptype) != 2)) {
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS,
                            "expect a period and an optional offset"
-                           "time parameter");
+                           " time parameter");
     return nullptr;
   }
 
