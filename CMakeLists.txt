@@ -100,6 +100,11 @@ configure_file(
     COPYONLY
 )
 
+file(
+    COPY "${PROJECT_SOURCE_DIR}/LICENSE"
+    DESTINATION "${CMAKE_BINARY_DIR}/python_dist"
+)
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(PYTHON_PLATFORM "manylinux_2_17_${CMAKE_SYSTEM_PROCESSOR}")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
