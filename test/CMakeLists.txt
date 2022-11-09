@@ -148,6 +148,9 @@ extr_py_unit_test(
     btec_bars
 )
 extr_py_unit_test(
+    btec_bars128
+)
+extr_py_unit_test(
     csv_play
 )
 extr_py_unit_test(
