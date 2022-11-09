@@ -22,7 +22,7 @@
 
 #include "fmc++/rational64.hpp"
 #include <Python.h>
-#include <extractor/python/py_extractor.h>
+#include <extractor/python/rational64.h>
 #include <py_type_utils.hpp>
 
 struct ExtractorBaseTypeRational64 {

@@ -23,6 +23,7 @@ macro(extr_unit_test)
         ${ARG_NAME}
         PUBLIC
         "${EXTRACTOR_INC_DIR}"
+        "${EXTRACTOR_PYTHON_INC_DIR}"
         "${EXTRACTOR_SRC_DIR}"
     )
     target_link_libraries(

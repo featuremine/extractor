@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_comp.hpp
+ * @file comp.hpp
  * @author Maxim Trokhimtchouk
  * @date 5 Oct 2017
  * @brief Python extension for extractor library
@@ -28,9 +28,9 @@ extern "C" {
 #include "extractor/comp_sys.h"
 }
 
-#include "py_comp_base.hpp"
-#include "py_types.hpp"
-#include "py_wrapper.hpp"
+#include "comp_base.hpp"
+#include "types.hpp"
+#include "wrapper.hpp"
 
 #include <Python.h>
 

@@ -37,7 +37,7 @@ extern "C" {
 #include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
 #include "serial_util.hpp"
-#include "storage_util.hpp"
+#include "upcast_util.hpp"
 #include "type_space.hpp"
 
 #include <iomanip>
@@ -172,7 +172,7 @@ size_t fm_arg_buffer_dump(fm_arg_buffer_t *buf, const char **where) {
 template <class T>
 bool fm_arg_item_read(string &buf, fm_arg_stack_t **s, fm_reader reader,
                       void *closure) {
-  using S = typename storage<T>::type;
+  using S = typename upcast<T>::type;
   S x;
   if (!fm_item_read(buf, x, reader, closure)) {
     return false;

@@ -38,6 +38,7 @@ extern "C" {
 #include "fmc++/rprice.hpp"
 #include "fmc++/strings.hpp"
 #include "fmc++/time.hpp"
+#include "upcast_util.hpp"
 
 #include <memory>
 #include <stdlib.h>
@@ -231,12 +232,6 @@ fm_call_def *fm_comp_convert_stream_call(fm_comp_def_cl comp_cl,
   return def;
 }
 
-template <class T> struct storage { using type = T; };
-
-template <> struct storage<fmc_decimal128_t> {
-  using type = typename fmc::decimal128;
-};
-
 template <class... Ts>
 convert_field_exec *get_convert_field_exec(fmc::type_list<Ts...>,
                                            fm_type_decl_cp from_type,
@@ -246,9 +241,9 @@ convert_field_exec *get_convert_field_exec(fmc::type_list<Ts...>,
     using Tt = decltype(t);
     using Tn = typename Tt::type;
     using From = typename Tn::first_type;
-    using FromS = typename storage<From>::type;
+    using FromS = typename upcast<From>::type;
     using To = typename Tn::second_type;
-    using ToS = typename storage<To>::type;
+    using ToS = typename upcast<To>::type;
     auto obj_to = fm::frame_field_type<To>();
     if constexpr (std::is_same<From, char *>::value) {
       if (!result && fm_type_is_array(from_type) &&
@@ -305,7 +300,7 @@ fm_ctx_def_t *fm_comp_convert_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       pair<bool, UINT64>, pair<bool, FLOAT32>, pair<bool, FLOAT64>,
       pair<RPRICE, FLOAT32>, pair<RPRICE, FLOAT64>, pair<FLOAT32, RPRICE>,
       pair<FLOAT64, RPRICE>, pair<INT8, RPRICE>, pair<INT16, RPRICE>,
-      pair<INT32, RPRICE>, pair<INT64, RPRICE>, pair<RPRICE, RATIONAL64>,
+      pair<INT32, RPRICE>, pair<INT64, RPRICE>,
       pair<RATIONAL64, FLOAT32>, pair<DECIMAL128, FLOAT32>,
       pair<DECIMAL128, FLOAT64>, pair<FLOAT32, DECIMAL128>,
       pair<FLOAT64, DECIMAL128>, pair<INT8, DECIMAL128>,

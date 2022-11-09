@@ -13,25 +13,20 @@
  *****************************************************************************/
 
 /**
- * @file storage_util.hpp
- * @date 7 Nov 2022
- * @brief File contains storage type helpers
+ * @file py_extractor.cpp
+ * @author Maxim Trokhimtchouk
+ * @date 5 Oct 2017
+ * @brief Python extension for extractor library
  *
- * @see http://www.featuremine.com
+ * This file contains Python C extention for extractor library
  */
 
-#include "fmc++/decimal128.hpp"
-#include "fmc++/rational64.hpp"
-#include "fmc++/rprice.hpp"
+extern "C" {
+#include "extractor/python/extractor.h"
+}
 
-template <class T> struct storage { using type = T; };
+#include <Python.h>
 
-template <> struct storage<fmc_decimal128_t> {
-  using type = typename fmc::decimal128;
-};
+PyMODINIT_FUNC PyInit_extractor(void) FMMODFUNC FMPYMODPUB;
 
-template <> struct storage<fmc_rprice_t> { using type = typename fmc::rprice; };
-
-template <> struct storage<fmc_rational64_t> {
-  using type = typename fmc::rational64;
-};
+PyMODINIT_FUNC PyInit_extractor(void) { return fm_extractor_py_init(); }

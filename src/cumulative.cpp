@@ -36,7 +36,7 @@ extern "C" {
 #include "fmc++/mpl.hpp"
 #include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
-#include "storage_util.hpp"
+#include "upcast_util.hpp"
 
 #include <memory>
 #include <stdlib.h>
@@ -123,7 +123,7 @@ cumulative_field_exec *get_cumulative_field_exec(fmc::type_list<Ts...>,
     using Tn = typename Tt::type;
     auto obj = fm::frame_field_type<Tn>();
     if (!result && obj.validate(f_type)) {
-      using S = typename storage<Tn>::type;
+      using S = typename upcast<Tn>::type;
       result = new the_cumulative_field_exec_2_0<S>(idx);
     }
   };

@@ -13,8 +13,8 @@ execute_process(COMMAND ${PYTHON3_BIN} -c
 add_library(
     py_extractor_obj
     STATIC
-    "book/py_book.cpp"
-    "py_extractor.cpp"
+    "src/book/book.cpp"
+    "src/extractor.cpp"
 )
 target_link_libraries(
     py_extractor_obj
@@ -27,6 +27,8 @@ target_include_directories(
     py_extractor_obj
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_PYTHON_INC_DIR}"
+    "${EXTRACTOR_PYTHON_SRC_DIR}"
     "${EXTRACTOR_SRC_DIR}"
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${NUMPY_INCLUDE_DIR}"
@@ -55,6 +57,8 @@ target_include_directories(
     py_extractor_dep
     INTERFACE
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_PYTHON_INC_DIR}"
+    "${EXTRACTOR_PYTHON_SRC_DIR}"
     "${PYTHON_INCLUDE_DIRS}"
 )
 
@@ -82,7 +86,7 @@ install(
 add_library(
     extractor_module
     SHARED
-    "py_extractor_main.cpp"
+    "src/extractor_main.cpp"
 )
 target_link_libraries(
     extractor_module
@@ -104,8 +108,16 @@ target_include_directories(
     extractor_module
     PRIVATE
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_PYTHON_INC_DIR}"
+    "${EXTRACTOR_PYTHON_SRC_DIR}"
     "${EXTRACTOR_SRC_DIR}"
     "${PYTHON_INCLUDE_DIRS}"
+)
+file(
+    COPY ${PROJECT_SOURCE_DIR}/python/include
+    DESTINATION "${CMAKE_BINARY_DIR}/python_dist/extractor"
+    FILES_MATCHING
+        PATTERN "*.h"
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")

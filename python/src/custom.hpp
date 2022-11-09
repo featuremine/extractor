@@ -22,9 +22,9 @@
  * @see http://www.featuremine.com
  */
 
-#include "py_frame.hpp"
-#include "py_types.hpp"
-#include "py_utils.hpp"
+#include "frame.hpp"
+#include "types.hpp"
+#include "utils.hpp"
 #include <Python.h>
 
 #pragma once

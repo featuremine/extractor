@@ -29,8 +29,8 @@ extern "C" {
 }
 
 #include "custom.hpp"
+#include "module.hpp"
 #include "pandas_play.hpp"
-#include "py_module.hpp"
 #include <Python.h>
 #include <memory>
 #include <string>

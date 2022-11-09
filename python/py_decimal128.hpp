@@ -20,9 +20,12 @@
 
 #pragma once
 
+extern "C" {
+#include <extractor/python/decimal128.h>
+}
+
 #include "fmc/decimal128.h"
 #include <Python.h>
-#include <extractor/python/py_extractor.h>
 #include <py_type_utils.hpp>
 
 struct ExtractorBaseTypeDecimal128 {
