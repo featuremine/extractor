@@ -96,7 +96,7 @@ bool fm_arg_buffer_build(ostringstream &os, fm_type_decl_cp td,
                             os << STACK_POP(args, RATIONAL64) << endl;
                             break;
                           case FM_TYPE_RPRICE:
-                            os << fmc::rprice::upcast(STACK_POP(args, RPRICE)) << endl;
+                            os << STACK_POP(args, RPRICE) << endl;
                             break;
                           case FM_TYPE_DECIMAL128:
                             os << STACK_POP(args, DECIMAL128) << endl;

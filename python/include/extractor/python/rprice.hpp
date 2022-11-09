@@ -516,11 +516,11 @@ PyObject *ExtractorBaseTypeRprice::min(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
     return nullptr;
   }
-  fmc::rprice dlhs;
+  fmc_rprice_t dlhs;
   if (py_type_convert<fmc_rprice_t>::convert(dlhs, lhs)) {
     return nullptr;
   }
-  fmc::rprice drhs;
+  fmc_rprice_t drhs;
   if (py_type_convert<fmc_rprice_t>::convert(drhs, rhs)) {
     return nullptr;
   }
