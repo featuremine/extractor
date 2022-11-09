@@ -142,9 +142,9 @@ PyObject *ExtractorBaseTypeDecimal128::nb_absolute(PyObject *self) {
 }
 
 PyObject *ExtractorBaseTypeDecimal128::nb_float(PyObject *self) {
-  char str[FMC_DECIMAL128_STR_SIZE];
-  fmc_decimal128_to_str(str, &((ExtractorBaseTypeDecimal128 *)self)->val);
-  return PyFloat_FromDouble(strtod(str, nullptr));
+  double dbl;
+  fmc_decimal128_to_double(&dbl, &((ExtractorBaseTypeDecimal128 *)self)->val);
+  return PyFloat_FromDouble(dbl);
 }
 
 PyObject *ExtractorBaseTypeDecimal128::nb_int(PyObject *self) {
@@ -157,7 +157,7 @@ PyObject *ExtractorBaseTypeDecimal128::nb_int(PyObject *self) {
                     "Error produced attempting to convert to int");
     return nullptr;
   }
-  return PyLong_FromLong(res);
+  return PyLong_FromLongLong(res);
 }
 
 PyNumberMethods ExtractorBaseTypeDecimal128::tp_as_number = {
