@@ -374,3 +374,4 @@ void fm_comp_book_build_destroy(fm_comp_def_cl cl, fm_ctx_def_t *def) {
   if (ctx_cl != nullptr)
     delete ctx_cl;
 }
+
