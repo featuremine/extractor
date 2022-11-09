@@ -14,8 +14,8 @@
 """
 @package callbacks.py
 @author Andres Rangel
-@date 10 May 2019
-@brief File contains extractor python sample
+@date 8 Nov 2022
+@brief File contains tests for numerical types
 """
 
 import extractor as extr
