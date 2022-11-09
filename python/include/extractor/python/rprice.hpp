@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_rprice.hpp
+ * @file rprice.hpp
  * @date 2 Nov 2022
  * @brief Python wrapper for extractor rprice type
  * */

@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_decimal128.hpp
+ * @file decimal128.hpp
  * @date 2 Nov 2022
  * @brief Python wrapper for extractor decimal128 type
  * */

@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_rational.hpp
+ * @file rational.hpp
  * @date 2 Nov 2022
  * @brief Python wrapper for extractor rational type
  * */
