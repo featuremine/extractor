@@ -45,12 +45,12 @@ using namespace std;
 using namespace fm;
 using namespace book;
 
-class header_op_cl {
+class book_vendor_time_op_cl {
 public:
-  header_op_cl(fm_type_decl_cp type) {
+  book_vendor_time_op_cl(fm_type_decl_cp type) {
     vendor_field_ = fm_type_frame_field_idx(type, "vendor");
   }
-  ~header_op_cl() {}
+  ~book_vendor_time_op_cl() {}
   void init(fm_frame_t *result) {
     *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
         fmc_time64_start();
@@ -76,7 +76,7 @@ bool fm_comp_book_vendor_time_call_stream_init(fm_frame_t *result, size_t args,
                                           const fm_frame_t *const argv[],
                                           fm_call_ctx_t *ctx,
                                           fm_call_exec_cl *cl) {
-  auto &comp = (*(header_op_cl *)ctx->comp);
+  auto &comp = (*(book_vendor_time_op_cl *)ctx->comp);
   comp.init(result);
   return true;
 }
@@ -85,7 +85,7 @@ bool fm_comp_book_vendor_time_stream_exec(fm_frame_t *result, size_t args,
                                      const fm_frame_t *const argv[],
                                      fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
   auto &box = *(book::message *)fm_frame_get_cptr1(argv[0], 0, 0);
-  auto &comp = (*(header_op_cl *)ctx->comp);
+  auto &comp = (*(book_vendor_time_op_cl *)ctx->comp);
   return comp.exec(box, result, (fm_stream_ctx *)ctx->exec);
 }
 
@@ -131,7 +131,7 @@ fm_ctx_def_t *fm_comp_book_vendor_time_gen(fm_comp_sys_t *csys,
     return nullptr;
   }
 
-  header_op_cl *cl = new header_op_cl(type);
+  book_vendor_time_op_cl *cl = new book_vendor_time_op_cl(type);
 
   auto *def = fm_ctx_def_new();
   fm_ctx_def_inplace_set(def, false);
@@ -143,7 +143,7 @@ fm_ctx_def_t *fm_comp_book_vendor_time_gen(fm_comp_sys_t *csys,
 }
 
 void fm_comp_book_vendor_time_destroy(fm_comp_def_cl cl, fm_ctx_def_t *def) {
-  auto *ctx_cl = (header_op_cl *)fm_ctx_def_closure(def);
+  auto *ctx_cl = (book_vendor_time_op_cl *)fm_ctx_def_closure(def);
   if (ctx_cl != nullptr)
     delete ctx_cl;
 }
