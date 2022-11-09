@@ -38,10 +38,10 @@ extern "C" {
 #include <wrapper.hpp>
 
 #include "upcast_util.hpp"
-#include <py_decimal128.hpp>
-#include <py_rational64.hpp>
-#include <py_rprice.hpp>
-#include <py_type_utils.hpp>
+#include <extractor/python/decimal128.hpp>
+#include <extractor/python/rational64.hpp>
+#include <extractor/python/rprice.hpp>
+#include <extractor/python/type_utils.hpp>
 
 #define BASE_TYPE_WRAPPER(name, T)                                             \
   struct ExtractorBaseType##name {                                             \

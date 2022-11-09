@@ -26,7 +26,7 @@ extern "C" {
 
 #include "fmc/decimal128.h"
 #include <Python.h>
-#include <py_type_utils.hpp>
+#include <extractor/python/type_utils.hpp>
 
 struct ExtractorBaseTypeDecimal128 {
   PyObject_HEAD;
