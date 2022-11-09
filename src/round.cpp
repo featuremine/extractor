@@ -74,13 +74,13 @@ struct the_round_field_exec_2_0<fmc_rprice_t, T> : round_field_exec {
 template <class T>
 struct the_round_field_exec_2_0<fmc_decimal128_t, T> : round_field_exec {
   the_round_field_exec_2_0(fm_field_t field, int64_t divisor)
-  : field_(field), divisor_(divisor),
-    factor_(1 / fmc::decimal128(divisor_)) {
-  }
+      : field_(field), divisor_(divisor),
+        factor_(1 / fmc::decimal128(divisor_)) {}
   void exec(fm_frame_t *result, size_t,
             const fm_frame_t *const argv[]) override {
     const T &val0 = *(const T *)fm_frame_get_cptr1(argv[0], field_, 0);
-    fmc_decimal128_t &res = *(fmc_decimal128_t *)fm_frame_get_ptr1(result, field_, 0);
+    fmc_decimal128_t &res =
+        *(fmc_decimal128_t *)fm_frame_get_ptr1(result, field_, 0);
     fmc_decimal128_from_int(&res, llround(val0 * divisor_));
     res = res * factor_;
   }
@@ -197,8 +197,9 @@ fm_ctx_def_t *fm_comp_round_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   }
 
   auto error = [&]() {
-    const char *errstr = "expecting either no agruments or the desired divisor "
-                         "as an integer argument and optionally the result type";
+    const char *errstr =
+        "expecting either no agruments or the desired divisor "
+        "as an integer argument and optionally the result type";
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS, errstr);
     return nullptr;
   };
@@ -220,7 +221,7 @@ fm_ctx_def_t *fm_comp_round_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS, errstr.c_str());
       return nullptr;
     }
-    
+
     bool is64 = true;
 
     if (fm_type_tuple_size(ptype) == 2) {
@@ -228,7 +229,8 @@ fm_ctx_def_t *fm_comp_round_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       if (!restype)
         return error();
       is64 = fm_type_equal(restype, fm_base_type_get(sys, FM_TYPE_RPRICE));
-      if (!is64 && !fm_type_equal(restype, fm_base_type_get(sys, FM_TYPE_DECIMAL128))) {
+      if (!is64 &&
+          !fm_type_equal(restype, fm_base_type_get(sys, FM_TYPE_DECIMAL128))) {
         auto *errstr = "only Decimal64 and Decimal128 types are supported";
         fm_type_sys_err_custom(sys, FM_TYPE_ERROR_ARGS, errstr);
         return nullptr;
@@ -267,9 +269,11 @@ fm_ctx_def_t *fm_comp_round_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       types[idx] = decimal_param_t;
 
       auto f_type = fm_type_frame_field_type(inp, idx);
-      round_field_exec *call = is64
-        ? get_round_field_exec<fmc_rprice_t>(supported_types(), f_type, idx, divisor)
-        : get_round_field_exec<fmc_decimal128_t>(supported_types(), f_type, idx, divisor);
+      round_field_exec *call =
+          is64 ? get_round_field_exec<fmc_rprice_t>(supported_types(), f_type,
+                                                    idx, divisor)
+               : get_round_field_exec<fmc_decimal128_t>(supported_types(),
+                                                        f_type, idx, divisor);
       if (!call) {
         ostringstream os;
         auto *str = fm_type_to_str(f_type);

@@ -55,7 +55,7 @@ extern "C" {
     static PyObject *tp_new(PyTypeObject *subtype, PyObject *args,             \
                             PyObject *kwds);                                   \
     static PyObject *py_new(T t);                                              \
-    static Py_hash_t tp_hash(PyObject* self);                                  \
+    static Py_hash_t tp_hash(PyObject *self);                                  \
     static PyObject *tp_str(PyObject *self);                                   \
     static bool init(PyObject *m);                                             \
   };                                                                           \
@@ -122,7 +122,7 @@ extern "C" {
     PyErr_SetString(PyExc_RuntimeError, "Could not convert to type " /*##T*/); \
     return nullptr;                                                            \
   }                                                                            \
-  Py_hash_t ExtractorBaseType##name::tp_hash(PyObject* self) {                 \
+  Py_hash_t ExtractorBaseType##name::tp_hash(PyObject *self) {                 \
     return std::hash<T>{}(((ExtractorBaseType##name *)self)->val);             \
   }                                                                            \
   PyObject *ExtractorBaseType##name::tp_str(PyObject *self) {                  \

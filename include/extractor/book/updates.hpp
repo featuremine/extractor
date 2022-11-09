@@ -142,9 +142,8 @@ using message = std::variant<updates::add, updates::insert, updates::position,
                              updates::state, updates::control, updates::set,
                              updates::announce, updates::time, updates::none>;
 
-static_assert(sizeof(message) <= 88,
-              "expecting book update message to be less "
-              "than 88B");
+static_assert(sizeof(message) <= 88, "expecting book update message to be less "
+                                     "than 88B");
 
 } // namespace book
 } // namespace fm

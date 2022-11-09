@@ -32,8 +32,8 @@ extern "C" {
 #include "fmc/time.h"
 }
 
-#include "fmc++/rprice.hpp"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/side.hpp"
 
 #include <utility>
@@ -44,12 +44,13 @@ using namespace std;
 
 struct bbo_aggr_exec_cl {
   virtual void init(fm_frame_t *result, const fm_frame_t *const argv[]) = 0;
-  virtual void exec(fm_frame_t *result, size_t argc, const fm_frame_t *const argv[], fmc_time64_t now) = 0;
+  virtual void exec(fm_frame_t *result, size_t argc,
+                    const fm_frame_t *const argv[], fmc_time64_t now) = 0;
   virtual ~bbo_aggr_exec_cl() {}
 };
 
-template<typename Price, typename Quantity>
-struct bbo_aggr_exec_cl_impl: bbo_aggr_exec_cl {
+template <typename Price, typename Quantity>
+struct bbo_aggr_exec_cl_impl : bbo_aggr_exec_cl {
 
   bbo_aggr_exec_cl_impl() : zero_(0) {}
 
@@ -72,7 +73,8 @@ struct bbo_aggr_exec_cl_impl: bbo_aggr_exec_cl {
         sided<Price>()[trade_side::ASK];
   }
 
-  void exec(fm_frame_t *result, size_t argc, const fm_frame_t *const argv[], fmc_time64_t now) override {
+  void exec(fm_frame_t *result, size_t argc, const fm_frame_t *const argv[],
+            fmc_time64_t now) override {
     *(fmc_time64_t *)fm_frame_get_ptr1(result, rec, 0) = now;
     for (auto side : trade_side::all()) {
       better<Price> cmp(side);
@@ -92,8 +94,7 @@ struct bbo_aggr_exec_cl_impl: bbo_aggr_exec_cl {
         if (best_px == px)
           qt_tot += *(Quantity *)fm_frame_get_cptr1(argv[i], qt_idx, 0);
       }
-      *(Price *)fm_frame_get_ptr1(result, out_pxs[side], 0) =
-          best_px;
+      *(Price *)fm_frame_get_ptr1(result, out_pxs[side], 0) = best_px;
       *(Quantity *)fm_frame_get_ptr1(result, out_qts[side], 0) = qt_tot;
     }
   }
@@ -159,7 +160,7 @@ fm_ctx_def_t *fm_comp_bbo_aggr_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   fm_type_decl_cp input = argv[0];
 
-  auto validate_type = [&sys, &input](auto type, auto argv){
+  auto validate_type = [&sys, &input](auto type, auto argv) {
     if (!fm_type_is_subframe(type, argv)) {
       auto *type_str1 = fm_type_to_str(type);
       auto *type_str2 = fm_type_to_str(argv);

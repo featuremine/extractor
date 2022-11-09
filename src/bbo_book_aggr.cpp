@@ -33,8 +33,8 @@ extern "C" {
 #include "fmc/time.h"
 }
 
-#include "fmc++/rprice.hpp"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/side.hpp"
 
 #include <utility>
@@ -44,27 +44,28 @@ using namespace fmc;
 using namespace std;
 
 struct bbo_book_aggr_exec_cl {
-  virtual void init(size_t argc, const fm_frame_t *const argv[], fm_frame_t *result) = 0;
+  virtual void init(size_t argc, const fm_frame_t *const argv[],
+                    fm_frame_t *result) = 0;
   virtual void update_book(fm_stream_ctx_t *ctx, size_t idx) = 0;
   virtual void nbbo_to_frame(fm_stream_ctx_t *ctx, fm_frame_t *result) = 0;
-  virtual ~bbo_book_aggr_exec_cl() {};
+  virtual ~bbo_book_aggr_exec_cl(){};
 };
 
-template<typename Price, typename Quantity>
+template <typename Price, typename Quantity>
 struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
 
   bbo_book_aggr_exec_cl_impl(fm_book_shared_t *book, unsigned argc)
       : book_(book),
-        data_(argc,
-              {make_pair(sided<Price>()[trade_side::BID], 0),
-               make_pair(sided<Price>()[trade_side::ASK], 0)}),
+        data_(argc, {make_pair(sided<Price>()[trade_side::BID], 0),
+                     make_pair(sided<Price>()[trade_side::ASK], 0)}),
         zero_(0) {
     fm_book_shared_inc(book_);
   }
 
   ~bbo_book_aggr_exec_cl_impl() { fm_book_shared_dec(book_); }
 
-  void init(size_t argc, const fm_frame_t *const argv[], fm_frame_t *result) override {
+  void init(size_t argc, const fm_frame_t *const argv[],
+            fm_frame_t *result) override {
     inps_ = vector<const fm_frame_t *>(
         argv, argv + (argc * sizeof(const fm_frame_t *)));
 
@@ -98,10 +99,12 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
       auto &oldqty = sided_data.second;
       auto isbid = is_bid(side);
       if (oldqty != zero_) {
-        if constexpr(is_same_v<Price, fmc::decimal128> && is_same_v<Quantity, fmc::decimal128>) {
+        if constexpr (is_same_v<Price, fmc::decimal128> &&
+                      is_same_v<Quantity, fmc::decimal128>) {
           fm_book_mod(book, idx, oldpx, oldqty, isbid);
         } else {
-          fm_book_mod(book, idx, fmc::decimal128(oldpx), fmc::decimal128(oldqty), isbid);
+          fm_book_mod(book, idx, fmc::decimal128(oldpx),
+                      fmc::decimal128(oldqty), isbid);
         }
       }
 
@@ -109,10 +112,12 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
       auto qty = *(Quantity *)fm_frame_get_cptr1(frame, qts_idx, 0);
       if (qty != zero_) {
         auto ven = *(fmc_time64_t *)fm_frame_get_cptr1(frame, recv_idx, 0);
-        if constexpr(is_same_v<Price, fmc::decimal128> && is_same_v<Quantity, fmc::decimal128>) {
+        if constexpr (is_same_v<Price, fmc::decimal128> &&
+                      is_same_v<Quantity, fmc::decimal128>) {
           fm_book_add(book, now, ven, 0, idx, px, qty, isbid);
         } else {
-          fm_book_add(book, now, ven, 0, idx, decimal128(px), decimal128(qty), isbid);
+          fm_book_add(book, now, ven, 0, idx, decimal128(px), decimal128(qty),
+                      isbid);
         }
       }
 
@@ -138,7 +143,7 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
       }
 
       *(fmc_time64_t *)fm_frame_get_ptr1(result, rec_, 0) = now;
-      *(Price *)fm_frame_get_ptr1(result, out_pxs_[side], 0) = px;      
+      *(Price *)fm_frame_get_ptr1(result, out_pxs_[side], 0) = px;
       *(Quantity *)fm_frame_get_ptr1(result, out_qts_[side], 0) = qty;
     }
   }
@@ -214,7 +219,7 @@ fm_ctx_def_t *fm_comp_bbo_book_aggr_gen(fm_comp_sys_t *csys,
 
   fm_type_decl_cp input = argv[0];
 
-  auto validate_type = [&sys, &input](auto type, auto argv){
+  auto validate_type = [&sys, &input](auto type, auto argv) {
     if (!fm_type_is_subframe(type, argv)) {
       auto *type_str1 = fm_type_to_str(type);
       auto *type_str2 = fm_type_to_str(argv);
@@ -311,7 +316,8 @@ fm_ctx_def_t *fm_comp_bbo_book_aggr_gen(fm_comp_sys_t *csys,
   if (fm_type_equal(used_type, compatibility_type)) {
     cl = new bbo_book_aggr_exec_cl_impl<fmc::rprice, int32_t>(book, argc);
   } else {
-    cl = new bbo_book_aggr_exec_cl_impl<fmc::decimal128, fmc::decimal128>(book, argc);
+    cl = new bbo_book_aggr_exec_cl_impl<fmc::decimal128, fmc::decimal128>(book,
+                                                                          argc);
   }
 
   auto *def = fm_ctx_def_new();

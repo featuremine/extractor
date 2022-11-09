@@ -35,7 +35,7 @@ struct ExtractorBaseTypeDecimal128 {
   static PyObject *tp_new(PyTypeObject *subtype, PyObject *args,
                           PyObject *kwds);
   static PyObject *py_new(fmc_decimal128_t t);
-  static Py_hash_t tp_hash(PyObject*);
+  static Py_hash_t tp_hash(PyObject *);
   static PyObject *tp_str(PyObject *self);
   static bool init(PyObject *m);
 
@@ -396,8 +396,9 @@ PyObject *ExtractorBaseTypeDecimal128::tp_new(PyTypeObject *subtype,
   return nullptr;
 }
 
-Py_hash_t ExtractorBaseTypeDecimal128::tp_hash(PyObject*self) {
-  return std::hash<fmc_decimal128_t>{}(((ExtractorBaseTypeDecimal128 *)self)->val);
+Py_hash_t ExtractorBaseTypeDecimal128::tp_hash(PyObject *self) {
+  return std::hash<fmc_decimal128_t>{}(
+      ((ExtractorBaseTypeDecimal128 *)self)->val);
 }
 
 PyObject *ExtractorBaseTypeDecimal128::tp_str(PyObject *self) {
@@ -588,5 +589,5 @@ fmc_decimal128_t Decimal128_val(PyObject *obj) {
 }
 
 PyObject *Decimal128_new(fmc_decimal128_t obj) {
-  return ExtractorBaseTypeDecimal128::py_new(obj);  
+  return ExtractorBaseTypeDecimal128::py_new(obj);
 }
