@@ -26,8 +26,8 @@
 
 #include <Python.h>
 
-#include "fmc/platform.h"
 #include "fmc/decimal128.h"
+#include "fmc/platform.h"
 
 FMMODFUNC bool Decimal128_Check(PyObject *obj);
 

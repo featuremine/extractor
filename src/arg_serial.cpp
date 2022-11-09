@@ -37,8 +37,8 @@ extern "C" {
 #include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
 #include "serial_util.hpp"
-#include "upcast_util.hpp"
 #include "type_space.hpp"
+#include "upcast_util.hpp"
 
 #include <iomanip>
 #include <iostream>
