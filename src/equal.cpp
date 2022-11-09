@@ -37,6 +37,7 @@ extern "C" {
 #include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
 #include "op_util.hpp"
+#include "upcast_util.hpp"
 
 #include <memory>
 #include <stdlib.h>
@@ -124,7 +125,8 @@ op_field_exec *get_equal_field_exec(fmc::type_list<Ts...>,
     using Tn = typename Tt::type;
     auto obj = fm::frame_field_type<Tn>();
     if (!result && obj.validate(f_type)) {
-      result = new the_equal_field_exec_2_0<Tn>(idx);
+      using S = typename upcast<Tn>::type;
+      result = new the_equal_field_exec_2_0<S>(idx);
     }
   };
   (create(fmc::typify<Ts>()), ...);

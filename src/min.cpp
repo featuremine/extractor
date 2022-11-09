@@ -38,6 +38,7 @@ extern "C" {
 #include "fmc++/rational64.hpp"
 #include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
+#include "upcast_util.hpp"
 
 #include "fmc/time.h"
 #include <deque>
@@ -197,7 +198,8 @@ exec_cl *get_comp_min_cl(fmc::type_list<Ts...>, fm_type_decl_cp f_type,
     using Tn = typename Tt::type;
     auto obj = fm::frame_field_type<Tn>();
     if (!result && obj.validate(f_type)) {
-      result = new min_exec_cl<Tn>(idx);
+      using S = typename upcast<Tn>::type;
+      result = new min_exec_cl<S>(idx);
     }
   };
   (create(fmc::typify<Ts>()), ...);

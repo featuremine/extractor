@@ -146,7 +146,7 @@ PyObject *ExtractorBaseTypeRational64::nb_float(PyObject *self) {
 PyObject *ExtractorBaseTypeRational64::nb_int(PyObject *self) {
   double dest;
   fmc_rational64_to_double(&dest, &((ExtractorBaseTypeRational64 *)self)->val);
-  return PyLong_FromLong(llround(dest));
+  return PyLong_FromLongLong(llround(dest));
 }
 
 PyNumberMethods ExtractorBaseTypeRational64::tp_as_number = {

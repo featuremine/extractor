@@ -141,7 +141,7 @@ PyObject *ExtractorBaseTypeRprice::nb_float(PyObject *self) {
 PyObject *ExtractorBaseTypeRprice::nb_int(PyObject *self) {
   int64_t dest;
   fmc_rprice_to_int(&dest, &((ExtractorBaseTypeRprice *)self)->val);
-  return PyLong_FromLong(dest);
+  return PyLong_FromLongLong(dest);
 }
 
 PyNumberMethods ExtractorBaseTypeRprice::tp_as_number = {
@@ -417,8 +417,8 @@ PyObject *ExtractorBaseTypeRprice::py_richcmp(PyObject *obj1, PyObject *obj2,
     return PyBool_FromLong(op == Py_NE);
   }
   int c = 0;
-  fmc_rprice_t t1;
-  fmc_rprice_t t2;
+  fmc::rprice t1;
+  fmc::rprice t2;
   t1 = ((ExtractorBaseTypeRprice *)obj1)->val;
   t2 = ((ExtractorBaseTypeRprice *)obj2)->val;
   switch (op) {
@@ -476,11 +476,11 @@ PyObject *ExtractorBaseTypeRprice::compare(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
     return nullptr;
   }
-  fmc_rprice_t dlhs;
+  fmc::rprice dlhs;
   if (py_type_convert<fmc_rprice_t>::convert(dlhs, lhs)) {
     return nullptr;
   }
-  fmc_rprice_t drhs;
+  fmc::rprice drhs;
   if (py_type_convert<fmc_rprice_t>::convert(drhs, rhs)) {
     return nullptr;
   }
@@ -495,11 +495,11 @@ PyObject *ExtractorBaseTypeRprice::max(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
     return nullptr;
   }
-  fmc_rprice_t dlhs;
+  fmc::rprice dlhs;
   if (py_type_convert<fmc_rprice_t>::convert(dlhs, lhs)) {
     return nullptr;
   }
-  fmc_rprice_t drhs;
+  fmc::rprice drhs;
   if (py_type_convert<fmc_rprice_t>::convert(drhs, rhs)) {
     return nullptr;
   }
@@ -516,11 +516,11 @@ PyObject *ExtractorBaseTypeRprice::min(PyObject *self, PyObject *args) {
   if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
     return nullptr;
   }
-  fmc_rprice_t dlhs;
+  fmc::rprice dlhs;
   if (py_type_convert<fmc_rprice_t>::convert(dlhs, lhs)) {
     return nullptr;
   }
-  fmc_rprice_t drhs;
+  fmc::rprice drhs;
   if (py_type_convert<fmc_rprice_t>::convert(drhs, rhs)) {
     return nullptr;
   }
