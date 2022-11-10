@@ -61,9 +61,13 @@ public:
             [](const book::updates::announce &m) { return false; },
             [](const book::updates::time &m) { return false; },
             [](const book::updates::none &m) { return false; },
+            [&](const book::updates::heartbeat &m) {
+              *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) = m.vendor;
+              return true;
+            },
             [&](const auto &m) {
-              *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
-                  m.vendor;
+              if (m.batch) return false;
+              *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) = m.vendor;
               return true;
             }},
         msg);
