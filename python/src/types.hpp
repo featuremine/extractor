@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_types.hpp
+ * @file types.hpp
  * @author Maxim Trokhimtchouk
  * @date 5 Oct 2017
  * @brief Python wrappers for extractor base types
@@ -31,11 +31,11 @@ extern "C" {
 #include "fmc++/time.hpp"
 
 #include <Python.h>
+#include <comp_base.hpp>
 #include <datetime.h>
 #include <limits>
-#include <py_comp_base.hpp>
-#include <py_wrapper.hpp>
 #include <type_traits>
+#include <wrapper.hpp>
 
 #include "storage_util.hpp"
 #include <py_decimal128.hpp>

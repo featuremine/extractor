@@ -23,6 +23,7 @@ macro(extr_unit_test)
         ${ARG_NAME}
         PUBLIC
         "${EXTRACTOR_INC_DIR}"
+        "${EXTRACTOR_PYTHON_INC_DIR}"
         "${EXTRACTOR_SRC_DIR}"
     )
     target_link_libraries(
@@ -282,9 +283,9 @@ extr_py_unit_test(
 extr_py_unit_test(
     book_update
 )
-# extr_py_unit_test(
-#     rational64
-# )
+extr_py_unit_test(
+    rational64
+)
 extr_py_unit_test(
     perf_timer
 )

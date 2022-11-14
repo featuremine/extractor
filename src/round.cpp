@@ -122,7 +122,7 @@ struct the_round_field_exec_2_0<int64_t, fmc_decimal128_t> : round_field_exec {
         *(const fmc_decimal128_t *)fm_frame_get_cptr1(argv[0], field_, 0);
     // Do we need to explicitly round?
     fmc_decimal128_t ret;
-    fmc_decimal128_round(&ret, &val0);
+    fmc_decimal128_round(&ret, &val0, 0);
     fmc_error_t *err;
     fmc_decimal128_to_int((int64_t *)fm_frame_get_ptr1(result, field_, 0), &ret,
                           &err);

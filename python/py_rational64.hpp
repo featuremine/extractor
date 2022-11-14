@@ -22,7 +22,7 @@
 
 #include "fmc++/rational64.hpp"
 #include <Python.h>
-#include <extractor/python/py_extractor.h>
+#include <extractor/python/extractor.h>
 #include <py_type_utils.hpp>
 
 struct ExtractorBaseTypeRational64 {
@@ -146,7 +146,7 @@ PyObject *ExtractorBaseTypeRational64::nb_float(PyObject *self) {
 PyObject *ExtractorBaseTypeRational64::nb_int(PyObject *self) {
   double dest;
   fmc_rational64_to_double(&dest, &((ExtractorBaseTypeRational64 *)self)->val);
-  return PyLong_FromLong(llround(dest));
+  return PyLong_FromLongLong(llround(dest));
 }
 
 PyNumberMethods ExtractorBaseTypeRational64::tp_as_number = {

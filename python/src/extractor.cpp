@@ -24,27 +24,28 @@
 #define PY_SSIZE_T_CLEAN
 
 extern "C" {
-#include "extractor/python/py_extractor.h"
-#include "book/py_book.h"
-#include "extractor/python/py_side.h"
+#include "extractor/python/extractor.h"
+#include "extractor/python/book.h"
+#include "extractor/python/side.h"
 #include "ytp.h"
 }
 
+#include "comp.hpp"
 #include "custom.hpp"
+#include "frame.hpp"
+#include "graph.hpp"
 #include "live_batch.hpp"
 #include "live_poll.hpp"
+#include "module.hpp"
 #include "pandas_play.hpp"
-#include "py_comp.hpp"
-#include "py_comp_sys.hpp"
-#include "py_frame.hpp"
-#include "py_graph.hpp"
-#include "py_module.hpp"
-#include "py_play.hpp"
-#include "py_side.hpp"
-#include "py_utils.hpp"
+#include "play.hpp"
+#include "side.hpp"
 #include "sim_poll.hpp"
+#include "sys_def.hpp"
 #include "tuple_msg.hpp"
 #include "tuple_split.hpp"
+#include "utils.hpp"
+#include "wrapper.hpp"
 
 #include "fmc/files.h"
 #include "fmc/platform.h"
@@ -54,7 +55,6 @@ extern "C" {
 
 #include <Python.h>
 #include <numpy/arrayobject.h>
-#include <py_wrapper.hpp>
 
 static py_ytp_sequence_api_v1 *ytp_; // py_ytp_api
 
