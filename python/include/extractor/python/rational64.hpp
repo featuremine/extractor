@@ -24,6 +24,7 @@
 #include <Python.h>
 #include <extractor/python/rational64.h>
 #include <extractor/python/type_utils.hpp>
+#include <extractor/python/extractor.h>
 
 struct ExtractorBaseTypeRational64 {
   PyObject_HEAD;
