@@ -149,7 +149,7 @@ struct the_convert_field_exec_2_0<fmc_decimal128_t, fmc_rational64_t>
         *(const fmc_decimal128_t *)fm_frame_get_cptr1(argv[0], field_, 0);
     fmc_rational64_from_double(
         (fmc_rational64_t *)fm_frame_get_ptr1(result, field_, 0),
-        fmc::conversion<fmc_decimal128_t, double>()(val0), 32);
+        fmc::conversion<fmc_decimal128_t, double>()(val0));
   }
   fm_field_t field_;
 };

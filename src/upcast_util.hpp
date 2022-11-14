@@ -13,21 +13,25 @@
  *****************************************************************************/
 
 /**
- * @file py_book.h
- * @author Andres Rangel
- * @date 2 Mar 2020
- * @brief File contains C definitions of the python book interface
+ * @file upcast_util.hpp
+ * @date 7 Nov 2022
+ * @brief File contains upcast type helpers
+ *
+ * @see http://www.featuremine.com
  */
 
-#pragma once
+#include "fmc++/decimal128.hpp"
+#include "fmc++/rational64.hpp"
+#include "fmc++/rprice.hpp"
 
-#include "book/book.h"
-#include <Python.h>
+template <class T> struct upcast { using type = T; };
 
-typedef struct BookStruct Book;
+template <> struct upcast<fmc_decimal128_t> {
+  using type = typename fmc::decimal128;
+};
 
-FMMODFUNC bool PyBook_Check(PyObject *);
+template <> struct upcast<fmc_rprice_t> { using type = typename fmc::rprice; };
 
-FMMODFUNC fm_book_shared_t *PyBook_SharedBook(PyObject *obj);
-
-FMMODFUNC bool PyBook_AddTypes(PyObject *);
+template <> struct upcast<fmc_rational64_t> {
+  using type = typename fmc::rational64;
+};

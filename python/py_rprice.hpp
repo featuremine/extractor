@@ -22,7 +22,7 @@
 
 #include "fmc++/rprice.hpp"
 #include <Python.h>
-#include <extractor/python/py_extractor.h>
+#include <extractor/python/extractor.h>
 #include <py_type_utils.hpp>
 
 struct ExtractorBaseTypeRprice {
@@ -141,7 +141,7 @@ PyObject *ExtractorBaseTypeRprice::nb_float(PyObject *self) {
 PyObject *ExtractorBaseTypeRprice::nb_int(PyObject *self) {
   int64_t dest;
   fmc_rprice_to_int(&dest, &((ExtractorBaseTypeRprice *)self)->val);
-  return PyLong_FromLong(dest);
+  return PyLong_FromLongLong(dest);
 }
 
 PyNumberMethods ExtractorBaseTypeRprice::tp_as_number = {

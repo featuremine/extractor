@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_comp_base.hpp
+ * @file comp_base.hpp
  * @author Andres Rangel
  * @date 31 Mar 2020
  * @brief Python extension for extractor library

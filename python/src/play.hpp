@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_play.hpp
+ * @file play.hpp
  * @author Maxim Trokhimtchouk
  * @date 19 Mar 2019
  * @brief File contains C++ definitions of the comp object
@@ -34,8 +34,8 @@ extern "C" {
 
 #include "extractor/type_sys.h"
 #include "fmc++/mpl.hpp"
-#include "py_utils.hpp"
-#include "py_wrapper.hpp"
+#include "utils.hpp"
+#include "wrapper.hpp"
 
 #include <cassert>
 #include <errno.h>

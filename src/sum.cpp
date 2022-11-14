@@ -37,6 +37,7 @@ extern "C" {
 #include "fmc++/rational64.hpp"
 #include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
+#include "upcast_util.hpp"
 
 #include <memory>
 #include <stdlib.h>
@@ -86,28 +87,6 @@ template <class T> struct the_sum_field_exec_2_0 : sum_field_exec {
     }
     *(T *)fm_frame_get_ptr1(result, field_, 0) = val0;
     *(T *)fm_frame_get_ptr1(o_val, field_, 0) = val_new;
-  }
-  fm_field_t field_;
-};
-
-template <> struct the_sum_field_exec_2_0<fmc_rprice_t> : sum_field_exec {
-  the_sum_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void init(fm_frame_t *result, size_t argc,
-            const fm_frame_t *const argv[]) override {
-    fmc_rprice_t val = fmc_rprice_t();
-    for (unsigned i = 0; i < argc; ++i) {
-      val = val + *(const fmc_rprice_t *)fm_frame_get_cptr1(argv[i], field_, 0);
-    }
-    *(fmc_rprice_t *)fm_frame_get_ptr1(result, field_, 0) = val;
-  }
-  void exec(fm_frame_t *result, fm_frame_t *o_val,
-            const fm_frame_t *n_val) override {
-    auto val_old = *(const fmc_rprice_t *)fm_frame_get_cptr1(o_val, field_, 0);
-    auto val_new = *(const fmc_rprice_t *)fm_frame_get_cptr1(n_val, field_, 0);
-    auto val0 = *(const fmc_rprice_t *)fm_frame_get_cptr1(result, field_, 0);
-    *(fmc_rprice_t *)fm_frame_get_ptr1(result, field_, 0) =
-        val0 - val_old + val_new;
-    *(fmc_rprice_t *)fm_frame_get_ptr1(o_val, field_, 0) = val_new;
   }
   fm_field_t field_;
 };
@@ -204,7 +183,8 @@ sum_field_exec *get_sum_field_exec(fmc::type_list<Ts...>,
     using Tn = typename Tt::type;
     auto obj = fm::frame_field_type<Tn>();
     if (!result && obj.validate(f_type)) {
-      result = new the_sum_field_exec_2_0<Tn>(idx);
+      using S = typename upcast<Tn>::type;
+      result = new the_sum_field_exec_2_0<S>(idx);
     }
   };
   (create(fmc::typify<Ts>()), ...);
@@ -257,7 +237,7 @@ fm_ctx_def_t *fm_comp_sum_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   using supported_types =
       fmc::type_list<INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64,
-                     FLOAT32, FLOAT64, RPRICE, TIME64, RATIONAL64>;
+                     FLOAT32, FLOAT64, RPRICE, DECIMAL128, TIME64, RATIONAL64>;
 
   auto inp = argv[0];
   int nf = fm_type_frame_nfields(inp);
