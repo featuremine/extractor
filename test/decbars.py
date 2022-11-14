@@ -8,13 +8,11 @@
         parties, reverse engineered or used in any manner not provided
         for in said License Agreement except with the prior written
         authorization from Featuremine Corporation.
-
         """
 
 """
-@package bars.py
-@author Maxim Trokhimtchouk
-@date 22 Apr 2018
+@package decbars.py
+@date 28 Oct 2022
 @brief File contains extractor python sample
 """
 
@@ -38,89 +36,74 @@ def New_York_time(year, mon, day, h=0, m=0, s=0):
                        localize(datetime(year, mon, day, h, m, s)))
 
 
-def quote_side_float64(quote, name):
-    return op.cond(op.is_zero(op.field(quote, name)),
-                   op.nan(quote),
-                   op.convert(quote, extr.Float64))
-
-
-def quote_float64(quote):
-    bid_quote = op.fields(quote, ("bidprice", "bidqty"))
-    ask_quote = op.fields(quote, ("askprice", "askqty"))
-    return op.combine(quote_side_float64(bid_quote, "bidqty"), tuple(),
-                      quote_side_float64(ask_quote, "askqty"), tuple())
-
-
-def compute_bar(nbbo, trades, ctrdt, name=None):
+def compute_bar(op, bbo, trade):
     bar_period = timedelta(minutes=5)
     close = op.timer(bar_period)
     close = op.perf_timer_start(close, "bars")
 
-    quote = op.fields(nbbo, ("bidprice", "askprice", "bidqty", "askqty"))
-    quote_bid = op.field(nbbo, "bidprice")
-    quote_ask = op.field(nbbo, "askprice")
+    quote = op.fields(bbo, ("bidprice", "askprice", "bidqty", "askqty"))
+    quote_bid = op.field(bbo, "bidprice")
+    quote_ask = op.field(bbo, "askprice")
     open_quote = op.asof_prev(quote, close)
     close_quote = op.left_lim(quote, close)
     high_quote = op.left_lim(op.asof(quote, op.max(quote_ask, close)), close)
     low_quote = op.left_lim(op.asof(quote, op.min(quote_bid, close)), close)
 
-    tw_quote = op.average_tw(quote_float64(quote), close)
-    trade = op.fields(trades, ("price", "qty", "market"))
-    trade_px = op.field(trade, "price")
+    tw_quote = op.average_tw(quote, close)
+
+    trade_px = trade.price
+    trade_qty = trade.qty
     first_trade = op.first_after(trade, close)
     open_trade = op.last_asof(first_trade, close)
     close_trade = op.last_asof(trade, close)
     high_trade = op.last_asof(op.asof(trade, op.max(trade_px, first_trade)), close)
     low_trade = op.last_asof(op.asof(trade, op.min(trade_px, first_trade)), close)
 
-    ctrdt_sampled = op.left_lim(ctrdt, close)
-    ctrdt_sampled_lagged = op.tick_lag(ctrdt_sampled, 1)
-    ctrdt_diff = op.diff(ctrdt_sampled, ctrdt_sampled_lagged)
+    total_notional = op.left_lim(op.cumulative(trade_px * trade_qty), close)
+    total_shares = op.left_lim(op.cumulative(trade_qty), close)
+    prev_total_notional = op.tick_lag(total_notional, 1)
+    prev_total_shares = op.tick_lag(total_shares, 1)
+    notional = total_notional - prev_total_notional
+    shares = total_shares - prev_total_shares
+    vwap = op.cond(op.is_zero(shares), open_trade.price, notional / shares)
 
     combined = op.combine(
-        open_trade,
-        (("price", "open_px"),
-         ("qty", "open_sz"),
-         ("market", "open_exch")),
-        close_trade,
-        (("price", "close_px"),
-         ("qty", "close_sz"),
-         ("market", "close_exch")),
-        high_trade,
-        (("price", "high_px"),
-         ("qty", "high_sz"),
-         ("market", "high_exch")),
-        low_trade,
-        (("price", "low_px"),
-         ("qty", "low_sz"),
-         ("market", "low_exch")),
-        open_quote,
-        (("bidprice", "open_bidpx"),
-         ("askprice", "open_askpx"),
-         ("bidqty", "open_bidsz"),
-         ("askqty", "open_asksz")),
-        close_quote,
-        (("bidprice", "close_bidpx"),
-         ("askprice", "close_askpx"),
-         ("bidqty", "close_bidsz"),
-         ("askqty", "close_asksz")),
-        high_quote,
-        (("bidprice", "high_bidpx"),
-         ("askprice", "high_askpx"),
-         ("bidqty", "high_bidsz"),
-         ("askqty", "high_asksz")),
-        low_quote,
-        (("bidprice", "low_bidpx"),
-         ("askprice", "low_askpx"),
-         ("bidqty", "low_bidsz"),
-         ("askqty", "low_asksz")),
-        tw_quote,
-        (("bidprice", "tw_bidpx"),
-         ("askprice", "tw_askpx"),
-         ("bidqty", "tw_bidsz"),
-         ("askqty", "tw_asksz")),
-        ctrdt_diff, tuple(),
-        close, (("actual", "close_time"),), name=name)
+        open_trade, (("price", "open_px"),
+                     ("qty", "open_sz"),
+                     ("market", "open_exch")),
+        close_trade, (("price", "close_px"),
+                      ("qty", "close_sz"),
+                      ("market", "close_exch")),
+        high_trade, (("price", "high_px"),
+                     ("qty", "high_sz"),
+                     ("market", "high_exch")),
+        low_trade, (("price", "low_px"),
+                    ("qty", "low_sz"),
+                    ("market", "low_exch")),
+        open_quote, (("bidprice", "open_bidpx"),
+                    ("askprice", "open_askpx"),
+                    ("bidqty", "open_bidsz"),
+                    ("askqty", "open_asksz")),
+        close_quote, (("bidprice", "close_bidpx"),
+                    ("askprice", "close_askpx"),
+                    ("bidqty", "close_bidsz"),
+                    ("askqty", "close_asksz")),
+        high_quote, (("bidprice", "high_bidpx"),
+                    ("askprice", "high_askpx"),
+                    ("bidqty", "high_bidsz"),
+                    ("askqty", "high_asksz")),
+        low_quote, (("bidprice", "low_bidpx"),
+                    ("askprice", "low_askpx"),
+                    ("bidqty", "low_bidsz"),
+                    ("askqty", "low_asksz")),
+        tw_quote, (("bidprice", "tw_bidpx"),
+                ("askprice", "tw_askpx"),
+                ("bidqty", "tw_bidsz"),
+                ("askqty", "tw_asksz")),
+        vwap, ("vwap",),
+        notional, ("notional",),
+        shares, ("shares",),
+        close, (("actual", "close_time"),))
     combined = op.perf_timer_stop(combined, "bars")
     return combined
 
@@ -181,32 +164,24 @@ if __name__ == "__main__":
     trade_split = op.split(trades_in, "market", tuple(markets))
 
     bbos = []
-    ctrds = []
     mkt_idx = 0
     for mkt in markets:
         mkt_tickers = [x[mkt] for x in tickers]
         mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
-        mkt_trade_split = op.split(trade_split[mkt_idx], "ticker", tuple(mkt_tickers))
         mkt_bbos = []
-        mkt_ctrds = []
         ticker_idx = 0
         for _ in tickers:
             bbo = mkt_bbo_split[ticker_idx]
-            trade = mkt_trade_split[ticker_idx]
-            cum_trade = op.cumulative(op.combine(trade.qty, (("qty", "shares"),), op.convert(trade.qty, extr.Float64) * op.convert(trade.price, extr.Float64), (("qty", "notional",),)))
             mkt_bbos.append(bbo)
-            mkt_ctrds.append(cum_trade)
             ticker_idx = ticker_idx + 1
         bbos.append(mkt_bbos)
-        ctrds.append(mkt_ctrds)
         mkt_idx = mkt_idx + 1
 
     nbbos = [op.bbo_aggr(*x) for x in zip(*bbos)]
-    ctrdts = [op.sum(*x) for x in zip(*ctrds)]
 
     trade_imnt_split = op.split(trades_in, "ticker", tuple([x["NASDAQOMX"] for x in tickers]))
 
-    bars = [compute_bar(nbbo, trd, ctrdt) for nbbo, trd, ctrdt in zip(nbbos, trade_imnt_split, ctrdts)]
+    bars = [compute_bar(op, nbbo, trd) for nbbo, trd in zip(nbbos, trade_imnt_split)]
 
     out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
                          tuple([x["NASDAQOMX"] for x in tickers]))
