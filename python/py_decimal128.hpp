@@ -22,7 +22,7 @@
 
 #include "fmc/decimal128.h"
 #include <Python.h>
-#include <extractor/python/py_extractor.h>
+#include <extractor/python/extractor.h>
 #include <py_type_utils.hpp>
 
 struct ExtractorBaseTypeDecimal128 {

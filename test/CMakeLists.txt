@@ -280,9 +280,9 @@ extr_py_unit_test(
 extr_py_unit_test(
     book_update
 )
-# extr_py_unit_test(
-#     rational64
-# )
+extr_py_unit_test(
+    rational64
+)
 extr_py_unit_test(
     perf_timer
 )

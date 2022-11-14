@@ -3,7 +3,7 @@
 #include <fmc/decimal128.h>
 
 #include <Python.h>
-#include <extractor/python/py_extractor.h>
+#include <extractor/python/extractor.h>
 #include <fenv.h>
 
 template <bool B> struct integral_value { typedef long long type; };
@@ -106,7 +106,7 @@ template <class T> struct py_type_convert {
         return false;
       }
       if (PyFloat_Check(temp)) {
-        fmc_rational64_from_double(&val, PyFloat_AsDouble(temp), 32);
+        fmc_rational64_from_double(&val, PyFloat_AsDouble(temp));
         return true;
       } else if (PyLong_Check(temp)) {
         int64_t i = PyLong_AsLongLong(temp);

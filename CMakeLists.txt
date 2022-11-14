@@ -19,13 +19,6 @@ add_subproject(
     GIT_URL "https://github.com/featuremine/yamal.git"
     TARGETS fmc++ ytp
 )
-add_subproject(
-    NAME yamal-python
-    VERSION "7.2.23"
-    GIT_REVISION "v7.2.23"
-    GIT_URL "https://github.com/featuremine/yamal-python.git"
-    VARIABLES yamal-python-incdir yamal-python-source
-)
 
 option (BUILD_TESTING "Enable build of the unit tests and their execution." ON)
 option (BUILD_TOOLS "Enable build of command line tools." ON)
