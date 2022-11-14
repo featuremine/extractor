@@ -154,12 +154,18 @@ PyObject *ExtractorBaseTypeDecimal128::nb_int(PyObject *self) {
   fmc_error_t *err;
   fmc_decimal128_to_int(&res, &((ExtractorBaseTypeDecimal128 *)self)->val,
                         &err);
-  if (fetestexcept(FE_DIVBYZERO)) std::cout << "FE_DIVBYZERO raised" << std::endl;
-  if (fetestexcept(FE_INEXACT)) std::cout << "FE_INEXACT raised" << std::endl;
-  if (fetestexcept(FE_INVALID)) std::cout << "FE_INVALID raised" << std::endl;
-  if (fetestexcept(FE_OVERFLOW)) std::cout << "FE_OVERFLOW raised" << std::endl;
-  if (fetestexcept(FE_UNDERFLOW)) std::cout << "FE_UNDERFLOW raised" << std::endl;
-  if (fetestexcept(FE_ALL_EXCEPT)) std::cout << "FE_ALL_EXCEPT raised" << std::endl;
+  if (fetestexcept(FE_DIVBYZERO))
+    std::cout << "FE_DIVBYZERO raised" << std::endl;
+  if (fetestexcept(FE_INEXACT))
+    std::cout << "FE_INEXACT raised" << std::endl;
+  if (fetestexcept(FE_INVALID))
+    std::cout << "FE_INVALID raised" << std::endl;
+  if (fetestexcept(FE_OVERFLOW))
+    std::cout << "FE_OVERFLOW raised" << std::endl;
+  if (fetestexcept(FE_UNDERFLOW))
+    std::cout << "FE_UNDERFLOW raised" << std::endl;
+  if (fetestexcept(FE_ALL_EXCEPT))
+    std::cout << "FE_ALL_EXCEPT raised" << std::endl;
   if (err && fetestexcept(FE_ALL_EXCEPT) != FE_INEXACT) {
     PyErr_SetString(PyExc_RuntimeError,
                     "Error produced attempting to convert to int");
