@@ -115,21 +115,6 @@ struct the_convert_field_exec_2_0<fmc_rprice_t, fmc_rational64_t>
   fm_field_t field_;
 };
 
-template <>
-struct the_convert_field_exec_2_0<fmc::decimal128, fmc_rational64_t>
-    : convert_field_exec {
-  the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
-            fm_exec_ctx_t *ctx) override {
-    auto val0 =
-        *(const fmc::decimal128 *)fm_frame_get_cptr1(argv[0], field_, 0);
-    fmc_rational64_from_double(
-        (fmc_rational64_t *)fm_frame_get_ptr1(result, field_, 0),
-        fmc::conversion<fmc::decimal128, double>()(val0));
-  }
-  fm_field_t field_;
-};
-
 template <class T>
 struct the_convert_field_exec_2_0<fmc_rational64_t, T> : convert_field_exec {
   the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
@@ -140,37 +125,6 @@ struct the_convert_field_exec_2_0<fmc_rational64_t, T> : convert_field_exec {
         &val0,
         (const fmc_rational64_t *)fm_frame_get_cptr1(argv[0], field_, 0));
     *(T *)fm_frame_get_ptr1(result, field_, 0) = T(val0);
-  }
-  fm_field_t field_;
-};
-
-template <>
-struct the_convert_field_exec_2_0<fmc_rprice_t, fmc::decimal128>
-    : convert_field_exec {
-  the_convert_field_exec_2_0(fm_field_t field) : field_(field) {
-    fmc_decimal128_from_int(&divisor_, FMC_RPRICE_FRACTION);
-  }
-  void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
-            fm_exec_ctx_t *ctx) override {
-    auto &val0 = *(const fmc_rprice_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    auto *res = (fmc::decimal128 *)fm_frame_get_ptr1(result, field_, 0);
-    fmc_decimal128_from_int(res, val0.value);
-    fmc_decimal128_div(res, res, &divisor_);
-  }
-  fm_field_t field_;
-  fmc::decimal128 divisor_;
-};
-
-template <>
-struct the_convert_field_exec_2_0<fmc::decimal128, fmc_rprice_t>
-    : convert_field_exec {
-  the_convert_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void exec(fm_frame_t *result, size_t, const fm_frame_t *const argv[],
-            fm_exec_ctx_t *ctx) override {
-    auto &val0 =
-        *(const fmc::decimal128 *)fm_frame_get_cptr1(argv[0], field_, 0);
-    fmc_rprice_from_double((fmc_rprice_t *)fm_frame_get_ptr1(result, field_, 0),
-                           fmc::conversion<fmc::decimal128, double>()(val0));
   }
   fm_field_t field_;
 };

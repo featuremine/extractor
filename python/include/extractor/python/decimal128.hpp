@@ -53,6 +53,7 @@ struct ExtractorBaseTypeDecimal128 {
   static PyObject *max(PyObject *self, PyObject *args);
   static PyObject *min(PyObject *self, PyObject *args);
   static PyObject *from_float(PyObject *self, PyObject *args);
+  static PyObject *significant(PyObject *type, PyObject *args);
 
   static PyObject *nb_add(PyObject *lhs, PyObject *rhs);
   static PyObject *nb_substract(PyObject *lhs, PyObject *rhs);
@@ -333,6 +334,9 @@ PyMethodDef ExtractorBaseTypeDecimal128::tp_methods[] = {
     // { "__complex__", dec_complex, METH_NOARGS, NULL },
     // { "__sizeof__", dec_sizeof, METH_NOARGS, NULL },
 
+    {"significant", ExtractorBaseTypeDecimal128::significant, METH_VARARGS | METH_CLASS,
+     NULL},
+
     {NULL, NULL, 1}};
 
 static PyTypeObject ExtractorBaseTypeDecimal128Type = {
@@ -576,6 +580,22 @@ PyObject *ExtractorBaseTypeDecimal128::from_float(PyObject *type,
   }
   fmc_decimal128_t res;
   fmc_decimal128_from_double(&res, src);
+  return ExtractorBaseTypeDecimal128::py_new(res);
+}
+
+PyObject *ExtractorBaseTypeDecimal128::significant(PyObject *type, PyObject *args) {
+  PyObject *obj = nullptr;
+  int64_t significant;
+  if (!PyArg_ParseTuple(args, "OL", &obj, &significant)) {
+    return nullptr;
+  }
+  if (!Decimal128_Check(obj)) {
+    PyErr_SetString(PyExc_RuntimeError, "Object not of type Decimal128");
+    return nullptr;
+  }
+  fmc_decimal128_t res;
+  int digits10 = fmc_decimal128_flog10abs(&((ExtractorBaseTypeDecimal128 *)obj)->val);
+  fmc_decimal128_round(&res, &((ExtractorBaseTypeDecimal128 *)obj)->val, digits10 != INT32_MIN ? 14 - digits10 : 0);
   return ExtractorBaseTypeDecimal128::py_new(res);
 }
 
