@@ -29,6 +29,9 @@ extern "C" {
 #include <extractor/python/extractor.h>
 #include <extractor/python/type_utils.hpp>
 
+// We also need to keep references to the module to avoid repeated imports
+PyObject *_context;
+
 struct ExtractorBaseTypeDecimal128 {
   PyObject_HEAD;
   fmc::decimal128 val;
@@ -55,6 +58,7 @@ struct ExtractorBaseTypeDecimal128 {
   static PyObject *min(PyObject *self, PyObject *args);
   static PyObject *from_float(PyObject *self, PyObject *args);
   static PyObject *significant(PyObject *type, PyObject *args);
+  static PyObject *as_decimal(PyObject *self, PyObject *args);
 
   static PyObject *nb_add(PyObject *lhs, PyObject *rhs);
   static PyObject *nb_substract(PyObject *lhs, PyObject *rhs);
@@ -338,6 +342,8 @@ PyMethodDef ExtractorBaseTypeDecimal128::tp_methods[] = {
     {"significant", ExtractorBaseTypeDecimal128::significant,
      METH_VARARGS | METH_CLASS, NULL},
 
+    {"as_decimal", ExtractorBaseTypeDecimal128::as_decimal, METH_NOARGS, NULL},
+
     {NULL, NULL, 1}};
 
 static PyTypeObject ExtractorBaseTypeDecimal128Type = {
@@ -417,6 +423,8 @@ PyObject *ExtractorBaseTypeDecimal128::tp_str(PyObject *self) {
 bool ExtractorBaseTypeDecimal128::init(PyObject *m) {
   if (PyType_Ready(&ExtractorBaseTypeDecimal128Type) < 0)
     return false;
+
+  // TODO: set up _context
 
   /* Numeric abstract base classes */
   PyObject *numbers = PyImport_ImportModule("numbers");
@@ -619,4 +627,24 @@ fmc_decimal128_t Decimal128_val(PyObject *obj) {
 
 PyObject *Decimal128_new(fmc_decimal128_t obj) {
   return ExtractorBaseTypeDecimal128::py_new(obj);
+}
+
+PyObject *ExtractorBaseTypeDecimal128::as_decimal(PyObject *self, PyObject *args) {
+  PyObject *dectype = PyObject_GetAttrString(PyImport_ImportModule((char *) "decimal"), (char *) "Decimal");
+  PyObject *etup = PyTuple_New(2);
+  
+  PyTuple_SetItem(etup, 0, PyLong_FromLong(0));
+  PyTuple_SetItem(etup, 1, _context);
+  Py_INCREF(_context);
+
+  PyObject *ret = PyObject_Call(dectype, etup, NULL);
+  PyDecObject *typed = (PyDecObject*)ret;
+
+  typed->dec.exp = fmc_decimal128_exp(&((ExtractorBaseTypeDecimal128 *)self)->val);
+  typed->dec.data[0] = fmc_decimal128_hiwword(&((ExtractorBaseTypeDecimal128 *)self)->val);
+  typed->dec.data[1] = fmc_decimal128_lowword(&((ExtractorBaseTypeDecimal128 *)self)->val);
+
+  typed->dec.flags = MPD_NEG * fmc_decimal128_sign(&((ExtractorBaseTypeDecimal128 *)self)->val);
+
+  return ret;
 }
