@@ -581,6 +581,8 @@ PyObject *ExtractorBaseTypeDecimal128::from_float(PyObject *type,
   }
   fmc_decimal128_t res;
   fmc_decimal128_from_double(&res, src);
+  std::cout<<"FM Decimal, from float"<<std::endl;
+  fmc_decimal128_pretty(&res);
   return ExtractorBaseTypeDecimal128::py_new(res);
 }
 

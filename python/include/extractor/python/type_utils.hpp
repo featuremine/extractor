@@ -29,8 +29,24 @@
 #include <extractor/python/rprice.h>
 #include <fenv.h>
 
+#include <libmpdec/mpdecimal.h>
+
 template <bool B> struct integral_value { typedef long long type; };
 template <> struct integral_value<true> { typedef unsigned long long type; };
+
+bool PyDecimal_Check(PyObject *obj){
+  PyObject *dectype = PyObject_GetAttrString(PyImport_ImportModule((char *) "decimal"), (char *) "Decimal");
+  return PyObject_IsInstance(obj, dectype);
+}
+
+#define _Py_DEC_MINALLOC 4
+
+typedef struct {
+    PyObject_HEAD
+    Py_hash_t hash;
+    mpd_t dec;
+    mpd_uint_t data[_Py_DEC_MINALLOC];
+} PyDecObject;
 
 template <class T> struct py_type_convert {
   static bool convert(T &val, PyObject *args) {
@@ -87,6 +103,9 @@ template <class T> struct py_type_convert {
           PyErr_SetString(PyExc_TypeError, "error converting from string");
           return false;
         }
+        std::cout<<"FM decimal generated from string:"<<std::endl;
+        fmc_decimal128_pretty(&val);
+        std::cout<<"Actual number generated from string: "<<val<<std::endl;
         return true;
       } else if (PyLong_Check(temp)) {
         uint64_t u = PyLong_AsUnsignedLongLong(temp);
@@ -103,6 +122,19 @@ template <class T> struct py_type_convert {
           fmc_decimal128_from_uint(&val, u);
           return true;
         }
+      } else if (PyDecimal_Check(temp)) {
+        PyDecObject *typed = (PyDecObject*)temp;
+        std::cout<<"structure data:"<<std::endl;
+        std::cout<<"flags: "<<typed->dec.flags<<std::endl;
+        std::cout<<"exp: "<<typed->dec.exp<<std::endl;
+        std::cout<<"digits: "<<typed->dec.digits<<std::endl;
+        std::cout<<"len: "<<typed->dec.len<<std::endl;
+        std::cout<<"alloc: "<<typed->dec.alloc<<std::endl;
+        fmc_decimal128_pretty((fmc_decimal128_t*)typed->dec.data);
+        memcpy(&val, typed->dec.data, typed->dec.len);
+        memset(&val + typed->dec.len, 0, (sizeof(fmc_decimal128_t) > typed->dec.len) * (sizeof(fmc_decimal128_t) - typed->dec.len));
+        std::cout<<"Actual number generated from decimal: "<<val<<std::endl;
+        return true;
       }
     } else if constexpr (is_same_v<T, RPRICE>) {
       PyObject *temp;

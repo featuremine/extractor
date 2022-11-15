@@ -21,6 +21,7 @@
 import extractor as extr
 import math
 import unittest
+from decimal import Decimal
 
 class NumericalTests(unittest.TestCase):
     def test_decimal128(self):
@@ -154,6 +155,18 @@ class NumericalTests(unittest.TestCase):
 
         v1 = extr.Decimal128.from_float(2.35)
         self.assertAlmostEqual(float(v1), 2.35)
+        print("======================================")
+        v1 = extr.Decimal128.from_float(2.0)
+        v2 = Decimal(2.0)
+        v3 = extr.Decimal128(v2)
+        print(v1, v2, v3, "\n")
+        # self.assertEqual(v1, v3)
+        print("======================================")
+        v1 = extr.Decimal128("5005005005005005005")
+        v2 = Decimal("5005005005005005005")
+        v3 = extr.Decimal128(v2)
+        print(v1, v2, v3, "\n")
+        # self.assertEqual(v1, v3)
 
     def test_rprice(self):
         from_int = extr.Rprice(0)
