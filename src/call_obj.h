@@ -171,3 +171,7 @@ void fm_call_obj_deps_queue(fm_call_obj_t *);
  * @brief adds a queuing callback for a dependency
  */
 void fm_call_obj_dep_queuer_add(fm_call_obj_t *, fm_call_obj_t *, size_t);
+
+#ifdef __cplusplus
+}
+#endif

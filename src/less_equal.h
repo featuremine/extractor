@@ -33,3 +33,7 @@ extern "C" {
 #endif
 
 FM_DEFINE_COMP_OP(less_equal);
+
+#ifdef __cplusplus
+}
+#endif

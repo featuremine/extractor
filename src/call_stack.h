@@ -145,3 +145,7 @@ bool fm_call_stack_exec(fm_call_stack_t *s, fm_call_queue_t *q);
 void fm_call_obj_copy(void *ptr, fm_call_obj_t *obj);
 
 void fm_call_obj_cleanup(fm_call_obj_t *obj);
+
+#ifdef __cplusplus
+}
+#endif

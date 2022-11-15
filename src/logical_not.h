@@ -40,3 +40,7 @@ void fm_comp_logical_not_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 const fm_comp_def_t fm_comp_logical_not = {"logical_not",
                                            &fm_comp_logical_not_gen,
                                            &fm_comp_logical_not_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif

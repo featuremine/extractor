@@ -37,3 +37,7 @@ FMMODFUNC bool Decimal128_Check(PyObject *obj);
 FMMODFUNC fmc_decimal128_t Decimal128_val(PyObject *obj);
 
 FMMODFUNC PyObject *Decimal128_new(fmc_decimal128_t obj);
+
+#ifdef __cplusplus
+}
+#endif

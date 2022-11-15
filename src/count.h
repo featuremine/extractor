@@ -38,3 +38,7 @@ fm_ctx_def_t *fm_comp_count_gen(fm_comp_sys_t *sys, fm_comp_def_cl, unsigned,
 void fm_comp_count_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 
 const fm_comp_def_t fm_comp_count = {"count", &fm_comp_count_gen, NULL, NULL};
+
+#ifdef __cplusplus
+}
+#endif

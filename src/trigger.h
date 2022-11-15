@@ -37,3 +37,7 @@ fm_ctx_def_t *fm_comp_trigger_gen(fm_comp_sys_t *sys, fm_comp_def_cl, unsigned,
 
 const fm_comp_def_t fm_comp_trigger = {"trigger", &fm_comp_trigger_gen, NULL,
                                        NULL};
+
+#ifdef __cplusplus
+}
+#endif

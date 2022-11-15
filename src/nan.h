@@ -36,3 +36,7 @@ fm_ctx_def_t *fm_comp_nan_gen(fm_comp_sys_t *sys, fm_comp_def_cl, unsigned,
                               fm_arg_stack_t);
 
 const fm_comp_def_t fm_comp_nan = {"nan", &fm_comp_nan_gen, NULL, NULL};
+
+#ifdef __cplusplus
+}
+#endif

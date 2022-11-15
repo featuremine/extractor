@@ -31,3 +31,7 @@ extern "C" {
 #endif
 
 FM_DEFINE_COMP_OP(less);
+
+#ifdef __cplusplus
+}
+#endif

@@ -44,3 +44,7 @@ FMMODFUNC extern TradeSideS _TradeSide_ASK;
 
 FMMODFUNC bool TradeSide_TypeCheck(PyObject *obj);
 FMMODFUNC int TradeSide_Side(PyObject *obj);
+
+#ifdef __cplusplus
+}
+#endif

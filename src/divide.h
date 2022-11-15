@@ -39,3 +39,7 @@ void fm_comp_divide_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 
 const fm_comp_def_t fm_comp_divide = {"divide", &fm_comp_divide_gen,
                                       &fm_comp_divide_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif

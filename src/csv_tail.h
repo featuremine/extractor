@@ -40,3 +40,7 @@ void fm_comp_csv_tail_destroy(fm_comp_def_cl cl, fm_ctx_def_t *def);
 
 const fm_comp_def_t fm_comp_csv_tail = {"csv_tail", &fm_comp_csv_tail_gen,
                                         &fm_comp_csv_tail_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif

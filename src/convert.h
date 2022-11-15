@@ -39,3 +39,7 @@ void fm_comp_convert_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 
 const fm_comp_def_t fm_comp_convert = {"convert", &fm_comp_convert_gen,
                                        &fm_comp_convert_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif

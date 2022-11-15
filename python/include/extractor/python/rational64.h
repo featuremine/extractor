@@ -35,3 +35,7 @@ extern "C" {
 FMMODFUNC bool Rational64_Check(PyObject *obj);
 
 FMMODFUNC fmc_rational64_t Rational64_val(PyObject *obj);
+
+#ifdef __cplusplus
+}
+#endif

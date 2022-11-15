@@ -39,3 +39,7 @@ void fm_comp_fields_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 
 const fm_comp_def_t fm_comp_fields = {"fields", &fm_comp_fields_gen,
                                       &fm_comp_fields_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif

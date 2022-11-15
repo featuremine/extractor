@@ -49,3 +49,7 @@ void fm_comp_bbo_book_aggr_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 const fm_comp_def_t fm_comp_bbo_book_aggr = {
     "bbo_book_aggr", &fm_comp_bbo_book_aggr_gen, &fm_comp_bbo_book_aggr_destroy,
     NULL};
+
+#ifdef __cplusplus
+}
+#endif

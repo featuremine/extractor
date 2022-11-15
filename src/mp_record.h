@@ -39,3 +39,7 @@ void fm_comp_mp_record_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 
 const fm_comp_def_t fm_comp_mp_record = {"mp_record", &fm_comp_mp_record_gen,
                                          &fm_comp_mp_record_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif

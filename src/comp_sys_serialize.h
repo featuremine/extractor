@@ -15,3 +15,7 @@ bool fm_comp_graph_write(const fm_comp_graph *, fm_writer, void *);
  * @brief Loads serialized graph
  */
 fm_comp_graph *fm_comp_graph_read(fm_comp_sys_t *, fm_reader reader, void *);
+
+#ifdef __cplusplus
+}
+#endif

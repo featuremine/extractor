@@ -39,3 +39,7 @@ void fm_comp_filter_if_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 
 const fm_comp_def_t fm_comp_filter_if = {"filter_if", &fm_comp_filter_if_gen,
                                          &fm_comp_filter_if_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif

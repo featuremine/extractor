@@ -31,3 +31,7 @@ extern "C" {
 #endif
 
 bool fm_comp_split_by_add(fm_comp_sys_t *sys);
+
+#ifdef __cplusplus
+}
+#endif

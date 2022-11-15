@@ -48,3 +48,7 @@ void fm_comp_find_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 
 const fm_comp_def_t fm_comp_find_substr = {"find", &fm_comp_find_gen,
                                            &fm_comp_find_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif

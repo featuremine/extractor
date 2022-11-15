@@ -24,3 +24,7 @@ extern "C" {
 
 typedef struct ExtractorStreamContext ExtractorStreamContext;
 FMMODFUNC fm_stream_ctx_t *get_stream_ctx(ExtractorStreamContext *self);
+
+#ifdef __cplusplus
+}
+#endif

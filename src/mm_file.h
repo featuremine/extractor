@@ -39,3 +39,7 @@ size_t mm_file_read(mm_file *m, size_t limit, void **buf);
 void mm_file_rewind(mm_file_t *m);
 
 void mm_file_close(mm_file_t *m);
+
+#ifdef __cplusplus
+}
+#endif

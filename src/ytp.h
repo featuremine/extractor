@@ -54,3 +54,7 @@ struct ytp_peer_wrapper {
   shared_sequence *sequence;
   ytp_peer_t peer;
 };
+
+#ifdef __cplusplus
+}
+#endif

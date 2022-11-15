@@ -40,3 +40,7 @@ void fm_comp_logical_and_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 const fm_comp_def_t fm_comp_logical_and = {"logical_and",
                                            &fm_comp_logical_and_gen,
                                            &fm_comp_logical_and_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif

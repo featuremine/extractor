@@ -39,3 +39,7 @@ void fm_comp_accumulate_destroy(fm_comp_def_cl cl, fm_ctx_def_t *def);
 
 const fm_comp_def_t fm_comp_accumulate = {"accumulate", &fm_comp_accumulate_gen,
                                           &fm_comp_accumulate_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif

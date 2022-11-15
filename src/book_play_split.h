@@ -42,3 +42,7 @@ void fm_comp_book_play_split_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 const fm_comp_def_t fm_comp_book_play_split = {
     "book_play_split", &fm_comp_book_play_split_gen,
     &fm_comp_book_play_split_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif

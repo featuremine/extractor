@@ -35,3 +35,7 @@ extern "C" {
 FMMODFUNC bool Rprice_Check(PyObject *obj);
 
 FMMODFUNC fmc_rprice_t Rprice_val(PyObject *obj);
+
+#ifdef __cplusplus
+}
+#endif

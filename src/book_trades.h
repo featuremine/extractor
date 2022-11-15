@@ -41,3 +41,7 @@ void fm_comp_book_trades_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 const fm_comp_def_t fm_comp_book_trades = {"book_trades",
                                            &fm_comp_book_trades_gen,
                                            &fm_comp_book_trades_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif

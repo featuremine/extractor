@@ -74,3 +74,7 @@ FMMODFUNC bool fm_comp_sys_py_comp(fm_comp_sys_t *sys);
  * @brief main module init function
  */
 PyMODINIT_FUNC fm_extractor_py_init(void) FMMODFUNC;
+
+#ifdef __cplusplus
+}
+#endif

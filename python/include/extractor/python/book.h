@@ -35,3 +35,7 @@ FMMODFUNC bool PyBook_Check(PyObject *);
 FMMODFUNC fm_book_shared_t *PyBook_SharedBook(PyObject *obj);
 
 FMMODFUNC bool PyBook_AddTypes(PyObject *);
+
+#ifdef __cplusplus
+}
+#endif

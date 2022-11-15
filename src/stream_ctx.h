@@ -53,3 +53,7 @@ void fm_stream_ctx_del(fm_stream_ctx_t *);
  * @brief get the call queue object
  */
 fm_call_queue_t *fm_stream_ctx_get_queue(fm_stream_ctx_t *ctx);
+
+#ifdef __cplusplus
+}
+#endif

@@ -31,3 +31,7 @@ extern "C" {
 #endif
 
 FM_DEFINE_COMP_OP(nano);
+
+#ifdef __cplusplus
+}
+#endif

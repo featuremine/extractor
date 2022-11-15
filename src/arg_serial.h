@@ -48,4 +48,6 @@ fm_arg_buffer_t *fm_arg_stack_from_buffer(fm_type_sys_t *ts,
                                           fm_type_decl_cp *type,
                                           fm_arg_stack_t **s);
 
-#endif /*__FM_ARG_SERIAL_H__*/
+#ifdef __cplusplus
+}
+#endif

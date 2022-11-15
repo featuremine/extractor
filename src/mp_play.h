@@ -39,3 +39,7 @@ void fm_comp_mp_play_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 
 const fm_comp_def_t fm_comp_mp_play = {"mp_play", &fm_comp_mp_play_gen,
                                        &fm_comp_mp_play_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif
