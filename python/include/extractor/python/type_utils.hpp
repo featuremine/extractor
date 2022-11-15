@@ -29,7 +29,7 @@
 #include <extractor/python/rprice.h>
 #include <fenv.h>
 
-#include <libmpdec/mpdecimal.h>
+#include <mpdecimal.h>
 
 template <bool B> struct integral_value { typedef long long type; };
 template <> struct integral_value<true> { typedef unsigned long long type; };
@@ -103,9 +103,7 @@ template <class T> struct py_type_convert {
           PyErr_SetString(PyExc_TypeError, "error converting from string");
           return false;
         }
-        std::cout<<"FM decimal generated from string:"<<std::endl;
         fmc_decimal128_pretty(&val);
-        std::cout<<"Actual number generated from string: "<<val<<std::endl;
         return true;
       } else if (PyLong_Check(temp)) {
         uint64_t u = PyLong_AsUnsignedLongLong(temp);
@@ -130,10 +128,16 @@ template <class T> struct py_type_convert {
         std::cout<<"digits: "<<typed->dec.digits<<std::endl;
         std::cout<<"len: "<<typed->dec.len<<std::endl;
         std::cout<<"alloc: "<<typed->dec.alloc<<std::endl;
-        fmc_decimal128_pretty((fmc_decimal128_t*)typed->dec.data);
-        memcpy(&val, typed->dec.data, typed->dec.len);
-        memset(&val + typed->dec.len, 0, (sizeof(fmc_decimal128_t) > typed->dec.len) * (sizeof(fmc_decimal128_t) - typed->dec.len));
-        std::cout<<"Actual number generated from decimal: "<<val<<std::endl;
+
+        mpd_context_t ctx;
+        mpd_ieee_context(&ctx, MPD_DECIMAL128);
+        mpd_t res;
+        mpd_copy(&res, &typed->dec, &ctx);
+        fmc_decimal128_pretty((fmc_decimal128_t *)res.data);
+
+        // memcpy(&val, typed->dec.data, typed->dec.len);
+        // memset(&val + typed->dec.len, 0, (sizeof(fmc_decimal128_t) > typed->dec.len) * (sizeof(fmc_decimal128_t) - typed->dec.len));
+        // std::cout<<"Actual number generated from decimal: "<<val<<std::endl;
         return true;
       }
     } else if constexpr (is_same_v<T, RPRICE>) {

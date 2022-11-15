@@ -73,6 +73,7 @@ target_link_libraries(
     PRIVATE
     py_extractor_dep
 )
+
 set_target_properties(
     py_extractor
     PROPERTIES
@@ -83,6 +84,8 @@ install(
     TARGETS
     py_extractor
 )
+
+find_library(MPDEC_LIB mpdec)
 
 add_library(
     extractor_module
@@ -96,6 +99,7 @@ target_link_libraries(
     ytp
     extractor
     py_extractor
+    ${MPDEC_LIB}
 )
 set_target_properties(
     extractor_module
