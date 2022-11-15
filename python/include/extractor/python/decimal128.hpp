@@ -424,7 +424,11 @@ bool ExtractorBaseTypeDecimal128::init(PyObject *m) {
   if (PyType_Ready(&ExtractorBaseTypeDecimal128Type) < 0)
     return false;
 
-  // TODO: set up _context
+  PyObject *ctxtype = PyObject_GetAttrString(PyImport_ImportModule((char *) "decimal"), (char *) "Context");
+  PyObject *etup = PyTuple_New(0);
+  _context = PyObject_Call(ctxtype, etup, NULL);
+  // configure context
+  Py_XDECREF(etup);
 
   /* Numeric abstract base classes */
   PyObject *numbers = PyImport_ImportModule("numbers");
@@ -638,15 +642,24 @@ PyObject *ExtractorBaseTypeDecimal128::as_decimal(PyObject *self, PyObject *args
   Py_INCREF(_context);
 
   PyObject *ret = PyObject_Call(dectype, etup, NULL);
+  Py_INCREF(ret);
   PyDecObject *typed = (PyDecObject*)ret;
 
   FMC_FLAG flags;
 
-  fmc_decimal128_triple(&typed->dec.data[0], &typed->dec.data[1], &typed->dec.exp, &flags, &((ExtractorBaseTypeDecimal128 *)self)->val);
+  fmc_decimal128_triple(&typed->dec.data[1], &typed->dec.data[0], &typed->dec.exp, &flags, &((ExtractorBaseTypeDecimal128 *)self)->val);
 
   typed->dec.flags = ((flags & FMC_DEC_NEG) == FMC_DEC_NEG) * MPD_NEG |
                      ((flags & FMC_DEC_INF) == FMC_DEC_INF) * MPD_INF |
                      ((flags & FMC_DEC_NAN) == FMC_DEC_NAN) * MPD_NAN;
+
+  // if (typed->dec.data[0] == 0) {
+  //   typed->dec.data[0] = typed->dec.data[1];
+  //   typed->dec.data[1] = 0;
+  // }
+
+  typed->dec.len = 1 + (typed->dec.data[1] != 0);
+  typed->dec.digits = fmc_decimal128_digits(&((ExtractorBaseTypeDecimal128 *)self)->val);
 
   return ret;
 }
