@@ -133,8 +133,8 @@ template <class T> struct py_type_convert {
         if (mpd_getstatus(&ctx)) {
           return false;
         }
-        fmc_error_t *err;s
-        fmc_decimal128_set_triple(&val, res.data[0], res.data[1], res.exp, (res.flags & MPD_NEG) == MPD_NEG, res.&err);
+        fmc_error_t *err;
+        fmc_decimal128_set_triple(&val, res.data[0], res.data[1], res.exp, (res.flags & MPD_NEG) == MPD_NEG, &err);
         return !bool(err);
       }
     } else if constexpr (is_same_v<T, RPRICE>) {
