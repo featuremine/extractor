@@ -51,7 +51,6 @@ extern "C" {
 #include <fmc++/python/wrapper.hpp>
 #include <numpy/arrayobject.h>
 
-
 #include "extractor/type_sys.h"
 
 using namespace fm;
