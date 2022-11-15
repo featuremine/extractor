@@ -134,7 +134,12 @@ template <class T> struct py_type_convert {
           return false;
         }
         fmc_error_t *err;
-        fmc_decimal128_set_triple(&val, res.data[0], res.data[1], res.exp, (res.flags & MPD_NEG) == MPD_NEG, &err);
+        FMC_FLAG flag = FMC_FLAG(((res.flags & MPD_NEG) == MPD_NEG) * FMC_DEC_NEG |
+                                 ((res.flags & MPD_INF) == MPD_INF) * FMC_DEC_INF |
+                                 ((res.flags & MPD_NAN) == MPD_NAN) * FMC_DEC_NAN |
+                                 ((res.flags & MPD_SNAN) == MPD_SNAN) * FMC_DEC_NAN);
+
+        fmc_decimal128_set_triple(&val, res.data[0], res.data[1], res.exp, flag, &err);
         return !bool(err);
       }
     } else if constexpr (is_same_v<T, RPRICE>) {
