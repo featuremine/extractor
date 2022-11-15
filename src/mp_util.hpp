@@ -47,14 +47,14 @@ inline bool msgpack_writer(cmp_ctx_t &cmp, float val) {
 inline bool msgpack_writer(cmp_ctx_t &cmp, double val) {
   return cmp_write_decimal(&cmp, val);
 }
-inline bool msgpack_writer(cmp_ctx_t &cmp, fm_rational64_t val) {
+inline bool msgpack_writer(cmp_ctx_t &cmp, fmc_rational64_t val) {
   if (!cmp_write_array(&cmp, 2))
     return false;
   if (!cmp_write_integer(&cmp, val.num))
     return false;
   return cmp_write_integer(&cmp, val.den);
 }
-inline bool msgpack_writer(cmp_ctx_t &cmp, fm_decimal64_t val) {
+inline bool msgpack_writer(cmp_ctx_t &cmp, fmc_rprice_t val) {
   return cmp_write_integer(&cmp, val.value);
 }
 inline bool msgpack_writer(cmp_ctx_t &cmp, fmc_time64_t val) {
@@ -120,8 +120,8 @@ inline fm_frame_writer_p fm_type_to_mp_writer(fm_type_decl_cp decl,
     case FM_TYPE_RATIONAL64:
       return base_writer<RATIONAL64>(offset);
       break;
-    case FM_TYPE_DECIMAL64:
-      return base_writer<DECIMAL64>(offset);
+    case FM_TYPE_RPRICE:
+      return base_writer<RPRICE>(offset);
       break;
     case FM_TYPE_DECIMAL128:
       return base_writer<DECIMAL128>(offset);
@@ -191,7 +191,7 @@ inline bool msgpack_parser(cmp_ctx_t &cmp, float &val) {
 inline bool msgpack_parser(cmp_ctx_t &cmp, double &val) {
   return cmp_read_decimal(&cmp, &val);
 }
-inline bool msgpack_parser(cmp_ctx_t &cmp, fm_rational64_t &val) {
+inline bool msgpack_parser(cmp_ctx_t &cmp, fmc_rational64_t &val) {
   uint32_t arr_len;
   if (!cmp_read_array(&cmp, &arr_len))
     return false;
@@ -201,7 +201,7 @@ inline bool msgpack_parser(cmp_ctx_t &cmp, fm_rational64_t &val) {
     return false;
   return cmp_read_int(&cmp, &val.den);
 }
-inline bool msgpack_parser(cmp_ctx_t &cmp, fm_decimal64_t &val) {
+inline bool msgpack_parser(cmp_ctx_t &cmp, fmc_rprice_t &val) {
   bool result = cmp_read_long(&cmp, &val.value);
   return result;
 }
@@ -231,8 +231,9 @@ inline bool msgpack_parser(cmp_ctx_t &cmp, fmc_decimal128_t &val) {
   if (!cmp.read(&cmp, buf, size))
     return false;
   buf[size] = '\0';
-  fmc_decimal128_from_str(&val, buf);
-  return true;
+  fmc_error_t *err;
+  fmc_decimal128_from_str(&val, buf, &err);
+  return !bool(err);
 }
 
 template <class T> auto base_reader(fm_field_t offset) {
@@ -281,8 +282,8 @@ inline fm_frame_reader_p fm_type_to_mp_reader(fm_type_decl_cp decl,
     case FM_TYPE_RATIONAL64:
       return base_reader<RATIONAL64>(offset);
       break;
-    case FM_TYPE_DECIMAL64:
-      return base_reader<DECIMAL64>(offset);
+    case FM_TYPE_RPRICE:
+      return base_reader<RPRICE>(offset);
       break;
     case FM_TYPE_DECIMAL128:
       return base_reader<DECIMAL128>(offset);

@@ -15,17 +15,10 @@ find_package(Subproject REQUIRED)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subproject(
     NAME yamal
-    VERSION "7.2.23"
-    GIT_REVISION "v7.2.23"
+    GIT_REVISION "v7.2.24"
+    VERSION "7.2.24"
     GIT_URL "https://github.com/featuremine/yamal.git"
-    TARGETS fmc++ ytp
-)
-add_subproject(
-    NAME yamal-python
-    VERSION "7.2.20"
-    GIT_REVISION "v7.2.20"
-    GIT_URL "https://github.com/featuremine/yamal-python.git"
-    VARIABLES yamal-python-incdir yamal-python-source
+    TARGETS fmc++ ytp py_yamal_dep
 )
 
 option (BUILD_TESTING "Enable build of the unit tests and their execution." ON)
@@ -35,6 +28,8 @@ option (BUILD_WHEEL "Enable build of the python package." ON)
 option (TEST_EXTENSIONS "Enable testing the extensions." ON)
 
 set(EXTRACTOR_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(EXTRACTOR_PYTHON_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/python/include")
+set(EXTRACTOR_PYTHON_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/python/src")
 set(EXTRACTOR_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(EXTRACTOR_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/package/bin")
 set(EXTRACTOR_LIB_DIR "${CMAKE_CURRENT_BINARY_DIR}/package/lib")
@@ -98,6 +93,26 @@ configure_file(
     COPYONLY
 )
 
+file(
+    COPY "${PROJECT_SOURCE_DIR}/LICENSE"
+    DESTINATION "${CMAKE_BINARY_DIR}/python_dist"
+)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(PYTHON_PLATFORM "manylinux_2_17_${CMAKE_SYSTEM_PROCESSOR}")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    execute_process(COMMAND sw_vers -productVersion
+                    OUTPUT_VARIABLE MACOS_VERSION
+                    OUTPUT_STRIP_TRAILING_WHITESPACE)
+    STRING(REGEX REPLACE "^([0-9]+)\\.?([0-9]+)\\.?([0-9]+)?$" "\\1" MACOS_VERSION_MAJOR "${MACOS_VERSION}")
+    STRING(REGEX REPLACE "^([0-9]+)\\.?([0-9]+)\\.?([0-9]+)?$" "\\2" MACOS_VERSION_MINOR "${MACOS_VERSION}")
+    set(PYTHON_PLATFORM "macosx_${MACOS_VERSION_MAJOR}_0_${CMAKE_SYSTEM_PROCESSOR}")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(PYTHON_PLATFORM "win_${CMAKE_SYSTEM_PROCESSOR}")
+else()
+    message(FATAL_ERROR "Platform not supported")
+endif()
+
 add_custom_target(
     extractor-whl ALL
 
@@ -114,6 +129,8 @@ add_custom_target(
     "bdist_wheel"
     "--bdist-dir=${CMAKE_CURRENT_BINARY_DIR}/python_dist/bdist"
     "--dist-dir=${CMAKE_BINARY_DIR}/output"
+
+    "--plat-name=${PYTHON_PLATFORM}"
 
     COMMAND
     "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
