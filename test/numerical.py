@@ -165,6 +165,8 @@ class NumericalTests(unittest.TestCase):
             v3 = extr.Decimal128(v2)
             print(f"conv -> {v3}")
         convtest("2")
+        convtest("1")
+        convtest("0")
         convtest("5005005005005005005")
 
     def test_rprice(self):

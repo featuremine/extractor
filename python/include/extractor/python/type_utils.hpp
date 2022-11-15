@@ -131,6 +131,16 @@ template <class T> struct py_type_convert {
         std::cout<<"coefficient size required "<<mpd_digits_to_size(typed->dec.digits)<<std::endl;
         fmc_decimal128_pretty((fmc_decimal128_t *)&typed->dec.data);
 
+        char lolobits[65] = {0};
+        char lohibits[65] = {0};
+        char hilobits[65] = {0};
+        char hihibits[65] = {0};
+        fmc_uint64_bebits(*typed->dec.data, lolobits);
+        fmc_uint64_bebits(*(typed->dec.data + 1), lohibits);
+        fmc_uint64_bebits(*(typed->dec.data + 2), hilobits);
+        fmc_uint64_bebits(*(typed->dec.data + 3), hihibits);
+        printf("%s %s %s %s\n", lolobits, lohibits, hilobits, hihibits);
+
         mpd_context_t ctx;
         mpd_ieee_context(&ctx, MPD_DECIMAL128);
         mpd_uint_t buf[2] = {0};
@@ -147,8 +157,14 @@ template <class T> struct py_type_convert {
         std::cout<<"alloc: "<<res.alloc<<std::endl;
         std::cout<<"coefficient size required "<<mpd_digits_to_size(res.digits)<<std::endl;
         fmc_decimal128_pretty((fmc_decimal128_t *)&res.data);
+
+        fmc_uint64_bebits(*res.data, lolobits);
+        fmc_uint64_bebits(*(res.data + 1), lohibits);
+        fmc_uint64_bebits(*(res.data + 2), hilobits);
+        fmc_uint64_bebits(*(res.data + 3), hihibits);
+        printf("%s %s %s %s\n", lolobits, lohibits, hilobits, hihibits);
+
         mpd_print(&res);
-        mpd_del(&res);
 
         // memcpy(&val, typed->dec.data, typed->dec.len);
         // memset(&val + typed->dec.len, 0, (sizeof(fmc_decimal128_t) > typed->dec.len) * (sizeof(fmc_decimal128_t) - typed->dec.len));
