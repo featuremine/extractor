@@ -22,11 +22,12 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_LN_H__
-#define __FM_LN_H__
+#pragma once
 
 #include "operator_def.h"
 
-FM_DEFINE_COMP_OP(ln);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#endif // __FM_LN_H__
+FM_DEFINE_COMP_OP(ln);

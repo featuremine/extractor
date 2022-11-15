@@ -22,12 +22,15 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_MODULE_H__
-#define __FM_MODULE_H__
+#pragma once
 
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "fmc/platform.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct fm_module fm_module_t;
 
@@ -94,4 +97,6 @@ FMMODFUNC bool fm_module_write(fm_module_t *, fm_writer, void *);
 FMMODFUNC fm_module_t *fm_module_read(fm_comp_sys_t *, fm_reader reader,
                                       void *);
 
-#endif // __FM_MODULE_H__
+#ifdef __cplusplus
+}
+#endif

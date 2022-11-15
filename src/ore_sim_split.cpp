@@ -22,7 +22,6 @@
  * This operator is intendend to stream book updates for certain symbols
  */
 
-extern "C" {
 #include "ore_sim_split.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
@@ -31,7 +30,6 @@ extern "C" {
 #include "fmc/time.h"
 #include "ytp/peer.h"
 #include "ytp/yamal.h"
-}
 
 #include "extractor/book/ore.hpp"
 #include "extractor/book/updates.hpp"

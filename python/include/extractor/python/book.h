@@ -24,6 +24,10 @@
 #include "book/book.h"
 #include <Python.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct BookStruct Book;
 
 FMMODFUNC bool PyBook_Check(PyObject *);

@@ -24,11 +24,9 @@
 
 #pragma once
 
-extern "C" {
 #include "extractor/stream_ctx.h"
 #include "extractor/type_sys.h"
 #include "fmc/time.h"
-}
 
 #include "field_util.hpp"
 #include "sample.hpp"

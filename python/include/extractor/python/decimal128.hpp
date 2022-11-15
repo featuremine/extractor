@@ -20,9 +20,7 @@
 
 #pragma once
 
-extern "C" {
 #include <extractor/python/decimal128.h>
-}
 
 #include "fmc/decimal128.h"
 #include <Python.h>

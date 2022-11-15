@@ -23,11 +23,14 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_BOOK_BUILD_H__
-#define __FM_BOOK_BUILD_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 fm_ctx_def_t *fm_comp_book_build_gen(fm_comp_sys_t *sys, fm_comp_def_cl,
                                      unsigned, fm_type_decl_cp[],
@@ -37,5 +40,3 @@ void fm_comp_book_build_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 
 const fm_comp_def_t fm_comp_book_build = {"book_build", &fm_comp_book_build_gen,
                                           &fm_comp_book_build_destroy, NULL};
-
-#endif // __FM_BOOK_BUILD_H__

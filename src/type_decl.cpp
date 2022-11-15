@@ -23,10 +23,8 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/type_decl.h"
 #include "fmc/time.h"
-}
 
 #include <algorithm>
 #include <cerrno>

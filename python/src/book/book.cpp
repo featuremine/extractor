@@ -21,11 +21,9 @@
 
 #include <Python.h>
 
-extern "C" {
 #include "book/book.h"
 #include "extractor/python/book.h"
 #include "extractor/python/side.h"
-}
 
 #include "book/level.hpp"
 #include "fmc++/side.hpp"

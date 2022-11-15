@@ -21,9 +21,7 @@
 
 #pragma once
 
-extern "C" {
 #include "extractor/type_decl.h"
-}
 #include "extractor/comp_def.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/rational64.hpp"

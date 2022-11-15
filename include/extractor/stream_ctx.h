@@ -22,12 +22,15 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_STREAM_CTX_H__
-#define __FM_STREAM_CTX_H__
+#pragma once
 
 #include "extractor/handle.h"
 #include "fmc/platform.h"
 #include "fmc/time.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief defines stream execution context object
@@ -127,4 +130,6 @@ FMMODFUNC void fm_stream_ctx_preproc_clbck_set(fm_stream_ctx_t *ctx,
 FMMODFUNC void fm_stream_ctx_postproc_clbck_set(fm_stream_ctx_t *ctx,
                                                 fm_ctx_clbck_p f, fm_ctx_cl cl);
 
-#endif // __FM_STREAM_CTX_H__
+#ifdef __cplusplus
+}
+#endif

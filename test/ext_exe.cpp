@@ -21,10 +21,8 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/comp_sys.h"
 #include "extractor/std_comp.h"
-}
 
 #ifdef __clang__
 #pragma clang diagnostic push

@@ -21,9 +21,7 @@
  * This file contains Python C extention for extractor library
  */
 
-extern "C" {
 #include "extractor/python/extractor.h"
-}
 
 #include <Python.h>
 

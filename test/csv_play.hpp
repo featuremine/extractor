@@ -24,7 +24,6 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "csv_play.h"
 #include "csv_record.h"
 #include "extractor/comp_sys.h"
@@ -32,7 +31,6 @@ extern "C" {
 #include "extractor/stream_ctx.h"
 #include "extractor/type_sys.h"
 #include "identity.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 

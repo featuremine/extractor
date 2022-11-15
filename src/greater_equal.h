@@ -22,11 +22,12 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_GREATER_EQUAL_H__
-#define __FM_GREATER_EQUAL_H__
+#pragma once
 
 #include "operator_def.h"
 
-FM_DEFINE_COMP_OP(greater_equal);
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-#endif // __FM_GREATER_OR_EQUAL_H__
+FM_DEFINE_COMP_OP(greater_equal);

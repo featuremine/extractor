@@ -1,10 +1,8 @@
 
-extern "C" {
 #include "extractor/frame.h"
 #include "extractor/type_sys.h"
 #include "fmc/decimal128.h"
 #include "fmc/time.h"
-}
 
 #include "fmc++/serialization.hpp"
 #include <functional>

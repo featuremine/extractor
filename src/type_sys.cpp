@@ -23,10 +23,8 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/type_sys.h"
 #include "extractor/module.h"
-}
 
 #include "fmc++/mpl.hpp"
 #include "type_error.hpp"

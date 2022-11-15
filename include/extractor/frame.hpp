@@ -23,11 +23,9 @@
 
 #pragma once
 
-extern "C" {
 #include "extractor/comp_sys.h"
 #include "extractor/frame.h"
 #include "extractor/type_sys.h"
-}
 
 #include "fmc++/mpl.hpp"
 #include <array>

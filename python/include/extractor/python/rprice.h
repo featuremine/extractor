@@ -21,16 +21,17 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_PY_RPRICE_H__
-#define __FM_PY_RPRICE_H__
+#pragma once
 
 #include <Python.h>
 
 #include "fmc/platform.h"
 #include "fmc/rprice.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 FMMODFUNC bool Rprice_Check(PyObject *obj);
 
 FMMODFUNC fmc_rprice_t Rprice_val(PyObject *obj);
-
-#endif // __FM_PY_RPRICE_H__

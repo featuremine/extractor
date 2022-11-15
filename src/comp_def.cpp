@@ -22,12 +22,10 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/comp_def.h"
 #include "extractor/call_ctx.h"
 #include "extractor/frame_base.h"
 #include "fmc/time.h"
-}
 
 #include <stdarg.h>
 

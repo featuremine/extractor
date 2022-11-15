@@ -22,11 +22,14 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_BBO_AGGR_H__
-#define __FM_BBO_AGGR_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 fm_ctx_def_t *fm_comp_bbo_aggr_gen(fm_comp_sys_t *sys, fm_comp_def_cl, unsigned,
                                    fm_type_decl_cp[], fm_type_decl_cp,
@@ -46,5 +49,3 @@ void fm_comp_bbo_book_aggr_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 const fm_comp_def_t fm_comp_bbo_book_aggr = {
     "bbo_book_aggr", &fm_comp_bbo_book_aggr_gen, &fm_comp_bbo_book_aggr_destroy,
     NULL};
-
-#endif // __FM_BBO_AGGR_H__

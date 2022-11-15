@@ -2,6 +2,10 @@
 #include "extractor/comp_sys.h"
 #include "frame_serial.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief Serializes the graph
  */

@@ -22,11 +22,14 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_EXEC_CTX_H__
-#define __FM_EXEC_CTX_H__
+#pragma once
 
 #include "extractor/frame.h"
 #include "fmc/platform.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief defines execution context object
@@ -43,4 +46,6 @@ FMMODFUNC void fm_exec_ctx_error_set(fm_exec_ctx_t *ctx, const char *msg, ...);
 FMMODFUNC void fm_exec_ctx_error_clear(fm_exec_ctx_t *ctx);
 FMMODFUNC fm_frame_alloc_t *fm_exec_ctx_frames(fm_exec_ctx_t *ctx);
 
-#endif // __FM_EXEC_CTX_H__
+#ifdef __cplusplus
+}
+#endif

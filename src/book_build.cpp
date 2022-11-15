@@ -23,7 +23,6 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "book_build.h"
 #include "book/book.h"
 #include "extractor/arg_stack.h"
@@ -31,7 +30,6 @@ extern "C" {
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
-}
 
 #include "extractor/book/updates.hpp"
 #include "fmc++/decimal128.hpp"

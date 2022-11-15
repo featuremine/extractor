@@ -21,14 +21,12 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/comp_sys.h"
 #include "comp.h"
 #include "extractor/comp_def_simp.h"
 #include "extractor/frame.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/type_sys.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 

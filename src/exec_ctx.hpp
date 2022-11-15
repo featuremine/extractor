@@ -24,9 +24,7 @@
 
 #pragma once
 
-extern "C" {
 #include "extractor/exec_ctx.h"
-}
 
 #include <string>
 

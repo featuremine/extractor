@@ -22,10 +22,13 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_MM_FILE_H__
-#define __FM_MM_FILE_H__
+#pragma once
 
 #include <stddef.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct mm_file mm_file_t;
 
@@ -36,5 +39,3 @@ size_t mm_file_read(mm_file *m, size_t limit, void **buf);
 void mm_file_rewind(mm_file_t *m);
 
 void mm_file_close(mm_file_t *m);
-
-#endif // __FM_MM_FILE_H__

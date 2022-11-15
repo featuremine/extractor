@@ -22,8 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_PY_EXTRACTOR_H__
-#define __FM_PY_EXTRACTOR_H__
+#pragma once
 
 #define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION
 
@@ -32,6 +31,10 @@
 #include "extractor/comp_sys.h"
 #include "extractor/frame_base.h"
 #include "fmc/platform.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief creates extractor frame object
@@ -71,5 +74,3 @@ FMMODFUNC bool fm_comp_sys_py_comp(fm_comp_sys_t *sys);
  * @brief main module init function
  */
 PyMODINIT_FUNC fm_extractor_py_init(void) FMMODFUNC;
-
-#endif // __FM_PY_EXTRACTOR_H__
