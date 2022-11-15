@@ -173,12 +173,15 @@ if __name__ == "__main__":
     bbos_in = op.combine(
         bbos_in,
         (('time', 'receive'),
-         ('ticker', 'ticker'),
-         ('bid_prx_0', 'bidprice'),
-         ('ask_prx_0', 'askprice'),
-         ('bid_shr_0', 'bidqty'),
-         ('ask_shr_0', 'askqty')
-         )
+         ('ticker', 'ticker')),
+        op.convert(bbos_in.bid_prx_0, extr.Decimal128),
+        (('bid_prx_0', 'bidprice'),),
+        op.convert(bbos_in.ask_prx_0, extr.Decimal128),
+        (('ask_prx_0', 'askprice'),),
+        op.convert(bbos_in.bid_shr_0, extr.Decimal128),
+        (('bid_shr_0', 'bidqty'),),
+        op.convert(bbos_in.ask_shr_0, extr.Decimal128),
+        (('ask_shr_0', 'askqty'),)
     )
 
     bbos = op.split(bbos_in, "ticker", tuple(tickers))
@@ -192,9 +195,11 @@ if __name__ == "__main__":
     trades_in = op.combine(
         trades_in,
         (('time', 'receive'),
-         ('ticker', 'ticker'),
-         ('size', 'qty'),
-         ('price', 'price'))
+         ('ticker', 'ticker')),
+        op.convert(trades_in.size, extr.Decimal128),
+        (('size', 'qty'),),
+        op.convert(trades_in.price, extr.Decimal128),
+        tuple()
     )
 
     trade_split = op.split(trades_in, "ticker", tuple(tickers))

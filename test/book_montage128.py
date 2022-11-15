@@ -36,6 +36,7 @@ def New_York_time(year, mon, day, h=0, m=0, s=0):
     return epoch_delta(pytz.timezone("America/New_York").
                        localize(datetime(year, mon, day, h, m, s)))
 
+
 ZERO = extr.Decimal128(0)
 
 class ValidationBook:
@@ -46,10 +47,10 @@ class ValidationBook:
         self.oldaskpx = {}
 
     def proc_bbo(self, bbo, idx):
-        bidqty = extr.Decimal128(bbo[0].bidqty)
-        askqty = extr.Decimal128(bbo[0].askqty)
-        bidprice = extr.Decimal128.significant(extr.Decimal128(bbo[0].bidprice), 15)
-        askprice = extr.Decimal128.significant(extr.Decimal128(bbo[0].askprice), 15)
+        bidqty = bbo[0].bidqty
+        askqty = bbo[0].askqty
+        bidprice = bbo[0].bidprice
+        askprice = bbo[0].askprice
 
         if (idx in self.oldbidpx) and (bidprice != self.oldbidpx[idx][0]):
             if self.oldbidpx[idx][1] != ZERO:
@@ -85,12 +86,9 @@ class ValidationBook:
             return False
 
         for price, level in bookside:
-            #Adjust the price for the hash
-            adjusted_price = extr.Decimal128.significant(price, 15)
-            assert price == adjusted_price
-            if adjusted_price not in validationside:
+            if price not in validationside:
                 return False
-            validationlevel = validationside[adjusted_price]
+            validationlevel = validationside[price]
 
             if len(validationlevel) != len(level):
                 return False
@@ -130,6 +128,14 @@ if __name__ == "__main__":
          ("askprice", extr.Rprice, ""),
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")))
+
+    bbos_in = op.combine(bbos_in.receive, tuple(),
+                         bbos_in.ticker, tuple(),
+                         bbos_in.market, tuple(),
+                         op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
+                         op.convert(bbos_in.askprice, extr.Decimal128), tuple(),
+                         op.convert(bbos_in.bidqty, extr.Decimal128), tuple(),
+                         op.convert(bbos_in.askqty, extr.Decimal128), tuple());
 
     bbo_split = op.split(bbos_in, "market", tuple(markets))
 

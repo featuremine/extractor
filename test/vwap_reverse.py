@@ -91,12 +91,6 @@ if __name__ == "__main__":
          ("bidqty", extr.Int32, ""),
          ("askqty", extr.Int32, "")))
 
-    bbo_fields = op.fields(bbos_in, ("receive", "ticker", "market", "bidqty", "askqty"))
-
-    bbos_in = op.combine(bbo_fields, tuple(),
-                         op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
-                         op.convert(bbos_in.askprice, extr.Decimal128), tuple())
-
     bbo_split = op.split(bbos_in, "ticker", tuple(imnts))
 
     trades_in = op.mp_play(
@@ -107,11 +101,6 @@ if __name__ == "__main__":
          ("price", extr.Rprice, ""),
          ("qty", extr.Int32, ""),
          ("side", extr.Int32, "")))
-
-    trade_fields = op.fields(trades_in, ("receive", "ticker", "market", "qty", "side"))
-
-    trades_in = op.combine(trade_fields, tuple(),
-                           op.convert(trades_in.price, extr.Decimal128), tuple())
 
     trade_split = op.split(trades_in, "ticker", tuple(imnts))
 
@@ -125,26 +114,18 @@ if __name__ == "__main__":
         for mkt in markets:
             bbo = mkt_bbo_split[mkt_idx]
             trade = mkt_trade_split[mkt_idx]
-            cum_trade = op.cum_trade(trade)
+            cum_trade = op.cumulative(op.combine(trade.qty, (("qty", "shares"),), op.convert(trade.qty, extr.Float64) * op.convert(trade.price, extr.Float64), (("qty", "notional",),)))
             bbos[mkt].append(bbo)
             ctrds[mkt].append(cum_trade)
             mkt_idx = mkt_idx + 1
         imnt_idx = imnt_idx + 1
 
     nbbos = [op.bbo_aggr(*x) for x in zip(*bbos.values())]
-    ctrdts = [op.cum_trade_total(*x) for x in zip(*ctrds.values())]
+    ctrdts = [op.sum(*x) for x in zip(*ctrds.values())]
 
     bars = [compute_bar(nbbo, ctrdt) for nbbo, ctrdt in zip(nbbos, ctrdts)]
     out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
                          tuple([x["NASDAQOMX"] for x in tickers]))
-
-    stream_fields = op.fields(out_stream, ("end_askqty","end_bidqty","end_receive","end_time","notional","shares","start_askqty","start_bidqty","start_receive","ticker","vwap"))
-    out_stream = op.combine(stream_fields, tuple(),
-                            op.convert(out_stream.end_askprice, extr.Rprice), tuple(),
-                            op.convert(out_stream.end_bidprice, extr.Rprice), tuple(),
-                            op.convert(out_stream.start_askprice, extr.Rprice), tuple(),
-                            op.convert(out_stream.start_bidprice, extr.Rprice), tuple()
-                            )
 
     op.csv_record(out_stream, bar_file)
 

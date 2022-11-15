@@ -74,12 +74,12 @@ bool fm_comp_book_build_call_stream_init(fm_frame_t *result, size_t args,
     sprintf(buf, "bid_prx_%u", i);
     fields.push_back(fm_frame_field(result, buf));
     *(fmc_decimal128_t *)fm_frame_get_ptr1(result, fields.back(), 0) =
-        fmc::decimal128(0);
+        fmc::decimal128();
 
     sprintf(buf, "bid_shr_%u", i);
     fields.push_back(fm_frame_field(result, buf));
     *(fmc_decimal128_t *)fm_frame_get_ptr1(result, fields.back(), 0) =
-        fmc::decimal128(0);
+        fmc::decimal128();
 
     sprintf(buf, "bid_ord_%u", i);
     fields.push_back(fm_frame_field(result, buf));
@@ -89,12 +89,12 @@ bool fm_comp_book_build_call_stream_init(fm_frame_t *result, size_t args,
     sprintf(buf, "ask_prx_%u", i);
     fields.push_back(fm_frame_field(result, buf));
     *(fmc_decimal128_t *)fm_frame_get_ptr1(result, fields.back(), 0) =
-        fmc::decimal128(0);
+        fmc::decimal128();
 
     sprintf(buf, "ask_shr_%u", i);
     fields.push_back(fm_frame_field(result, buf));
     *(fmc_decimal128_t *)fm_frame_get_ptr1(result, fields.back(), 0) =
-        fmc::decimal128(0);
+        fmc::decimal128();
 
     sprintf(buf, "ask_ord_%u", i);
     fields.push_back(fm_frame_field(result, buf));
@@ -243,9 +243,9 @@ bool fm_comp_book_build_stream_exec(fm_frame_t *result, size_t args,
     }
     for (; idx < lvl_cnt; ++idx) {
       *(fmc_decimal128_t *)fm_frame_get_ptr1(result, *(it++), 0) =
-          fmc::decimal128(0);
+          fmc::decimal128();
       *(fmc_decimal128_t *)fm_frame_get_ptr1(result, *(it++), 0) =
-          fmc::decimal128(0);
+          fmc::decimal128();
       *(uint32_t *)fm_frame_get_ptr1(result, *(it++), 0) = 0;
     }
   }

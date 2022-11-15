@@ -8,7 +8,6 @@
         parties, reverse engineered or used in any manner not provided
         for in said License Agreement except with the prior written
         authorization from Featuremine Corporation.
-
         """
 
 """
@@ -50,14 +49,7 @@ def compute_bar(op, bbo, trade):
     high_quote = op.left_lim(op.asof(quote, op.max(quote_ask, close)), close)
     low_quote = op.left_lim(op.asof(quote, op.min(quote_bid, close)), close)
 
-    quote = op.combine(op.fields(quote, ("bidprice", "askprice")), tuple(),
-                       op.convert(quote.bidqty, extr.Decimal128), tuple(),
-                       op.convert(quote.askqty, extr.Decimal128), tuple())
-
     tw_quote = op.average_tw(quote, close)
-
-    trade = op.combine(op.fields(trade, ("price", "market")), tuple(),
-                       op.convert(trade.qty, extr.Decimal128), tuple())
 
     trade_px = trade.price
     trade_qty = trade.qty
@@ -148,8 +140,8 @@ if __name__ == "__main__":
                                    bbos_in.market, tuple(),
                                    op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
                                    op.convert(bbos_in.askprice, extr.Decimal128), tuple(),
-                                   bbos_in.bidqty, tuple(),
-                                   bbos_in.askqty, tuple());
+                                   op.convert(bbos_in.bidqty, extr.Decimal128), tuple(),
+                                   op.convert(bbos_in.askqty, extr.Decimal128), tuple());
 
     bbo_split = op.split(bbos_in, "market", tuple(markets))
 
@@ -166,7 +158,7 @@ if __name__ == "__main__":
                                    trades_in.ticker, tuple(),
                                    trades_in.market, tuple(),
                                    op.convert(trades_in.price, extr.Decimal128), tuple(),
-                                   trades_in.qty, tuple(),
+                                   op.convert(trades_in.qty, extr.Decimal128), tuple(),
                                    trades_in.side, tuple());
 
     trade_split = op.split(trades_in, "market", tuple(markets))

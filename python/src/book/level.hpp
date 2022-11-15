@@ -26,6 +26,8 @@
 extern "C" {
 #include "book/book.h"
 #include "extractor/python/book.h"
+#include "extractor/python/decimal128.h"
+#include "extractor/python/extractor.h"
 #include "extractor/python/side.h"
 }
 
@@ -78,8 +80,7 @@ static PyObject *Order_id(Order *self, void *) {
 }
 
 static PyObject *Order_qty(Order *self, void *) {
-  return PyFloat_FromDouble(fmc::conversion<fmc_decimal128_t, double>()(
-      fm_book_order_qty(self->order_)));
+  return Decimal128_new(fm_book_order_qty(self->order_));
 }
 
 static PyObject *Order_rec(Order *self, void *) {
@@ -289,13 +290,11 @@ static PyMappingMethods Level_as_mapping = {
 };
 
 static PyObject *Level_px(Level *self, void *) {
-  return PyFloat_FromDouble(fmc::conversion<fmc_decimal128_t, double>()(
-      fm_book_level_prx(self->level_)));
+  return Decimal128_new(fm_book_level_prx(self->level_));
 }
 
 static PyObject *Level_shr(Level *self, void *) {
-  return PyFloat_FromDouble(fmc::conversion<fmc_decimal128_t, double>()(
-      fm_book_level_shr(self->level_)));
+  return Decimal128_new(fm_book_level_shr(self->level_));
 }
 
 static PyObject *Level_ord(Level *self, void *) {
@@ -383,9 +382,7 @@ PyObject *LevelIter_iternext(PyObject *self) {
   }
   auto *ret = PyTuple_New(2);
   auto *level = fm_book_level(p->levels()->levels_, p->done_++);
-  auto px =
-      fmc::conversion<fmc_decimal128_t, double>()(fm_book_level_prx(level));
-  PyTuple_SET_ITEM(ret, 0, PyFloat_FromDouble(px));
+  PyTuple_SET_ITEM(ret, 0, Decimal128_new(fm_book_level_prx(level)));
   PyTuple_SET_ITEM(ret, 1, Level_new(level, p->levels()));
   return ret;
 }
