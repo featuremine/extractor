@@ -45,7 +45,7 @@ jobs:
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@new-yamal
+      uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.24'
@@ -80,7 +80,7 @@ jobs:
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@new-yamal
+      uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.24'
@@ -96,7 +96,7 @@ jobs:
     
     steps:
     - name: Test ${{ github.event.repository.name }} release
-      uses: featuremine/actions/package/test@new-yamal
+      uses: featuremine/actions/package/test@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.24'
@@ -120,7 +120,7 @@ jobs:
           python-version: ${{ matrix.python_version }}
 
       - name: Test ${{ github.event.repository.name }} release for python version ${{ matrix.python_version }}
-        uses: featuremine/actions/package/test@new-yamal
+        uses: featuremine/actions/package/test@main
         with:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           yamal_version: '7.2.24'
