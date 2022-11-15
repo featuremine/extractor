@@ -13,25 +13,24 @@
  *****************************************************************************/
 
 /**
- * @file storage_util.hpp
- * @date 7 Nov 2022
- * @brief File contains storage type helpers
+ * @file rational64.h
+ * @date 9 Nov 2022
+ * @brief File contains C Python api for Rational64 Type
  *
+ * This file contains C Python api for Rational64 Type
  * @see http://www.featuremine.com
  */
 
-#include "fmc++/decimal128.hpp"
-#include "fmc++/rational64.hpp"
-#include "fmc++/rprice.hpp"
+#ifndef __FM_PY_RATIONAL64_H__
+#define __FM_PY_RATIONAL64_H__
 
-template <class T> struct storage { using type = T; };
+#include <Python.h>
 
-template <> struct storage<fmc_decimal128_t> {
-  using type = typename fmc::decimal128;
-};
+#include "fmc/platform.h"
+#include "fmc/rational64.h"
 
-template <> struct storage<fmc_rprice_t> { using type = typename fmc::rprice; };
+FMMODFUNC bool Rational64_Check(PyObject *obj);
 
-template <> struct storage<fmc_rational64_t> {
-  using type = typename fmc::rational64;
-};
+FMMODFUNC fmc_rational64_t Rational64_val(PyObject *obj);
+
+#endif // __FM_PY_RATIONAL64_H__

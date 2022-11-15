@@ -13,28 +13,29 @@
  *****************************************************************************/
 
 /**
- * @file py_decimal128.hpp
+ * @file rational.hpp
  * @date 2 Nov 2022
- * @brief Python wrapper for extractor decimal128 type
+ * @brief Python wrapper for extractor rational type
  * */
 
 #pragma once
 
-#include "fmc/decimal128.h"
+#include "fmc++/rational64.hpp"
 #include <Python.h>
 #include <extractor/python/extractor.h>
-#include <py_type_utils.hpp>
+#include <extractor/python/rational64.h>
+#include <extractor/python/type_utils.hpp>
 
-struct ExtractorBaseTypeDecimal128 {
+struct ExtractorBaseTypeRational64 {
   PyObject_HEAD;
-  fmc::decimal128 val;
-  static void py_dealloc(ExtractorBaseTypeDecimal128 *self) {
+  fmc::rational64 val;
+  static void py_dealloc(ExtractorBaseTypeRational64 *self) {
     Py_TYPE(self)->tp_free((PyObject *)self);
   }
   static PyObject *py_richcmp(PyObject *obj1, PyObject *obj2, int op);
   static PyObject *tp_new(PyTypeObject *subtype, PyObject *args,
                           PyObject *kwds);
-  static PyObject *py_new(fmc_decimal128_t t);
+  static PyObject *py_new(fmc_rational64_t t);
   static PyObject *tp_str(PyObject *self);
   static bool init(PyObject *m);
 
@@ -70,102 +71,95 @@ struct ExtractorBaseTypeDecimal128 {
   static PyMethodDef tp_methods[];
 };
 
-PyObject *ExtractorBaseTypeDecimal128::nb_add(PyObject *lhs, PyObject *rhs) {
-  return ExtractorBaseTypeDecimal128::py_new(
-      ((ExtractorBaseTypeDecimal128 *)lhs)->val +
-      ((ExtractorBaseTypeDecimal128 *)rhs)->val);
+PyObject *ExtractorBaseTypeRational64::nb_add(PyObject *lhs, PyObject *rhs) {
+  return ExtractorBaseTypeRational64::py_new(
+      ((ExtractorBaseTypeRational64 *)lhs)->val +
+      ((ExtractorBaseTypeRational64 *)rhs)->val);
 }
 
-PyObject *ExtractorBaseTypeDecimal128::nb_substract(PyObject *lhs,
+PyObject *ExtractorBaseTypeRational64::nb_substract(PyObject *lhs,
                                                     PyObject *rhs) {
-  return ExtractorBaseTypeDecimal128::py_new(
-      ((ExtractorBaseTypeDecimal128 *)lhs)->val -
-      ((ExtractorBaseTypeDecimal128 *)rhs)->val);
+  return ExtractorBaseTypeRational64::py_new(
+      ((ExtractorBaseTypeRational64 *)lhs)->val -
+      ((ExtractorBaseTypeRational64 *)rhs)->val);
 }
 
-PyObject *ExtractorBaseTypeDecimal128::nb_multiply(PyObject *lhs,
+PyObject *ExtractorBaseTypeRational64::nb_multiply(PyObject *lhs,
                                                    PyObject *rhs) {
-  return ExtractorBaseTypeDecimal128::py_new(
-      ((ExtractorBaseTypeDecimal128 *)lhs)->val *
-      ((ExtractorBaseTypeDecimal128 *)rhs)->val);
+  return ExtractorBaseTypeRational64::py_new(
+      ((ExtractorBaseTypeRational64 *)lhs)->val *
+      ((ExtractorBaseTypeRational64 *)rhs)->val);
 }
 
-PyObject *ExtractorBaseTypeDecimal128::nb_true_divide(PyObject *self,
+PyObject *ExtractorBaseTypeRational64::nb_true_divide(PyObject *self,
                                                       PyObject *rhs) {
-  return ExtractorBaseTypeDecimal128::py_new(
-      ((ExtractorBaseTypeDecimal128 *)self)->val /
-      ((ExtractorBaseTypeDecimal128 *)rhs)->val);
+  return ExtractorBaseTypeRational64::py_new(
+      ((ExtractorBaseTypeRational64 *)self)->val /
+      ((ExtractorBaseTypeRational64 *)rhs)->val);
 }
 
-PyObject *ExtractorBaseTypeDecimal128::nb_inplace_add(PyObject *self,
+PyObject *ExtractorBaseTypeRational64::nb_inplace_add(PyObject *self,
                                                       PyObject *rhs) {
-  fmc::decimal128::upcast(((ExtractorBaseTypeDecimal128 *)self)->val) +=
-      ((ExtractorBaseTypeDecimal128 *)rhs)->val;
+  ((ExtractorBaseTypeRational64 *)self)->val +=
+      ((ExtractorBaseTypeRational64 *)rhs)->val;
   Py_INCREF(self);
   return self;
 }
 
-PyObject *ExtractorBaseTypeDecimal128::nb_inplace_substract(PyObject *self,
+PyObject *ExtractorBaseTypeRational64::nb_inplace_substract(PyObject *self,
                                                             PyObject *rhs) {
-  fmc::decimal128::upcast(((ExtractorBaseTypeDecimal128 *)self)->val) -=
-      ((ExtractorBaseTypeDecimal128 *)rhs)->val;
+  ((ExtractorBaseTypeRational64 *)self)->val -=
+      ((ExtractorBaseTypeRational64 *)rhs)->val;
   Py_INCREF(self);
   return self;
 }
 
-PyObject *ExtractorBaseTypeDecimal128::nb_inplace_multiply(PyObject *self,
+PyObject *ExtractorBaseTypeRational64::nb_inplace_multiply(PyObject *self,
                                                            PyObject *rhs) {
-  ((ExtractorBaseTypeDecimal128 *)self)->val =
-      ((ExtractorBaseTypeDecimal128 *)self)->val *
-      ((ExtractorBaseTypeDecimal128 *)rhs)->val;
+  ((ExtractorBaseTypeRational64 *)self)->val =
+      ((ExtractorBaseTypeRational64 *)self)->val *
+      ((ExtractorBaseTypeRational64 *)rhs)->val;
   Py_INCREF(self);
   return self;
 }
 
-PyObject *ExtractorBaseTypeDecimal128::nb_inplace_true_divide(PyObject *self,
+PyObject *ExtractorBaseTypeRational64::nb_inplace_true_divide(PyObject *self,
                                                               PyObject *rhs) {
-  ((ExtractorBaseTypeDecimal128 *)self)->val =
-      ((ExtractorBaseTypeDecimal128 *)self)->val /
-      ((ExtractorBaseTypeDecimal128 *)rhs)->val;
+  ((ExtractorBaseTypeRational64 *)self)->val =
+      ((ExtractorBaseTypeRational64 *)self)->val /
+      ((ExtractorBaseTypeRational64 *)rhs)->val;
   Py_INCREF(self);
   return self;
 }
 
-PyObject *ExtractorBaseTypeDecimal128::nb_absolute(PyObject *self) {
-  fmc_decimal128_t absval;
-  fmc_decimal128_abs(&absval, &((ExtractorBaseTypeDecimal128 *)self)->val);
-  return ExtractorBaseTypeDecimal128::py_new(absval);
+PyObject *ExtractorBaseTypeRational64::nb_absolute(PyObject *self) {
+  fmc_rational64_t res;
+  fmc_rational64_abs(&res, &((ExtractorBaseTypeRational64 *)self)->val);
+  return ExtractorBaseTypeRational64::py_new(res);
 }
 
-PyObject *ExtractorBaseTypeDecimal128::nb_float(PyObject *self) {
-  char str[FMC_DECIMAL128_STR_SIZE];
-  fmc_decimal128_to_str(str, &((ExtractorBaseTypeDecimal128 *)self)->val);
-  return PyFloat_FromDouble(strtod(str, nullptr));
+PyObject *ExtractorBaseTypeRational64::nb_float(PyObject *self) {
+  double dest;
+  fmc_rational64_to_double(&dest, &((ExtractorBaseTypeRational64 *)self)->val);
+  return PyFloat_FromDouble(dest);
 }
 
-PyObject *ExtractorBaseTypeDecimal128::nb_int(PyObject *self) {
-  int64_t res;
-  fmc_error_t *err;
-  fmc_decimal128_to_int(&res, &((ExtractorBaseTypeDecimal128 *)self)->val,
-                        &err);
-  if (err && fetestexcept(FE_ALL_EXCEPT) != FE_INEXACT) {
-    PyErr_SetString(PyExc_RuntimeError,
-                    "Error produced attempting to convert to int");
-    return nullptr;
-  }
-  return PyLong_FromLong(res);
+PyObject *ExtractorBaseTypeRational64::nb_int(PyObject *self) {
+  double dest;
+  fmc_rational64_to_double(&dest, &((ExtractorBaseTypeRational64 *)self)->val);
+  return PyLong_FromLongLong(llround(dest));
 }
 
-PyNumberMethods ExtractorBaseTypeDecimal128::tp_as_number = {
-    ExtractorBaseTypeDecimal128::nb_add,       //  binaryfunc nb_add;
-    ExtractorBaseTypeDecimal128::nb_substract, //  binaryfunc nb_subtract;
-    ExtractorBaseTypeDecimal128::nb_multiply,  //  binaryfunc nb_multiply;
+PyNumberMethods ExtractorBaseTypeRational64::tp_as_number = {
+    ExtractorBaseTypeRational64::nb_add,       //  binaryfunc nb_add;
+    ExtractorBaseTypeRational64::nb_substract, //  binaryfunc nb_subtract;
+    ExtractorBaseTypeRational64::nb_multiply,  //  binaryfunc nb_multiply;
     0,                                         //  binaryfunc nb_remainder;
     0,                                         //  binaryfunc nb_divmod;
     0,                                         //  ternaryfunc nb_power;
     0,                                         //  unaryfunc nb_negative;
     0,                                         //  unaryfunc nb_positive;
-    ExtractorBaseTypeDecimal128::nb_absolute,  //  unaryfunc nb_absolute;
+    ExtractorBaseTypeRational64::nb_absolute,  //  unaryfunc nb_absolute;
     0,                                         //  inquiry nb_bool;
     0,                                         //  unaryfunc nb_invert;
     0,                                         //  binaryfunc nb_lshift;
@@ -173,14 +167,14 @@ PyNumberMethods ExtractorBaseTypeDecimal128::tp_as_number = {
     0,                                         //  binaryfunc nb_and;
     0,                                         //  binaryfunc nb_xor;
     0,                                         //  binaryfunc nb_or;
-    ExtractorBaseTypeDecimal128::nb_int,       //  unaryfunc nb_int;
+    ExtractorBaseTypeRational64::nb_int,       //  unaryfunc nb_int;
     0,                                         //  void *nb_reserved;
-    ExtractorBaseTypeDecimal128::nb_float,     //  unaryfunc nb_float;
+    ExtractorBaseTypeRational64::nb_float,     //  unaryfunc nb_float;
 
-    ExtractorBaseTypeDecimal128::nb_inplace_add, //  binaryfunc nb_inplace_add;
-    ExtractorBaseTypeDecimal128::nb_inplace_substract, //  binaryfunc
+    ExtractorBaseTypeRational64::nb_inplace_add, //  binaryfunc nb_inplace_add;
+    ExtractorBaseTypeRational64::nb_inplace_substract, //  binaryfunc
                                                        //  nb_inplace_subtract;
-    ExtractorBaseTypeDecimal128::nb_inplace_multiply,  //  binaryfunc
+    ExtractorBaseTypeRational64::nb_inplace_multiply,  //  binaryfunc
                                                        //  nb_inplace_multiply;
     0, //  binaryfunc nb_inplace_remainder;
     0, //  ternaryfunc nb_inplace_power;
@@ -191,9 +185,9 @@ PyNumberMethods ExtractorBaseTypeDecimal128::tp_as_number = {
     0, //  binaryfunc nb_inplace_or;
 
     0,                                           //  binaryfunc nb_floor_divide;
-    ExtractorBaseTypeDecimal128::nb_true_divide, //  binaryfunc nb_true_divide;
+    ExtractorBaseTypeRational64::nb_true_divide, //  binaryfunc nb_true_divide;
     0, //  binaryfunc nb_inplace_floor_divide;
-    ExtractorBaseTypeDecimal128::
+    ExtractorBaseTypeRational64::
         nb_inplace_true_divide, //  binaryfunc nb_inplace_true_divide;
 
     0, //  unaryfunc nb_index;
@@ -202,7 +196,7 @@ PyNumberMethods ExtractorBaseTypeDecimal128::tp_as_number = {
     0, //  binaryfunc nb_inplace_matrix_multiply;
 };
 
-PyMethodDef ExtractorBaseTypeDecimal128::tp_methods[] = {
+PyMethodDef ExtractorBaseTypeRational64::tp_methods[] = {
     // /* Unary arithmetic functions, optional context arg */
     // { "exp", _PyCFunction_CAST(dec_mpd_qexp), METH_VARARGS|METH_KEYWORDS,
     // doc_exp },
@@ -226,15 +220,15 @@ PyMethodDef ExtractorBaseTypeDecimal128::tp_methods[] = {
     // doc_sqrt },
 
     // /* Binary arithmetic functions, optional context arg */
-    {"compare", (PyCFunction)ExtractorBaseTypeDecimal128::compare,
+    {"compare", (PyCFunction)ExtractorBaseTypeRational64::compare,
      METH_VARARGS | METH_KEYWORDS, NULL},
     // { "compare_signal", _PyCFunction_CAST(dec_mpd_qcompare_signal),
     // METH_VARARGS|METH_KEYWORDS, doc_compare_signal },
-    {"max", ExtractorBaseTypeDecimal128::max, METH_VARARGS | METH_KEYWORDS,
+    {"max", ExtractorBaseTypeRational64::max, METH_VARARGS | METH_KEYWORDS,
      NULL},
     // { "max_mag", _PyCFunction_CAST(dec_mpd_qmax_mag),
     // METH_VARARGS|METH_KEYWORDS, doc_max_mag },
-    {"min", ExtractorBaseTypeDecimal128::min, METH_VARARGS | METH_KEYWORDS,
+    {"min", ExtractorBaseTypeRational64::min, METH_VARARGS | METH_KEYWORDS,
      NULL},
     // { "min_mag", _PyCFunction_CAST(dec_mpd_qmin_mag),
     // METH_VARARGS|METH_KEYWORDS, doc_min_mag },
@@ -251,14 +245,14 @@ PyMethodDef ExtractorBaseTypeDecimal128::tp_methods[] = {
 
     // /* Boolean functions, no context arg */
     // { "is_canonical", dec_mpd_iscanonical, METH_NOARGS, doc_is_canonical },
-    {"is_finite", ExtractorBaseTypeDecimal128::is_finite, METH_NOARGS, NULL},
-    {"is_infinite", ExtractorBaseTypeDecimal128::is_infinite, METH_NOARGS,
+    {"is_finite", ExtractorBaseTypeRational64::is_finite, METH_NOARGS, NULL},
+    {"is_infinite", ExtractorBaseTypeRational64::is_infinite, METH_NOARGS,
      NULL},
-    {"is_nan", ExtractorBaseTypeDecimal128::is_nan, METH_NOARGS, NULL},
-    {"is_qnan", ExtractorBaseTypeDecimal128::is_qnan, METH_NOARGS, NULL},
-    {"is_snan", ExtractorBaseTypeDecimal128::is_snan, METH_NOARGS, NULL},
-    {"is_signed", ExtractorBaseTypeDecimal128::is_signed, METH_NOARGS, NULL},
-    {"is_zero", ExtractorBaseTypeDecimal128::is_zero, METH_NOARGS, NULL},
+    {"is_nan", ExtractorBaseTypeRational64::is_nan, METH_NOARGS, NULL},
+    {"is_qnan", ExtractorBaseTypeRational64::is_qnan, METH_NOARGS, NULL},
+    {"is_snan", ExtractorBaseTypeRational64::is_snan, METH_NOARGS, NULL},
+    {"is_signed", ExtractorBaseTypeRational64::is_signed, METH_NOARGS, NULL},
+    {"is_zero", ExtractorBaseTypeRational64::is_zero, METH_NOARGS, NULL},
 
     // /* Boolean functions, optional context arg */
     // { "is_normal", _PyCFunction_CAST(dec_mpd_isnormal),
@@ -311,7 +305,7 @@ PyMethodDef ExtractorBaseTypeDecimal128::tp_methods[] = {
     // doc_shift },
 
     // /* Miscellaneous */
-    {"from_float", ExtractorBaseTypeDecimal128::from_float, METH_O | METH_CLASS,
+    {"from_float", ExtractorBaseTypeRational64::from_float, METH_O | METH_CLASS,
      NULL},
     // { "as_tuple", PyDec_AsTuple, METH_NOARGS, doc_as_tuple },
     // { "as_integer_ratio", dec_as_integer_ratio, METH_NOARGS,
@@ -331,22 +325,22 @@ PyMethodDef ExtractorBaseTypeDecimal128::tp_methods[] = {
 
     {NULL, NULL, 1}};
 
-static PyTypeObject ExtractorBaseTypeDecimal128Type = {
-    PyVarObject_HEAD_INIT(NULL, 0) "extractor.Decimal128", /* tp_name */
-    sizeof(ExtractorBaseTypeDecimal128),                   /* tp_basicsize */
+static PyTypeObject ExtractorBaseTypeRational64Type = {
+    PyVarObject_HEAD_INIT(NULL, 0) "extractor.Rational64", /* tp_name */
+    sizeof(ExtractorBaseTypeRational64),                   /* tp_basicsize */
     0,                                                     /* tp_itemsize */
-    (destructor)ExtractorBaseTypeDecimal128::py_dealloc,   /* tp_dealloc */
+    (destructor)ExtractorBaseTypeRational64::py_dealloc,   /* tp_dealloc */
     0,                                                     /* tp_print */
     0,                                                     /* tp_getattr */
     0,                                                     /* tp_setattr */
     0,                                                     /* tp_reserved */
     0,                                                     /* tp_repr */
-    &ExtractorBaseTypeDecimal128::tp_as_number,            /* tp_as_number */
+    &ExtractorBaseTypeRational64::tp_as_number,            /* tp_as_number */
     0,                                                     /* tp_as_sequence */
     0,                                                     /* tp_as_mapping */
     0,                                                     /* tp_hash  */
     0,                                                     /* tp_call */
-    (reprfunc)ExtractorBaseTypeDecimal128::tp_str,         /* tp_str */
+    (reprfunc)ExtractorBaseTypeRational64::tp_str,         /* tp_str */
     0,                                                     /* tp_getattro */
     0,                                                     /* tp_setattro */
     0,                                                     /* tp_as_buffer */
@@ -354,11 +348,11 @@ static PyTypeObject ExtractorBaseTypeDecimal128Type = {
     "Extractor system base type object",                   /* tp_doc */
     0,                                                     /* tp_traverse */
     0,                                                     /* tp_clear */
-    (richcmpfunc)ExtractorBaseTypeDecimal128::py_richcmp,  /* tp_richcompare */
+    (richcmpfunc)ExtractorBaseTypeRational64::py_richcmp,  /* tp_richcompare */
     0,                                       /* tp_weaklistoffset */
     0,                                       /* tp_iter */
     0,                                       /* tp_iternext */
-    ExtractorBaseTypeDecimal128::tp_methods, /* tp_methods */
+    ExtractorBaseTypeRational64::tp_methods, /* tp_methods */
     0,                                       /* tp_members */
     0,                                       /* tp_getset */
     0,                                       /* tp_base */
@@ -368,39 +362,39 @@ static PyTypeObject ExtractorBaseTypeDecimal128Type = {
     0,                                       /* tp_dictoffset */
     0,                                       /* tp_init */
     0,                                       /* tp_alloc */
-    ExtractorBaseTypeDecimal128::tp_new,     /* tp_new */
+    ExtractorBaseTypeRational64::tp_new,     /* tp_new */
 };
-PyObject *ExtractorBaseTypeDecimal128::py_new(fmc_decimal128_t t) {
-  PyTypeObject *type = (PyTypeObject *)&ExtractorBaseTypeDecimal128Type;
-  ExtractorBaseTypeDecimal128 *self;
+PyObject *ExtractorBaseTypeRational64::py_new(fmc_rational64_t t) {
+  PyTypeObject *type = (PyTypeObject *)&ExtractorBaseTypeRational64Type;
+  ExtractorBaseTypeRational64 *self;
 
-  self = (ExtractorBaseTypeDecimal128 *)type->tp_alloc(type, 0);
+  self = (ExtractorBaseTypeRational64 *)type->tp_alloc(type, 0);
   if (self == nullptr)
     return nullptr;
 
   self->val = t;
   return (PyObject *)self;
 }
-PyObject *ExtractorBaseTypeDecimal128::tp_new(PyTypeObject *subtype,
+PyObject *ExtractorBaseTypeRational64::tp_new(PyTypeObject *subtype,
                                               PyObject *args, PyObject *kwds) {
   PyObject *input = NULL;
   if (PyArg_ParseTuple(args, "O", &input) &&
       ExtractorComputation_type_check(input))
     return create(subtype, args, kwds);
-  fmc_decimal128_t val;
-  if (py_type_convert<fmc_decimal128_t>::convert(val, args)) {
+  fmc_rational64_t val;
+  if (py_type_convert<fmc_rational64_t>::convert(val, args)) {
     return py_new(val);
   }
-  PyErr_SetString(PyExc_RuntimeError, "Could not convert to type Decimal128");
+  PyErr_SetString(PyExc_RuntimeError, "Could not convert to type Rational64");
   return nullptr;
 }
-PyObject *ExtractorBaseTypeDecimal128::tp_str(PyObject *self) {
-  std::string str = std::to_string(((ExtractorBaseTypeDecimal128 *)self)->val);
+PyObject *ExtractorBaseTypeRational64::tp_str(PyObject *self) {
+  std::string str = std::to_string(((ExtractorBaseTypeRational64 *)self)->val);
   return PyUnicode_FromString(str.c_str());
 }
 
-bool ExtractorBaseTypeDecimal128::init(PyObject *m) {
-  if (PyType_Ready(&ExtractorBaseTypeDecimal128Type) < 0)
+bool ExtractorBaseTypeRational64::init(PyObject *m) {
+  if (PyType_Ready(&ExtractorBaseTypeRational64Type) < 0)
     return false;
 
   /* Numeric abstract base classes */
@@ -412,7 +406,7 @@ bool ExtractorBaseTypeDecimal128::init(PyObject *m) {
     return false;
   /* Register Decimal with the Number abstract base class */
   PyObject *obj = PyObject_CallMethod(
-      Number, "register", "(O)", (PyObject *)&ExtractorBaseTypeDecimal128Type);
+      Number, "register", "(O)", (PyObject *)&ExtractorBaseTypeRational64Type);
   if (!obj)
     return false;
 
@@ -420,23 +414,23 @@ bool ExtractorBaseTypeDecimal128::init(PyObject *m) {
   Py_CLEAR(numbers);
   Py_CLEAR(Number);
 
-  Py_INCREF(&ExtractorBaseTypeDecimal128Type);
-  PyModule_AddObject(m, "Decimal128",
-                     (PyObject *)&ExtractorBaseTypeDecimal128Type);
+  Py_INCREF(&ExtractorBaseTypeRational64Type);
+  PyModule_AddObject(m, "Rational64",
+                     (PyObject *)&ExtractorBaseTypeRational64Type);
 
   return true;
 }
 
-PyObject *ExtractorBaseTypeDecimal128::py_richcmp(PyObject *obj1,
+PyObject *ExtractorBaseTypeRational64::py_richcmp(PyObject *obj1,
                                                   PyObject *obj2, int op) {
-  if (!Decimal128_Check(obj1) || !Decimal128_Check(obj2)) {
+  if (!Rational64_Check(obj1) || !Rational64_Check(obj2)) {
     return PyBool_FromLong(op == Py_NE);
   }
   int c = 0;
-  fmc_decimal128_t t1;
-  fmc_decimal128_t t2;
-  t1 = ((ExtractorBaseTypeDecimal128 *)obj1)->val;
-  t2 = ((ExtractorBaseTypeDecimal128 *)obj2)->val;
+  fmc_rational64_t t1;
+  fmc_rational64_t t2;
+  t1 = ((ExtractorBaseTypeRational64 *)obj1)->val;
+  t2 = ((ExtractorBaseTypeRational64 *)obj2)->val;
   switch (op) {
   case Py_LT:
     c = t1 < t2;
@@ -460,54 +454,48 @@ PyObject *ExtractorBaseTypeDecimal128::py_richcmp(PyObject *obj1,
   return PyBool_FromLong(c);
 }
 
-PyObject *ExtractorBaseTypeDecimal128::is_finite(PyObject *self,
+PyObject *ExtractorBaseTypeRational64::is_finite(PyObject *self,
                                                  PyObject *args) {
-  return PyBool_FromLong(
-      fmc_decimal128_is_finite(&((ExtractorBaseTypeDecimal128 *)self)->val));
+  Py_RETURN_TRUE;
 }
 
-PyObject *ExtractorBaseTypeDecimal128::is_infinite(PyObject *self,
+PyObject *ExtractorBaseTypeRational64::is_infinite(PyObject *self,
                                                    PyObject *args) {
-  return PyBool_FromLong(
-      fmc_decimal128_is_inf(&((ExtractorBaseTypeDecimal128 *)self)->val));
+  Py_RETURN_FALSE;
 }
 
-PyObject *ExtractorBaseTypeDecimal128::is_nan(PyObject *self, PyObject *args) {
-  return PyBool_FromLong(
-      fmc_decimal128_is_nan(&((ExtractorBaseTypeDecimal128 *)self)->val));
+PyObject *ExtractorBaseTypeRational64::is_nan(PyObject *self, PyObject *args) {
+  Py_RETURN_FALSE;
 }
 
-PyObject *ExtractorBaseTypeDecimal128::is_qnan(PyObject *self, PyObject *args) {
-  return PyBool_FromLong(
-      fmc_decimal128_is_qnan(&((ExtractorBaseTypeDecimal128 *)self)->val));
+PyObject *ExtractorBaseTypeRational64::is_qnan(PyObject *self, PyObject *args) {
+  Py_RETURN_FALSE;
 }
 
-PyObject *ExtractorBaseTypeDecimal128::is_snan(PyObject *self, PyObject *args) {
-  return PyBool_FromLong(
-      fmc_decimal128_is_snan(&((ExtractorBaseTypeDecimal128 *)self)->val));
+PyObject *ExtractorBaseTypeRational64::is_snan(PyObject *self, PyObject *args) {
+  Py_RETURN_FALSE;
 }
 
-PyObject *ExtractorBaseTypeDecimal128::is_signed(PyObject *self,
+PyObject *ExtractorBaseTypeRational64::is_signed(PyObject *self,
                                                  PyObject *args) {
-  return PyBool_FromLong(((ExtractorBaseTypeDecimal128 *)self)->val <
-                         fmc::decimal128());
+  return PyBool_FromLong(((ExtractorBaseTypeRational64 *)self)->val.num < 0);
 }
 
-PyObject *ExtractorBaseTypeDecimal128::is_zero(PyObject *self, PyObject *args) {
-  return PyBool_FromLong(((ExtractorBaseTypeDecimal128 *)self)->val ==
-                         fmc::decimal128());
+PyObject *ExtractorBaseTypeRational64::is_zero(PyObject *self, PyObject *args) {
+  return PyBool_FromLong(!((ExtractorBaseTypeRational64 *)self)->val.num &&
+                         ((ExtractorBaseTypeRational64 *)self)->val.den);
 }
-PyObject *ExtractorBaseTypeDecimal128::compare(PyObject *self, PyObject *args) {
+PyObject *ExtractorBaseTypeRational64::compare(PyObject *self, PyObject *args) {
   PyObject *lhs, *rhs;
   if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
     return nullptr;
   }
-  fmc_decimal128_t dlhs;
-  if (py_type_convert<fmc_decimal128_t>::convert(dlhs, lhs)) {
+  fmc_rational64_t dlhs;
+  if (py_type_convert<fmc_rational64_t>::convert(dlhs, lhs)) {
     return nullptr;
   }
-  fmc_decimal128_t drhs;
-  if (py_type_convert<fmc_decimal128_t>::convert(drhs, rhs)) {
+  fmc_rational64_t drhs;
+  if (py_type_convert<fmc_rational64_t>::convert(drhs, rhs)) {
     return nullptr;
   }
   if (dlhs < drhs) {
@@ -516,17 +504,17 @@ PyObject *ExtractorBaseTypeDecimal128::compare(PyObject *self, PyObject *args) {
   return PyLong_FromLong(dlhs > drhs);
 }
 
-PyObject *ExtractorBaseTypeDecimal128::max(PyObject *self, PyObject *args) {
+PyObject *ExtractorBaseTypeRational64::max(PyObject *self, PyObject *args) {
   PyObject *lhs, *rhs;
   if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
     return nullptr;
   }
-  fmc_decimal128_t dlhs;
-  if (py_type_convert<fmc_decimal128_t>::convert(dlhs, lhs)) {
+  fmc_rational64_t dlhs;
+  if (py_type_convert<fmc_rational64_t>::convert(dlhs, lhs)) {
     return nullptr;
   }
-  fmc_decimal128_t drhs;
-  if (py_type_convert<fmc_decimal128_t>::convert(drhs, rhs)) {
+  fmc_rational64_t drhs;
+  if (py_type_convert<fmc_rational64_t>::convert(drhs, rhs)) {
     return nullptr;
   }
   if (dlhs > drhs) {
@@ -537,17 +525,17 @@ PyObject *ExtractorBaseTypeDecimal128::max(PyObject *self, PyObject *args) {
   return rhs;
 }
 
-PyObject *ExtractorBaseTypeDecimal128::min(PyObject *self, PyObject *args) {
+PyObject *ExtractorBaseTypeRational64::min(PyObject *self, PyObject *args) {
   PyObject *lhs, *rhs;
   if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
     return nullptr;
   }
-  fmc_decimal128_t dlhs;
-  if (py_type_convert<fmc_decimal128_t>::convert(dlhs, lhs)) {
+  fmc_rational64_t dlhs;
+  if (py_type_convert<fmc_rational64_t>::convert(dlhs, lhs)) {
     return nullptr;
   }
-  fmc_decimal128_t drhs;
-  if (py_type_convert<fmc_decimal128_t>::convert(drhs, rhs)) {
+  fmc_rational64_t drhs;
+  if (py_type_convert<fmc_rational64_t>::convert(drhs, rhs)) {
     return nullptr;
   }
   if (dlhs < drhs) {
@@ -558,25 +546,25 @@ PyObject *ExtractorBaseTypeDecimal128::min(PyObject *self, PyObject *args) {
   return rhs;
 }
 
-PyObject *ExtractorBaseTypeDecimal128::from_float(PyObject *type,
+PyObject *ExtractorBaseTypeRational64::from_float(PyObject *type,
                                                   PyObject *fval) {
   double src = PyFloat_AsDouble(fval);
   if (PyErr_Occurred()) {
     return nullptr;
   }
-  fmc_decimal128_t res;
-  fmc_decimal128_from_double(&res, src);
-  return ExtractorBaseTypeDecimal128::py_new(res);
+  fmc_rational64_t res;
+  fmc_rational64_from_double(&res, src);
+  return ExtractorBaseTypeRational64::py_new(res);
 }
 
-bool Decimal128_Check(PyObject *obj) {
-  return PyObject_TypeCheck(obj, &ExtractorBaseTypeDecimal128Type);
+bool Rational64_Check(PyObject *obj) {
+  return PyObject_TypeCheck(obj, &ExtractorBaseTypeRational64Type);
 }
 
-fmc_decimal128_t Decimal128_val(PyObject *obj) {
-  if (!Decimal128_Check(obj)) {
-    PyErr_SetString(PyExc_RuntimeError, "Object not of type Decimal128");
+fmc_rational64_t Rational64_val(PyObject *obj) {
+  if (!Rational64_Check(obj)) {
+    PyErr_SetString(PyExc_RuntimeError, "Object not of type Rational64");
     return {};
   }
-  return ((ExtractorBaseTypeDecimal128 *)obj)->val;
+  return ((ExtractorBaseTypeRational64 *)obj)->val;
 }

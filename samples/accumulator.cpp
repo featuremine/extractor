@@ -54,8 +54,8 @@ void accumulate_data(const string &licence_filename) {
       "ticker",
       fm_array_type_get(tsys, fm_base_type_get(tsys, FM_TYPE_CHAR), 16), "",
       "type", fm_base_type_get(tsys, FM_TYPE_CHAR), "", "bidprice",
-      fm_base_type_get(tsys, FM_TYPE_DECIMAL64), "", "askprice",
-      fm_base_type_get(tsys, FM_TYPE_DECIMAL64), "", "bidqty",
+      fm_base_type_get(tsys, FM_TYPE_RPRICE), "", "askprice",
+      fm_base_type_get(tsys, FM_TYPE_RPRICE), "", "bidqty",
       fm_base_type_get(tsys, FM_TYPE_INT32), "", "askqty",
       fm_base_type_get(tsys, FM_TYPE_INT32), "");
 

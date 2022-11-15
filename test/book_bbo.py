@@ -92,15 +92,13 @@ def setup_prod_sip(universe, symbology, graph, ytpfile):
             book_receive = op.decode_receive(bookupd)
             bbo_receive = op.asof(book_receive, bbo_book)
 
-            bidqty_int32 = op.convert(op.round(bbo_book.bid_shr_0), extractor.Int32)
-            askqty_int32 = op.convert(op.round(bbo_book.ask_shr_0), extractor.Int32)
             bbo_book_combined = op.combine(
                 bbo_book, (
                     ("bid_prx_0", "bidprice"),
-                    ("ask_prx_0", "askprice")
+                    ("ask_prx_0", "askprice"),
+                    ("bid_shr_0", "bidqty"),
+                    ("ask_shr_0", "askqty")
                 ),
-                bidqty_int32, (("bid_shr_0", "bidqty"),),
-                askqty_int32, (("ask_shr_0", "askqty"),),
                 bbo_receive, (("time", "receive"),)
             )
             graph.callback(bbo_book_combined, print_bbos)
@@ -116,25 +114,20 @@ def setup_prod_sip(universe, symbology, graph, ytpfile):
                 bid_val, ask_val, unk_val, 'decoration', extractor.Array(
                     extractor.Char, 1), ('b', 'a', 'u')).side
 
-            qty_decimal64 = op.round(trade.qty)
-            qty_int32 = op.convert(qty_decimal64, extractor.Int32)
-
             trade_combined = op.combine(
-                trade, (("trade_price", "price"),),
-                qty_int32, (("qty", "qty"),),
+                trade, (("trade_price", "price"),("qty", "qty")),
                 trade_receive, (("time", "receive"),),
                 side, (("side", "side"),)
             )
             graph.callback(trade_combined, print_trades)
 
-            cum_trade = op.cum_trade(trade_combined,
-                                     name="cum_trade/{0}/{1}".format(mkt, imnt))
+            cum_trade = op.cumulative(op.combine(trade_combined.qty, (("qty", "shares"),), op.convert(trade_combined.qty, extractor.Float64) * op.convert(trade_combined.price, extractor.Float64), (("qty", "notional",),)))
+
             bbos_book.append(bbo_book_combined)
             trades.append(trade)
             cum_trades.append(cum_trade)
         op.bbo_aggr(*bbos_book, name="nbbo/{0}".format(imnt))
-        op.cum_trade_total(*cum_trades,
-                           name="cum_trade_total/{0}".format(imnt))
+        op.sum(*cum_trades, name="cum_trade_total/{0}".format(imnt))
 
 
 class Universe:

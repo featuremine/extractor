@@ -149,6 +149,9 @@ extr_py_unit_test(
     btec_bars
 )
 extr_py_unit_test(
+    btec_bars128
+)
+extr_py_unit_test(
     csv_play
 )
 extr_py_unit_test(
@@ -336,6 +339,9 @@ extr_py_unit_test(
 )
 extr_py_unit_test(
     book_montage
+)
+extr_py_unit_test(
+    book_montage128
 )
 extr_py_unit_test(
     top_book_update

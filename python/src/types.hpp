@@ -37,16 +37,16 @@ extern "C" {
 #include <type_traits>
 #include <wrapper.hpp>
 
-#include "storage_util.hpp"
-#include <py_decimal128.hpp>
-#include <py_rational64.hpp>
-#include <py_rprice.hpp>
-#include <py_type_utils.hpp>
+#include "upcast_util.hpp"
+#include <extractor/python/decimal128.hpp>
+#include <extractor/python/rational64.hpp>
+#include <extractor/python/rprice.hpp>
+#include <extractor/python/type_utils.hpp>
 
 #define BASE_TYPE_WRAPPER(name, T)                                             \
   struct ExtractorBaseType##name {                                             \
     PyObject_HEAD;                                                             \
-    using S = typename storage<T>::type;                                       \
+    using S = typename upcast<T>::type;                                        \
     S val;                                                                     \
     static void py_dealloc(ExtractorBaseType##name *self) {                    \
       Py_TYPE(self)->tp_free((PyObject *)self);                                \
@@ -55,6 +55,7 @@ extern "C" {
     static PyObject *tp_new(PyTypeObject *subtype, PyObject *args,             \
                             PyObject *kwds);                                   \
     static PyObject *py_new(T t);                                              \
+    static Py_hash_t tp_hash(PyObject *self);                                  \
     static PyObject *tp_str(PyObject *self);                                   \
     static bool init(PyObject *m);                                             \
   };                                                                           \
@@ -71,7 +72,7 @@ extern "C" {
       0,                                                 /* tp_as_number */    \
       0,                                                 /* tp_as_sequence */  \
       0,                                                 /* tp_as_mapping */   \
-      0,                                                 /* tp_hash  */        \
+      (hashfunc)ExtractorBaseType##name::tp_hash,        /* tp_hash  */        \
       0,                                                 /* tp_call */         \
       (reprfunc)ExtractorBaseType##name::tp_str,         /* tp_str */          \
       0,                                                 /* tp_getattro */     \
@@ -120,6 +121,9 @@ extern "C" {
     }                                                                          \
     PyErr_SetString(PyExc_RuntimeError, "Could not convert to type " /*##T*/); \
     return nullptr;                                                            \
+  }                                                                            \
+  Py_hash_t ExtractorBaseType##name::tp_hash(PyObject *self) {                 \
+    return std::hash<T>{}(((ExtractorBaseType##name *)self)->val);             \
   }                                                                            \
   PyObject *ExtractorBaseType##name::tp_str(PyObject *self) {                  \
     std::string str = std::to_string(((ExtractorBaseType##name *)self)->val);  \
@@ -540,6 +544,10 @@ BASE_TYPE_WRAPPER(Float64, FLOAT64);
 BASE_TYPE_WRAPPER(Char, CHAR);
 BASE_TYPE_WRAPPER(Wchar, WCHAR);
 BASE_TYPE_WRAPPER(Bool, bool);
+
+PyObject *ExtractorDecimal128_new(fmc_decimal128_t val) {
+  return ExtractorBaseTypeDecimal128::py_new(val);
+}
 
 fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj) {
   if (PyObject_TypeCheck(obj, &ExtractorArrayTypeType)) {
