@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file split_by.cpp
+ * @file activated_timer.cpp
  * @author Andres Rangel
  * @date Feb 4 2019
  * @brief File contains C++ definitions of the comp object

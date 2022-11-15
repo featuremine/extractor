@@ -53,6 +53,16 @@ const fm_comp_def_t fm_comp_book_header = {"book_header",
                                            &fm_comp_book_header_gen,
                                            &fm_comp_book_header_destroy, NULL};
 
+fm_ctx_def_t *fm_comp_book_vendor_time_gen(fm_comp_sys_t *sys, fm_comp_def_cl,
+                                           unsigned, fm_type_decl_cp[],
+                                           fm_type_decl_cp, fm_arg_stack_t);
+
+void fm_comp_book_vendor_time_destroy(fm_comp_def_cl, fm_ctx_def_t *);
+
+const fm_comp_def_t fm_comp_book_vendor_time = {
+    "book_vendor_time", &fm_comp_book_vendor_time_gen,
+    &fm_comp_book_vendor_time_destroy, NULL};
+
 #ifdef __cplusplus
 }
 #endif

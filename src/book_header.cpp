@@ -65,6 +65,7 @@ public:
         fmc::overloaded{
             [](const book::updates::announce &m) { return false; },
             [](const book::updates::time &m) { return false; },
+            [](const book::updates::heartbeat &m) { return false; },
             [](const book::updates::none &m) { return false; },
             [&](const auto &m) {
               *(fmc_time64_t *)fm_frame_get_ptr1(result, receive_field_, 0) =
