@@ -21,8 +21,8 @@
 
 #pragma once
 
-#include "extractor/type_decl.h"
 #include "extractor/comp_def.hpp"
+#include "extractor/type_decl.h"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/rational64.hpp"
 #include "fmc++/rprice.hpp"
