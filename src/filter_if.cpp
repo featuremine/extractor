@@ -116,7 +116,7 @@ fm_ctx_def_t *fm_comp_filter_if_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   auto *sys = fm_type_sys_get(csys);
 
   if (argc != 2) {
-    auto *errstr = "expect two operator arguments";
+    auto *errstr = "expect one or two operator arguments";
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_ARGS, errstr);
     return nullptr;
   }

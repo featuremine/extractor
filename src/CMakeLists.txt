@@ -34,6 +34,7 @@ add_library(
     "book_msg.cpp"
     "book_trades.cpp"
     "book_header.cpp"
+    "book_vendor_time.cpp"
     "std_comp.cpp"
     "tick_lag.cpp"
     "time_lag.cpp"

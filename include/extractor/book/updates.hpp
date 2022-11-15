@@ -135,12 +135,17 @@ struct time {
   fmc_time64_t seconds;
 };
 
+struct heartbeat {
+  fmc_time64_t vendor;
+};
+
 struct none {};
 } // namespace updates
 using message = std::variant<updates::add, updates::insert, updates::position,
                              updates::cancel, updates::execute, updates::trade,
                              updates::state, updates::control, updates::set,
-                             updates::announce, updates::time, updates::none>;
+                             updates::announce, updates::time,
+                             updates::heartbeat, updates::none>;
 
 static_assert(sizeof(message) <= 88, "expecting book update message to be less "
                                      "than 88B");
