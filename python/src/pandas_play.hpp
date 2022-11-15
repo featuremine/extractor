@@ -44,11 +44,13 @@ extern "C" {
 
 #include <iostream>
 
+#include "fmc++/python/wrapper.hpp"
 #include "fmc++/strings.hpp"
 #include "wrapper.hpp"
 #include <extractor/python/decimal128.hpp>
 #include <fmc++/python/wrapper.hpp>
 #include <numpy/arrayobject.h>
+
 
 #include "extractor/type_sys.h"
 
