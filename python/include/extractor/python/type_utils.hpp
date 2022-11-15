@@ -122,25 +122,6 @@ template <class T> struct py_type_convert {
         }
       } else if (PyDecimal_Check(temp)) {
         PyDecObject *typed = (PyDecObject*)temp;
-        std::cout<<"structure data:"<<std::endl;
-        std::cout<<"flags: "<<typed->dec.flags<<std::endl;
-        std::cout<<"exp: "<<typed->dec.exp<<std::endl;
-        std::cout<<"digits: "<<typed->dec.digits<<std::endl;
-        std::cout<<"len: "<<typed->dec.len<<std::endl;
-        std::cout<<"alloc: "<<typed->dec.alloc<<std::endl;
-        std::cout<<"coefficient size required "<<mpd_digits_to_size(typed->dec.digits)<<std::endl;
-        fmc_decimal128_pretty((fmc_decimal128_t *)&typed->dec.data);
-
-        char lolobits[65] = {0};
-        char lohibits[65] = {0};
-        char hilobits[65] = {0};
-        char hihibits[65] = {0};
-        fmc_uint64_bebits(*typed->dec.data, lolobits);
-        fmc_uint64_bebits(*(typed->dec.data + 1), lohibits);
-        fmc_uint64_bebits(*(typed->dec.data + 2), hilobits);
-        fmc_uint64_bebits(*(typed->dec.data + 3), hihibits);
-        printf("%s %s %s %s\n", lolobits, lohibits, hilobits, hihibits);
-
         mpd_context_t ctx;
         mpd_ieee_context(&ctx, MPD_DECIMAL128);
         mpd_uint_t buf[2] = {0};
@@ -149,27 +130,12 @@ template <class T> struct py_type_convert {
         res.alloc = 2;
         mpd_set_static_data(&res);
         mpd_copy(&res, &typed->dec, &ctx);
-        std::cout<<"result data:"<<std::endl;
-        std::cout<<"flags: "<<res.flags<<std::endl;
-        std::cout<<"exp: "<<res.exp<<std::endl;
-        std::cout<<"digits: "<<res.digits<<std::endl;
-        std::cout<<"len: "<<res.len<<std::endl;
-        std::cout<<"alloc: "<<res.alloc<<std::endl;
-        std::cout<<"coefficient size required "<<mpd_digits_to_size(res.digits)<<std::endl;
-        fmc_decimal128_pretty((fmc_decimal128_t *)&res.data);
-
-        fmc_uint64_bebits(*res.data, lolobits);
-        fmc_uint64_bebits(*(res.data + 1), lohibits);
-        fmc_uint64_bebits(*(res.data + 2), hilobits);
-        fmc_uint64_bebits(*(res.data + 3), hihibits);
-        printf("%s %s %s %s\n", lolobits, lohibits, hilobits, hihibits);
-
-        mpd_print(&res);
-
-        // memcpy(&val, typed->dec.data, typed->dec.len);
-        // memset(&val + typed->dec.len, 0, (sizeof(fmc_decimal128_t) > typed->dec.len) * (sizeof(fmc_decimal128_t) - typed->dec.len));
-        // std::cout<<"Actual number generated from decimal: "<<val<<std::endl;
-        return true;
+        if (mpd_getstatus(&ctx)) {
+          return false;
+        }
+        fmc_error_t *err;
+        fmc_decimal128_set_triple(&val, res.data[0], res.data[1], res.exp, &err);
+        return !bool(err);
       }
     } else if constexpr (is_same_v<T, RPRICE>) {
       PyObject *temp;
