@@ -22,6 +22,7 @@ target_link_libraries(
     fmc++
     ytp
     extractor
+    py_yamal_dep
 )
 target_include_directories(
     py_extractor_obj
@@ -32,7 +33,6 @@ target_include_directories(
     "${EXTRACTOR_SRC_DIR}"
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${NUMPY_INCLUDE_DIR}"
-    "${yamal-python-incdir}"
     "${PYTHON_INCLUDE_DIRS}"
 )
 target_compile_definitions(

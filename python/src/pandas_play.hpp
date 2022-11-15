@@ -44,8 +44,11 @@ extern "C" {
 
 #include <iostream>
 
+#include "fmc++/python/wrapper.hpp"
 #include "fmc++/strings.hpp"
 #include "wrapper.hpp"
+#include <extractor/python/decimal128.hpp>
+#include <fmc++/python/wrapper.hpp>
 #include <numpy/arrayobject.h>
 
 #include "extractor/type_sys.h"
@@ -167,7 +170,7 @@ static bool add_column_parser(fm_exec_ctx_t *ctx, fm_frame_t *frame,
         return error("char");
       type = 15;
       break;
-    case FM_TYPE_DECIMAL64:
+    case FM_TYPE_RPRICE:
       if (fdtype != NPY_FLOAT64 && fdtype != NPY_FLOAT32)
         return error("float64, float32.");
       type = 11;
@@ -332,8 +335,9 @@ bool pandas_parse_one(fm_exec_ctx_t *ctx, pandas_play_exec_cl *cl,
           PyTuple_GetItem(cl->curr.get_ref(), cl->parsers[p_off + 2] + 1));
       if (!bool(item))
         return field_error();
-      *(DECIMAL64 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row) =
-          fm_decimal64_from_double(PyFloat_AsDouble(item.get_ref()));
+      fmc_rprice_from_double(
+          (RPRICE *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row),
+          PyFloat_AsDouble(item.get_ref()));
       p_off += 3;
     } break;
     case 12: {

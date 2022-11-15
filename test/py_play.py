@@ -50,7 +50,7 @@ if __name__ == "__main__":
     data_in_one = op.immediate_play(
         data_feed(),
         (("other_name", extr.Array(extr.Char, 16)),
-         ("third_thing", extr.Decimal64),
+         ("third_thing", extr.Rprice),
          ("col1", extr.Uint64)),
         timedelta(milliseconds=10))
 

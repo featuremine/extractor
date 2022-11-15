@@ -108,7 +108,7 @@ df_type_check get_df_type_checker(fm_type_decl_cp decl) {
         return fdtype == NPY_FLOAT64 || fdtype == NPY_FLOAT32;
       };
       break;
-    case FM_TYPE_DECIMAL64:
+    case FM_TYPE_RPRICE:
       return [](int fdtype) {
         return fdtype == NPY_FLOAT64 || fdtype == NPY_FLOAT32;
       };
@@ -253,9 +253,9 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
         return true;
       };
       break;
-    case FM_TYPE_DECIMAL64:
+    case FM_TYPE_RPRICE:
       return [](void *ptr, PyObject *obj) {
-        *(DECIMAL64 *)ptr = fm_decimal64_from_double(PyFloat_AsDouble(obj));
+        fmc_rprice_from_double((RPRICE *)ptr, PyFloat_AsDouble(obj));
         if (PyErr_Occurred())
           return false;
         return true;
@@ -394,11 +394,13 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
     case FM_TYPE_FLOAT64:
       return PyFloat_FromDouble(*(FLOAT64 *)ptr);
       break;
-    case FM_TYPE_DECIMAL64:
-      return PyFloat_FromDouble(fm_decimal64_to_double(*(DECIMAL64 *)ptr));
-      break;
+    case FM_TYPE_RPRICE: {
+      double val;
+      fmc_rprice_to_double(&val, (RPRICE *)ptr);
+      return PyFloat_FromDouble(val);
+    } break;
     case FM_TYPE_DECIMAL128:
-      return ExtractorBaseTypeDecimal128::py_new(*(DECIMAL128 *)ptr);
+      return ExtractorDecimal128_new(*(DECIMAL128 *)ptr);
       break;
     case FM_TYPE_CHAR:
       return PyUnicode_FromStringAndSize((const char *)ptr, 1);
@@ -486,12 +488,13 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
     case FM_TYPE_WCHAR:
       return PyUnicode_FromWideChar(&STACK_POP(plist, WCHAR), 1);
       break;
-    case FM_TYPE_DECIMAL64:
-      return PyFloat_FromDouble(
-          fm_decimal64_to_double(STACK_POP(plist, DECIMAL64)));
-      break;
+    case FM_TYPE_RPRICE: {
+      double val;
+      fmc_rprice_to_double(&val, &STACK_POP(plist, RPRICE));
+      return PyFloat_FromDouble(val);
+    } break;
     case FM_TYPE_DECIMAL128: {
-      return ExtractorBaseTypeDecimal128::py_new(STACK_POP(plist, DECIMAL128));
+      return ExtractorDecimal128_new(STACK_POP(plist, DECIMAL128));
     } break;
     case FM_TYPE_TIME64: {
       using days = typename chrono::duration<long int, std::ratio<86400>>;
@@ -776,7 +779,7 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
         type = NPY_FLOAT64;
         elem_size = sizeof(double);
         break;
-      case FM_TYPE_DECIMAL64:
+      case FM_TYPE_RPRICE:
         type = NPY_INT64;
         elem_size = sizeof(int64_t);
         break;
@@ -826,9 +829,9 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
 
     if (fm_type_base_enum(decl) == FM_TYPE_RATIONAL64) {
       for (int item = 0; item < f_dims[0]; ++item) {
-        *(double *)PyArray_GETPTR1((PyArrayObject *)array, item) =
-            fm_rational64_to_double(
-                *(fm_rational64_t *)fm_frame_get_cptr1(frame, i, item));
+        fmc_rational64_to_double(
+            (double *)PyArray_GETPTR1((PyArrayObject *)array, item),
+            (fmc_rational64_t *)fm_frame_get_cptr1(frame, i, item));
       }
     } else if (fm_type_base_enum(decl) == FM_TYPE_BOOL) {
       for (int item = 0; item < f_dims[0]; ++item) {
@@ -837,7 +840,7 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
       }
     } else if (fm_type_base_enum(decl) == FM_TYPE_DECIMAL128) {
       for (int item = 0; item < f_dims[0]; ++item) {
-        auto *val = ExtractorBaseTypeDecimal128::py_new(
+        auto *val = ExtractorDecimal128_new(
             *(DECIMAL128 *)fm_frame_get_cptr1(frame, i, item));
         PyArray_SETITEM((PyArrayObject *)array,
                         (char *)PyArray_GETPTR1((PyArrayObject *)array, item),
@@ -856,7 +859,7 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
       return nullptr;
     }
 
-    if (fm_type_base_enum(decl) == FM_TYPE_DECIMAL64) {
+    if (fm_type_base_enum(decl) == FM_TYPE_RPRICE) {
       // @note Module is imported directly because numpy division
       // is not available in C_API
 
@@ -871,7 +874,7 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
       }
       tmp_array = array;
       array = PyObject_CallMethod(np.get_ref(), "divide", "Od", tmp_array,
-                                  double(DECIMAL64_FRACTION));
+                                  double(FMC_RPRICE_FRACTION));
       Py_XDECREF(tmp_array);
       if (!array) {
         PyErr_SetString(PyExc_RuntimeError, "Unable to divide by "
@@ -1000,7 +1003,7 @@ inline short type_size(fm_type_decl_cp decl) {
     case FM_TYPE_FLOAT64:
       return 20;
       break;
-    case FM_TYPE_DECIMAL64:
+    case FM_TYPE_RPRICE:
       return 20;
       break;
     case FM_TYPE_DECIMAL128:
@@ -1068,10 +1071,11 @@ string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
       auto view = fmc::to_string_view_double(buf, *(FLOAT64 *)ptr, 9);
       return string(view.data(), view.size());
     } break;
-    case FM_TYPE_DECIMAL64: {
+    case FM_TYPE_RPRICE: {
+      double val;
+      fmc_rprice_to_double(&val, (RPRICE *)ptr);
       char buf[20];
-      auto view = fmc::to_string_view_double(
-          buf, fm_decimal64_to_double(*(DECIMAL64 *)ptr), 9);
+      auto view = fmc::to_string_view_double(buf, val, 9);
       return string(view.data(), view.size());
     } break;
     case FM_TYPE_DECIMAL128: {

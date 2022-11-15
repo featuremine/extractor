@@ -35,7 +35,7 @@ extern "C" {
 
 #include "extractor/book/ore.hpp"
 #include "extractor/book/updates.hpp"
-#include "extractor/decimal64.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/serialization.hpp"
 #include "fmc++/time.hpp"
 

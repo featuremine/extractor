@@ -87,8 +87,8 @@ TEST(writer_reader, check) {
                    (src_dir + "/data/sip_quotes_20171018.mp").c_str(),
                    "receive", fm_base_type_get(tsys, FM_TYPE_TIME64), "",
                    "ticker", chararray16, "", "market", chararray32, "",
-                   "bidprice", fm_base_type_get(tsys, FM_TYPE_DECIMAL64), "",
-                   "askprice", fm_base_type_get(tsys, FM_TYPE_DECIMAL64), "",
+                   "bidprice", fm_base_type_get(tsys, FM_TYPE_RPRICE), "",
+                   "askprice", fm_base_type_get(tsys, FM_TYPE_RPRICE), "",
                    "bidqty", fm_base_type_get(tsys, FM_TYPE_INT32), "",
                    "askqty", fm_base_type_get(tsys, FM_TYPE_INT32), "");
 

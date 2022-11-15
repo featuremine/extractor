@@ -153,12 +153,12 @@ if __name__ == "__main__":
     data_in_one = op.csv_play(
         in_file_one,
         (("timestamp", extr.Time64, ""),
-         ("val1", extr.Decimal64, ""),
+         ("val1", extr.Rprice, ""),
          ("val2", extr.Int32, "")))
     data_in_two = op.csv_play(
         in_file_two,
         (("timestamp", extr.Time64, ""),
-         ("val1", extr.Decimal64, ""),
+         ("val1", extr.Rprice, ""),
          ("val2", extr.Int32, "")))
 
     ts = pd.to_datetime([65811153, 3513518183, 6111135331], unit='s')
@@ -218,8 +218,8 @@ if __name__ == "__main__":
         df,
         (("binstring_col", extr.Array(extr.Char, 16)),
          ("bool_col", extr.Bool),
-         ("decimal_from_float32_col", extr.Decimal64),
-         ("decimal_from_float64_col", extr.Decimal64),
+         ("decimal_from_float32_col", extr.Rprice),
+         ("decimal_from_float64_col", extr.Rprice),
          ("float32_col", extr.Float32),
          ("float64_col", extr.Float64),
          ("float64_from_float32_col", extr.Float64),

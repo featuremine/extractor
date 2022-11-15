@@ -31,11 +31,12 @@ extern "C" {
 #include "fmc/time.h"
 }
 
-#include "extractor/decimal64.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
+#include "upcast_util.hpp"
 
 #include <memory>
 #include <stdlib.h>
@@ -70,36 +71,6 @@ struct the_cumulative_field_exec_2_0 : cumulative_field_exec {
     }
     auto val1 = *(const T *)fm_frame_get_cptr1(result, field_, 0);
     *(T *)fm_frame_get_ptr1(result, field_, 0) = val0 + val1;
-  }
-  fm_field_t field_;
-};
-
-template <>
-struct the_cumulative_field_exec_2_0<fm_decimal64_t> : cumulative_field_exec {
-  the_cumulative_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void init(fm_frame_t *result, const fm_frame_t *const argv[]) override {
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, field_, 0) =
-        *(const fm_decimal64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-  }
-  void exec(fm_frame_t *result, const fm_frame_t *const argv[]) override {
-    auto val0 = *(const fm_decimal64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    auto val1 = *(const fm_decimal64_t *)fm_frame_get_cptr1(result, field_, 0);
-    *(fm_decimal64_t *)fm_frame_get_ptr1(result, field_, 0) = val0 + val1;
-  }
-  fm_field_t field_;
-};
-
-template <>
-struct the_cumulative_field_exec_2_0<fmc_time64_t> : cumulative_field_exec {
-  the_cumulative_field_exec_2_0(fm_field_t field) : field_(field) {}
-  void init(fm_frame_t *result, const fm_frame_t *const argv[]) override {
-    *(fmc_time64_t *)fm_frame_get_ptr1(result, field_, 0) =
-        *(const fmc_time64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-  }
-  void exec(fm_frame_t *result, const fm_frame_t *const argv[]) override {
-    auto val0 = *(const fmc_time64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
-    auto val1 = *(const fmc_time64_t *)fm_frame_get_cptr1(result, field_, 0);
-    *(fmc_time64_t *)fm_frame_get_ptr1(result, field_, 0) = val0 + val1;
   }
   fm_field_t field_;
 };
@@ -152,7 +123,8 @@ cumulative_field_exec *get_cumulative_field_exec(fmc::type_list<Ts...>,
     using Tn = typename Tt::type;
     auto obj = fm::frame_field_type<Tn>();
     if (!result && obj.validate(f_type)) {
-      result = new the_cumulative_field_exec_2_0<Tn>(idx);
+      using S = typename upcast<Tn>::type;
+      result = new the_cumulative_field_exec_2_0<S>(idx);
     }
   };
   (create(fmc::typify<Ts>()), ...);
@@ -184,7 +156,7 @@ fm_ctx_def_t *fm_comp_cumulative_gen(fm_comp_sys_t *csys,
 
   using supported_types =
       fmc::type_list<INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64,
-                     FLOAT32, FLOAT64, DECIMAL64, DECIMAL128, TIME64>;
+                     FLOAT32, FLOAT64, RPRICE, DECIMAL128, TIME64>;
 
   auto inp = argv[0];
   int nf = fm_type_frame_nfields(inp);

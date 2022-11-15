@@ -35,7 +35,7 @@ if __name__ == "__main__":
     csv_data_in = op.csv_play(os.path.join(src_dir, "data/rational_input.csv"),
                               (("timestamp", extr.Time64, ""),
                                ("val1", extr.Rational64, ""),
-                                  ("val2", extr.Decimal64, "")), name="csv_play_0")
+                                  ("val2", extr.Rprice, "")), name="csv_play_0")
 
     decimal_data = op.field(csv_data_in, "val2")
 
@@ -46,7 +46,7 @@ if __name__ == "__main__":
     mp_data_in = op.mp_play(os.path.join(src_dir, "data/rational.base.mp"),
                             (("timestamp", extr.Time64, ""),
                              ("val1", extr.Rational64, ""),
-                                ("val2", extr.Decimal64, "")), name="mp_play_0")
+                                ("val2", extr.Rprice, "")), name="mp_play_0")
 
     csv_data_out = op.csv_record(csv_data_in,
                                  os.path.join(src_dir, "data/rational.test.csv"), name="csv_record_0")

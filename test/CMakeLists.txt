@@ -57,7 +57,6 @@ extr_unit_test(
     "${EXTRACTOR_SRC_DIR}/type_space.cpp"
     "${EXTRACTOR_SRC_DIR}/type_error.cpp"
     "${EXTRACTOR_SRC_DIR}/type_decl.cpp"
-    "${EXTRACTOR_SRC_DIR}/rational64.cpp"
 )
 extr_unit_test(
     NAME
@@ -100,7 +99,6 @@ extr_unit_test(
     "${EXTRACTOR_SRC_DIR}/type_error.cpp"
     "${EXTRACTOR_SRC_DIR}/type_decl.cpp"
     "${EXTRACTOR_SRC_DIR}/exec_ctx.cpp"
-    "${EXTRACTOR_SRC_DIR}/rational64.cpp"
 )
 extr_unit_test(
     NAME
@@ -110,7 +108,6 @@ extr_unit_test(
     "${EXTRACTOR_SRC_DIR}/type_space.cpp"
     "${EXTRACTOR_SRC_DIR}/type_error.cpp"
     "${EXTRACTOR_SRC_DIR}/type_decl.cpp"
-    "${EXTRACTOR_SRC_DIR}/rational64.cpp"
 )
 extr_unit_test(
     NAME
@@ -150,6 +147,9 @@ extr_py_unit_test(
 )
 extr_py_unit_test(
     btec_bars
+)
+extr_py_unit_test(
+    btec_bars128
 )
 extr_py_unit_test(
     csv_play
@@ -341,6 +341,9 @@ extr_py_unit_test(
     book_montage
 )
 extr_py_unit_test(
+    book_montage128
+)
+extr_py_unit_test(
     top_book_update
 )
 extr_py_unit_test(
@@ -396,6 +399,9 @@ extr_py_unit_test(
 )
 extr_py_unit_test(
     coinbase
+)
+extr_py_unit_test(
+    numerical
 )
 
 add_library(

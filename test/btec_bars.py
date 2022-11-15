@@ -18,8 +18,6 @@
 @brief File contains extractor python example of generating bars
 """
 
-import pandas as pd
-from pandas.testing import assert_frame_equal
 from datetime import datetime, timedelta
 import extractor as extr
 from extractor import result_as_pandas
@@ -167,8 +165,8 @@ if __name__ == "__main__":
     bbos_in = op.csv_play(bbo_file,
                           (("time", extr.Time64, ""),
                            ("ticker", extr.Array(extr.Char, 16), ""),
-                              ("bid_prx_0", extr.Decimal64, ""),
-                              ("ask_prx_0", extr.Decimal64, ""),
+                              ("bid_prx_0", extr.Rprice, ""),
+                              ("ask_prx_0", extr.Rprice, ""),
                               ("bid_shr_0", extr.Int32, ""),
                               ("ask_shr_0", extr.Int32, "")))
 
@@ -188,16 +186,15 @@ if __name__ == "__main__":
     trades_in = op.csv_play(trade_file,
                             (("time", extr.Time64, ""),
                              ("ticker", extr.Array(extr.Char, 16), ""),
-                                ("price", extr.Decimal64, ""),
+                                ("price", extr.Rprice, ""),
                                 ("size", extr.Int32, "")))
 
     trades_in = op.combine(
         trades_in,
         (('time', 'receive'),
          ('ticker', 'ticker'),
-         ('size', 'qty')),
-        op.convert(trades_in.price, extr.Decimal128),
-        tuple()
+         ('size', 'qty'),
+         ('price', 'price'))
     )
 
     trade_split = op.split(trades_in, "ticker", tuple(tickers))
@@ -206,7 +203,7 @@ if __name__ == "__main__":
     ticker_idx = 0
     for _ in tickers:
         trade_per_imnt = trade_split[ticker_idx]
-        cum_trade = op.cum_trade(trade_per_imnt)
+        cum_trade = op.cumulative(op.combine(trade_per_imnt.qty, (("qty", "shares"),), op.convert(trade_per_imnt.qty, extr.Float64) * op.convert(trade_per_imnt.price, extr.Float64), (("qty", "notional",),)))
         ctrds.append(cum_trade)
         ticker_idx += 1
 

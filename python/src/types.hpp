@@ -25,10 +25,9 @@ extern "C" {
 #include "extractor/type_decl.h"
 }
 #include "extractor/comp_def.hpp"
-#include "extractor/decimal64.hpp"
-#include "extractor/rational64.hpp"
-#include "extractor/rprice.hpp"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/rational64.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
 
 #include <Python.h>
@@ -38,113 +37,17 @@ extern "C" {
 #include <type_traits>
 #include <wrapper.hpp>
 
-fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj);
-
-static PyObject *create(PyTypeObject *type, PyObject *args, PyObject *kwds) {
-  PyObject *input = NULL;
-  static char *kwlist[] = {(char *)"input", NULL};
-  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O", kwlist, &input)) {
-    PyErr_SetString(PyExc_RuntimeError, "Unable to parse keywords");
-    return nullptr;
-  }
-  if (!ExtractorComputation_type_check(input)) {
-    PyErr_SetString(PyExc_RuntimeError, "Argument is not an extractor"
-                                        " computation");
-    return nullptr;
-  }
-  ExtractorComputation *i = (ExtractorComputation *)input;
-  fm_comp_t *i_comp = i->comp_;
-  fm_comp_sys_t *sys = i->sys_;
-  fm_type_sys_t *tsys = fm_type_sys_get(sys);
-  fm_comp_graph *graph = i->graph_;
-  auto *comp =
-      fm_comp_decl(sys, graph, "convert", 1,
-                   fm_tuple_type_get(tsys, 1, fm_type_type_get(tsys)), i_comp,
-                   fm_type_from_py_type(tsys, (PyObject *)type));
-  if (!comp) {
-    if (fm_type_sys_errno(tsys) != FM_TYPE_ERROR_OK) {
-      PyErr_SetString(PyExc_RuntimeError, fm_type_sys_errmsg(tsys));
-    } else if (fm_comp_sys_is_error(sys)) {
-      PyErr_SetString(PyExc_RuntimeError, fm_comp_sys_error_msg(sys));
-    }
-    return nullptr;
-  };
-  return (PyObject *)ExtractorComputation_new(comp, sys, graph);
-}
-
-template <bool B> struct integral_value { typedef long long type; };
-template <> struct integral_value<true> { typedef unsigned long long type; };
-
-template <class T> struct py_type_convert {
-  static bool convert(T &val, PyObject *args) {
-    using namespace std;
-    if constexpr (is_same_v<bool, T>) {
-      bool temp;
-      if (!PyArg_ParseTuple(args, "p", &temp)) {
-        PyErr_SetString(PyExc_TypeError, "expecting an integer value");
-        return false;
-      }
-      val = temp;
-      return true;
-    } else if constexpr (is_integral_v<T>) {
-      typename integral_value<is_unsigned_v<T>>::type temp;
-      if (!PyArg_ParseTuple(args, "L", &temp) ||
-          temp > numeric_limits<T>::max() || temp < numeric_limits<T>::min()) {
-        PyErr_SetString(PyExc_TypeError, "expecting an integer value");
-        return false;
-      }
-      val = temp;
-      return true;
-    } else if constexpr (is_floating_point<T>::value) {
-      double temp;
-      if (!PyArg_ParseTuple(args, "d", &temp) ||
-          temp > numeric_limits<T>::max() || temp < numeric_limits<T>::min()) {
-        PyErr_SetString(PyExc_TypeError, "expecting an float value");
-        return false;
-      }
-      val = temp;
-      return true;
-    } else if constexpr (is_same_v<T, DECIMAL128>) {
-      PyObject *temp;
-      if (!PyArg_ParseTuple(args, "O", &temp)) {
-        PyErr_SetString(PyExc_TypeError, "Expect single argument");
-        return false;
-      }
-      if (PyUnicode_Check(temp)) {
-        Py_ssize_t sz = 0;
-        const char *str = PyUnicode_AsUTF8AndSize(temp, &sz);
-        if (sz > FMC_DECIMAL128_STR_SIZE) {
-          PyErr_SetString(PyExc_TypeError, "expecting a valid string value");
-          return false;
-        }
-        fmc_decimal128_from_str(&val, str);
-        return true;
-      } else if (PyLong_Check(temp)) {
-        uint64_t u = PyLong_AsUnsignedLongLong(temp);
-        if (PyErr_Occurred()) {
-          PyErr_Clear();
-          int64_t i = PyLong_AsLongLong(temp);
-          if (PyErr_Occurred()) {
-            return false;
-          } else {
-            fmc_decimal128_from_int(&val, i);
-            return true;
-          }
-        } else {
-          fmc_decimal128_from_uint(&val, u);
-          return true;
-        }
-      }
-    }
-    PyErr_SetString(PyExc_TypeError, "unknown type");
-    return false;
-  }
-};
+#include "upcast_util.hpp"
+#include <extractor/python/decimal128.hpp>
+#include <extractor/python/rational64.hpp>
+#include <extractor/python/rprice.hpp>
+#include <extractor/python/type_utils.hpp>
 
 #define BASE_TYPE_WRAPPER(name, T)                                             \
   struct ExtractorBaseType##name {                                             \
     PyObject_HEAD;                                                             \
-    T val;                                                                     \
+    using S = typename upcast<T>::type;                                        \
+    S val;                                                                     \
     static void py_dealloc(ExtractorBaseType##name *self) {                    \
       Py_TYPE(self)->tp_free((PyObject *)self);                                \
     }                                                                          \
@@ -152,6 +55,7 @@ template <class T> struct py_type_convert {
     static PyObject *tp_new(PyTypeObject *subtype, PyObject *args,             \
                             PyObject *kwds);                                   \
     static PyObject *py_new(T t);                                              \
+    static Py_hash_t tp_hash(PyObject *self);                                  \
     static PyObject *tp_str(PyObject *self);                                   \
     static bool init(PyObject *m);                                             \
   };                                                                           \
@@ -168,7 +72,7 @@ template <class T> struct py_type_convert {
       0,                                                 /* tp_as_number */    \
       0,                                                 /* tp_as_sequence */  \
       0,                                                 /* tp_as_mapping */   \
-      0,                                                 /* tp_hash  */        \
+      (hashfunc)ExtractorBaseType##name::tp_hash,        /* tp_hash  */        \
       0,                                                 /* tp_call */         \
       (reprfunc)ExtractorBaseType##name::tp_str,         /* tp_str */          \
       0,                                                 /* tp_getattro */     \
@@ -217,6 +121,9 @@ template <class T> struct py_type_convert {
     }                                                                          \
     PyErr_SetString(PyExc_RuntimeError, "Could not convert to type " /*##T*/); \
     return nullptr;                                                            \
+  }                                                                            \
+  Py_hash_t ExtractorBaseType##name::tp_hash(PyObject *self) {                 \
+    return std::hash<T>{}(((ExtractorBaseType##name *)self)->val);             \
   }                                                                            \
   PyObject *ExtractorBaseType##name::tp_str(PyObject *self) {                  \
     std::string str = std::to_string(((ExtractorBaseType##name *)self)->val);  \
@@ -634,13 +541,13 @@ BASE_TYPE_WRAPPER(Uint32, UINT32);
 BASE_TYPE_WRAPPER(Uint64, UINT64);
 BASE_TYPE_WRAPPER(Float32, FLOAT32);
 BASE_TYPE_WRAPPER(Float64, FLOAT64);
-BASE_TYPE_WRAPPER(Rational64, RATIONAL64);
-BASE_TYPE_WRAPPER(Decimal64, DECIMAL64);
-BASE_TYPE_WRAPPER(Decimal128, DECIMAL128);
-// BASE_TYPE_WRAPPER(Time64, TIME64);
 BASE_TYPE_WRAPPER(Char, CHAR);
 BASE_TYPE_WRAPPER(Wchar, WCHAR);
 BASE_TYPE_WRAPPER(Bool, bool);
+
+PyObject *ExtractorDecimal128_new(fmc_decimal128_t val) {
+  return ExtractorBaseTypeDecimal128::py_new(val);
+}
 
 fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj) {
   if (PyObject_TypeCheck(obj, &ExtractorArrayTypeType)) {
@@ -685,8 +592,8 @@ fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj) {
                               &ExtractorBaseTypeRational64Type)) {
     return fm_base_type_get(tsys, FM_TYPE_RATIONAL64);
   } else if (PyType_IsSubtype((PyTypeObject *)obj,
-                              &ExtractorBaseTypeDecimal64Type)) {
-    return fm_base_type_get(tsys, FM_TYPE_DECIMAL64);
+                              &ExtractorBaseTypeRpriceType)) {
+    return fm_base_type_get(tsys, FM_TYPE_RPRICE);
   } else if (PyType_IsSubtype((PyTypeObject *)obj,
                               &ExtractorBaseTypeDecimal128Type)) {
     return fm_base_type_get(tsys, FM_TYPE_DECIMAL128);
@@ -797,9 +704,9 @@ PyTypeObject *py_type_from_fm_type(fm_type_decl_cp decl) {
       Py_INCREF(&ExtractorBaseTypeFloat64Type);
       return &ExtractorBaseTypeFloat64Type;
       break;
-    case FM_TYPE_DECIMAL64:
-      Py_INCREF(&ExtractorBaseTypeDecimal64Type);
-      return &ExtractorBaseTypeDecimal64Type;
+    case FM_TYPE_RPRICE:
+      Py_INCREF(&ExtractorBaseTypeRpriceType);
+      return &ExtractorBaseTypeRpriceType;
       break;
     case FM_TYPE_DECIMAL128:
       Py_INCREF(&ExtractorBaseTypeDecimal128Type);
@@ -840,7 +747,7 @@ bool init_type_wrappers(PyObject *m) {
          ExtractorBaseTypeFloat64::init(m) &&
          ExtractorBaseTypeTime64::init(m) &&
          ExtractorBaseTypeRational64::init(m) &&
-         ExtractorBaseTypeDecimal64::init(m) &&
+         ExtractorBaseTypeRprice::init(m) &&
          ExtractorBaseTypeDecimal128::init(m) &&
          ExtractorBaseTypeChar::init(m) && ExtractorBaseTypeWchar::init(m) &&
          ExtractorArrayType::init(m) && ExtractorBaseTypeBool::init(m);

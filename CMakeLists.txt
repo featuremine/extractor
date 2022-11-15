@@ -15,17 +15,10 @@ find_package(Subproject REQUIRED)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subproject(
     NAME yamal
-    VERSION "7.2.23"
-    GIT_REVISION "v7.2.23"
+    GIT_REVISION "v7.2.24"
+    VERSION "7.2.24"
     GIT_URL "https://github.com/featuremine/yamal.git"
-    TARGETS fmc++ ytp
-)
-add_subproject(
-    NAME yamal-python
-    VERSION "7.2.23"
-    GIT_REVISION "v7.2.23"
-    GIT_URL "https://github.com/featuremine/yamal-python.git"
-    VARIABLES yamal-python-incdir yamal-python-source
+    TARGETS fmc++ ytp py_yamal_dep
 )
 
 option (BUILD_TESTING "Enable build of the unit tests and their execution." ON)
