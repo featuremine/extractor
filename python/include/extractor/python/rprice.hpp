@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file py_rprice.hpp
+ * @file rprice.hpp
  * @date 2 Nov 2022
  * @brief Python wrapper for extractor rprice type
  * */
@@ -23,7 +23,8 @@
 #include "fmc++/rprice.hpp"
 #include <Python.h>
 #include <extractor/python/extractor.h>
-#include <py_type_utils.hpp>
+#include <extractor/python/rprice.h>
+#include <extractor/python/type_utils.hpp>
 
 struct ExtractorBaseTypeRprice {
   PyObject_HEAD;

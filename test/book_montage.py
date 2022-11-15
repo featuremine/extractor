@@ -36,6 +36,7 @@ def New_York_time(year, mon, day, h=0, m=0, s=0):
     return epoch_delta(pytz.timezone("America/New_York").
                        localize(datetime(year, mon, day, h, m, s)))
 
+ZERO = extr.Decimal128(0)
 
 class ValidationBook:
     def __init__(self):
@@ -45,32 +46,32 @@ class ValidationBook:
         self.oldaskpx = {}
 
     def proc_bbo(self, bbo, idx):
-        bidqty = bbo[0].bidqty
-        askqty = bbo[0].askqty
-        bidprice = bbo[0].bidprice
-        askprice = bbo[0].askprice
+        bidqty = extr.Decimal128(bbo[0].bidqty)
+        askqty = extr.Decimal128(bbo[0].askqty)
+        bidprice = extr.Decimal128.significant(extr.Decimal128(bbo[0].bidprice), 15)
+        askprice = extr.Decimal128.significant(extr.Decimal128(bbo[0].askprice), 15)
 
         if (idx in self.oldbidpx) and (bidprice != self.oldbidpx[idx][0]):
-            if self.oldbidpx[idx][1] != 0:
+            if self.oldbidpx[idx][1] != ZERO:
                 oldpx = self.oldbidpx[idx][0]
                 del self.bids[oldpx][idx]
                 if len(self.bids[oldpx]) == 0:
                     del self.bids[oldpx]
 
         if (idx in self.oldaskpx) and (askprice != self.oldaskpx[idx][0]):
-            if self.oldaskpx[idx][1] != 0:
+            if self.oldaskpx[idx][1] != ZERO:
                 oldpx = self.oldaskpx[idx][0]
                 del self.asks[oldpx][idx]
                 if len(self.asks[oldpx]) == 0:
                     del self.asks[oldpx]
 
-        if askqty != 0:
+        if askqty != ZERO:
             if askprice in self.asks:
                 self.asks[askprice][idx] = askqty
             else:
                 self.asks[askprice] = {idx: askqty}
 
-        if bidqty != 0:
+        if bidqty != ZERO:
             if bidprice in self.bids:
                 self.bids[bidprice][idx] = bidqty
             else:
@@ -84,10 +85,12 @@ class ValidationBook:
             return False
 
         for price, level in bookside:
-            price = float(price)
-            if price not in validationside:
+            #Adjust the price for the hash
+            adjusted_price = extr.Decimal128.significant(price, 15)
+            assert price == adjusted_price
+            if adjusted_price not in validationside:
                 return False
-            validationlevel = validationside[price]
+            validationlevel = validationside[adjusted_price]
 
             if len(validationlevel) != len(level):
                 return False
@@ -95,7 +98,7 @@ class ValidationBook:
             for order in level:
                 if order.id not in validationlevel:
                     return False
-                if validationlevel[order.id] != int(order.qty):
+                if validationlevel[order.id] != order.qty:
                     return False
 
         return True

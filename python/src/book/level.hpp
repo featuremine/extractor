@@ -26,6 +26,7 @@
 extern "C" {
 #include "book/book.h"
 #include "extractor/python/book.h"
+#include "extractor/python/decimal128.h"
 #include "extractor/python/extractor.h"
 #include "extractor/python/side.h"
 }

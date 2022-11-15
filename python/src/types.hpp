@@ -37,16 +37,16 @@ extern "C" {
 #include <type_traits>
 #include <wrapper.hpp>
 
-#include "storage_util.hpp"
-#include <py_decimal128.hpp>
-#include <py_rational64.hpp>
-#include <py_rprice.hpp>
-#include <py_type_utils.hpp>
+#include "upcast_util.hpp"
+#include <extractor/python/decimal128.hpp>
+#include <extractor/python/rational64.hpp>
+#include <extractor/python/rprice.hpp>
+#include <extractor/python/type_utils.hpp>
 
 #define BASE_TYPE_WRAPPER(name, T)                                             \
   struct ExtractorBaseType##name {                                             \
     PyObject_HEAD;                                                             \
-    using S = typename storage<T>::type;                                       \
+    using S = typename upcast<T>::type;                                        \
     S val;                                                                     \
     static void py_dealloc(ExtractorBaseType##name *self) {                    \
       Py_TYPE(self)->tp_free((PyObject *)self);                                \
