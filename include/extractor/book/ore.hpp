@@ -523,9 +523,9 @@ inline result parser::parse_hbt(cmp_ctx_t *ctx, uint32_t &left) {
   if (!cmp_read_many(ctx, &left, &nanoseconds, &vendor)) {
     return result::ERR;
   }
-  
+
   time = seconds + fmc_time64_from_nanos(nanoseconds);
-  
+
   book::updates::heartbeat msg;
   msg.vendor = fmc_time64_from_nanos(vendor);
   this->msg = msg;

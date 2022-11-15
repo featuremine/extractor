@@ -144,8 +144,8 @@ struct none {};
 using message = std::variant<updates::add, updates::insert, updates::position,
                              updates::cancel, updates::execute, updates::trade,
                              updates::state, updates::control, updates::set,
-                             updates::announce, updates::time, updates::heartbeat,
-                             updates::none>;
+                             updates::announce, updates::time,
+                             updates::heartbeat, updates::none>;
 
 static_assert(sizeof(message) <= 88, "expecting book update message to be less "
                                      "than 88B");

@@ -57,19 +57,21 @@ public:
   }
   bool exec(const book::message &msg, fm_frame_t *result, fm_stream_ctx *ctx) {
     return std::visit(
-        fmc::overloaded{
-            [](const book::updates::announce &m) { return false; },
-            [](const book::updates::time &m) { return false; },
-            [](const book::updates::none &m) { return false; },
-            [&](const book::updates::heartbeat &m) {
-              *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) = m.vendor;
-              return true;
-            },
-            [&](const auto &m) {
-              if (m.batch) return false;
-              *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) = m.vendor;
-              return true;
-            }},
+        fmc::overloaded{[](const book::updates::announce &m) { return false; },
+                        [](const book::updates::time &m) { return false; },
+                        [](const book::updates::none &m) { return false; },
+                        [&](const book::updates::heartbeat &m) {
+                          *(fmc_time64_t *)fm_frame_get_ptr1(
+                              result, vendor_field_, 0) = m.vendor;
+                          return true;
+                        },
+                        [&](const auto &m) {
+                          if (m.batch)
+                            return false;
+                          *(fmc_time64_t *)fm_frame_get_ptr1(
+                              result, vendor_field_, 0) = m.vendor;
+                          return true;
+                        }},
         msg);
   }
 
@@ -77,35 +79,35 @@ public:
 };
 
 bool fm_comp_book_vendor_time_call_stream_init(fm_frame_t *result, size_t args,
-                                          const fm_frame_t *const argv[],
-                                          fm_call_ctx_t *ctx,
-                                          fm_call_exec_cl *cl) {
+                                               const fm_frame_t *const argv[],
+                                               fm_call_ctx_t *ctx,
+                                               fm_call_exec_cl *cl) {
   auto &comp = (*(book_vendor_time_op_cl *)ctx->comp);
   comp.init(result);
   return true;
 }
 
 bool fm_comp_book_vendor_time_stream_exec(fm_frame_t *result, size_t args,
-                                     const fm_frame_t *const argv[],
-                                     fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
+                                          const fm_frame_t *const argv[],
+                                          fm_call_ctx_t *ctx,
+                                          fm_call_exec_cl cl) {
   auto &box = *(book::message *)fm_frame_get_cptr1(argv[0], 0, 0);
   auto &comp = (*(book_vendor_time_op_cl *)ctx->comp);
   return comp.exec(box, result, (fm_stream_ctx *)ctx->exec);
 }
 
 fm_call_def *fm_comp_book_vendor_time_stream_call(fm_comp_def_cl comp_cl,
-                                             const fm_ctx_def_cl ctx_cl) {
+                                                  const fm_ctx_def_cl ctx_cl) {
   auto *def = fm_call_def_new();
   fm_call_def_init_set(def, fm_comp_book_vendor_time_call_stream_init);
   fm_call_def_exec_set(def, fm_comp_book_vendor_time_stream_exec);
   return def;
 }
 
-fm_ctx_def_t *fm_comp_book_vendor_time_gen(fm_comp_sys_t *csys,
-                                      fm_comp_def_cl closure, unsigned argc,
-                                      fm_type_decl_cp argv[],
-                                      fm_type_decl_cp ptype,
-                                      fm_arg_stack_t plist) {
+fm_ctx_def_t *
+fm_comp_book_vendor_time_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
+                             unsigned argc, fm_type_decl_cp argv[],
+                             fm_type_decl_cp ptype, fm_arg_stack_t plist) {
   auto *sys = fm_type_sys_get(csys);
   auto rec_t =
       fm_record_type_get(sys, "fm::book::message", sizeof(book::message));
