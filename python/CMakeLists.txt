@@ -15,6 +15,7 @@ add_library(
     STATIC
     "src/book/book.cpp"
     "src/extractor.cpp"
+    "src/pydecimal.c"
 )
 target_link_libraries(
     py_extractor_obj

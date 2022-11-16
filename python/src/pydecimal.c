@@ -13,33 +13,33 @@
  *****************************************************************************/
 
 /**
- * @file pydecimal.h
+ * @file pydecimal.c
  * @date 2 Nov 2022
- * @brief Definitions for python decimal type support
+ * @brief Implementation of utilities for python decimal type support
  * */
 
-#pragma once
+#include "extractor/python/pydecimal.h"
 
-#include "extractor/python/mpdecimal.h"
-#include <Python.h>
-#include "fmc/platform.h"
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-FMMODFUNC PyObject *PyDecimal_Type();
-
-FMMODFUNC bool PyDecimal_Check(PyObject *obj);
-
-#define _Py_DEC_MINALLOC 4
-
-typedef struct {
-  PyObject_HEAD Py_hash_t hash;
-  mpd_t dec;
-  mpd_uint_t data[_Py_DEC_MINALLOC];
-} PyDecObject;
-
-#ifdef __cplusplus
+PyObject *PyDecimal_Type() {
+  static PyObject *dectype = NULL;
+  if (!dectype) {
+    PyObject *decmodule = PyImport_ImportModule((char *)"decimal");
+    if (!decmodule) {
+      return NULL;
+    }
+    dectype = PyObject_GetAttrString(decmodule, (char *)"Decimal");
+    Py_XDECREF(decmodule);
+    if (!dectype) {
+      return NULL;
+    }
+  }
+  return dectype;
 }
-#endif
+
+bool PyDecimal_Check(PyObject *obj) {
+  PyObject *dectype = PyDecimal_Type();
+  if (!dectype) {
+    return false;
+  }
+  return PyObject_IsInstance(obj, dectype);
+}
