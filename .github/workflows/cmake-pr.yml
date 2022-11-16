@@ -46,7 +46,7 @@ jobs:
 
     - name: Install mpdec library
       working-directory: /tmp
-      run: yum install libmpdec-devel
+      run: yum install mpdecimal-devel
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
