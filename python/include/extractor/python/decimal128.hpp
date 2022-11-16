@@ -622,34 +622,39 @@ PyObject *Decimal128_new(fmc_decimal128_t obj) {
   return ExtractorBaseTypeDecimal128::py_new(obj);
 }
 
-PyObject *ExtractorBaseTypeDecimal128::as_decimal(PyObject *self, PyObject *args) {
+PyObject *ExtractorBaseTypeDecimal128::as_decimal(PyObject *self,
+                                                  PyObject *args) {
 
-  static PyObject * dectype = NULL;
+  static PyObject *dectype = NULL;
   if (!dectype) {
-    PyObject * decmodule = PyImport_ImportModule((char *) "decimal");
+    PyObject *decmodule = PyImport_ImportModule((char *)"decimal");
     if (!decmodule) {
       return NULL;
     }
-    dectype = PyObject_GetAttrString(decmodule, (char *) "Decimal");
+    dectype = PyObject_GetAttrString(decmodule, (char *)"Decimal");
     Py_XDECREF(decmodule);
     if (!dectype) {
       return NULL;
     }
   }
 
-  PyDecObject *typed = (PyDecObject*)PyObject_CallObject(dectype, NULL);
+  PyDecObject *typed = (PyDecObject *)PyObject_CallObject(dectype, NULL);
 
   uint16_t flags;
 
-  fmc_decimal128_triple(typed->dec.data, &typed->dec.len, &typed->dec.exp, &flags, &((ExtractorBaseTypeDecimal128 *)self)->val);
+  fmc_decimal128_triple(typed->dec.data, &typed->dec.len, &typed->dec.exp,
+                        &flags, &((ExtractorBaseTypeDecimal128 *)self)->val);
 
-  typed->dec.flags = ((flags & FMC_DECIMAL128_NEG) == FMC_DECIMAL128_NEG) * MPD_NEG |
-                     ((flags & FMC_DECIMAL128_INF) == FMC_DECIMAL128_INF) * MPD_INF |
-                     ((flags & FMC_DECIMAL128_NAN) == FMC_DECIMAL128_NAN) * MPD_NAN;
+  typed->dec.flags =
+      ((flags & FMC_DECIMAL128_NEG) == FMC_DECIMAL128_NEG) * MPD_NEG |
+      ((flags & FMC_DECIMAL128_INF) == FMC_DECIMAL128_INF) * MPD_INF |
+      ((flags & FMC_DECIMAL128_NAN) == FMC_DECIMAL128_NAN) * MPD_NAN;
 
-  typed->dec.digits = fmc_decimal128_digits(&((ExtractorBaseTypeDecimal128 *)self)->val);
+  typed->dec.digits =
+      fmc_decimal128_digits(&((ExtractorBaseTypeDecimal128 *)self)->val);
 
-  // PyObject_CallObject returns a new reference, segfaults in mac when reference count is not increased
+  // PyObject_CallObject returns a new reference, segfaults in mac when
+  // reference count is not increased
   Py_INCREF(typed);
   return (PyObject *)typed;
 }

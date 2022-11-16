@@ -34,18 +34,18 @@
 template <bool B> struct integral_value { typedef long long type; };
 template <> struct integral_value<true> { typedef unsigned long long type; };
 
-bool PyDecimal_Check(PyObject *obj){
-  PyObject *dectype = PyObject_GetAttrString(PyImport_ImportModule((char *) "decimal"), (char *) "Decimal");
+bool PyDecimal_Check(PyObject *obj) {
+  PyObject *dectype = PyObject_GetAttrString(
+      PyImport_ImportModule((char *)"decimal"), (char *)"Decimal");
   return PyObject_IsInstance(obj, dectype);
 }
 
 #define _Py_DEC_MINALLOC 4
 
 typedef struct {
-    PyObject_HEAD
-    Py_hash_t hash;
-    mpd_t dec;
-    mpd_uint_t data[_Py_DEC_MINALLOC];
+  PyObject_HEAD Py_hash_t hash;
+  mpd_t dec;
+  mpd_uint_t data[_Py_DEC_MINALLOC];
 } PyDecObject;
 
 template <class T> struct py_type_convert {
@@ -120,12 +120,14 @@ template <class T> struct py_type_convert {
           return true;
         }
       } else if (PyDecimal_Check(temp)) {
-        PyDecObject *typed = (PyDecObject*)temp;
-        uint16_t flag = ((typed->dec.flags & MPD_NEG) == MPD_NEG) * FMC_DECIMAL128_NEG |
-                        ((typed->dec.flags & MPD_INF) == MPD_INF) * FMC_DECIMAL128_INF |
-                        ((typed->dec.flags & MPD_NAN) == MPD_NAN) * FMC_DECIMAL128_NAN |
-                        ((typed->dec.flags & MPD_SNAN) == MPD_SNAN) * FMC_DECIMAL128_SNAN;
-        fmc_decimal128_set_triple(&val, typed->dec.data, typed->dec.len, typed->dec.exp, flag);
+        PyDecObject *typed = (PyDecObject *)temp;
+        uint16_t flag =
+            ((typed->dec.flags & MPD_NEG) == MPD_NEG) * FMC_DECIMAL128_NEG |
+            ((typed->dec.flags & MPD_INF) == MPD_INF) * FMC_DECIMAL128_INF |
+            ((typed->dec.flags & MPD_NAN) == MPD_NAN) * FMC_DECIMAL128_NAN |
+            ((typed->dec.flags & MPD_SNAN) == MPD_SNAN) * FMC_DECIMAL128_SNAN;
+        fmc_decimal128_set_triple(&val, typed->dec.data, typed->dec.len,
+                                  typed->dec.exp, flag);
         return true;
       }
     } else if constexpr (is_same_v<T, RPRICE>) {
