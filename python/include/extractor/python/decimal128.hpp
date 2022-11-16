@@ -645,13 +645,12 @@ PyObject *ExtractorBaseTypeDecimal128::as_decimal(PyObject *self, PyObject *args
 
   uint16_t flags;
 
-  fmc_decimal128_triple(&typed->dec.data[1], &typed->dec.data[0], &typed->dec.exp, &flags, &((ExtractorBaseTypeDecimal128 *)self)->val);
+  fmc_decimal128_triple(typed->dec.data, &typed->dec.len, &typed->dec.exp, &flags, &((ExtractorBaseTypeDecimal128 *)self)->val);
 
   typed->dec.flags = ((flags & FMC_DECIMAL128_NEG) == FMC_DECIMAL128_NEG) * MPD_NEG |
                      ((flags & FMC_DECIMAL128_INF) == FMC_DECIMAL128_INF) * MPD_INF |
                      ((flags & FMC_DECIMAL128_NAN) == FMC_DECIMAL128_NAN) * MPD_NAN;
 
-  typed->dec.len = 1 + (typed->dec.data[1] != 0);
   typed->dec.digits = fmc_decimal128_digits(&((ExtractorBaseTypeDecimal128 *)self)->val);
 
   return ret;
