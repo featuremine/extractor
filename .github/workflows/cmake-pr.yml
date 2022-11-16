@@ -46,7 +46,7 @@ jobs:
 
     - name: Install mpdec library
       working-directory: /tmp
-      run: apt-get install libmpdec-dev
+      run: yup install libmpdec-devel
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
