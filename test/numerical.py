@@ -166,11 +166,23 @@ class NumericalTests(unittest.TestCase):
                 v3 = extr.Decimal128(v2)
                 print(f"conv -> {v3}")
                 print(v1, v2, v3)
-                self.assertEqual(v1, v3)
-                self.assertAlmostEqual(float(v1), float(v2))
+                if math.isnan(v1):
+                    self.assertTrue(math.isnan(v1))
+                    self.assertTrue(math.isnan(v3))
+                    self.assertTrue(math.isnan(float(v1)))
+                    self.assertTrue(math.isnan(float(v3)))
+                else:
+                    self.assertEqual(v1, v3)
+                    self.assertAlmostEqual(float(v1), float(v2))
                 d1 = v1.as_decimal()
-                self.assertEqual(d1, v2)
-                self.assertAlmostEqual(float(d1), float(v1))
+                if math.isnan(v1):
+                    self.assertTrue(math.isnan(v1))
+                    self.assertTrue(math.isnan(v2))
+                    self.assertTrue(math.isnan(float(v1)))
+                    self.assertTrue(math.isnan(float(v2)))
+                else:
+                    self.assertEqual(d1, v2)
+                    self.assertAlmostEqual(float(d1), float(v1))
             _convtest(repr)
             _convtest("-" + repr)
 
@@ -191,6 +203,9 @@ class NumericalTests(unittest.TestCase):
         convtest("5005005005005005005.00500500522") # two extra digits left over in last declet
 
         convtest("5005005005005005005005005005005005") # 34 digits, 11 declets (33) and msd (1)
+
+        convtest("inf")
+        convtest("nan")
 
     def test_rprice(self):
         from_int = extr.Rprice(0)
