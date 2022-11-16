@@ -166,22 +166,17 @@ class NumericalTests(unittest.TestCase):
                 v3 = extr.Decimal128(v2)
                 print(f"conv -> {v3}")
                 print(v1, v2, v3)
+                d1 = v1.as_decimal()
                 if math.isnan(v1):
-                    self.assertTrue(math.isnan(v1))
+                    self.assertTrue(math.isnan(v2))
                     self.assertTrue(math.isnan(v3))
                     self.assertTrue(math.isnan(float(v1)))
+                    self.assertTrue(math.isnan(float(v2)))
                     self.assertTrue(math.isnan(float(v3)))
                 else:
                     self.assertEqual(v1, v3)
-                    self.assertAlmostEqual(float(v1), float(v2))
-                d1 = v1.as_decimal()
-                if math.isnan(v1):
-                    self.assertTrue(math.isnan(v1))
-                    self.assertTrue(math.isnan(v2))
-                    self.assertTrue(math.isnan(float(v1)))
-                    self.assertTrue(math.isnan(float(v2)))
-                else:
                     self.assertEqual(d1, v2)
+                    self.assertAlmostEqual(float(v1), float(v2))
                     self.assertAlmostEqual(float(d1), float(v1))
             _convtest(repr)
             _convtest("-" + repr)
