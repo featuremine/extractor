@@ -29,9 +29,6 @@ extern "C" {
 #include <extractor/python/extractor.h>
 #include <extractor/python/type_utils.hpp>
 
-// We also need to keep references to the module to avoid repeated imports
-PyObject *_context;
-
 struct ExtractorBaseTypeDecimal128 {
   PyObject_HEAD;
   fmc::decimal128 val;
@@ -424,12 +421,6 @@ bool ExtractorBaseTypeDecimal128::init(PyObject *m) {
   if (PyType_Ready(&ExtractorBaseTypeDecimal128Type) < 0)
     return false;
 
-  PyObject *ctxtype = PyObject_GetAttrString(PyImport_ImportModule((char *) "decimal"), (char *) "Context");
-  PyObject *etup = PyTuple_New(0);
-  _context = PyObject_Call(ctxtype, etup, NULL);
-  // configure context
-  Py_XDECREF(etup);
-
   /* Numeric abstract base classes */
   PyObject *numbers = PyImport_ImportModule("numbers");
   if (!numbers)
@@ -632,16 +623,21 @@ PyObject *Decimal128_new(fmc_decimal128_t obj) {
 }
 
 PyObject *ExtractorBaseTypeDecimal128::as_decimal(PyObject *self, PyObject *args) {
-  PyObject *dectype = PyObject_GetAttrString(PyImport_ImportModule((char *) "decimal"), (char *) "Decimal");
-  PyObject *etup = PyTuple_New(2);
-  
-  PyTuple_SetItem(etup, 0, PyLong_FromLong(0));
-  PyTuple_SetItem(etup, 1, _context);
-  Py_INCREF(_context);
 
-  PyObject *ret = PyObject_Call(dectype, etup, NULL);
-  Py_INCREF(ret);
-  PyDecObject *typed = (PyDecObject*)ret;
+  static PyObject * dectype = NULL;
+  if (!dectype) {
+    PyObject * decmodule = PyImport_ImportModule((char *) "decimal");
+    if (!decmodule) {
+      return NULL;
+    }
+    dectype = PyObject_GetAttrString(decmodule, (char *) "Decimal");
+    Py_XDECREF(decmodule);
+    if (!dectype) {
+      return NULL;
+    }
+  }
+
+  PyDecObject *typed = (PyDecObject*)PyObject_CallObject(dectype, NULL);
 
   uint16_t flags;
 
@@ -653,5 +649,7 @@ PyObject *ExtractorBaseTypeDecimal128::as_decimal(PyObject *self, PyObject *args
 
   typed->dec.digits = fmc_decimal128_digits(&((ExtractorBaseTypeDecimal128 *)self)->val);
 
-  return ret;
+  // PyObject_CallObject returns a new reference, segfaults in mac when reference count is not increased
+  Py_INCREF(typed);
+  return (PyObject *)typed;
 }
