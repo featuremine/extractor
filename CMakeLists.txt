@@ -20,12 +20,6 @@ add_subproject(
     TARGETS fmc++ ytp py_yamal_dep
 )
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    execute_process(COMMAND brew --prefix OUTPUT_VARIABLE BREW_PREFIX OUTPUT_STRIP_TRAILING_WHITESPACE)
-    link_directories("${BREW_PREFIX}/lib")
-    include_directories("${BREW_PREFIX}/include")
-endif()
-
 option (BUILD_TESTING "Enable build of the unit tests and their execution." ON)
 option (BUILD_TOOLS "Enable build of command line tools." ON)
 option (BUILD_PACKAGE "Enable build of the self-extracting package." ON)

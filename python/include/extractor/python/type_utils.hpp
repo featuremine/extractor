@@ -29,24 +29,10 @@
 #include <extractor/python/rprice.h>
 #include <fenv.h>
 
-#include <mpdecimal.h>
+#include <extractor/python/pydecimal.h>
 
 template <bool B> struct integral_value { typedef long long type; };
 template <> struct integral_value<true> { typedef unsigned long long type; };
-
-bool PyDecimal_Check(PyObject *obj) {
-  PyObject *dectype = PyObject_GetAttrString(
-      PyImport_ImportModule((char *)"decimal"), (char *)"Decimal");
-  return PyObject_IsInstance(obj, dectype);
-}
-
-#define _Py_DEC_MINALLOC 4
-
-typedef struct {
-  PyObject_HEAD Py_hash_t hash;
-  mpd_t dec;
-  mpd_uint_t data[_Py_DEC_MINALLOC];
-} PyDecObject;
 
 template <class T> struct py_type_convert {
   static bool convert(T &val, PyObject *args) {

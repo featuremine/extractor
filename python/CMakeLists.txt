@@ -85,8 +85,6 @@ install(
     py_extractor
 )
 
-find_library(MPDEC_LIB mpdec)
-
 add_library(
     extractor_module
     SHARED
@@ -99,7 +97,6 @@ target_link_libraries(
     ytp
     extractor
     py_extractor
-    ${MPDEC_LIB}
 )
 set_target_properties(
     extractor_module

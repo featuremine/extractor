@@ -33,7 +33,6 @@ macro(extr_unit_test)
         ytp
         PkgConfig::GTEST
         PkgConfig::PYTHON
-        ${MPDEC_LIB}
     )
     add_test(NAME ${ARG_NAME} COMMAND ${ARG_NAME} ${CMAKE_CURRENT_SOURCE_DIR})
 endmacro()
