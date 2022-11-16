@@ -21,8 +21,9 @@ add_subproject(
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    link_directories("/opt/homebrew/lib")
-    include_directories("/opt/homebrew/include")
+    execute_process(COMMAND brew --prefix OUTPUT_VARIABLE BREW_PREFIX OUTPUT_STRIP_TRAILING_WHITESPACE)
+    link_directories("${BREW_PREFIX}/lib")
+    include_directories("${BREW_PREFIX}/include")
 endif()
 
 option (BUILD_TESTING "Enable build of the unit tests and their execution." ON)
