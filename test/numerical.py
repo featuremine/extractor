@@ -156,15 +156,9 @@ class NumericalTests(unittest.TestCase):
         v1 = extr.Decimal128.from_float(2.35)
         self.assertAlmostEqual(float(v1), 2.35)
         def convtest(repr):
-            print("======================================")
-            print(f"repr -> {repr}")
             v1 = extr.Decimal128(repr)
-            print(f"extr -> {v1}")
             v2 = Decimal(repr)
-            print(f"deci -> {v2}")
             v3 = extr.Decimal128(v2)
-            print(f"conv -> {v3}")
-            print(v1, v2, v3)
             self.assertEqual(v1, v3)
             self.assertAlmostEqual(float(v1), float(v2))
             d1 = v1.as_decimal()
@@ -174,7 +168,9 @@ class NumericalTests(unittest.TestCase):
         convtest("2")
         convtest("1")
         convtest("0")
-        convtest("5005005005005005005")
+        convtest("5005005005005005005") # low digits, one digit per declet
+        convtest("35035035035035035035") # low digits, two digit per declet
+        convtest("135135135135135135135") # low digits, three digit per declet
 
     def test_rprice(self):
         from_int = extr.Rprice(0)

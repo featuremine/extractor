@@ -103,7 +103,6 @@ template <class T> struct py_type_convert {
           PyErr_SetString(PyExc_TypeError, "error converting from string");
           return false;
         }
-        fmc_decimal128_pretty(&val);
         return true;
       } else if (PyLong_Check(temp)) {
         uint64_t u = PyLong_AsUnsignedLongLong(temp);
@@ -122,24 +121,26 @@ template <class T> struct py_type_convert {
         }
       } else if (PyDecimal_Check(temp)) {
         PyDecObject *typed = (PyDecObject*)temp;
-        mpd_context_t ctx;
-        mpd_ieee_context(&ctx, MPD_DECIMAL128);
-        mpd_uint_t buf[2] = {0};
-        mpd_t res;
-        res.data = buf;
-        res.alloc = 2;
-        mpd_set_static_data(&res);
-        mpd_copy(&res, &typed->dec, &ctx);
-        if (mpd_getstatus(&ctx)) {
-          return false;
-        }
+        FMC_FLAG flag = FMC_FLAG(((typed->dec.flags & MPD_NEG) == MPD_NEG) * FMC_DEC_NEG |
+                                 ((typed->dec.flags & MPD_INF) == MPD_INF) * FMC_DEC_INF |
+                                 ((typed->dec.flags & MPD_NAN) == MPD_NAN) * FMC_DEC_NAN |
+                                 ((typed->dec.flags & MPD_SNAN) == MPD_SNAN) * FMC_DEC_NAN);
         fmc_error_t *err;
-        FMC_FLAG flag = FMC_FLAG(((res.flags & MPD_NEG) == MPD_NEG) * FMC_DEC_NEG |
-                                 ((res.flags & MPD_INF) == MPD_INF) * FMC_DEC_INF |
-                                 ((res.flags & MPD_NAN) == MPD_NAN) * FMC_DEC_NAN |
-                                 ((res.flags & MPD_SNAN) == MPD_SNAN) * FMC_DEC_NAN);
-
-        fmc_decimal128_set_triple(&val, res.data[0], res.data[1], res.exp, flag, &err);
+        switch(typed->dec.len) {
+          case 0:
+          fmc_decimal128_set_triple(&val, 0ULL, 0ULL, typed->dec.exp, flag, &err);
+          break;
+          case 1:
+          fmc_decimal128_set_triple(&val, 0ULL, typed->dec.data[0], typed->dec.exp, flag, &err);
+          break;
+          case 2:
+          fmc_decimal128_set_triple(&val, typed->dec.data[1], typed->dec.data[0], typed->dec.exp, flag, &err);
+          break;
+          default:
+            PyErr_SetString(PyExc_OverflowError, "Overflow building Extractor Decimal128 object");
+            return false;
+          break;
+        }
         return !bool(err);
       }
     } else if constexpr (is_same_v<T, RPRICE>) {

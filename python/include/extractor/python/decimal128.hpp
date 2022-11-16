@@ -593,8 +593,6 @@ PyObject *ExtractorBaseTypeDecimal128::from_float(PyObject *type,
   }
   fmc_decimal128_t res;
   fmc_decimal128_from_double(&res, src);
-  std::cout<<"FM Decimal, from float"<<std::endl;
-  fmc_decimal128_pretty(&res);
   return ExtractorBaseTypeDecimal128::py_new(res);
 }
 
@@ -652,11 +650,6 @@ PyObject *ExtractorBaseTypeDecimal128::as_decimal(PyObject *self, PyObject *args
   typed->dec.flags = ((flags & FMC_DEC_NEG) == FMC_DEC_NEG) * MPD_NEG |
                      ((flags & FMC_DEC_INF) == FMC_DEC_INF) * MPD_INF |
                      ((flags & FMC_DEC_NAN) == FMC_DEC_NAN) * MPD_NAN;
-
-  // if (typed->dec.data[0] == 0) {
-  //   typed->dec.data[0] = typed->dec.data[1];
-  //   typed->dec.data[1] = 0;
-  // }
 
   typed->dec.len = 1 + (typed->dec.data[1] != 0);
   typed->dec.digits = fmc_decimal128_digits(&((ExtractorBaseTypeDecimal128 *)self)->val);
