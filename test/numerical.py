@@ -202,6 +202,41 @@ class NumericalTests(unittest.TestCase):
         convtest("inf")
         convtest("nan")
 
+    def test_decimal128_identity_double_1(self):
+        decimals = []
+        integers = []
+        signs = [1.0, -1.0]
+        decim = 0.0000019073486328125
+        while decim < 1.0:
+            decimals.append(decim)
+            decim *= 2.0
+
+        integ = 1.0
+        while integ < 10779215329.0:
+            integers.append(integ)
+            integ *= 47.0
+
+        decimals.append(0.0)
+        integers.append(0.0)
+
+        for sign in signs:
+            for decimal in decimals:
+                for integer in integers:
+                    keep_zeros = 12
+                    while keep_zeros >= 0:
+                        fval = str((decimal + integer) * sign)
+                        v1 = extr.Decimal128(fval)
+                        v2 = Decimal(fval)
+                        v3 = extr.Decimal128(v2)
+                        d1 = v1.as_decimal()
+
+                        self.assertEqual(v1, v3)
+                        self.assertEqual(d1, v2)
+                        self.assertAlmostEqual(float(v1), float(v2))
+                        self.assertAlmostEqual(float(d1), float(v1))
+
+                        keep_zeros-=3
+
     def test_rprice(self):
         from_int = extr.Rprice(0)
         self.assertTrue(isinstance(from_int, extr.Rprice))
