@@ -34,7 +34,6 @@ target_include_directories(
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${NUMPY_INCLUDE_DIR}"
     "${PYTHON_INCLUDE_DIRS}"
-    "/opt/homebrew/include"
 )
 target_compile_definitions(
     py_extractor_obj

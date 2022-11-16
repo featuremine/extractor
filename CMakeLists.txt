@@ -20,6 +20,11 @@ add_subproject(
     TARGETS fmc++ ytp py_yamal_dep
 )
 
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    link_directories("/opt/homebrew/lib")
+    include_directories("/opt/homebrew/include")
+endif()
+
 option (BUILD_TESTING "Enable build of the unit tests and their execution." ON)
 option (BUILD_TOOLS "Enable build of command line tools." ON)
 option (BUILD_PACKAGE "Enable build of the self-extracting package." ON)
