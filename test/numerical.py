@@ -156,20 +156,23 @@ class NumericalTests(unittest.TestCase):
         v1 = extr.Decimal128.from_float(2.35)
         self.assertAlmostEqual(float(v1), 2.35)
         def convtest(repr):
-            print("======================================")
-            print(f"repr -> {repr}")
-            v1 = extr.Decimal128(repr)
-            print(f"extr -> {v1}")
-            v2 = Decimal(repr)
-            print(f"deci -> {v2}")
-            v3 = extr.Decimal128(v2)
-            print(f"conv -> {v3}")
-            print(v1, v2, v3)
-            self.assertEqual(v1, v3)
-            self.assertAlmostEqual(float(v1), float(v2))
-            d1 = v1.as_decimal()
-            self.assertEqual(d1, v2)
-            self.assertAlmostEqual(float(d1), float(v1))
+            def _convtest(repr):
+                print("======================================")
+                print(f"repr -> {repr}")
+                v1 = extr.Decimal128(repr)
+                print(f"extr -> {v1}")
+                v2 = Decimal(repr)
+                print(f"deci -> {v2}")
+                v3 = extr.Decimal128(v2)
+                print(f"conv -> {v3}")
+                print(v1, v2, v3)
+                self.assertEqual(v1, v3)
+                self.assertAlmostEqual(float(v1), float(v2))
+                d1 = v1.as_decimal()
+                self.assertEqual(d1, v2)
+                self.assertAlmostEqual(float(d1), float(v1))
+            _convtest(repr)
+            _convtest("-" + repr)
 
         convtest("2")
         convtest("1")
@@ -177,13 +180,17 @@ class NumericalTests(unittest.TestCase):
         convtest("5005005005005005005") # low digits, one digit per declet
         convtest("35035035035035035035") # low digits, two digit per declet
         convtest("135135135135135135135") # low digits, three digit per declet
+        convtest("2.4")
+        convtest("1.24")
+        convtest("0.543")
+        convtest("5005005005005005005.005005005") # low digits, one digit per declet
+        convtest("35035035035035035035.035035035") # low digits, two digit per declet
+        convtest("135135135135135135135.135135135") # low digits, three digit per declet
 
-        convtest("-2")
-        convtest("-1")
-        convtest("-0")
-        convtest("-5005005005005005005") # low digits, one digit per declet
-        convtest("-35035035035035035035") # low digits, two digit per declet
-        convtest("-135135135135135135135") # low digits, three digit per declet
+        convtest("5005005005005005005.0050050052") # one extra digit left over in last declet
+        convtest("5005005005005005005.00500500522") # two extra digits left over in last declet
+
+        convtest("5005005005005005005005005005005005") # 34 digits, 11 declets (33) and msd (1)
 
     def test_rprice(self):
         from_int = extr.Rprice(0)
