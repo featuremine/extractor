@@ -121,27 +121,12 @@ template <class T> struct py_type_convert {
         }
       } else if (PyDecimal_Check(temp)) {
         PyDecObject *typed = (PyDecObject*)temp;
-        FMC_FLAG flag = FMC_FLAG(((typed->dec.flags & MPD_NEG) == MPD_NEG) * FMC_DEC_NEG |
-                                 ((typed->dec.flags & MPD_INF) == MPD_INF) * FMC_DEC_INF |
-                                 ((typed->dec.flags & MPD_NAN) == MPD_NAN) * FMC_DEC_NAN |
-                                 ((typed->dec.flags & MPD_SNAN) == MPD_SNAN) * FMC_DEC_NAN);
-        fmc_error_t *err;
-        switch(typed->dec.len) {
-          case 0:
-          fmc_decimal128_set_triple(&val, 0ULL, 0ULL, typed->dec.exp, flag, &err);
-          break;
-          case 1:
-          fmc_decimal128_set_triple(&val, 0ULL, typed->dec.data[0], typed->dec.exp, flag, &err);
-          break;
-          case 2:
-          fmc_decimal128_set_triple(&val, typed->dec.data[1], typed->dec.data[0], typed->dec.exp, flag, &err);
-          break;
-          default:
-            PyErr_SetString(PyExc_OverflowError, "Overflow building Extractor Decimal128 object");
-            return false;
-          break;
-        }
-        return !bool(err);
+        uint16_t flag = ((typed->dec.flags & MPD_NEG) == MPD_NEG) * FMC_DECIMAL128_NEG |
+                        ((typed->dec.flags & MPD_INF) == MPD_INF) * FMC_DECIMAL128_INF |
+                        ((typed->dec.flags & MPD_NAN) == MPD_NAN) * FMC_DECIMAL128_NAN |
+                        ((typed->dec.flags & MPD_SNAN) == MPD_SNAN) * FMC_DECIMAL128_SNAN;
+        fmc_decimal128_set_triple(&val, typed->dec.data, typed->dec.len, typed->dec.exp, flag);
+        return true;
       }
     } else if constexpr (is_same_v<T, RPRICE>) {
       PyObject *temp;
