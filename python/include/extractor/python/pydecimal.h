@@ -21,8 +21,8 @@
 #pragma once
 
 #include "extractor/python/mpdecimal.h"
-#include <Python.h>
 #include "fmc/platform.h"
+#include <Python.h>
 
 #ifdef __cplusplus
 extern "C" {
