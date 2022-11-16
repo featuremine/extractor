@@ -44,6 +44,11 @@ jobs:
         rm -rf numdiff-5.9.0*
       shell: bash
 
+    - name: Install mpdec library
+      working-directory: /tmp
+      run: sudo apt-get install libmpdec-dev
+      shell: bash
+
     - name: Build ${{ github.event.repository.name }} with fm gcc
       uses: featuremine/actions/package/build@main
       with:
