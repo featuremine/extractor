@@ -69,7 +69,10 @@ jobs:
         submodules: recursive
 
     - name: Install dependencies
-      run: brew install pkg-config cmake googletest python mpdecimal
+      run: |
+        brew install pkg-config cmake googletest python mpdecimal
+        brew link mpdecimal
+      shell: bash
 
     - name: Install numdiff
       working-directory: /tmp
