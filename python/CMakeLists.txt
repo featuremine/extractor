@@ -41,7 +41,6 @@ target_compile_definitions(
     PRIVATE
     PY_EXTR_VER="${PROJECT_VERSION}"
     NO_DLL_DECORATOR
-    UNIVERSAL
 )
 
 add_library(
