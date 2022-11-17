@@ -22,8 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_CALL_OBJ_H__
-#define __FM_CALL_OBJ_H__
+#pragma once
 
 #include "call_stack.h"
 #include "extractor/call_ctx.h"
@@ -31,6 +30,10 @@
 #include "extractor/handle.h"
 
 #include <stddef.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief a call object
@@ -169,4 +172,6 @@ void fm_call_obj_deps_queue(fm_call_obj_t *);
  */
 void fm_call_obj_dep_queuer_add(fm_call_obj_t *, fm_call_obj_t *, size_t);
 
-#endif // __FM_CALL_OBJ_H__
+#ifdef __cplusplus
+}
+#endif

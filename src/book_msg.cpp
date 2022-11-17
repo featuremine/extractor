@@ -23,7 +23,6 @@
  * book updates of the desired type.
  */
 
-extern "C" {
 #include "book_msg.h"
 #include "book/book.h"
 #include "extractor/arg_stack.h"
@@ -31,7 +30,6 @@ extern "C" {
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
-}
 
 #include "extractor/book/updates.hpp"
 #include "fmc++/decimal128.hpp"
@@ -380,7 +378,7 @@ public:
         (fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_, 0),
         0);
     *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
-        fmc::decimal128(0);
+        fmc::decimal128();
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
     memset((char *)fm_frame_get_ptr1(result, decoration_field_, 0), 0,
            sizeof(char) * 8);

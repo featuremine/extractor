@@ -23,10 +23,8 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/type_decl.h"
 #include "fmc/time.h"
-}
 
 #include <algorithm>
 #include <cerrno>
@@ -117,7 +115,7 @@ const char *rational64_parser(const char *begin, const char *end, void *data,
   }
 
   if (e == end) {
-    *(fm_rational64_t *)data = fm_rational64_new2(num, 1);
+    fmc_rational64_new2((fmc_rational64_t *)data, num, 1);
     return end;
   }
 
@@ -138,7 +136,7 @@ const char *rational64_parser(const char *begin, const char *end, void *data,
     return e;
   }
 
-  *(fm_rational64_t *)data = fm_rational64_new2(num, den);
+  fmc_rational64_new2((fmc_rational64_t *)data, num, den);
 
   return d;
 }
@@ -147,14 +145,13 @@ const char *decimal64_parser(const char *begin, const char *end, void *data,
                              const char *fmt) {
   double val = 0.0;
   auto ret = type_parser<FLOAT64>(begin, end, &val, "");
-  *(fm_decimal64_t *)data = fm_decimal64_from_double(val);
+  fmc_rprice_from_double((fmc_rprice_t *)data, val);
   return ret;
 }
 
 const char *decimal128_parser(const char *begin, const char *end, void *data,
                               const char *fmt) {
-  fmc_decimal128_from_str((fmc_decimal128_t *)data, begin);
-  return end;
+  return fmc_decimal128_parse((fmc_decimal128_t *)data, begin);
 }
 
 template <class T>
@@ -209,7 +206,7 @@ fm_base_type_parser fm_base_type_parser_get(FM_BASE_TYPE t) {
   case FM_TYPE_RATIONAL64:
     return &rational64_parser;
     break;
-  case FM_TYPE_DECIMAL64:
+  case FM_TYPE_RPRICE:
     return &decimal64_parser;
     break;
   case FM_TYPE_DECIMAL128:
@@ -269,8 +266,8 @@ size_t fm_base_type_sizeof(FM_BASE_TYPE t) {
   case FM_TYPE_RATIONAL64:
     return sizeof(RATIONAL64);
     break;
-  case FM_TYPE_DECIMAL64:
-    return sizeof(DECIMAL64);
+  case FM_TYPE_RPRICE:
+    return sizeof(RPRICE);
     break;
   case FM_TYPE_DECIMAL128:
     return sizeof(DECIMAL128);
@@ -329,7 +326,7 @@ constexpr const char *format_str(FM_BASE_TYPE type) {
   case FM_TYPE_RATIONAL64:
     return "";
     break;
-  case FM_TYPE_DECIMAL64:
+  case FM_TYPE_RPRICE:
     return "";
     break;
   case FM_TYPE_DECIMAL128:
@@ -364,12 +361,13 @@ bool nano_fwriter(FILE *file, const void *val, const char *fmt) {
 }
 
 bool rational64_fwriter(FILE *file, const void *val, const char *fmt) {
-  auto value = (*(fm_rational64_t *)val);
+  auto value = (*(fmc_rational64_t *)val);
   return fprintf(file, "%i/%i", value.num, value.den) > 0;
 }
 
 bool decimal64_fwriter(FILE *file, const void *val, const char *fmt) {
-  auto value = fm_decimal64_to_double(*(fm_decimal64_t *)val);
+  double value;
+  fmc_rprice_to_double(&value, (fmc_rprice_t *)val);
   return fprintf(file, "%.15lg", value) > 0;
 }
 
@@ -419,7 +417,7 @@ fm_base_type_fwriter fm_base_type_fwriter_get(FM_BASE_TYPE t) {
   case FM_TYPE_RATIONAL64:
     return &rational64_fwriter;
     break;
-  case FM_TYPE_DECIMAL64:
+  case FM_TYPE_RPRICE:
     return &decimal64_fwriter;
     break;
   case FM_TYPE_DECIMAL128:
@@ -468,8 +466,8 @@ const char *fm_base_type_name(FM_BASE_TYPE t) {
     return "FLOAT64";
   case FM_TYPE_RATIONAL64:
     return "RATIONAL64";
-  case FM_TYPE_DECIMAL64:
-    return "DECIMAL64";
+  case FM_TYPE_RPRICE:
+    return "RPRICE";
   case FM_TYPE_DECIMAL128:
     return "DECIMAL128";
   case FM_TYPE_TIME64:

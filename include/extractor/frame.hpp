@@ -23,11 +23,9 @@
 
 #pragma once
 
-extern "C" {
 #include "extractor/comp_sys.h"
 #include "extractor/frame.h"
 #include "extractor/type_sys.h"
-}
 
 #include "fmc++/mpl.hpp"
 #include <array>
@@ -79,8 +77,8 @@ FRAME_FIELD_TYPE_ENUM(int32_t, FM_TYPE_INT32);
 FRAME_FIELD_TYPE_ENUM(int64_t, FM_TYPE_INT64);
 FRAME_FIELD_TYPE_ENUM(double, FM_TYPE_FLOAT64);
 FRAME_FIELD_TYPE_ENUM(float, FM_TYPE_FLOAT32);
-FRAME_FIELD_TYPE_ENUM(fm_rational64_t, FM_TYPE_RATIONAL64);
-FRAME_FIELD_TYPE_ENUM(fm_decimal64_t, FM_TYPE_DECIMAL64);
+FRAME_FIELD_TYPE_ENUM(fmc_rational64_t, FM_TYPE_RATIONAL64);
+FRAME_FIELD_TYPE_ENUM(fmc_rprice_t, FM_TYPE_RPRICE);
 FRAME_FIELD_TYPE_ENUM(fmc_decimal128_t, FM_TYPE_DECIMAL128);
 FRAME_FIELD_TYPE_ENUM(fmc_time64_t, FM_TYPE_TIME64);
 FRAME_FIELD_TYPE_ENUM(wchar_t, FM_TYPE_WCHAR);

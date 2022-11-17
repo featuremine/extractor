@@ -22,18 +22,16 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "log.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
-}
 
-#include "extractor/decimal64.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
 
 #include <memory>

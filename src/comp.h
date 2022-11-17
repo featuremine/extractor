@@ -22,21 +22,20 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_COMP_H__
-#define __FM_COMP_H__
+#pragma once
 
 #include "arg_serial.h"
 #include "comp_base.h"
 #include "extractor/call_ctx.h"
 #include "extractor/comp_def.h"
 
-typedef struct fm_result_ref fm_result_ref_t;
-
-typedef struct fm_comp_node fm_comp_node_t;
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef struct fm_result_ref fm_result_ref_t;
+
+typedef struct fm_comp_node fm_comp_node_t;
 
 /**
  * @brief
@@ -102,5 +101,3 @@ FMMODFUNC void fm_comp_result_set(fm_result_ref_t *ref, fm_frame_t *frame);
 #ifdef __cplusplus
 }
 #endif
-
-#endif // __FM_COMP_H__

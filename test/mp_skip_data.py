@@ -34,7 +34,7 @@ if __name__ == "__main__":
         (("receive", extr.Time64, ""),
          ("ticker", extr.Array(extr.Char, 16), ""),
          ("market", extr.Array(extr.Char, 32), ""),
-         ("price", extr.Decimal64, ""),
+         ("price", extr.Rprice, ""),
          ("qty", extr.Int32, "")), name="mp_play_1")
 
     graph.features.csv_record(trades_in,

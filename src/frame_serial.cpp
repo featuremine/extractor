@@ -1,11 +1,9 @@
 
-extern "C" {
 #include "frame_serial.h"
 #include "extractor/frame.h"
 #include "extractor/serial.h"
 #include "fmc/time.h"
 #include <cmp/cmp.h>
-}
 
 #include "mp_util.hpp"
 #include <functional>

@@ -25,7 +25,7 @@ import os
 
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
-if __name__ == "__main__":
+def main(val1type):
     graph = extr.system.comp_graph()
     op = graph.features
 
@@ -36,19 +36,15 @@ if __name__ == "__main__":
     data_in_one = op.csv_play(
         in_file_one,
         (("timestamp", extr.Time64, ""),
-         ("val1", extr.Decimal64, ""),
+         ("val1", val1type, ""),
          ("val2", extr.Int32, "")))
     data_in_two = op.csv_play(
         in_file_two,
         (("timestamp", extr.Time64, ""),
-         ("val1", extr.Decimal64, ""),
+         ("val1", val1type, ""),
          ("val2", extr.Int32, "")))
 
-    val_one = op.field(data_in_one, "val2")
-    val_two = op.field(data_in_two, "val2")
-
-    out_stream_one = op.add(val_one, val_two)
-    out_stream_two = op.add(val_one, val_one)
+    out_stream_one = op.add(data_in_one, data_in_two)
 
     true = op.constant(('a', extr.Bool, True))
     true_ref = graph.get_ref(true)
@@ -82,3 +78,7 @@ if __name__ == "__main__":
     assert uint16_ref[0].a == 16
     assert signed_zero_ref[0].a == 0
     assert unsigned_zero_ref[0].a == 0
+
+if __name__ == "__main__":
+    main(extr.Rprice)
+    main(extr.Decimal128)

@@ -22,11 +22,16 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_SPLIT_BY_H__
-#define __FM_SPLIT_BY_H__
+#pragma once
 
 #include "operator_def.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 bool fm_comp_split_by_add(fm_comp_sys_t *sys);
 
-#endif // __FM_SPLIT_BY_H__
+#ifdef __cplusplus
+}
+#endif

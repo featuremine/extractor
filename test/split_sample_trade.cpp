@@ -23,13 +23,11 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/comp_sys.h"
 #include "extractor/frame.h"
 #include "extractor/std_comp.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/type_sys.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 #include <iostream>
@@ -73,7 +71,7 @@ TEST(csv_plays, identity) {
       sys, g, "mp_play", 0, mp_play_param_t, "../test/data/trade_20161003.mp",
       "receive", fm_base_type_get(tsys, FM_TYPE_TIME64), "", "ticker",
       chararray16, "", "market", chararray32, "", "price",
-      fm_base_type_get(tsys, FM_TYPE_DECIMAL64), "", "qty",
+      fm_base_type_get(tsys, FM_TYPE_RPRICE), "", "qty",
       fm_base_type_get(tsys, FM_TYPE_INT32), "", "side",
       fm_base_type_get(tsys, FM_TYPE_INT32), "");
 

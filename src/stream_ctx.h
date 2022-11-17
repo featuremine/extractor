@@ -22,14 +22,17 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_SRC_STREAM_CTX_H__
-#define __FM_SRC_STREAM_CTX_H__
+#pragma once
 
 #include "call_stack.h"
 #include "comp_graph.h"
 #include "extractor/handle.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief
@@ -51,4 +54,6 @@ void fm_stream_ctx_del(fm_stream_ctx_t *);
  */
 fm_call_queue_t *fm_stream_ctx_get_queue(fm_stream_ctx_t *ctx);
 
-#endif // __FM_SRC_STREAM_CTX_H__
+#ifdef __cplusplus
+}
+#endif

@@ -21,13 +21,11 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/comp_sys.h"
 #include "extractor/frame.h"
 #include "extractor/std_comp.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/type_sys.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 
@@ -143,7 +141,7 @@ TEST(substr_comp, single_field) {
       sys, g, "csv_play", 0, csv_play_param_t,
       (src_dir + "/data/logical_op_file_one.csv").c_str(), "timestamp",
       fm_base_type_get(tsys, FM_TYPE_TIME64), "", "val1",
-      fm_base_type_get(tsys, FM_TYPE_DECIMAL64), "", "val2",
+      fm_base_type_get(tsys, FM_TYPE_RPRICE), "", "val2",
       fm_base_type_get(tsys, FM_TYPE_INT32), "", "text",
       fm_array_type_get(tsys, fm_base_type_get(tsys, FM_TYPE_CHAR), 16), "");
   ASSERT_NE(comp_A, nullptr);

@@ -20,8 +20,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_DEBUG_H__
-#define __FM_DEBUG_H__
+#pragma once
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wnullability-completeness"
@@ -31,5 +30,3 @@
 #pragma clang diagnostic pop
 
 #define BREAKPT (raise(SIGTRAP));
-
-#endif // __FM_DEBUG_H__

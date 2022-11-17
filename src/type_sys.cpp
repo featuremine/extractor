@@ -23,10 +23,8 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/type_sys.h"
 #include "extractor/module.h"
-}
 
 #include "fmc++/mpl.hpp"
 #include "type_error.hpp"
@@ -378,7 +376,7 @@ bool fm_type_is_decimal(fm_type_decl_cp td) {
     case FM_TYPE_FLOAT64:
       return false;
       break;
-    case FM_TYPE_DECIMAL64:
+    case FM_TYPE_RPRICE:
       return true;
       break;
     default:
@@ -410,7 +408,7 @@ bool fm_type_is_decimal128(fm_type_decl_cp td) {
     case FM_TYPE_FLOAT64:
       return false;
       break;
-    case FM_TYPE_DECIMAL64:
+    case FM_TYPE_RPRICE:
       return false;
       break;
     case FM_TYPE_DECIMAL128:
@@ -651,8 +649,8 @@ int fm_arg_stack_build(fm_type_decl_cp td, fm_arg_stack_t *s, va_list *args) {
             case FM_TYPE_RATIONAL64:
               return fm_stack_push_arg<RATIONAL64, RATIONAL64>(s, args);
               break;
-            case FM_TYPE_DECIMAL64:
-              return fm_stack_push_arg<DECIMAL64, DECIMAL64>(s, args);
+            case FM_TYPE_RPRICE:
+              return fm_stack_push_arg<RPRICE, RPRICE>(s, args);
               break;
             case FM_TYPE_DECIMAL128:
               return fm_stack_push_arg<DECIMAL128, DECIMAL128>(s, args);

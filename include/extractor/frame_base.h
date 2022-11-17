@@ -21,12 +21,15 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_FRAME_BASE_H__
-#define __FM_FRAME_BASE_H__
+#pragma once
 
 #include "call_ctx_base.h"
 #include "extractor/type_decl.h"
 #include "fmc/platform.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct fm_frame fm_frame_t;
 
@@ -52,4 +55,6 @@ typedef void *fm_frame_clbck_cl;
 typedef void (*fm_frame_clbck_p)(const fm_frame_t *, fm_frame_clbck_cl,
                                  fm_call_ctx_t *);
 
-#endif // __FM_FRAME_BASE_H__
+#ifdef __cplusplus
+}
+#endif

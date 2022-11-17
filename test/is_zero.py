@@ -65,11 +65,11 @@ if __name__ == "__main__":
     not_zero_ts_data = graph.features.is_zero(not_zero_ts)
     not_zero_ts_data_ref = graph.get_ref(not_zero_ts_data)
 
-    zero_dec = op.constant(("zerodec", extr.Decimal64, 0.0))
+    zero_dec = op.constant(("zerodec", extr.Rprice, 0.0))
     zero_dec_data = graph.features.is_zero(zero_dec)
     zero_dec_data_ref = graph.get_ref(zero_dec_data)
 
-    not_zero_dec = op.constant(("notzerodec", extr.Decimal64, 1.0))
+    not_zero_dec = op.constant(("notzerodec", extr.Rprice, 1.0))
     not_zero_dec_data = graph.features.is_zero(not_zero_dec)
     not_zero_dec_data_ref = graph.get_ref(not_zero_dec_data)
 

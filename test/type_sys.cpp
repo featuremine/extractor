@@ -21,9 +21,7 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/type_sys.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 
@@ -144,19 +142,19 @@ TEST(type_sys, create) {
       fm_base_type_get(ts, FM_TYPE_UINT64), "bidqty",
       fm_base_type_get(ts, FM_TYPE_INT32), "askqty",
       fm_base_type_get(ts, FM_TYPE_INT32), "bidprice",
-      fm_base_type_get(ts, FM_TYPE_DECIMAL64), "askprice",
-      fm_base_type_get(ts, FM_TYPE_DECIMAL64), 1);
+      fm_base_type_get(ts, FM_TYPE_RPRICE), "askprice",
+      fm_base_type_get(ts, FM_TYPE_RPRICE), 1);
 
   auto *type2 = fm_frame_type_get(
       ts, 6, 1, "receive", fm_base_type_get(ts, FM_TYPE_TIME64), "sequence",
       fm_base_type_get(ts, FM_TYPE_UINT64), "bidprice",
-      fm_base_type_get(ts, FM_TYPE_DECIMAL64), "askprice",
-      fm_base_type_get(ts, FM_TYPE_DECIMAL64), "bidqty",
+      fm_base_type_get(ts, FM_TYPE_RPRICE), "askprice",
+      fm_base_type_get(ts, FM_TYPE_RPRICE), "bidqty",
       fm_base_type_get(ts, FM_TYPE_INT32), "askqty",
       fm_base_type_get(ts, FM_TYPE_INT32), 1);
 
   auto *str = fm_type_to_str(type1);
-  auto *teststr = "frame(askprice:DECIMAL64,askqty:INT32,bidprice:DECIMAL64,"
+  auto *teststr = "frame(askprice:RPRICE,askqty:INT32,bidprice:RPRICE,"
                   "bidqty:INT32,receive:TIME64,sequence:UINT64)";
   EXPECT_STREQ(str, teststr);
   free(str);
@@ -170,8 +168,8 @@ TEST(type_sys, create) {
       ts, 8, 1, "receive", fm_base_type_get(ts, FM_TYPE_TIME64), "market",
       chararray, "ticker", chararray, "type",
       fm_base_type_get(ts, FM_TYPE_CHAR), "bidprice",
-      fm_base_type_get(ts, FM_TYPE_DECIMAL64), "askprice",
-      fm_base_type_get(ts, FM_TYPE_DECIMAL64), "bidqty",
+      fm_base_type_get(ts, FM_TYPE_RPRICE), "askprice",
+      fm_base_type_get(ts, FM_TYPE_RPRICE), "bidqty",
       fm_base_type_get(ts, FM_TYPE_INT32), "askqty",
       fm_base_type_get(ts, FM_TYPE_INT32), 0);
 

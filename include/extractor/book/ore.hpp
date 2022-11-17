@@ -66,8 +66,8 @@ struct result {
   result_enum value;
 };
 struct order_info {
-  fmc::decimal128 price = fmc::decimal128(0);
-  fmc::decimal128 qty = fmc::decimal128(0);
+  fmc::decimal128 price;
+  fmc::decimal128 qty;
   bool is_bid = 0;
 };
 using orders_t = unordered_map<uint64_t, order_info>;
@@ -111,6 +111,7 @@ struct parser {
   result parse_ctl(cmp_ctx_t *ctx, uint32_t &left);
   result parse_set(cmp_ctx_t *ctx, uint32_t &left);
   result parse_ann(cmp_ctx_t *ctx, uint32_t &left);
+  result parse_hbt(cmp_ctx_t *ctx, uint32_t &left);
 
   template <class Msg>
   void process_reduce(orders_t &ords, orders_t::iterator it, Msg &msg);
@@ -516,6 +517,22 @@ inline result parser::parse_ann(cmp_ctx_t *ctx, uint32_t &left) {
   return result::ANNOUNCE;
 }
 
+inline result parser::parse_hbt(cmp_ctx_t *ctx, uint32_t &left) {
+  int64_t nanoseconds = 0;
+  int64_t vendor = 0;
+  if (!cmp_read_many(ctx, &left, &nanoseconds, &vendor)) {
+    return result::ERR;
+  }
+
+  time = seconds + fmc_time64_from_nanos(nanoseconds);
+
+  book::updates::heartbeat msg;
+  msg.vendor = fmc_time64_from_nanos(vendor);
+  this->msg = msg;
+
+  return result::SUCCESS;
+}
+
 inline result parser::parse(cmp_ctx_t *ctx) {
   result res;
   uint8_t type = 0;
@@ -578,6 +595,9 @@ inline result parser::parse(cmp_ctx_t *ctx) {
     break;
   case 15:
     res = parse_ann(ctx, left);
+    break;
+  case 16:
+    res = parse_hbt(ctx, left);
     break;
   default:
     res = skip_msg(ctx, left);

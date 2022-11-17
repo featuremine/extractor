@@ -13,31 +13,35 @@ execute_process(COMMAND ${PYTHON3_BIN} -c
 add_library(
     py_extractor_obj
     STATIC
-    "book/py_book.cpp"
-    "py_extractor.cpp"
+    "src/book/book.cpp"
+    "src/extractor.cpp"
+    "src/decimal.c"
 )
 target_link_libraries(
     py_extractor_obj
     PUBLIC
     fmc++
     ytp
-    PkgConfig::PYTHON
     extractor
+    py_yamal_dep
 )
 target_include_directories(
     py_extractor_obj
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_PYTHON_INC_DIR}"
+    "${EXTRACTOR_PYTHON_SRC_DIR}"
     "${EXTRACTOR_SRC_DIR}"
     "${CMAKE_CURRENT_SOURCE_DIR}"
     "${NUMPY_INCLUDE_DIR}"
-    "${yamal-python-incdir}"
+    "${PYTHON_INCLUDE_DIRS}"
 )
 target_compile_definitions(
     py_extractor_obj
     PRIVATE
     PY_EXTR_VER="${PROJECT_VERSION}"
     NO_DLL_DECORATOR
+    UNIVERSAL
 )
 
 add_library(
@@ -49,13 +53,15 @@ target_link_libraries(
     INTERFACE
     fmc++
     ytp
-    PkgConfig::PYTHON
     extractor
 )
 target_include_directories(
     py_extractor_dep
     INTERFACE
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_PYTHON_INC_DIR}"
+    "${EXTRACTOR_PYTHON_SRC_DIR}"
+    "${PYTHON_INCLUDE_DIRS}"
 )
 
 add_library(
@@ -68,6 +74,7 @@ target_link_libraries(
     PRIVATE
     py_extractor_dep
 )
+
 set_target_properties(
     py_extractor
     PROPERTIES
@@ -82,7 +89,7 @@ install(
 add_library(
     extractor_module
     SHARED
-    "py_extractor_main.cpp"
+    "src/extractor_main.cpp"
 )
 target_link_libraries(
     extractor_module
@@ -91,7 +98,6 @@ target_link_libraries(
     ytp
     extractor
     py_extractor
-    PkgConfig::PYTHON
 )
 set_target_properties(
     extractor_module
@@ -105,5 +111,21 @@ target_include_directories(
     extractor_module
     PRIVATE
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_PYTHON_INC_DIR}"
+    "${EXTRACTOR_PYTHON_SRC_DIR}"
     "${EXTRACTOR_SRC_DIR}"
+    "${PYTHON_INCLUDE_DIRS}"
 )
+file(
+    COPY ${PROJECT_SOURCE_DIR}/python/include
+    DESTINATION "${CMAKE_BINARY_DIR}/python_dist/extractor"
+    FILES_MATCHING
+        PATTERN "*.h"
+)
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    target_link_options(extractor_module PRIVATE -Wl,-rpath,@loader_path)
+    target_link_options(extractor_module PRIVATE -undefined dynamic_lookup)
+else()
+    set_property(TARGET extractor_module PROPERTY BUILD_RPATH_USE_ORIGIN TRUE)
+endif()

@@ -22,14 +22,12 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "constant.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
-}
 
 #include "op_util.hpp"
 #include <cassert>
@@ -107,27 +105,27 @@ template <> struct the_constant_field_exec_2_0<char *> : op_field_exec {
   string val_;
 };
 
-template <> struct the_constant_field_exec_2_0<DECIMAL64> : op_field_exec {
+template <> struct the_constant_field_exec_2_0<RPRICE> : op_field_exec {
   the_constant_field_exec_2_0(fm_field_t field, fm_type_decl_cp arg_type,
                               fm_arg_stack_t &plist)
       : field_(field) {
     if (fm_type_is_decimal(arg_type)) {
-      val_ = STACK_POP(plist, DECIMAL64);
+      val_ = STACK_POP(plist, RPRICE);
     } else {
       double val;
       fmc_runtime_error_unless(fm_arg_try_float64(arg_type, &plist, &val))
           << "could not read a float value";
-      val_ = fm_decimal64_from_double(val);
+      fmc_rprice_from_double(&val_, val);
     }
   }
 
   void exec(fm_frame_t *result, size_t args,
             const fm_frame_t *const argv[]) override {
-    *(DECIMAL64 *)fm_frame_get_ptr1(result, field_, 0) = val_;
+    *(RPRICE *)fm_frame_get_ptr1(result, field_, 0) = val_;
   }
 
   fm_field_t field_;
-  DECIMAL64 val_;
+  RPRICE val_;
 };
 
 struct constant_comp_cl {
@@ -288,9 +286,9 @@ fm_ctx_def_t *fm_comp_constant_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
           calls.push_back(
               new the_constant_field_exec_2_0<double>(i, arg_type, plist));
           break;
-        case FM_TYPE_DECIMAL64:
+        case FM_TYPE_RPRICE:
           calls.push_back(
-              new the_constant_field_exec_2_0<DECIMAL64>(i, arg_type, plist));
+              new the_constant_field_exec_2_0<RPRICE>(i, arg_type, plist));
           break;
         case FM_TYPE_TIME64:
           calls.push_back(new the_constant_field_exec_2_0<TIME64>(i, plist));

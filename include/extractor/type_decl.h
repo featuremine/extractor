@@ -23,8 +23,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_TYPE_DECL_H__
-#define __FM_TYPE_DECL_H__
+#pragma once
 
 #include "fmc/platform.h"
 #include <stddef.h>
@@ -32,10 +31,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "extractor/decimal64.h"
-#include "extractor/rational64.h"
 #include "fmc/decimal128.h"
+#include "fmc/rational64.h"
+#include "fmc/rprice.h"
 #include "fmc/time.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief type declaration object
@@ -61,8 +64,8 @@ typedef uint32_t UINT32;
 typedef uint64_t UINT64;
 typedef float FLOAT32;
 typedef double FLOAT64;
-typedef fm_rational64_t RATIONAL64;
-typedef fm_decimal64_t DECIMAL64;
+typedef fmc_rational64_t RATIONAL64;
+typedef fmc_rprice_t RPRICE;
 typedef fmc_decimal128_t DECIMAL128;
 typedef fmc_time64_t TIME64;
 typedef char CHAR;
@@ -85,7 +88,7 @@ typedef enum {
   FM_TYPE_FLOAT32,
   FM_TYPE_FLOAT64,
   FM_TYPE_RATIONAL64,
-  FM_TYPE_DECIMAL64,
+  FM_TYPE_RPRICE,
   FM_TYPE_DECIMAL128,
   FM_TYPE_TIME64,
   FM_TYPE_CHAR,
@@ -107,4 +110,6 @@ FMMODFUNC size_t fm_base_type_sizeof(FM_BASE_TYPE t);
 
 FMMODFUNC const char *fm_base_type_name(FM_BASE_TYPE t);
 
-#endif /* __FM_TYPE_DECL_H__ */
+#ifdef __cplusplus
+}
+#endif

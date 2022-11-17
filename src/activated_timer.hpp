@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file split_by.cpp
+ * @file activated_timer.cpp
  * @author Andres Rangel
  * @date Feb 4 2019
  * @brief File contains C++ definitions of the comp object
@@ -22,13 +22,11 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
-}
 
 #include "fmc++/time.hpp"
 

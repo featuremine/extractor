@@ -17,6 +17,14 @@
 #include "extractor/module.h"
 #include "frame_serial.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 char *fm_module_uniq_name_gen(fm_comp_sys_t *sys);
 bool fm_module_name_add(fm_comp_sys_t *sys, const char *name, fm_module_t *m);
 fm_module_t *fm_module_name_find(fm_comp_sys_t *sys, const char *name);
+
+#ifdef __cplusplus
+}
+#endif

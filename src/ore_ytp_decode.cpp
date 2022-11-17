@@ -22,14 +22,12 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "ore_ytp_decode.h"
 #include "extractor/arg_stack.h"  // fm_arg_stack_t
 #include "extractor/comp_def.h"   // fm_ctx_def_cl
 #include "extractor/comp_sys.h"   // fm_type_sys_get
 #include "extractor/stream_ctx.h" // fm_stream_ctx_queue
 #include "fmc/error.h"            // fmc_error_t
-}
 
 #include "extractor/book/ore.hpp"     // parser
 #include "extractor/book/updates.hpp" // fm::book::updates::announce
@@ -150,7 +148,8 @@ bool fm_comp_ore_ytp_decode_stream_exec(fm_frame_t *result, size_t args,
                                     // .orders;
                                 });
     } else if (!res.is_skip()) {
-      fm_exec_ctx_error_set(ctx->exec, "error reading ytp channel");
+      fm_exec_ctx_error_set(ctx->exec, "error reading ytp channel: %s",
+                            parser.error.c_str());
       return false;
     }
   }

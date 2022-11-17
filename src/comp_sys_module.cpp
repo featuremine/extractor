@@ -12,9 +12,7 @@
 
  *****************************************************************************/
 
-extern "C" {
 #include "comp_sys_module.h"
-}
 
 #include "comp_sys.hpp"
 #include "fmc++/mpl.hpp"

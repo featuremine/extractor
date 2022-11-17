@@ -22,7 +22,6 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "mp_play.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
@@ -30,7 +29,6 @@ extern "C" {
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
 #include <cmp/cmp.h>
-}
 
 #include "errno.h"
 #include "fmc++/counters.hpp"
@@ -145,7 +143,7 @@ static void add_column_parser(fm_type_sys_t *ts, fm_frame_t *frame,
     case FM_TYPE_FLOAT64:
       type = 10;
       break;
-    case FM_TYPE_DECIMAL64:
+    case FM_TYPE_RPRICE:
       type = old ? 111 : 11;
       break;
     case FM_TYPE_TIME64:
@@ -259,14 +257,15 @@ int mp_parse_one(mp_play_exec_cl *cl, fm_frame_t *frame, int row) {
     case 11:
       success = msgpack_parser(
           cl->cmp,
-          *(DECIMAL64 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row));
+          *(RPRICE *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row));
       p_off += 2;
       break;
     case 111: {
-      fm_decimal64_t value;
+      fmc_rprice_t value;
       success = msgpack_parser(cl->cmp, value);
-      *(DECIMAL64 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row) =
-          fm_decimal64_from_old(value);
+      fmc_rprice_from_old(
+          (RPRICE *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row),
+          &value);
       p_off += 2;
     } break;
     case 12:

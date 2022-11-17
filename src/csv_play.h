@@ -22,8 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_CSV_PLAY_H__
-#define __FM_CSV_PLAY_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
@@ -44,5 +43,3 @@ const fm_comp_def_t fm_comp_csv_play = {"csv_play", &fm_comp_csv_play_gen,
 #ifdef __cplusplus
 }
 #endif
-
-#endif // __FM_CSV_PLAY_H__

@@ -21,10 +21,8 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "arg_serial.h"
 #include "extractor/arg_stack.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 #include <string_view>
@@ -62,7 +60,7 @@ TEST(arg_serial, simple) {
   ASSERT_NE(s, nullptr);
 
   auto *time_t = fm_base_type_get(tsys, FM_TYPE_TIME64);
-  auto *decimal_t = fm_base_type_get(tsys, FM_TYPE_DECIMAL64);
+  auto *decimal_t = fm_base_type_get(tsys, FM_TYPE_RPRICE);
   auto *i32_t = fm_base_type_get(tsys, FM_TYPE_INT32);
   auto *str1 = "../test/sip_quotes_20171018.base.mp";
   auto *str2 = "receive";

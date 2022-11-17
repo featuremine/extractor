@@ -23,8 +23,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_TYPE_SYS_H__
-#define __FM_TYPE_SYS_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/type_decl.h"
@@ -34,6 +33,10 @@
 
 #include "extractor/arg_stack.h"
 #include "extractor/type_decl.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief type system object
@@ -472,4 +475,6 @@ FMMODFUNC const char *fm_type_io_parse(fm_type_io_t *, const char *,
  */
 FMMODFUNC bool fm_type_io_fwrite(fm_type_io_t *, FILE *, const void *);
 
-#endif /* __FM_TYPE_SYS_H__ */
+#ifdef __cplusplus
+}
+#endif

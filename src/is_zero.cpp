@@ -21,19 +21,17 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "is_zero.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
-}
 
-#include "extractor/decimal64.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
+#include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
 #include "op_util.hpp"
 
@@ -74,13 +72,13 @@ template <> struct the_is_zero_field_exec_2_0<fmc_time64_t> : op_field_exec {
   fm_field_t field_;
 };
 
-template <> struct the_is_zero_field_exec_2_0<fm_decimal64_t> : op_field_exec {
+template <> struct the_is_zero_field_exec_2_0<fmc_rprice_t> : op_field_exec {
   the_is_zero_field_exec_2_0(fm_field_t field) : field_(field) {}
 
   void exec(fm_frame_t *result, size_t args,
             const fm_frame_t *const argv[]) override {
-    const fm_decimal64_t &decimal =
-        *(const fm_decimal64_t *)fm_frame_get_cptr1(argv[0], field_, 0);
+    const fmc_rprice_t &decimal =
+        *(const fmc_rprice_t *)fm_frame_get_cptr1(argv[0], field_, 0);
     bool res = decimal.value == 0LL;
 
     *(bool *)fm_frame_get_ptr1(result, field_, 0) = res;
@@ -182,7 +180,7 @@ fm_ctx_def_t *fm_comp_is_zero_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   using supported_types =
       fmc::type_list<INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64,
-                     FLOAT32, FLOAT64, TIME64, DECIMAL64, DECIMAL128>;
+                     FLOAT32, FLOAT64, TIME64, RPRICE, DECIMAL128>;
 
   auto inp = argv[0];
 

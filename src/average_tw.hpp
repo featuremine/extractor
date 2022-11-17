@@ -23,6 +23,7 @@
  */
 
 #include "sample.hpp"
+#include "upcast_util.hpp"
 
 #include <limits>
 #include <vector>
@@ -140,15 +141,9 @@ template <template <class> class Comp> struct fm_comp_tw : fm_comp_sample_2_0 {
   fm_type_decl_cp ret_type = nullptr;
 };
 
-template <class T> struct storage { using type = T; };
-
-template <> struct storage<fmc_decimal128_t> {
-  using type = typename fmc::decimal128;
-};
-
 template <class T> struct average_tw_exec_cl : public exec_cl {
   using result = T;
-  using S = typename storage<T>::type;
+  using S = typename upcast<T>::type;
   average_tw_exec_cl(fm_field_t field)
       : field_(field), last_val_(0), num_(0), denom_({0}) {}
   void exec(fmc_time64_t t_d) override {
@@ -187,7 +182,7 @@ template <class T> struct average_tw_exec_cl : public exec_cl {
 
 template <class T> struct elapsed_exec_cl : public exec_cl {
   using result = fmc_time64_t;
-  using S = typename storage<T>::type;
+  using S = typename upcast<T>::type;
   elapsed_exec_cl(fm_field_t field)
       : field_(field), last_val_(0), denom_({0}) {}
   void exec(fmc_time64_t t_d) override {
@@ -218,7 +213,7 @@ template <class T> struct elapsed_exec_cl : public exec_cl {
 
 template <class T> struct sum_tw_exec_cl : public exec_cl {
   using result = T;
-  using S = typename storage<T>::type;
+  using S = typename upcast<T>::type;
   sum_tw_exec_cl(fm_field_t field) : field_(field), last_val_(0), num_(0) {}
   void exec(fmc_time64_t t_d) override {
     if (t_d == fmc_time64_end()) {
@@ -235,7 +230,7 @@ template <class T> struct sum_tw_exec_cl : public exec_cl {
     }
 
     if (!isnan(last_val_) && isfinite(num_)) {
-      num_ += last_val_ * fmc_time64_to_fseconds(t_d);
+      num_ += last_val_ * S(fmc_time64_to_fseconds(t_d));
     }
   }
   void set(fm_frame_t *result) override {

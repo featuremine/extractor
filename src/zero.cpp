@@ -22,10 +22,8 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "zero.h"
 #include "extractor/comp_sys.h"
-}
 
 #include <vector>
 

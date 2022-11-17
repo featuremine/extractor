@@ -142,7 +142,7 @@ def run(test_case, post, m):
         (("receive", extr.Time64, ""),
          ("ticker", extr.Array(extr.Char, 16), ""),
          ("market", extr.Array(extr.Char, 32), ""),
-         ("price", extr.Decimal64, ""),
+         ("price", extr.Rprice, ""),
          ("qty", extr.Int32, ""),
          ("side", extr.Int32, "")))
 
