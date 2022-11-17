@@ -24,9 +24,7 @@
 
 #pragma once
 
-extern "C" {
 #include "fmc/time.h"
-}
 
 #include "field_util.hpp"
 #include "sample.hpp"

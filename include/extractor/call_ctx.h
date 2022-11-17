@@ -22,14 +22,17 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_CALL_CTX_H__
-#define __FM_CALL_CTX_H__
+#pragma once
 
 #include "call_ctx_base.h"
 #include "extractor/exec_ctx.h"
 #include "extractor/frame.h"
 #include "extractor/handle.h"
 #include "fmc/platform.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief type definition of the context provided by computation generator
@@ -78,4 +81,6 @@ typedef struct fm_comp_clbck {
 
 typedef fm_comp_clbck_t *fm_comp_clbck_it;
 
-#endif // __FM_CALL_CTX_H__
+#ifdef __cplusplus
+}
+#endif

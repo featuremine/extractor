@@ -21,11 +21,9 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "call_obj.h"
 #include "extractor/call_ctx.h"
 #include "extractor/handle.h"
-}
 
 #include <stddef.h>
 #include <stdlib.h>

@@ -23,10 +23,8 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/arg_stack.h"
 #include "fmc/extension.h"
-}
 
 fm_arg_stack_t *fm_arg_stack_alloc(size_t tsize) {
   if (tsize <= sizeof(fm_arg_stack_header_t))

@@ -22,11 +22,9 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "book/book.h"
 #include "fmc/decimal128.h"
 #include "fmc/time.h"
-}
 
 #include "fmc++/decimal128.hpp"
 #include "fmc++/time.hpp"

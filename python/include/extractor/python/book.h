@@ -24,6 +24,10 @@
 #include "book/book.h"
 #include <Python.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct BookStruct Book;
 
 FMMODFUNC bool PyBook_Check(PyObject *);
@@ -31,3 +35,7 @@ FMMODFUNC bool PyBook_Check(PyObject *);
 FMMODFUNC fm_book_shared_t *PyBook_SharedBook(PyObject *obj);
 
 FMMODFUNC bool PyBook_AddTypes(PyObject *);
+
+#ifdef __cplusplus
+}
+#endif

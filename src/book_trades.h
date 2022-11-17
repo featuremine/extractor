@@ -23,11 +23,14 @@
  * all the trade book updates, such as trades or executions.
  */
 
-#ifndef __FM_book_trades_H__
-#define __FM_book_trades_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 fm_ctx_def_t *fm_comp_book_trades_gen(fm_comp_sys_t *sys, fm_comp_def_cl,
                                       unsigned, fm_type_decl_cp[],
@@ -39,4 +42,6 @@ const fm_comp_def_t fm_comp_book_trades = {"book_trades",
                                            &fm_comp_book_trades_gen,
                                            &fm_comp_book_trades_destroy, NULL};
 
-#endif // __FM_book_trades_H__
+#ifdef __cplusplus
+}
+#endif

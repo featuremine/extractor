@@ -21,7 +21,6 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "stream_ctx.h"
 #include "call_obj.h"
 #include "call_stack.h"
@@ -29,7 +28,6 @@ extern "C" {
 #include "comp_graph.h"
 #include "extractor/frame_base.h"
 #include "fmc/time.h"
-}
 
 #include "exec_ctx.hpp"
 #include <chrono>

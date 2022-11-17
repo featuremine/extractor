@@ -1,5 +1,4 @@
 
-extern "C" {
 #include "extractor/comp_sys_capture.h"
 #include "comp.h"
 #include "comp_graph.h"
@@ -13,7 +12,6 @@ extern "C" {
 #include "frame_serial.h"
 #include "stream_ctx.h"
 #include <cmp/cmp.h>
-}
 
 #include "comp_sys.hpp"
 #include "mp_util.hpp"

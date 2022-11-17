@@ -22,8 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_CSV_RECORD_H__
-#define __FM_CSV_RECORD_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
@@ -45,5 +44,3 @@ const fm_comp_def_t fm_comp_csv_record = {"csv_record", &fm_comp_csv_record_gen,
 #ifdef __cplusplus
 }
 #endif
-
-#endif // __FM_CSV_RECORD_H__

@@ -21,9 +21,7 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/type_sys.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 

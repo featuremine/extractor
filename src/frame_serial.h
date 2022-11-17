@@ -3,13 +3,13 @@
 #include "extractor/frame.h"
 #include "extractor/serial.h"
 
-typedef struct fm_frame_writer fm_frame_writer_t;
-
-typedef struct fm_frame_reader fm_frame_reader_t;
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef struct fm_frame_writer fm_frame_writer_t;
+
+typedef struct fm_frame_reader fm_frame_reader_t;
 
 FMMODFUNC fm_frame_writer_t *
 fm_frame_writer_new(fm_type_decl_cp type, fm_writer writer, void *closure);

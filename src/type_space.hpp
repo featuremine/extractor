@@ -34,10 +34,8 @@
 #include <variant>
 #include <vector>
 
-extern "C" {
 #include "extractor/type_decl.h"
 #include "fmc/extension.h"
-}
 
 struct fm_type_decl;
 

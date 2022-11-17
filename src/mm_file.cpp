@@ -22,9 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "mm_file.h"
-}
 
 #include "fmc/platform.h"
 #include <fcntl.h>

@@ -26,6 +26,10 @@
 
 #include "ytp/api.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 struct ytp_msg_decoded {
   uint64_t time;
   fm_frame_t *frame;
@@ -50,3 +54,7 @@ struct ytp_peer_wrapper {
   shared_sequence *sequence;
   ytp_peer_t peer;
 };
+
+#ifdef __cplusplus
+}
+#endif

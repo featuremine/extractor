@@ -18,5 +18,13 @@
 #include "extractor/comp_def.h"
 #include "extractor/stream_ctx.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct ExtractorStreamContext ExtractorStreamContext;
 FMMODFUNC fm_stream_ctx_t *get_stream_ctx(ExtractorStreamContext *self);
+
+#ifdef __cplusplus
+}
+#endif

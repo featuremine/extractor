@@ -22,8 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_COMP_GRAPH_H__
-#define __FM_COMP_GRAPH_H__
+#pragma once
 
 #include "fmc/platform.h"
 
@@ -220,5 +219,3 @@ FMMODFUNC unsigned fm_comp_graph_term(fm_comp_graph_t *g,
 #ifdef __cplusplus
 }
 #endif
-
-#endif // __FM_COMP_GRAPH_H__

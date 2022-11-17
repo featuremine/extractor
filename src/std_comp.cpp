@@ -22,7 +22,6 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/std_comp.h"
 #include "accumulate.h"
 #include "add.h"
@@ -93,7 +92,6 @@ extern "C" {
 #include "unique.h"
 #include "ytp_sequence.h"
 #include "zero.h"
-}
 
 #include "activated_timer.hpp"
 #include "ar.hpp"

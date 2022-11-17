@@ -23,7 +23,6 @@
  * the header information for each update.
  */
 
-extern "C" {
 #include "book/book.h"
 #include "book_msg.h"
 #include "extractor/arg_stack.h"
@@ -31,7 +30,6 @@ extern "C" {
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
-}
 
 #include "extractor/book/updates.hpp"
 #include "fmc++/mpl.hpp"

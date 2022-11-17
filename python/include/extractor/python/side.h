@@ -22,12 +22,15 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_PY_SIDE_H__
-#define __FM_PY_SIDE_H__
+#pragma once
 
 #include <Python.h>
 
 #include "fmc/platform.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct TradeSideStruct TradeSideS;
 
@@ -42,4 +45,6 @@ FMMODFUNC extern TradeSideS _TradeSide_ASK;
 FMMODFUNC bool TradeSide_TypeCheck(PyObject *obj);
 FMMODFUNC int TradeSide_Side(PyObject *obj);
 
-#endif // __FM_PY_SIDE_H__
+#ifdef __cplusplus
+}
+#endif

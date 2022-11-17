@@ -22,8 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_STD_COMP_H__
-#define __FM_STD_COMP_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
@@ -34,9 +33,15 @@
 #include "fmc/platform.h"
 #include "fmc/time.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /**
  * @brief loads standard computations
  */
 FMMODFUNC bool fm_comp_sys_std_comp(fm_comp_sys_t *);
 
-#endif // __FM_STD_COMP_H__
+#ifdef __cplusplus
+}
+#endif

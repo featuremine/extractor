@@ -22,11 +22,16 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_EXP_H__
-#define __FM_EXP_H__
+#pragma once
 
 #include "operator_def.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 FM_DEFINE_COMP_OP(exp);
 
-#endif // __FM_EXP_H__
+#ifdef __cplusplus
+}
+#endif
