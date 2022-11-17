@@ -160,9 +160,8 @@ PyObject *ExtractorBaseTypeDecimal128::nb_int(PyObject *self) {
   if (exc & FE_OVERFLOW)
     PyErr_SetString(PyExc_OverflowError,
                     "cannot convert decimal infinity to integer");
-  else 
-    PyErr_SetString(PyExc_ValueError,
-                    "cannot convert to integer");
+  else
+    PyErr_SetString(PyExc_ValueError, "cannot convert to integer");
   return nullptr;
 }
 
