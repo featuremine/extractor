@@ -231,9 +231,8 @@ inline bool msgpack_parser(cmp_ctx_t &cmp, fmc_decimal128_t &val) {
   if (!cmp.read(&cmp, buf, size))
     return false;
   buf[size] = '\0';
-  fmc_error_t *err;
-  fmc_decimal128_from_str(&val, buf, &err);
-  return !bool(err);
+  const char *ret = fmc_decimal128_parse(&val, buf);
+  return (ret - buf) == size;
 }
 
 template <class T> auto base_reader(fm_field_t offset) {

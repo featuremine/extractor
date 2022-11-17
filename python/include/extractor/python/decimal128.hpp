@@ -151,14 +151,7 @@ PyObject *ExtractorBaseTypeDecimal128::nb_float(PyObject *self) {
 
 PyObject *ExtractorBaseTypeDecimal128::nb_int(PyObject *self) {
   int64_t res;
-  fmc_error_t *err;
-  fmc_decimal128_to_int(&res, &((ExtractorBaseTypeDecimal128 *)self)->val,
-                        &err);
-  if (err && fetestexcept(FE_INEXACT) != FE_INEXACT) {
-    PyErr_SetString(PyExc_RuntimeError,
-                    "Error produced attempting to convert to int");
-    return nullptr;
-  }
+  fmc_decimal128_to_int(&res, &((ExtractorBaseTypeDecimal128 *)self)->val);
   return PyLong_FromLongLong(res);
 }
 
