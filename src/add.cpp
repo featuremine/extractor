@@ -36,7 +36,6 @@ extern "C" {
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/rational64.hpp"
-#include "fmc++/decimal128.hpp"
 #include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
 #include "upcast_util.hpp"
