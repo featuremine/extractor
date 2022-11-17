@@ -29,7 +29,7 @@
 #include <extractor/python/rprice.h>
 #include <fenv.h>
 
-#include <extractor/python/pydecimal.h>
+#include <extractor/python/decimal.h>
 
 template <bool B> struct integral_value { typedef long long type; };
 template <> struct integral_value<true> { typedef unsigned long long type; };
