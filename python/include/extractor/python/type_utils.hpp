@@ -29,6 +29,8 @@
 #include <extractor/python/rprice.h>
 #include <fenv.h>
 
+#include <extractor/python/decimal.h>
+
 template <bool B> struct integral_value { typedef long long type; };
 template <> struct integral_value<true> { typedef unsigned long long type; };
 
@@ -103,6 +105,16 @@ template <class T> struct py_type_convert {
           fmc_decimal128_from_uint(&val, u);
           return true;
         }
+      } else if (PyDecimal_Check(temp)) {
+        PyDecObject *typed = (PyDecObject *)temp;
+        uint16_t flag =
+            ((typed->dec.flags & MPD_NEG) == MPD_NEG) * FMC_DECIMAL128_NEG |
+            ((typed->dec.flags & MPD_INF) == MPD_INF) * FMC_DECIMAL128_INF |
+            ((typed->dec.flags & MPD_NAN) == MPD_NAN) * FMC_DECIMAL128_NAN |
+            ((typed->dec.flags & MPD_SNAN) == MPD_SNAN) * FMC_DECIMAL128_SNAN;
+        fmc_decimal128_set_triple(&val, typed->dec.data, typed->dec.len,
+                                  typed->dec.exp, flag);
+        return true;
       }
     } else if constexpr (is_same_v<T, RPRICE>) {
       PyObject *temp;

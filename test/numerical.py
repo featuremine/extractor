@@ -21,6 +21,7 @@
 import extractor as extr
 import math
 import unittest
+from decimal import Decimal
 
 class NumericalTests(unittest.TestCase):
     def test_decimal128(self):
@@ -154,6 +155,169 @@ class NumericalTests(unittest.TestCase):
 
         v1 = extr.Decimal128.from_float(2.35)
         self.assertAlmostEqual(float(v1), 2.35)
+        def convtest(repr):
+            def _convtest(repr):
+                v1 = extr.Decimal128(repr)
+                v2 = Decimal(repr)
+                v3 = extr.Decimal128(v2)
+                d1 = v1.as_decimal()
+                if math.isnan(v1):
+                    self.assertTrue(math.isnan(v2))
+                    self.assertTrue(math.isnan(v3))
+                    self.assertTrue(math.isnan(float(v1)))
+                    self.assertTrue(math.isnan(float(v2)))
+                    self.assertTrue(math.isnan(float(v3)))
+                else:
+                    self.assertEqual(v1, v3)
+                    self.assertEqual(d1, v2)
+                    self.assertAlmostEqual(float(v1), float(v2))
+                    self.assertAlmostEqual(float(d1), float(v1))
+            _convtest(repr)
+            _convtest("-" + repr)
+
+        convtest("2")
+        convtest("1")
+        convtest("0")
+        convtest("5005005005005005005") # low digits, one digit per declet
+        convtest("35035035035035035035") # low digits, two digit per declet
+        convtest("135135135135135135135") # low digits, three digit per declet
+        convtest("2.4")
+        convtest("1.24")
+        convtest("0.543")
+        convtest("5005005005005005005.005005005") # low digits, one digit per declet
+        convtest("35035035035035035035.035035035") # low digits, two digit per declet
+        convtest("135135135135135135135.135135135") # low digits, three digit per declet
+
+        convtest("5005005005005005005.0050050052") # one extra digit left over in last declet
+        convtest("5005005005005005005.00500500522") # two extra digits left over in last declet
+
+        convtest("5005005005005005005005005005005005") # 34 digits, 11 declets (33) and msd (1)
+
+        convtest("inf")
+        convtest("nan")
+
+        qnan = Decimal("nan")
+        eqnan = extr.Decimal128(qnan)
+        cqnan = eqnan.as_decimal()
+        self.assertTrue(qnan.is_qnan())
+        self.assertFalse(qnan.is_snan())
+        self.assertTrue(eqnan.is_qnan())
+        self.assertFalse(eqnan.is_snan())
+        self.assertTrue(cqnan.is_qnan())
+        self.assertFalse(cqnan.is_snan())
+
+        snan = Decimal("snan")
+        esnan = extr.Decimal128(snan)
+        csnan = esnan.as_decimal()
+        self.assertTrue(snan.is_snan())
+        self.assertFalse(snan.is_qnan())
+        self.assertTrue(esnan.is_snan())
+        self.assertFalse(esnan.is_qnan())
+        self.assertTrue(csnan.is_snan())
+        self.assertFalse(csnan.is_qnan())
+
+    def test_decimal128_identity_double_1(self):
+        decimals = []
+        integers = []
+        signs = [1.0, -1.0]
+        decim = 0.0000019073486328125
+        while decim < 1.0:
+            decimals.append(decim)
+            decim *= 2.0
+
+        integ = 1.0
+        while integ < 10779215329.0:
+            integers.append(integ)
+            integ *= 47.0
+
+        decimals.append(0.0)
+        integers.append(0.0)
+
+        for sign in signs:
+            for decimal in decimals:
+                for integer in integers:
+                    keep_zeros = 12
+                    while keep_zeros >= 0:
+                        fval = str((decimal + integer) * sign)
+                        v1 = extr.Decimal128(fval)
+                        v2 = Decimal(fval)
+                        v3 = extr.Decimal128(v2)
+                        d1 = v1.as_decimal()
+
+                        self.assertEqual(v1, v3)
+                        self.assertEqual(d1, v2)
+                        self.assertAlmostEqual(float(v1), float(v2))
+                        self.assertAlmostEqual(float(d1), float(v1))
+
+                        keep_zeros-=3
+
+    def test_decimal128_identity_double_2(self):
+        original = Decimal(1.0)
+        converted = Decimal(-1.0)
+        def convert(number):
+            nonlocal original
+            nonlocal converted
+            original = number
+            dnumber = extr.Decimal128(number)
+            converted = dnumber.as_decimal()
+        convert(Decimal("232863465.5218646228313446044921875"))
+        self.assertEqual(converted, original)
+        convert(Decimal("297581596.830785691738128662109375"))
+        self.assertEqual(converted, original)
+        convert(Decimal("364181915.17104339599609375"))
+        self.assertEqual(converted, original)
+        convert(Decimal("-445464211.388862311840057373046875"))
+        self.assertEqual(converted, original)
+        convert(Decimal("505788598.10503494739532470703125"))
+        self.assertEqual(converted, original)
+        convert(Decimal("538651182.4585511684417724609375"))
+        self.assertEqual(converted, original)
+        convert(Decimal("762722659.79106426239013671875"))
+        self.assertEqual(converted, original)
+        convert(Decimal("962612880.8451635837554931640625"))
+        self.assertEqual(converted, original)
+        convert(Decimal("976451324.891252994537353515625"))
+        self.assertEqual(converted, original)
+        convert(Decimal("-2277953182515.47265625"))
+        self.assertEqual(converted, original)
+        convert(Decimal("2696170217385.513671875"))
+        self.assertEqual(converted, original)
+        convert(Decimal("2926970179449.04052734375"))
+        self.assertEqual(converted, original)
+        convert(Decimal("3969252460837.57568359375"))
+        self.assertEqual(converted, original)
+        convert(Decimal("5888875542576.8427734375"))
+        self.assertEqual(converted, original)
+        convert(Decimal("6676174390470.93359375"))
+        self.assertEqual(converted, original)
+        convert(Decimal("6872537948155.7353515625"))
+        self.assertEqual(converted, original)
+        convert(Decimal("-7422573333287.1533203125"))
+        self.assertEqual(converted, original)
+        convert(Decimal("8030198688345.638671875"))
+        self.assertEqual(converted, original)
+        convert(Decimal("9901494043192.171875"))
+        self.assertEqual(converted, original)
+        convert(Decimal("82889918991823536.0"))
+        self.assertEqual(converted, original)
+        convert(Decimal("124536052943002528.0"))
+        self.assertEqual(converted, original)
+        convert(Decimal("144156884135999968.0"))
+        self.assertEqual(converted, original)
+        convert(Decimal("212839053581483936.0"))
+        self.assertEqual(converted, original)
+        convert(Decimal("218801490682184032.0"))
+        self.assertEqual(converted, original)
+        convert(Decimal("-536470472374601792.0"))
+        self.assertEqual(converted, original)
+        convert(Decimal("537654832563489984.0"))
+        self.assertEqual(converted, original)
+        convert(Decimal("652938785621731200.0"))
+        self.assertEqual(converted, original)
+        convert(Decimal("-659372859226975744.0"))
+        self.assertEqual(converted, original)
+        convert(Decimal("793418214483531648.0"))
+        self.assertEqual(converted, original)
 
     def test_rprice(self):
         from_int = extr.Rprice(0)

@@ -610,7 +610,7 @@ fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj) {
   }
   return nullptr;
 }
-#include <iostream>
+
 fm_type_decl_cp fm_type_from_py_obj(fm_type_sys_t *tsys, PyObject *o,
                                     fm_arg_stack_t *&s) {
   if (PyObject_TypeCheck(o, &ExtractorBaseTypeInt8Type)) {
