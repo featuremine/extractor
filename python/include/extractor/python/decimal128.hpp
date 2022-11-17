@@ -624,7 +624,6 @@ PyObject *Decimal128_new(fmc_decimal128_t obj) {
 
 PyObject *ExtractorBaseTypeDecimal128::as_decimal(PyObject *self,
                                                   PyObject *args) {
-
   static PyObject *dectype = PyDecimal_Type();
   if (!dectype) {
     return NULL;
@@ -640,9 +639,10 @@ PyObject *ExtractorBaseTypeDecimal128::as_decimal(PyObject *self,
   typed->dec.flags =
       ((flags & FMC_DECIMAL128_NEG) == FMC_DECIMAL128_NEG) * MPD_NEG |
       ((flags & FMC_DECIMAL128_INF) == FMC_DECIMAL128_INF) * MPD_INF |
-      ((flags & FMC_DECIMAL128_NAN) == FMC_DECIMAL128_NAN) * MPD_NAN;
+      (((flags & FMC_DECIMAL128_NAN) == FMC_DECIMAL128_NAN) & ((flags & FMC_DECIMAL128_SIG) == 0)) * MPD_NAN |
+      ((flags & FMC_DECIMAL128_SNAN) == FMC_DECIMAL128_SNAN) * MPD_SNAN;
 
-  typed->dec.digits =
+  typed->dec.digits = (!flags || (flags == FMC_DECIMAL128_NEG)) *
       fmc_decimal128_digits(&((ExtractorBaseTypeDecimal128 *)self)->val);
 
   // PyObject_CallObject returns a new reference, segfaults in mac when

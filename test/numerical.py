@@ -157,15 +157,9 @@ class NumericalTests(unittest.TestCase):
         self.assertAlmostEqual(float(v1), 2.35)
         def convtest(repr):
             def _convtest(repr):
-                print("======================================")
-                print(f"repr -> {repr}")
                 v1 = extr.Decimal128(repr)
-                print(f"extr -> {v1}")
                 v2 = Decimal(repr)
-                print(f"deci -> {v2}")
                 v3 = extr.Decimal128(v2)
-                print(f"conv -> {v3}")
-                print(v1, v2, v3)
                 d1 = v1.as_decimal()
                 if math.isnan(v1):
                     self.assertTrue(math.isnan(v2))
@@ -201,6 +195,26 @@ class NumericalTests(unittest.TestCase):
 
         convtest("inf")
         convtest("nan")
+
+        qnan = Decimal("nan")
+        eqnan = extr.Decimal128(qnan)
+        cqnan = eqnan.as_decimal()
+        self.assertTrue(qnan.is_qnan())
+        self.assertFalse(qnan.is_snan())
+        self.assertTrue(eqnan.is_qnan())
+        self.assertFalse(eqnan.is_snan())
+        self.assertTrue(cqnan.is_qnan())
+        self.assertFalse(cqnan.is_snan())
+
+        snan = Decimal("snan")
+        esnan = extr.Decimal128(snan)
+        csnan = esnan.as_decimal()
+        self.assertTrue(snan.is_snan())
+        self.assertFalse(snan.is_qnan())
+        self.assertTrue(esnan.is_snan())
+        self.assertFalse(esnan.is_qnan())
+        self.assertTrue(csnan.is_snan())
+        self.assertFalse(csnan.is_qnan())
 
     def test_decimal128_identity_double_1(self):
         decimals = []
