@@ -44,11 +44,6 @@ jobs:
         rm -rf numdiff-5.9.0*
       shell: bash
 
-    - name: Install mpdec library
-      working-directory: /tmp
-      run: yum install -y mpdecimal-devel
-      shell: bash
-
     - name: Build ${{ github.event.repository.name }} with fm gcc
       uses: featuremine/actions/package/build@main
       with:
@@ -69,10 +64,7 @@ jobs:
         submodules: recursive
 
     - name: Install dependencies
-      run: |
-        brew install pkg-config cmake googletest python mpdecimal
-        brew link mpdecimal
-      shell: bash
+      run: brew install pkg-config cmake googletest python
 
     - name: Install numdiff
       working-directory: /tmp
