@@ -627,7 +627,7 @@ PyObject *Decimal128_new(fmc_decimal128_t obj) {
 
 PyObject *ExtractorBaseTypeDecimal128::as_decimal(PyObject *self,
                                                   PyObject *args) {
-  static PyObject *dectype = PyDecimal_Type();
+  PyObject *dectype = PyDecimal_Type();
   if (!dectype) {
     return NULL;
   }
