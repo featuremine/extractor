@@ -48,7 +48,7 @@ jobs:
       uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.23'
+        yamal_version: '7.2.24'
         cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
         #TODO: Add test_pypi_token when extractor name is available
@@ -83,7 +83,7 @@ jobs:
       uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.23'
+        yamal_version: '7.2.24'
         cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
 
@@ -99,7 +99,7 @@ jobs:
       uses: featuremine/actions/package/test@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.23'
+        yamal_version: '7.2.24'
 
   test-pythons:
     needs: [utility, build-manylinux, build-macos]
@@ -123,5 +123,5 @@ jobs:
         uses: featuremine/actions/package/test@main
         with:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
-          yamal_version: '7.2.23'
+          yamal_version: '7.2.24'
           sudo: true

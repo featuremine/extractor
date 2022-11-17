@@ -230,7 +230,7 @@ template <class T> struct sum_tw_exec_cl : public exec_cl {
     }
 
     if (!isnan(last_val_) && isfinite(num_)) {
-      num_ += double(last_val_) * fmc_time64_to_fseconds(t_d);
+      num_ += last_val_ * S(fmc_time64_to_fseconds(t_d));
     }
   }
   void set(fm_frame_t *result) override {

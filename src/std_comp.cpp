@@ -99,6 +99,7 @@ extern "C" {
 #include "ar.hpp"
 #include "average_tw.hpp"
 #include "comp_sys.hpp"
+#include "data_bar.hpp"
 #include "delta.hpp"
 #include "extractor/comp_def.hpp"
 #include "percentile.hpp"
@@ -123,6 +124,7 @@ bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
          fm_comp_type_add(sys, &fm_comp_book_msg) &&
          fm_comp_type_add(sys, &fm_comp_book_trades) &&
          fm_comp_type_add(sys, &fm_comp_book_header) &&
+         fm_comp_type_add(sys, &fm_comp_book_vendor_time) &&
          fm_comp_type_add(sys, &fm_comp_tick_lag) &&
          fm_comp_type_add(sys, &fm_comp_time_lag) &&
          fm_comp_type_add(sys, &fm_comp_field) &&
@@ -180,7 +182,7 @@ bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
          fm_comp_window_add(sys) && fm_comp_percentile_add(sys) &&
          fm_comp_ar_add(sys) && fm_comp_type_add(sys, &fm_comp_round) &&
          fm_comp_perf_timer_add(sys, (void *)&sys->samples_) &&
-         fm_comp_activated_timer_add(sys) &&
+         fm_comp_activated_timer_add(sys) && fm_comp_data_bar_add(sys) &&
          fm::fm_cpp_comp_type_add<fm::timer>(sys, "timer") &&
          fm::fm_cpp_comp_type_add<fm::clock_timer>(sys, "clock_timer");
 }
