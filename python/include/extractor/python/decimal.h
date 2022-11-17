@@ -20,8 +20,8 @@
 
 #pragma once
 
-#include "libmpdec/mpdecimal.h"
 #include "fmc/platform.h"
+#include "libmpdec/mpdecimal.h"
 #include <Python.h>
 
 #ifdef __cplusplus
