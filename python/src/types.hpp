@@ -215,7 +215,8 @@ static PyObject *ExtractorBaseTypeTime64_from_timedelta(PyObject *self,
   int64_t days = PyLong_AsLongLong(PyObject_GetAttrString(delta, "days"));
   int64_t secs = days * 24 * 3600 +
                  PyLong_AsLongLong(PyObject_GetAttrString(delta, "seconds"));
-  int64_t mics = PyLong_AsLongLong(PyObject_GetAttrString(delta, "microseconds"));
+  int64_t mics =
+      PyLong_AsLongLong(PyObject_GetAttrString(delta, "microseconds"));
   int64_t total_nanos = secs * 1000000000 + mics * 1000;
   auto t = fmc_time64_from_nanos(total_nanos);
   return ExtractorBaseTypeTime64::py_new(t);
