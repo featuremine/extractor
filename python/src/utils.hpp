@@ -414,7 +414,15 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
       auto sec = duration_cast<seconds>(us);
       auto tmp = duration_cast<microseconds>(sec);
       auto rem = us - tmp;
-      return PyDelta_FromDSU(d.count(), sec.count(), rem.count());
+      auto args = fmc::python::object::from_new(PyTuple_New(0));
+      auto kwargs = fmc::python::object::from_new(PyDict_New());
+      auto pdays = fmc::python::py_int(d.count());
+      PyDict_SetItemString(kwargs.get_ref(), "days", pdays.get_ref());
+      auto seconds = fmc::python::py_int(sec.count());
+      PyDict_SetItemString(kwargs.get_ref(), "seconds", seconds.get_ref());
+      auto microseconds = fmc::python::py_int(rem.count());
+      PyDict_SetItemString(kwargs.get_ref(), "microseconds", microseconds.get_ref());
+      return PyObject_Call(fm::python::datetime::get_timedelta_type().get_ref(), args.get_ref(), kwargs.get_ref());
     } break;
     case FM_TYPE_BOOL:
       if (*(BOOL *)ptr)
@@ -502,7 +510,15 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       auto sec = duration_cast<seconds>(us);
       auto tmp = duration_cast<microseconds>(sec);
       auto rem = us - tmp;
-      return PyDelta_FromDSU(d.count(), sec.count(), rem.count());
+      auto args = fmc::python::object::from_new(PyTuple_New(0));
+      auto kwargs = fmc::python::object::from_new(PyDict_New());
+      auto pdays = fmc::python::py_int(d.count());
+      PyDict_SetItemString(kwargs.get_ref(), "days", pdays.get_ref());
+      auto seconds = fmc::python::py_int(sec.count());
+      PyDict_SetItemString(kwargs.get_ref(), "seconds", seconds.get_ref());
+      auto microseconds = fmc::python::py_int(rem.count());
+      PyDict_SetItemString(kwargs.get_ref(), "microseconds", microseconds.get_ref());
+      return PyObject_Call(fm::python::datetime::get_timedelta_type().get_ref(), args.get_ref(), kwargs.get_ref());
     } break;
     case FM_TYPE_BOOL:
       if (STACK_POP(plist, BOOL))

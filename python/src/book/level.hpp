@@ -29,6 +29,7 @@
 #include "extractor/python/extractor.h"
 #include "extractor/python/side.h"
 
+#include "fmc++/python/wrapper.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/side.hpp"
 #include "wrapper.hpp"
@@ -89,7 +90,15 @@ static PyObject *Order_rec(Order *self, void *) {
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
   auto rem = us - tmp;
-  return PyDelta_FromDSU(0, sec.count(), rem.count());
+  auto args = fmc::python::object::from_new(PyTuple_New(0));
+  auto kwargs = fmc::python::object::from_new(PyDict_New());
+  auto days = fmc::python::py_int(0);
+  PyDict_SetItemString(kwargs.get_ref(), "days", days.get_ref());
+  auto seconds = fmc::python::py_int(sec.count());
+  PyDict_SetItemString(kwargs.get_ref(), "seconds", seconds.get_ref());
+  auto microseconds = fmc::python::py_int(rem.count());
+  PyDict_SetItemString(kwargs.get_ref(), "microseconds", microseconds.get_ref());
+  return PyObject_Call(fm::python::datetime::get_timedelta_type().get_ref(), args.get_ref(), kwargs.get_ref());
 }
 
 static PyObject *Order_ven(Order *self, void *) {
@@ -100,7 +109,15 @@ static PyObject *Order_ven(Order *self, void *) {
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
   auto rem = us - tmp;
-  return PyDelta_FromDSU(0, sec.count(), rem.count());
+  auto args = fmc::python::object::from_new(PyTuple_New(0));
+  auto kwargs = fmc::python::object::from_new(PyDict_New());
+  auto days = fmc::python::py_int(0);
+  PyDict_SetItemString(kwargs.get_ref(), "days", days.get_ref());
+  auto seconds = fmc::python::py_int(sec.count());
+  PyDict_SetItemString(kwargs.get_ref(), "seconds", seconds.get_ref());
+  auto microseconds = fmc::python::py_int(rem.count());
+  PyDict_SetItemString(kwargs.get_ref(), "microseconds", microseconds.get_ref());
+  return PyObject_Call(fm::python::datetime::get_timedelta_type().get_ref(), args.get_ref(), kwargs.get_ref());
 }
 
 static PyObject *Order_seq(Order *self, void *) {

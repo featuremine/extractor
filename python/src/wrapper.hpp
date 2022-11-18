@@ -160,6 +160,11 @@ public:
         module("pandas")["core"]["dtypes"]["dtypes"]["DatetimeTZDtype"];
     return datetime;
   }
+  static object get_timedelta_type() {
+    static auto datetime =
+        module("datetime")["timedelta"];
+    return datetime;
+  }
 };
 
 } // namespace python
