@@ -90,7 +90,8 @@ static PyObject *Order_rec(Order *self, void *) {
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
   auto rem = us - tmp;
-  return fm::python::datetime::timedelta(0, sec.count(), rem.count()).steal_ref();
+  return fm::python::datetime::timedelta(0, sec.count(), rem.count())
+      .steal_ref();
 }
 
 static PyObject *Order_ven(Order *self, void *) {
@@ -101,7 +102,8 @@ static PyObject *Order_ven(Order *self, void *) {
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
   auto rem = us - tmp;
-  return fm::python::datetime::timedelta(0, sec.count(), rem.count()).steal_ref();
+  return fm::python::datetime::timedelta(0, sec.count(), rem.count())
+      .steal_ref();
 }
 
 static PyObject *Order_seq(Order *self, void *) {

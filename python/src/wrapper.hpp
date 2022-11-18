@@ -176,9 +176,10 @@ public:
     PyDict_SetItemString(kwargs.get_ref(), "seconds", s.get_ref());
     auto m = fmc::python::object::from_new(PyLong_FromLongLong(microseconds));
     PyDict_SetItemString(kwargs.get_ref(), "microseconds", m.get_ref());
-    return object::from_new(PyObject_Call(fm::python::datetime::get_timedelta_type().get_ref(), args.get_ref(), kwargs.get_ref()));
+    return object::from_new(
+        PyObject_Call(fm::python::datetime::get_timedelta_type().get_ref(),
+                      args.get_ref(), kwargs.get_ref()));
   }
-
 };
 
 } // namespace python
