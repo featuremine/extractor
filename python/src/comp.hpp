@@ -23,10 +23,8 @@
 
 #pragma once
 
-extern "C" {
 #include "comp.h"
 #include "extractor/comp_sys.h"
-}
 
 #include "comp_base.hpp"
 #include "types.hpp"

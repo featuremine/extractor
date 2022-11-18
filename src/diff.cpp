@@ -22,14 +22,12 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "diff.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
-}
 
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"

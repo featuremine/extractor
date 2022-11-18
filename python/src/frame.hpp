@@ -23,11 +23,9 @@
 
 #pragma once
 
-extern "C" {
 #include "comp.h"
 #include "comp_graph.h"
 #include "extractor/comp_sys.h"
-}
 
 #include "utils.hpp"
 #include "wrapper.hpp"

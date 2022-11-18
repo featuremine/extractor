@@ -23,11 +23,14 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_FILTER_UNLESS_H__
-#define __FM_FILTER_UNLESS_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 fm_ctx_def_t *fm_comp_filter_unless_gen(fm_comp_sys_t *sys, fm_comp_def_cl,
                                         unsigned, fm_type_decl_cp[],
@@ -39,4 +42,6 @@ const fm_comp_def_t fm_comp_filter_unless = {
     "filter_unless", &fm_comp_filter_unless_gen, &fm_comp_filter_unless_destroy,
     NULL};
 
-#endif // __ FM_FILTER_UNLESS_H__
+#ifdef __cplusplus
+}
+#endif

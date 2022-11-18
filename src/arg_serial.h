@@ -23,12 +23,15 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_ARG_SERIAL_H__
-#define __FM_ARG_SERIAL_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/serial.h"
 #include "extractor/type_sys.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct fm_arg_buffer fm_arg_buffer_t;
 
@@ -45,4 +48,6 @@ fm_arg_buffer_t *fm_arg_stack_from_buffer(fm_type_sys_t *ts,
                                           fm_type_decl_cp *type,
                                           fm_arg_stack_t **s);
 
-#endif /*__FM_ARG_SERIAL_H__*/
+#ifdef __cplusplus
+}
+#endif

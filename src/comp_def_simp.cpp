@@ -22,12 +22,10 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/comp_def_simp.h"
 #include "extractor/call_ctx.h"
 #include "extractor/comp_sys.h"
 #include "fmc/time.h"
-}
 
 fm_call_def *fm_comp_def_simp_stream_call(fm_comp_def_cl comp_cl,
                                           const fm_ctx_def_cl ctx_cl) {

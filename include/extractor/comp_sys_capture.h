@@ -22,12 +22,15 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_COMP_SYS_CAPTURE_H__
-#define __FM_COMP_SYS_CAPTURE_H__
+#pragma once
 
 #include "extractor/comp_sys.h"
 #include "extractor/serial.h"
 #include "fmc/platform.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief Record enabled context
@@ -45,4 +48,7 @@ FMMODFUNC fm_stream_ctx_t *fm_stream_ctx_recorded(fm_comp_sys_t *,
 FMMODFUNC fm_stream_ctx_t *fm_stream_ctx_replayed(fm_comp_sys_t *,
                                                   fm_comp_graph_t *,
                                                   fm_reader w, void *cl);
-#endif //__FM_COMP_SYS_CAPTURE_H__
+
+#ifdef __cplusplus
+}
+#endif

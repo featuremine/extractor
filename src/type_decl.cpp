@@ -23,10 +23,8 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/type_decl.h"
 #include "fmc/time.h"
-}
 
 #include <algorithm>
 #include <cerrno>
@@ -153,9 +151,7 @@ const char *decimal64_parser(const char *begin, const char *end, void *data,
 
 const char *decimal128_parser(const char *begin, const char *end, void *data,
                               const char *fmt) {
-  fmc_error_t *err;
-  fmc_decimal128_from_str((fmc_decimal128_t *)data, begin, &err);
-  return err ? begin : end;
+  return fmc_decimal128_parse((fmc_decimal128_t *)data, begin);
 }
 
 template <class T>

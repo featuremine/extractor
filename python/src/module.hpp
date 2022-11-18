@@ -23,9 +23,7 @@
 
 #pragma once
 
-extern "C" {
 #include "extractor/module.h"
-}
 
 #include "utils.hpp"
 #include <Python.h>

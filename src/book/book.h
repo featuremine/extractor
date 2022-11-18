@@ -22,13 +22,16 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_BOOK_H__
-#define __FM_BOOK_H__
+#pragma once
 
 #include "fmc/platform.h"
 
 #include "fmc/decimal128.h"
 #include "fmc/time.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct fm_book_pos fm_book_pos_t;
 typedef struct fm_book fm_book_t;
@@ -36,10 +39,6 @@ typedef struct fm_book_shared fm_book_shared_t;
 typedef struct fm_levels fm_levels_t;
 typedef struct fm_level fm_level_t;
 typedef struct fm_order fm_order_t;
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 FMMODFUNC fm_book_t *fm_book_new();
 
@@ -95,5 +94,3 @@ FMMODFUNC fm_book_t *fm_book_shared_get(fm_book_shared_t *shared_book);
 #ifdef __cplusplus
 }
 #endif
-
-#endif // __FM_BOOK_H__

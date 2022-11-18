@@ -23,8 +23,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_TYPE_DECL_H__
-#define __FM_TYPE_DECL_H__
+#pragma once
 
 #include "fmc/platform.h"
 #include <stddef.h>
@@ -36,6 +35,10 @@
 #include "fmc/rational64.h"
 #include "fmc/rprice.h"
 #include "fmc/time.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief type declaration object
@@ -107,4 +110,6 @@ FMMODFUNC size_t fm_base_type_sizeof(FM_BASE_TYPE t);
 
 FMMODFUNC const char *fm_base_type_name(FM_BASE_TYPE t);
 
-#endif /* __FM_TYPE_DECL_H__ */
+#ifdef __cplusplus
+}
+#endif

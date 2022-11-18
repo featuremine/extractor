@@ -21,13 +21,11 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "filter_if.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
-}
 
 #include "extractor/frame.hpp"
 #include "fmc++/mpl.hpp"

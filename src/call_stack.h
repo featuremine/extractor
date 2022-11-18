@@ -22,12 +22,15 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_CALL_STACK_H__
-#define __FM_CALL_STACK_H__
+#pragma once
 
 #include "extractor/handle.h"
 
 #include <stddef.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief a call object
@@ -143,4 +146,6 @@ void fm_call_obj_copy(void *ptr, fm_call_obj_t *obj);
 
 void fm_call_obj_cleanup(fm_call_obj_t *obj);
 
-#endif // __FM_CALL_STACK_H__
+#ifdef __cplusplus
+}
+#endif

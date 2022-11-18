@@ -21,9 +21,7 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "call_stack.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 #include "fmc/alignment.h"

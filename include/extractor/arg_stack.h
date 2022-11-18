@@ -23,8 +23,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_ARG_STACK_H__
-#define __FM_ARG_STACK_H__
+#pragma once
 
 #include <stdint.h>
 #include <stdlib.h>
@@ -32,6 +31,10 @@
 
 #include "fmc/alignment.h"
 #include "fmc/platform.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct {
   size_t size;
@@ -89,4 +92,6 @@ FMMODFUNC void fm_arg_stack_free(fm_arg_stack_t *ptr);
   ((stack).header.cursor = STACK_OFF((stack), what) - sizeof(what),            \
    *(what *)(stack).header.cursor)
 
-#endif /* __FM_ARG_STACK_H__ */
+#ifdef __cplusplus
+}
+#endif

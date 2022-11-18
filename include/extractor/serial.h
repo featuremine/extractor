@@ -20,13 +20,18 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_SERIAL_H__
-#define __FM_SERIAL_H__
+#pragma once
 
 #include "fmc/platform.h"
 #include <stdint.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef bool (*fm_reader)(void *data, size_t limit, void *closure);
 typedef size_t (*fm_writer)(const void *data, size_t count, void *closure);
 
-#endif // __FM_SERIAL_H__
+#ifdef __cplusplus
+}
+#endif

@@ -22,14 +22,12 @@
  * This operator is intendend to replay book updates for certain symbols
  */
 
-extern "C" {
 #include "book_play_split.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
-}
 
 #include "extractor/book/ore.hpp"
 #include "extractor/book/updates.hpp"

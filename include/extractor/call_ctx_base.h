@@ -22,14 +22,19 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_CALL_CTX_BASE_H__
-#define __FM_CALL_CTX_BASE_H__
+#pragma once
 
 #include "fmc/platform.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief defines context structure for a call
  */
 typedef struct fm_call_ctx fm_call_ctx_t;
 
-#endif // __FM_CALL_CTX_BASE_H__
+#ifdef __cplusplus
+}
+#endif

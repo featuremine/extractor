@@ -22,7 +22,6 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/comp_sys.h"
 #include "comp.h"
 #include "comp_graph.h"
@@ -30,7 +29,6 @@ extern "C" {
 #include "extractor/frame.h"
 #include "extractor/type_sys.h"
 #include "stream_ctx.h"
-}
 
 #include "comp_sys.hpp"
 #include "fmc++/strings.hpp"

@@ -24,11 +24,14 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_ORE_LIVE_SPLIT_H__
-#define __FM_ORE_LIVE_SPLIT_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 fm_ctx_def_t *fm_comp_ore_live_split_gen(fm_comp_sys_t *sys, fm_comp_def_cl,
                                          unsigned, fm_type_decl_cp[],
@@ -40,4 +43,6 @@ const fm_comp_def_t fm_comp_ore_live_split = {
     "ore_live_split", &fm_comp_ore_live_split_gen,
     &fm_comp_ore_live_split_destroy, NULL};
 
-#endif // __FM_ORE_LIVE_SPLIT_H__
+#ifdef __cplusplus
+}
+#endif

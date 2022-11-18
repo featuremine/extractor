@@ -15,6 +15,7 @@ add_library(
     STATIC
     "src/book/book.cpp"
     "src/extractor.cpp"
+    "src/decimal.c"
 )
 target_link_libraries(
     py_extractor_obj
@@ -40,6 +41,7 @@ target_compile_definitions(
     PRIVATE
     PY_EXTR_VER="${PROJECT_VERSION}"
     NO_DLL_DECORATOR
+    UNIVERSAL
 )
 
 add_library(
@@ -72,6 +74,7 @@ target_link_libraries(
     PRIVATE
     py_extractor_dep
 )
+
 set_target_properties(
     py_extractor
     PROPERTIES

@@ -22,9 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/frame_base.h"
-}
 
 #include <vector>
 

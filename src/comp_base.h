@@ -22,12 +22,15 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_COMP_BASE_H__
-#define __FM_COMP_BASE_H__
+#pragma once
 
 #include "call_obj.h"
 #include "extractor/call_ctx.h"
 #include "extractor/frame_base.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct fm_comp fm_comp_t;
 
@@ -72,4 +75,6 @@ void fm_comp_call_destroy(fm_comp_t *);
  */
 const char *fm_comp_type(const fm_comp *obj);
 
-#endif // __FM_COMP_BASE_H__
+#ifdef __cplusplus
+}
+#endif

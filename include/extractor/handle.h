@@ -22,11 +22,14 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_HANDLE_H__
-#define __FM_HANDLE_H__
+#pragma once
 
 #include "fmc/platform.h"
 #include <stddef.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief execution point object
@@ -35,4 +38,6 @@
  */
 typedef size_t fm_call_handle_t;
 
-#endif // __FM_HANDLE_H__
+#ifdef __cplusplus
+}
+#endif

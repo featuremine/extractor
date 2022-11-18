@@ -22,7 +22,6 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "mp_play.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
@@ -30,7 +29,6 @@ extern "C" {
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
 #include <cmp/cmp.h>
-}
 
 #include "errno.h"
 #include "fmc++/counters.hpp"

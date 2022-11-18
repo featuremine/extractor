@@ -21,13 +21,16 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_PY_DECIMAL128_H__
-#define __FM_PY_DECIMAL128_H__
+#pragma once
 
 #include <Python.h>
 
 #include "fmc/decimal128.h"
 #include "fmc/platform.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 FMMODFUNC bool Decimal128_Check(PyObject *obj);
 
@@ -35,4 +38,6 @@ FMMODFUNC fmc_decimal128_t Decimal128_val(PyObject *obj);
 
 FMMODFUNC PyObject *Decimal128_new(fmc_decimal128_t obj);
 
-#endif // __FM_PY_DECIMAL128_H__
+#ifdef __cplusplus
+}
+#endif

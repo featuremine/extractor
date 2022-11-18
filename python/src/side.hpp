@@ -3,9 +3,7 @@
 #include "fmc++/side.hpp"
 #include <sstream>
 
-extern "C" {
 #include "extractor/python/side.h"
-}
 
 struct TradeSideStruct {
   PyObject_VAR_HEAD fmc::trade_side side_;

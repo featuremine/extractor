@@ -22,13 +22,11 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/module.h"
 #include "arg_serial.h"
 #include "comp_graph.h"
 #include "comp_sys_module.h"
 #include "extractor/arg_stack.h"
-}
 
 #include "fmc++/mpl.hpp"
 #include "serial_util.hpp"

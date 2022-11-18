@@ -22,14 +22,12 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
 #include "roundop.h"
-}
 
 #include "extractor/comp_def.hpp"
 #include "extractor/frame.hpp"
@@ -123,9 +121,8 @@ struct the_round_field_exec_2_0<int64_t, fmc_decimal128_t> : round_field_exec {
     // Do we need to explicitly round?
     fmc_decimal128_t ret;
     fmc_decimal128_round(&ret, &val0, 0);
-    fmc_error_t *err;
-    fmc_decimal128_to_int((int64_t *)fm_frame_get_ptr1(result, field_, 0), &ret,
-                          &err);
+    fmc_decimal128_to_int((int64_t *)fm_frame_get_ptr1(result, field_, 0),
+                          &ret);
   }
   fm_field_t field_;
 };

@@ -21,14 +21,12 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "call_obj.h"
 #include "comp.h"
 #include "comp_base.h"
 #include "comp_graph.h"
 #include "extractor/frame_base.h"
 #include "stream_ctx.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 #include <string>

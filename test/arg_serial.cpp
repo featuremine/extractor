@@ -21,10 +21,8 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "arg_serial.h"
 #include "extractor/arg_stack.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 #include <string_view>

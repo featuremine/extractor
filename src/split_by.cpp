@@ -22,7 +22,6 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "split_by.h"
 #include "comp.h"
 #include "comp_graph.h"
@@ -32,7 +31,7 @@ extern "C" {
 #include "extractor/module.h"
 #include "fmc/time.h"
 #include "stream_ctx.h"
-}
+
 #include "comp_sys.hpp"
 
 #include "fmc++/time.hpp"

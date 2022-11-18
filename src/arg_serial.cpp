@@ -23,12 +23,10 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "arg_serial.h"
 #include "extractor/arg_stack.h"
 #include "extractor/type_decl.h"
 #include "extractor/type_sys.h"
-}
 
 #include "extractor/comp_def.hpp"
 #include "fmc++/decimal128.hpp"

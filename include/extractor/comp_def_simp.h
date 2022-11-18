@@ -22,14 +22,17 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_COMP_DEF_SIMP_H__
-#define __FM_COMP_DEF_SIMP_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/call_ctx.h"
 #include "extractor/comp_def.h"
 #include "fmc/platform.h"
 #include "fmc/time.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct fm_comp_def_simp {
   bool inplace;
@@ -57,4 +60,6 @@ fm_comp_def_simp_generate(fm_comp_sys_t *sys, fm_comp_def_cl, unsigned,
 
 FMMODFUNC void fm_comp_def_simp_destroy(fm_comp_def_cl cl, fm_ctx_def_t *def);
 
-#endif // __FM_COMP_DEF_SIMP_H__
+#ifdef __cplusplus
+}
+#endif

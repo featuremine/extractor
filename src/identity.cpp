@@ -22,14 +22,12 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "identity.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
-}
 
 #include <stdlib.h>
 #include <string.h>

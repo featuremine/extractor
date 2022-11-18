@@ -32,9 +32,8 @@
 #include <sys/mman.h>
 #include <sys/stat.h>
 #include <sys/types.h>
-extern "C" {
+
 #include "mm_file.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 

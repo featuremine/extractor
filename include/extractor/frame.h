@@ -21,8 +21,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_FRAME_H__
-#define __FM_FRAME_H__
+#pragma once
 
 #include <stddef.h>
 
@@ -30,11 +29,11 @@
 #include "extractor/type_decl.h"
 #include "fmc/platform.h"
 
-typedef int fm_field_t;
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+typedef int fm_field_t;
 
 FMMODFUNC fm_frame_t *fm_frame_from_type(fm_frame_alloc_t *,
                                          fm_type_decl_cp type);
@@ -111,5 +110,3 @@ FMMODFUNC int fm_frame_dim(const fm_frame_t *, int i);
 #ifdef __cplusplus
 }
 #endif
-
-#endif // __FM_FRAME_H__

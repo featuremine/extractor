@@ -23,11 +23,9 @@
 
 #pragma once
 
-extern "C" {
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/module.h"
-}
 
 #include "types.hpp"
 

@@ -22,13 +22,12 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "comp.h"
 #include "arg_serial.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
-}
+
 #include <iostream>
 #include <stdlib.h>
 #include <string>

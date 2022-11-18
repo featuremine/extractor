@@ -22,8 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_COMP_DEF_H__
-#define __FM_COMP_DEF_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/call_ctx.h"
@@ -38,6 +37,10 @@
 #define FmMODINIT_FUNC extern "C" void
 #else
 #define FmMODINIT_FUNC void
+#endif
+
+#ifdef __cplusplus
+extern "C" {
 #endif
 
 typedef bool (*fm_call_init_p)(fm_frame_t *, size_t,
@@ -218,4 +221,6 @@ FMMODFUNC fm_call_range_p fm_call_def_range(fm_call_def_t *obj);
  */
 FMMODFUNC fm_call_exec_p fm_call_def_exec(fm_call_def_t *obj);
 
-#endif // __FM_COMP_DEF_H__
+#ifdef __cplusplus
+}
+#endif

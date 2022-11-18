@@ -21,7 +21,6 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "csv_tail.h"
 #include "csv_play.h"
 #include "extractor/arg_stack.h"
@@ -29,7 +28,7 @@ extern "C" {
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
-}
+
 #include "csv_utils.hpp"
 #include "errno.h"
 #include "fmc/files.h"

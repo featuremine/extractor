@@ -22,10 +22,8 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/perf_timer.h"
 #include "extractor/comp_sys.h"
-}
 
 #include "fmc++/counters.hpp"
 

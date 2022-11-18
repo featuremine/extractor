@@ -21,9 +21,7 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "comp_graph.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 

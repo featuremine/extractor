@@ -23,9 +23,7 @@
 
 #pragma once
 
-extern "C" {
 #include "extractor/type_decl.h"
-}
 
 #include "extractor/frame.hpp"
 #include "fmc++/mpl.hpp"

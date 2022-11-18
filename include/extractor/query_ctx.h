@@ -22,10 +22,13 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_QUERY_CTX_H__
-#define __FM_QUERY_CTX_H__
+#pragma once
 
 #include "fmc/platform.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 /**
  * @brief defines execution context object
@@ -53,4 +56,6 @@ FMMODFUNC time_t fm_ctx_next_time(fm_exec_ctx_t *ctx);
 
 FMMODFUNC bool fm_ctx_query(fm_exec_ctx_t *ctx, time_t t1, time_t t2);
 
-#endif // __FM_QUERY_CTX_H__
+#ifdef __cplusplus
+}
+#endif

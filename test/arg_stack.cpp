@@ -21,9 +21,7 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "extractor/arg_stack.h"
-}
 
 #include "fmc++/gtestwrap.hpp"
 

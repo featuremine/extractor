@@ -22,7 +22,6 @@
  * @see http://www.featuremine.com
  */
 
-extern "C" {
 #include "comp.h"
 #include "comp_graph.h"
 #include "extractor/arg_stack.h"
@@ -34,7 +33,6 @@ extern "C" {
 #include "fmc/time.h"
 #include "frame_serial.h"
 #include <cmp/cmp.h>
-}
 
 #include "mp_util.hpp"
 #include "serial_util.hpp"

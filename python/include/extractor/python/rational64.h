@@ -21,16 +21,21 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_PY_RATIONAL64_H__
-#define __FM_PY_RATIONAL64_H__
+#pragma once
 
 #include <Python.h>
 
 #include "fmc/platform.h"
 #include "fmc/rational64.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 FMMODFUNC bool Rational64_Check(PyObject *obj);
 
 FMMODFUNC fmc_rational64_t Rational64_val(PyObject *obj);
 
-#endif // __FM_PY_RATIONAL64_H__
+#ifdef __cplusplus
+}
+#endif

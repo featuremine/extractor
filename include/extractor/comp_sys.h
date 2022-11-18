@@ -22,8 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_COMP_SYS_H__
-#define __FM_COMP_SYS_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
@@ -34,6 +33,10 @@
 #include "fmc/platform.h"
 #include "fmc/time.h"
 #include "ytp/api.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 typedef struct fm_comp_graph fm_comp_graph_t;
 
@@ -165,4 +168,6 @@ FMMODFUNC bool fm_comp_sys_sample_value(fm_comp_sys_t *sys,
 FMMODFUNC void set_ytp_api_v1(struct ytp_sequence_api_v1 *);
 FMMODFUNC struct ytp_sequence_api_v1 *get_ytp_api_v1();
 
-#endif // __FM_COMP_SYS_H__
+#ifdef __cplusplus
+}
+#endif

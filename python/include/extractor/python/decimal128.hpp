@@ -20,9 +20,7 @@
 
 #pragma once
 
-extern "C" {
 #include <extractor/python/decimal128.h>
-}
 
 #include "fmc/decimal128.h"
 #include <Python.h>
@@ -55,6 +53,7 @@ struct ExtractorBaseTypeDecimal128 {
   static PyObject *min(PyObject *self, PyObject *args);
   static PyObject *from_float(PyObject *self, PyObject *args);
   static PyObject *significant(PyObject *type, PyObject *args);
+  static PyObject *as_decimal(PyObject *self, PyObject *args);
 
   static PyObject *nb_add(PyObject *lhs, PyObject *rhs);
   static PyObject *nb_substract(PyObject *lhs, PyObject *rhs);
@@ -151,15 +150,18 @@ PyObject *ExtractorBaseTypeDecimal128::nb_float(PyObject *self) {
 
 PyObject *ExtractorBaseTypeDecimal128::nb_int(PyObject *self) {
   int64_t res;
-  fmc_error_t *err;
-  fmc_decimal128_to_int(&res, &((ExtractorBaseTypeDecimal128 *)self)->val,
-                        &err);
-  if (err && fetestexcept(FE_INEXACT) != FE_INEXACT) {
-    PyErr_SetString(PyExc_RuntimeError,
-                    "Error produced attempting to convert to int");
-    return nullptr;
-  }
-  return PyLong_FromLongLong(res);
+  feclearexcept(FE_ALL_EXCEPT);
+  fmc_decimal128_to_int(&res, &((ExtractorBaseTypeDecimal128 *)self)->val);
+  auto exc = fetestexcept(FE_ALL_EXCEPT);
+  if (!(exc & ~FE_INEXACT))
+    return PyLong_FromLongLong(res);
+
+  if (exc & FE_OVERFLOW)
+    PyErr_SetString(PyExc_OverflowError,
+                    "cannot convert decimal infinity to integer");
+  else
+    PyErr_SetString(PyExc_ValueError, "cannot convert to integer");
+  return nullptr;
 }
 
 PyNumberMethods ExtractorBaseTypeDecimal128::tp_as_number = {
@@ -337,6 +339,8 @@ PyMethodDef ExtractorBaseTypeDecimal128::tp_methods[] = {
 
     {"significant", ExtractorBaseTypeDecimal128::significant,
      METH_VARARGS | METH_CLASS, NULL},
+
+    {"as_decimal", ExtractorBaseTypeDecimal128::as_decimal, METH_NOARGS, NULL},
 
     {NULL, NULL, 1}};
 
@@ -617,4 +621,36 @@ fmc_decimal128_t Decimal128_val(PyObject *obj) {
 
 PyObject *Decimal128_new(fmc_decimal128_t obj) {
   return ExtractorBaseTypeDecimal128::py_new(obj);
+}
+
+PyObject *ExtractorBaseTypeDecimal128::as_decimal(PyObject *self,
+                                                  PyObject *args) {
+  PyObject *dectype = PyDecimal_Type();
+  if (!dectype) {
+    return NULL;
+  }
+
+  PyDecObject *typed = (PyDecObject *)PyObject_CallObject(dectype, NULL);
+
+  uint16_t flags;
+
+  fmc_decimal128_triple(typed->dec.data, &typed->dec.len, &typed->dec.exp,
+                        &flags, &((ExtractorBaseTypeDecimal128 *)self)->val);
+
+  typed->dec.flags =
+      ((flags & FMC_DECIMAL128_NEG) == FMC_DECIMAL128_NEG) * MPD_NEG |
+      ((flags & FMC_DECIMAL128_INF) == FMC_DECIMAL128_INF) * MPD_INF |
+      (((flags & FMC_DECIMAL128_NAN) == FMC_DECIMAL128_NAN) &
+       ((flags & FMC_DECIMAL128_SIG) == 0)) *
+          MPD_NAN |
+      ((flags & FMC_DECIMAL128_SNAN) == FMC_DECIMAL128_SNAN) * MPD_SNAN;
+
+  typed->dec.digits =
+      (!flags || (flags == FMC_DECIMAL128_NEG)) *
+      fmc_decimal128_digits(&((ExtractorBaseTypeDecimal128 *)self)->val);
+
+  // PyObject_CallObject returns a new reference, segfaults in mac when
+  // reference count is not increased
+  Py_INCREF(typed);
+  return (PyObject *)typed;
 }

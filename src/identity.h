@@ -22,8 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_IDENTITY_H__
-#define __FM_IDENTITY_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
@@ -44,5 +43,3 @@ const fm_comp_def_t fm_comp_identity = {"identity", &fm_comp_identity_gen, NULL,
 #ifdef __cplusplus
 }
 #endif
-
-#endif // __FM_IDENTITY_H__

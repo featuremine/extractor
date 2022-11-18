@@ -22,13 +22,16 @@
  * @see http://www.featuremine.com
  */
 
-#ifndef __FM_PERF_TIMER_H__
-#define __FM_PERF_TIMER_H__
+#pragma once
 
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "fmc/platform.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 FMMODFUNC fm_ctx_def_t *fm_comp_perf_timer_start_gen(fm_comp_sys_t *sys,
                                                      fm_comp_def_cl, unsigned,
@@ -46,4 +49,6 @@ FMMODFUNC void fm_comp_perf_timer_stop_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 
 FMMODFUNC bool fm_comp_perf_timer_add(fm_comp_sys_t *sys, void *samples);
 
-#endif // __FM_PERF_TIMER_H__
+#ifdef __cplusplus
+}
+#endif
