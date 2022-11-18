@@ -168,6 +168,18 @@ public:
   static bool is_timedelta_type(PyObject *obj) {
     return PyObject_IsInstance(obj, get_timedelta_type().get_ref());
   }
+  static object timedelta(int64_t days, int64_t seconds, int64_t microseconds) {
+    auto args = fmc::python::object::from_new(PyTuple_New(0));
+    auto kwargs = fmc::python::object::from_new(PyDict_New());
+    auto d = fmc::python::object::from_new(PyLong_FromLongLong(days));
+    PyDict_SetItemString(kwargs.get_ref(), "days", d.get_ref());
+    auto s = fmc::python::object::from_new(PyLong_FromLongLong(seconds));
+    PyDict_SetItemString(kwargs.get_ref(), "seconds", s.get_ref());
+    auto m = fmc::python::object::from_new(PyLong_FromLongLong(microseconds));
+    PyDict_SetItemString(kwargs.get_ref(), "microseconds", m.get_ref());
+    return object::from_new(PyObject_Call(fm::python::datetime::get_timedelta_type().get_ref(), args.get_ref(), kwargs.get_ref()));
+  }
+
 };
 
 } // namespace python

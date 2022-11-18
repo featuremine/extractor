@@ -230,15 +230,7 @@ static PyObject *ExtractorBaseTypeTime64_as_timedelta(PyObject *self) {
   int64_t us = ns / 1000;
   int64_t sec = us / 1000000;
   us = us - sec * 1000000;
-  auto args = fmc::python::object::from_new(PyTuple_New(0));
-  auto kwargs = fmc::python::object::from_new(PyDict_New());
-  auto days = fmc::python::py_int(0);
-  PyDict_SetItemString(kwargs.get_ref(), "days", days.get_ref());
-  auto seconds = fmc::python::py_int(sec);
-  PyDict_SetItemString(kwargs.get_ref(), "seconds", seconds.get_ref());
-  auto microseconds = fmc::python::py_int(us);
-  PyDict_SetItemString(kwargs.get_ref(), "microseconds", microseconds.get_ref());
-  return PyObject_Call(fm::python::datetime::get_timedelta_type().get_ref(), args.get_ref(), kwargs.get_ref());
+  return fm::python::datetime::timedelta(0, sec, us).steal_ref();
 }
 
 static PyObject *ExtractorBaseTypeTime64_from_nanos(PyObject *self,
