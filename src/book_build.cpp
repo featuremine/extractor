@@ -34,6 +34,7 @@ extern "C" {
 }
 
 #include "extractor/book/updates.hpp"
+#include "fmc++/counters.hpp"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/time.hpp"
@@ -104,9 +105,29 @@ bool fm_comp_book_build_call_stream_init(fm_frame_t *result, size_t args,
   return true;
 }
 
+using counter_t = fmc::counter::nanoseconds;
+using sampler_t = fmc::counter::precision_sampler;
+
+struct sampler {
+  ~sampler() {
+    std::vector<double> percentiles{25.0, 50.0, 75.0, 90.0, 95.0, 99.0, 100.0};
+    std::cout << "fm_comp_book_build_stream_exec" << std::endl;
+    for (double &percentile : percentiles) {
+      std::cout << "  " << percentile
+                << "% percentile: " << s.percentile(percentile)
+                << " nanoseconds" << std::endl;
+    }
+    std::cout << std::endl;
+  }
+  fmc::counter::record<counter_t, sampler_t> s;
+};
+
+sampler global_sampler;
+
 bool fm_comp_book_build_stream_exec(fm_frame_t *result, size_t args,
                                     const fm_frame_t *const argv[],
                                     fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
+  fmc::counter::scoped_sampler s(global_sampler.s);
   auto *exe_ctx = (fm_stream_ctx *)ctx->exec;
   auto now = fm_stream_ctx_now(exe_ctx);
   auto exe_cl = (bb_exe_cl *)ctx->comp;
