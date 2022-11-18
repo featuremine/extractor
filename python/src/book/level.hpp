@@ -30,6 +30,7 @@
 #include "extractor/python/side.h"
 
 #include "fmc++/decimal128.hpp"
+#include "fmc++/python/wrapper.hpp"
 #include "fmc++/side.hpp"
 #include "wrapper.hpp"
 #include <datetime.h>
@@ -89,7 +90,8 @@ static PyObject *Order_rec(Order *self, void *) {
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
   auto rem = us - tmp;
-  return PyDelta_FromDSU(0, sec.count(), rem.count());
+  return fm::python::datetime::timedelta(0, sec.count(), rem.count())
+      .steal_ref();
 }
 
 static PyObject *Order_ven(Order *self, void *) {
@@ -100,7 +102,8 @@ static PyObject *Order_ven(Order *self, void *) {
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
   auto rem = us - tmp;
-  return PyDelta_FromDSU(0, sec.count(), rem.count());
+  return fm::python::datetime::timedelta(0, sec.count(), rem.count())
+      .steal_ref();
 }
 
 static PyObject *Order_seq(Order *self, void *) {
