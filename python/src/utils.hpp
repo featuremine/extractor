@@ -421,8 +421,10 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
       auto seconds = fmc::python::py_int(sec.count());
       PyDict_SetItemString(kwargs.get_ref(), "seconds", seconds.get_ref());
       auto microseconds = fmc::python::py_int(rem.count());
-      PyDict_SetItemString(kwargs.get_ref(), "microseconds", microseconds.get_ref());
-      return PyObject_Call(fm::python::datetime::get_timedelta_type().get_ref(), args.get_ref(), kwargs.get_ref());
+      PyDict_SetItemString(kwargs.get_ref(), "microseconds",
+                           microseconds.get_ref());
+      return PyObject_Call(fm::python::datetime::get_timedelta_type().get_ref(),
+                           args.get_ref(), kwargs.get_ref());
     } break;
     case FM_TYPE_BOOL:
       if (*(BOOL *)ptr)
@@ -517,8 +519,10 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       auto seconds = fmc::python::py_int(sec.count());
       PyDict_SetItemString(kwargs.get_ref(), "seconds", seconds.get_ref());
       auto microseconds = fmc::python::py_int(rem.count());
-      PyDict_SetItemString(kwargs.get_ref(), "microseconds", microseconds.get_ref());
-      return PyObject_Call(fm::python::datetime::get_timedelta_type().get_ref(), args.get_ref(), kwargs.get_ref());
+      PyDict_SetItemString(kwargs.get_ref(), "microseconds",
+                           microseconds.get_ref());
+      return PyObject_Call(fm::python::datetime::get_timedelta_type().get_ref(),
+                           args.get_ref(), kwargs.get_ref());
     } break;
     case FM_TYPE_BOOL:
       if (STACK_POP(plist, BOOL))
