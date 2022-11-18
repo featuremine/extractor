@@ -88,7 +88,7 @@ struct parser {
   book::message expanded;
   bool expand = false;
   std::string error;
-  result parse(cmp_ctx_t *ctx);
+  result parse(cmp_ctx_t *ctx, imnt_info *ii = nullptr);
 
   template <class Msg>
   int32_t parse_hdr0(cmp_ctx_t *ctx, Msg &msg, uint32_t &left);
@@ -161,6 +161,8 @@ inline result parser::parse_hdr(cmp_ctx_t *ctx, Msg &msg, uint32_t &left) {
   if (imnt_idx < 0) {
     return result::ERR;
   }
+  if (imnt)
+    return result::SUCCESS;
   auto where = imnts.find(imnt_idx);
   if (where == imnts.end()) {
     imnt = nullptr;
@@ -533,10 +535,11 @@ inline result parser::parse_hbt(cmp_ctx_t *ctx, uint32_t &left) {
   return result::SUCCESS;
 }
 
-inline result parser::parse(cmp_ctx_t *ctx) {
+inline result parser::parse(cmp_ctx_t *ctx, imnt_info *ii) {
   result res;
   uint8_t type = 0;
   uint32_t left = 0;
+  imnt = ii;
   if (!cmp_read_array(ctx, &left)) {
     if (ctx->error == TYPE_MARKER_READING_ERROR && feof((FILE *)ctx->buf)) {
       return result::ENDOFFILE;
