@@ -29,8 +29,8 @@
 #include "extractor/python/extractor.h"
 #include "extractor/python/side.h"
 
-#include "fmc++/python/wrapper.hpp"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/python/wrapper.hpp"
 #include "fmc++/side.hpp"
 #include "wrapper.hpp"
 #include <datetime.h>

@@ -24,10 +24,10 @@
 #include "extractor/comp_def.hpp"
 #include "extractor/type_decl.h"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/python/wrapper.hpp"
 #include "fmc++/rational64.hpp"
 #include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
-#include "fmc++/python/wrapper.hpp"
 
 #include <Python.h>
 #include <comp_base.hpp>
@@ -213,7 +213,8 @@ static PyObject *ExtractorBaseTypeTime64_from_timedelta(PyObject *self,
     return nullptr;
   };
   int64_t days = PyLong_AsLong(PyObject_GetAttrString(delta, "days"));
-  int64_t secs = days * 24 * 3600 + PyLong_AsLong(PyObject_GetAttrString(delta, "seconds"));
+  int64_t secs = days * 24 * 3600 +
+                 PyLong_AsLong(PyObject_GetAttrString(delta, "seconds"));
   int64_t mics = PyLong_AsLong(PyObject_GetAttrString(delta, "microseconds"));
   int64_t total_nanos = secs * 1000000000 + mics * 1000;
   auto t = fmc_time64_from_nanos(total_nanos);

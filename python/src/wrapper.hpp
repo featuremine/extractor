@@ -161,8 +161,7 @@ public:
     return datetime;
   }
   static object get_timedelta_type() {
-    static auto datetime =
-        module("datetime")["timedelta"];
+    static auto datetime = module("datetime")["timedelta"];
     return datetime;
   }
   static bool is_timedelta_type(PyObject *obj) {
