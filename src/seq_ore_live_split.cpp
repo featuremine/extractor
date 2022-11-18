@@ -28,15 +28,15 @@
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
 #include "ytp/peer.h"
-#include "ytp/yamal.h"
 #include "ytp/sequence.h"
+#include "ytp/yamal.h"
 
 #include "extractor/book/ore.hpp"
 #include "extractor/book/updates.hpp"
-#include "fmc++/rprice.hpp"
-#include "fmc++/time.hpp"
 #include "fmc++/mpl.hpp" // fmc_runtime_error_unless()
+#include "fmc++/rprice.hpp"
 #include "fmc++/serialization.hpp"
+#include "fmc++/time.hpp"
 #include "fmc/platform.h"
 
 #include <algorithm>
