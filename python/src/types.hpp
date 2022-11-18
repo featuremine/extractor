@@ -208,13 +208,13 @@ static PyObject *ExtractorBaseTypeTime64_from_timedelta(PyObject *self,
   if (!PyArg_ParseTuple(args, "O", &delta)) {
     return nullptr;
   }
-  if (!PyDelta_Check(delta)) {
+  if (!fm::python::datetime::is_timedelta_type(delta)) {
     PyErr_SetString(PyExc_TypeError, "expecting timedelta object");
     return nullptr;
   };
-  int64_t days = PyDateTime_DELTA_GET_DAYS(delta);
-  int64_t secs = days * 24 * 3600 + PyDateTime_DELTA_GET_SECONDS(delta);
-  int64_t mics = PyDateTime_DELTA_GET_MICROSECONDS(delta);
+  int64_t days = PyLong_AsLong(PyObject_GetAttrString(delta, "days"));
+  int64_t secs = days * 24 * 3600 + PyLong_AsLong(PyObject_GetAttrString(delta, "seconds"));
+  int64_t mics = PyLong_AsLong(PyObject_GetAttrString(delta, "microseconds"));
   int64_t total_nanos = secs * 1000000000 + mics * 1000;
   auto t = fmc_time64_from_nanos(total_nanos);
   return ExtractorBaseTypeTime64::py_new(t);

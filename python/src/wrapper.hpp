@@ -130,7 +130,7 @@ public:
   datetime(object &&obj) : object(obj) {}
   operator fmc_time64_t() {
     using namespace std::chrono;
-    if (PyDelta_Check(get_ref())) {
+    if (fm::python::datetime::is_timedelta_type(get_ref())) {
       auto h = 24 * PyLong_AsLong(PyObject_GetAttrString(get_ref(), "days"));
       auto sec = PyLong_AsLong(PyObject_GetAttrString(get_ref(), "seconds"));
       auto us =
@@ -164,6 +164,9 @@ public:
     static auto datetime =
         module("datetime")["timedelta"];
     return datetime;
+  }
+  static bool is_timedelta_type(PyObject *obj) {
+    return PyObject_IsInstance(obj, get_timedelta_type().get_ref());
   }
 };
 

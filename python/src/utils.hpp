@@ -291,7 +291,7 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
 
     case FM_TYPE_TIME64:
       return [](void *ptr, PyObject *obj) {
-        if (!PyDelta_Check(obj))
+        if (!fm::python::datetime::is_timedelta_type(obj))
           return false;
         auto h = duration_cast<nanoseconds>(
             hours(24 * PyLong_AsLong(PyObject_GetAttrString(obj, "days"))));
