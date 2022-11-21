@@ -23,8 +23,6 @@
  * @see http://www.featuremine.com
  */
 
-
-#include "perf_util.hpp"
 #include "book_build.h"
 #include "book/book.h"
 #include "extractor/arg_stack.h"
@@ -32,6 +30,7 @@
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
+#include "perf_util.hpp"
 
 #include "extractor/book/updates.hpp"
 #include "fmc++/decimal128.hpp"

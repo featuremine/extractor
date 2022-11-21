@@ -39,7 +39,8 @@ struct perf_sampler_t {
 
   ~perf_sampler_t() {
     if (enabled_) {
-      std::vector<double> percentiles{25.0, 50.0, 75.0, 90.0, 95.0, 99.0, 100.0};
+      std::vector<double> percentiles{25.0, 50.0, 75.0, 90.0,
+                                      95.0, 99.0, 100.0};
       std::cout << name_ << std::endl;
       for (double &percentile : percentiles) {
         std::cout << "  " << percentile
@@ -67,14 +68,8 @@ struct perf_sampler_t {
   bool enabled_;
 };
 
-template<typename Sampler>
-struct perf_scoped_sampler_t {
-  perf_scoped_sampler_t(Sampler &inst)
-      : inst_(inst) {
-    inst_.start();
-  }
-  ~perf_scoped_sampler_t() {
-    inst_.stop();
-  }
+template <typename Sampler> struct perf_scoped_sampler_t {
+  perf_scoped_sampler_t(Sampler &inst) : inst_(inst) { inst_.start(); }
+  ~perf_scoped_sampler_t() { inst_.stop(); }
   Sampler &inst_;
 };
