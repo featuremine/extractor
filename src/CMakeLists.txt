@@ -143,7 +143,7 @@ set_target_properties(
     extractor
     PROPERTIES
     OUTPUT_NAME "extractor"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/python_dist/extractor"
+    LIBRARY_OUTPUT_DIRECTORY "${WHEEL_extractor_BUILD_DIR}/dist/extractor"
 )
 install(
     TARGETS
