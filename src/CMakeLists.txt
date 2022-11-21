@@ -30,6 +30,7 @@ add_library(
     "bbo_aggr.cpp"
     "book_play_split.cpp"
     "ore_live_split.cpp"
+    "seq_ore_live_split.cpp"
     "ore_sim_split.cpp"
     "book_msg.cpp"
     "book_trades.cpp"

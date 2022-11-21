@@ -291,7 +291,7 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
 
     case FM_TYPE_TIME64:
       return [](void *ptr, PyObject *obj) {
-        if (!PyDelta_Check(obj))
+        if (!fm::python::datetime::is_timedelta_type(obj))
           return false;
         auto h = duration_cast<nanoseconds>(
             hours(24 * PyLong_AsLong(PyObject_GetAttrString(obj, "days"))));
@@ -414,7 +414,9 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
       auto sec = duration_cast<seconds>(us);
       auto tmp = duration_cast<microseconds>(sec);
       auto rem = us - tmp;
-      return PyDelta_FromDSU(d.count(), sec.count(), rem.count());
+      return fm::python::datetime::timedelta(d.count(), sec.count(),
+                                             rem.count())
+          .steal_ref();
     } break;
     case FM_TYPE_BOOL:
       if (*(BOOL *)ptr)
@@ -502,7 +504,9 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       auto sec = duration_cast<seconds>(us);
       auto tmp = duration_cast<microseconds>(sec);
       auto rem = us - tmp;
-      return PyDelta_FromDSU(d.count(), sec.count(), rem.count());
+      return fm::python::datetime::timedelta(d.count(), sec.count(),
+                                             rem.count())
+          .steal_ref();
     } break;
     case FM_TYPE_BOOL:
       if (STACK_POP(plist, BOOL))

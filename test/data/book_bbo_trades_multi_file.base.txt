@@ -1,0 +1,1000 @@
+idx price               qty                 receive                       side          
+0   24                  313                 2017-10-14 13:30:05.000555000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:37:06.697727000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:37:27.424294000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:37:46.567293000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:38:03.654263000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:38:22.686280000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:38:42.162335000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:39:04.751790000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:39:27.631278000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:39:55.192779000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:40:19.675281000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:40:38.646799000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:40:57.990782000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:41:16.371774000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:41:46.712285000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:42:07.102720000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:42:20.939846000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:42:47.643737000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:43:11.359781000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:43:31.778280000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:43:53.911224000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:44:08.001268000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:44:31.037261000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:44:49.022251000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:45:18.787736000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 13:45:27.192579000 2             
+idx price               qty                 receive                       side          
+0   25.87               350                 2017-10-14 13:45:27.293108000 2             
+idx price               qty                 receive                       side          
+0   25.87               2550                2017-10-14 13:45:27.493997000 2             
+idx price               qty                 receive                       side          
+0   25.87               600                 2017-10-14 13:45:27.996442000 2             
+idx price               qty                 receive                       side          
+0   25.87               2900                2017-10-14 13:45:28.900915000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 13:45:29.001427000 2             
+idx price               qty                 receive                       side          
+0   25.87               300                 2017-10-14 13:45:29.101905000 2             
+idx price               qty                 receive                       side          
+0   25.87               700                 2017-10-14 13:45:30.910844000 2             
+idx price               qty                 receive                       side          
+0   25.85               100                 2017-10-14 13:45:32.760221000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:45:54.564723000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:46:20.672774000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:46:38.786255000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:46:58.385241000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:47:16.168688000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:47:35.919226000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:47:52.828737000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:48:17.608189000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:48:43.065250000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:49:03.895216000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:49:21.961661000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:49:48.175194000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:50:07.667141000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:50:28.649689000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:50:48.598195000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:51:06.093213000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:51:33.052991000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:51:48.940197000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:52:10.717753000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:52:44.054708000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:53:08.387112000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:53:34.435357000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:53:49.876669000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:54:21.256203000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:54:45.149177000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:55:11.157206000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:55:31.331143000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:55:51.870663000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:56:21.192709000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:56:38.138182000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:57:01.472198000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:57:33.719733000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:57:46.577152000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:58:01.368769000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:58:20.606653000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:58:42.772178000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:59:03.927647000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:59:21.459189000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:59:40.758678000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 13:59:59.456674000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:00:19.881170000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:00:46.407637000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 14:00:51.143154000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:01:08.388159000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:01:30.690159000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:01:47.859664000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:02:04.024626000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:02:23.682647000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:02:45.926194000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:02:57.358171000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:03:17.115670000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:03:41.923656000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:04:05.781667000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:04:22.376178000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:04:44.652688000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:05:04.915213000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:05:23.460705000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:05:45.125738000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:06:11.786188000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:06:35.958660000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:07:06.884654000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:07:27.410751000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:07:44.606677000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:08:12.380704000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:08:32.634665000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:08:52.555657000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:09:11.485656000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:09:42.504098000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:10:06.132715000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:10:29.810144000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:10:55.455130000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:11:12.900638000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:11:35.990646000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:11:52.890653000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:12:19.781660000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:12:38.499645000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:12:58.656123000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 14:13:01.397784000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:13:09.776836000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:13:31.747174000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 14:13:42.379449000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:14:02.756655000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 14:14:13.757899000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:14:22.261703000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:14:40.574698000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:14:58.735149000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:15:22.490027000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:15:41.772229000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:16:00.401209000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:16:19.460139000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:16:49.502175000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:17:18.430637000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:17:41.019127000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:18:08.823153000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:18:32.909631000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:18:46.824700000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:19:11.090165000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:19:32.464628000 2             
+idx price               qty                 receive                       side          
+0   25.87               400                 2017-10-14 14:19:36.718169000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:19:55.532131000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:20:19.962644000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:20:43.957148000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:21:06.734583000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:21:32.111652000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:21:50.650163000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:22:23.430708000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:23:03.562125000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:23:27.335698000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:23:53.976148000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:24:20.656707000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:24:41.897181000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:25:06.464134000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:25:33.767186000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:25:54.955632000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:26:19.650093000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:26:49.554598000 2             
+idx price               qty                 receive                       side          
+0   25.87               200                 2017-10-14 14:27:03.685908000 2             
+idx price               qty                 receive                       side          
+0   25.86               100                 2017-10-14 14:27:03.685538000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:27:08.816633000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:27:26.086158000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:27:49.876598000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:28:11.661811000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:28:33.230601000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 14:28:43.946259000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 14:28:52.117727000 2             
+idx price               qty                 receive                       side          
+0   25.85               300                 2017-10-14 14:28:58.619443000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:28:58.619463000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:29:17.738634000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:29:39.215671000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:30:03.588663000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:30:32.839706000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:30:54.001162000 2             
+idx price               qty                 receive                       side          
+0   25.83               60                  2017-10-14 14:31:09.160824000 2             
+idx price               qty                 receive                       side          
+0   25.83               40                  2017-10-14 14:31:23.227154000 2             
+idx price               qty                 receive                       side          
+0   25.83               60                  2017-10-14 14:31:31.336142000 2             
+idx price               qty                 receive                       side          
+0   25.83               1                   2017-10-14 14:31:32.999007000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:31:49.205160000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:31:50.009125000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:32:14.661199000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:32:25.250137000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:32:41.865013000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:32:47.287572000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:33:10.250204000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:33:13.600593000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:33:34.958599000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:33:37.335102000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:34:07.850136000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:34:14.362608000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:34:34.888650000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:34:37.667575000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:35:01.268649000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:35:06.589587000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:35:25.344579000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:35:29.160580000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:35:54.441133000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:35:57.771591000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:36:21.759656000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:36:27.910068000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:36:51.428590000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:36:55.855571000 2             
+idx price               qty                 receive                       side          
+0   25.5                100                 2017-10-14 14:37:05.034217000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:37:13.577625000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:37:16.652545000 2             
+idx price               qty                 receive                       side          
+0   25.48               100                 2017-10-14 14:37:21.027414000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:37:38.490093000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:37:41.644580000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:37:56.385603000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:37:59.779072000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:38:25.097113000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:38:30.060111000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:38:48.474593000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:38:49.486073000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:39:05.981600000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:39:08.915552000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:39:26.656592000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:39:33.413081000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:39:53.078594000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:40:03.294640000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:40:18.404591000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:40:21.795586000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:40:45.491120000 2             
+idx price               qty                 receive                       side          
+0   25.83               61                  2017-10-14 14:40:50.648160000 2             
+idx price               qty                 receive                       side          
+0   25.83               39                  2017-10-14 14:41:04.431391000 2             
+idx price               qty                 receive                       side          
+0   25.87               61                  2017-10-14 14:41:04.431417000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:41:13.593544000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:41:41.688064000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:42:08.108579000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:42:27.333565000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:42:56.701109000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:43:18.347575000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:43:42.472178000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:44:11.542129000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:44:33.477575000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:44:49.165561000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:45:07.779594000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:45:32.571652000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:46:03.305608000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:46:24.530612000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:46:50.461131000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:47:13.327570000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:47:35.869625000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:48:02.812680000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:48:19.419661000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:48:45.574652000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:49:05.960184000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:49:30.274212000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:49:46.893190000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:50:08.419120000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 14:50:09.400343000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:50:24.576135000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:50:42.218118000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:51:14.316632000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:51:29.968202000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:51:52.939138000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 14:52:09.533121000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 14:52:36.787344000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 14:55:53.346686000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:38:10.225229000 2             
+idx price               qty                 receive                       side          
+0   25.25               200                 2017-10-14 15:38:17.994322000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:38:31.258233000 2             
+idx price               qty                 receive                       side          
+0   25.86               400                 2017-10-14 15:38:34.582022000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:38:47.120501000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:39:07.675720000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:39:22.850229000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:39:46.181229000 2             
+idx price               qty                 receive                       side          
+0   25.87               1                   2017-10-14 15:39:53.716471000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:40:06.541742000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:40:27.421206000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:40:45.652680000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:41:02.946216000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:41:33.370986000 2             
+idx price               qty                 receive                       side          
+0   25                  50                  2017-10-14 15:41:40.226380000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:41:58.653788000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:42:23.853740000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:42:36.117604000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:42:52.381727000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:43:13.042719000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:43:33.690244000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:43:51.929249000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:44:03.022397000 2             
+idx price               qty                 receive                       side          
+0   25.87               50                  2017-10-14 15:44:03.022423000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:44:12.399206000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:44:37.156697000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:45:06.953224000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:45:34.544203000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:45:55.330273000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:46:17.984700000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:46:37.403692000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:46:48.177203000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:47:09.692750000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:47:29.642723000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:47:48.913184000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:48:14.240695000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:48:39.533824000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:48:58.198194000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:49:21.363716000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:49:42.252229000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:49:59.154172000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:50:38.112764000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:51:14.131692000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:51:30.425735000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:51:55.930692000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:52:21.146188000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:52:43.851691000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:53:07.598210000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:53:24.386716000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 15:53:30.863122000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 15:53:32.232887000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:53:52.779746000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:54:16.868790000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:54:44.138232000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:55:05.598686000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:55:11.969707000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:55:28.040712000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:55:51.831208000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:56:11.572256000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:56:32.087266000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:56:46.306702000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:57:11.444283000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:57:34.354697000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:57:57.261256000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:58:20.476299000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:58:38.749771000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:59:01.098242000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:59:24.320750000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 15:59:45.044279000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:00:09.219204000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:00:34.154735000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:00:50.940821000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 16:00:54.504258000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:01:12.507232000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:01:33.498209000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:01:58.815243000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:02:28.265763000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:02:46.238249000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:03:08.544223000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:03:26.497708000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:03:49.016726000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:04:11.501722000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:04:42.277215000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:04:59.077235000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:05:21.075756000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:05:45.371316000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:05:59.453772000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:06:23.479785000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:06:45.297226000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:07:07.902753000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:07:25.168227000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:07:52.778238000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:08:16.846704000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:08:41.064294000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:09:04.321732000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 16:09:15.745123000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:09:30.621775000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:09:50.861475000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:10:15.024718000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:10:30.551256000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:10:58.655767000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:11:21.003767000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:11:35.900256000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:12:04.338209000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:12:29.561767000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:12:44.079268000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:13:01.448781000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:13:25.399235000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:13:45.243766000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:14:11.097775000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:14:31.831774000 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 16:14:45.598697000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:15:00.937328000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:15:17.730741000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:15:36.849699000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:15:59.309185000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:16:16.039282000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:16:44.126224000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:17:00.076331000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:17:23.201272000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:17:37.859247000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:18:01.842812000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:18:15.836712000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:18:33.304259000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:18:47.831252000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:19:11.358195000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:19:30.681781000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:19:53.561733000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:20:11.079740000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:20:36.070226000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:20:50.988709000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:21:18.627226000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:21:36.544652000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:21:54.983798000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:22:06.821751000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:22:26.420227000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:22:58.777740000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:23:15.661772000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:23:37.655739000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:24:00.869265000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:24:17.844136000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:24:41.850755000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:24:55.996230000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:25:17.711735000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:25:33.836227000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:25:55.040236000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:26:28.495248000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:26:49.914728000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:27:10.226308000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:27:38.056228000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:28:13.314839000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:28:28.272711000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:28:53.041698000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:29:12.463712000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:29:35.785205000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:29:47.817724000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:30:16.675780000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:30:35.269204000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:30:52.881726000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:31:19.270767000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:31:47.326269000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:32:05.787257000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:32:16.250249000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:32:40.099755000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:33:01.512297000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:33:28.004237000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:33:51.430768000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:34:15.589290000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:34:46.464249000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:35:07.377733000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:35:27.569265000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:35:52.812260000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:36:16.947156000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:36:40.357812000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:36:56.454249000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:37:12.492258000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:37:31.408782000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:37:45.835781000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:38:06.522779000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:38:21.090759000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:38:44.119333000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:39:10.527230000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:39:33.507270000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:39:48.864246000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:40:10.117745000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:40:36.826737000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:40:57.729776000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:41:23.763260000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:41:38.913203000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:41:59.070771000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:42:18.936261000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:42:48.440210000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:43:05.382752000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:43:26.645188000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:43:44.037710000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:43:53.773710000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:44:08.292196000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:44:29.293190000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:44:42.856687000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:45:03.877259000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:45:27.213759000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:45:48.813794000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:46:04.289233000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:46:19.451778000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:46:34.513245000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:46:54.588275000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:47:10.352697000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:47:27.109733000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:47:44.189728000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:48:03.133294000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:48:27.954242000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:48:50.850280000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:49:08.020280000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:49:31.628196000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:49:51.366790000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:50:08.304305000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:50:32.730298000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:50:53.536778000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:51:13.115305000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:51:43.371739000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:52:11.192324000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:52:29.167770000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:52:53.456274000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:53:16.202821000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:53:35.959771000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:53:53.504750000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:54:15.673822000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:54:38.979344000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:55:09.726262000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:55:32.177277000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:55:48.169311000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:56:12.360795000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:56:29.153289000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:56:47.172780000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:57:17.132816000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:57:37.787753000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:57:55.390270000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:58:15.556777000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:58:46.766824000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:59:06.301804000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:59:27.746782000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:59:52.219781000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:00:09.361318000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:00:22.685779000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:00:34.875328000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:01:01.751331000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:01:22.533807000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:01:37.864267000 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:02:06.144330000 2             

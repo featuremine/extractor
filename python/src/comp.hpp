@@ -364,7 +364,7 @@ PyObject *ConstGen(PyObject *obj, fm_comp_sys_t *sys, fm_comp_graph *graph) {
 
     comp = fm_comp_decl(sys, graph, "constant", 0, constant_param_t, "const",
                         type, val);
-  } else if (PyDelta_Check(obj)) {
+  } else if (fm::python::datetime::is_timedelta_type(obj)) {
     auto h = 24 * PyLong_AsLong(PyObject_GetAttrString(obj, "days"));
     auto sec = PyLong_AsLong(PyObject_GetAttrString(obj, "seconds"));
     auto us = PyLong_AsLong(PyObject_GetAttrString(obj, "microseconds"));
