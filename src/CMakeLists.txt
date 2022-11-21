@@ -1,6 +1,6 @@
 add_library(
     extractor_obj
-    STATIC
+    OBJECT
     "book_build.cpp"
 	"call_obj.cpp"
 	"call_stack.cpp"
