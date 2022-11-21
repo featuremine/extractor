@@ -120,7 +120,7 @@ file(
     COPY ${CMAKE_CURRENT_SOURCE_DIR}/include
     DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/dist/extractor"
     FILES_MATCHING
-        PATTERN "*.h"
+    PATTERN "*.h"
 )
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
