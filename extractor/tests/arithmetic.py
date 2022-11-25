@@ -125,13 +125,24 @@ class TestExtractorArithmetic(unittest.TestCase):
         inps = [[1.0, 0, 25.33],]
         run_tests(comps, "float64", extr.Rprice, *inps, outdtype='bool')
 
-        #  fm_comp_type_add(sys, &fm_comp_convert) &&
-        #  fm_comp_type_add(sys, &fm_comp_greater) &&
-        #  fm_comp_type_add(sys, &fm_comp_greater_equal) &&
-        #  fm_comp_type_add(sys, &fm_comp_less_equal) &&
-        #  fm_comp_type_add(sys, &fm_comp_less) &&
-        #  fm_comp_type_add(sys, &fm_comp_equal) &&
-        #  fm_comp_type_add(sys, &fm_comp_not_equal) &&
+        comps = [
+            ("greater",[False,False,True]),
+            ("greater_equal",[False,True,True]),
+            ("less_equal",[True,True,False]),
+            ("less",[True,False,False]),
+            ("equal",[False,True,False]),
+            ("not_equal",[True,False,True]),
+        ]
+        inps = [[0, 7, 6],[2,7,1]]
+        run_tests(comps, "uint32", extr.Uint32, *inps, outdtype='bool')
+        run_tests(comps, "uint64", extr.Uint64, *inps, outdtype='bool')
+        run_tests(comps, "int32", extr.Int32, *inps, outdtype='bool')
+        run_tests(comps, "int64", extr.Int64, *inps, outdtype='bool')
+        run_tests(comps, "float64", extr.Rprice, *inps, outdtype='bool')
+        run_tests(comps, "float32", extr.Float32, *inps, outdtype='bool')
+        run_tests(comps, "float64", extr.Float64, *inps, outdtype='bool')
+        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="bool")
+
         #  fm_comp_type_add(sys, &fm_comp_constant) &&
 
         #  fm_comp_type_add(sys, &fm_comp_ln) &&
