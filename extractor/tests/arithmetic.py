@@ -49,6 +49,7 @@ def run_test(comp, out, dtype, extrtype, *inps, conv=None, outts=None, outdtype=
     ts = outts if outts is not None else pd.to_datetime(list(range(len(out))), unit='s')
     outdf = pd.DataFrame(data={"Timestamp": ts, "val": outs})
 
+    raise RuntimeError("\n", extr.result_as_pandas(res), outdf)
     pd.testing.assert_frame_equal(extr.result_as_pandas(res), outdf)
 
 def run_tests(comps, dtype, extrtype, *inps, conv=None, outts=None, outdtype=None):
@@ -58,105 +59,117 @@ def run_tests(comps, dtype, extrtype, *inps, conv=None, outts=None, outdtype=Non
 class TestExtractorArithmetic(unittest.TestCase):
 
     def test_basic_arithmetic(self):
-        comps = [
-            ("add",[4,13,7]),
-            ("diff",[0,1,5]),
-            ("mult",[4,42,6]),
-            ("sum",[4,13,7]),
-        ]
-        inps = [[2, 7, 6],[2,6,1]]
-        run_tests(comps, "uint32", extr.Uint32, *inps)
-        run_tests(comps, "uint64", extr.Uint64, *inps)
-        run_tests(comps, "int32", extr.Int32, *inps)
-        run_tests(comps, "int64", extr.Int64, *inps)
-        run_tests(comps, "float64", extr.Rprice, *inps)
-        run_tests(comps, "float32", extr.Float32, *inps)
-        run_tests(comps, "float64", extr.Float64, *inps)
-        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="object")
+        # comps = [
+        #     ("add",[4,13,7]),
+        #     ("diff",[0,1,5]),
+        #     ("mult",[4,42,6]),
+        #     ("sum",[4,13,7]),
+        # ]
+        # inps = [[2, 7, 6],[2,6,1]]
+        # run_tests(comps, "uint32", extr.Uint32, *inps)
+        # run_tests(comps, "uint64", extr.Uint64, *inps)
+        # run_tests(comps, "int32", extr.Int32, *inps)
+        # run_tests(comps, "int64", extr.Int64, *inps)
+        # run_tests(comps, "float64", extr.Rprice, *inps)
+        # run_tests(comps, "float32", extr.Float32, *inps)
+        # run_tests(comps, "float64", extr.Float64, *inps)
+        # run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="object")
+
+        # comps = [
+        #     ("divide",[0.5,2.4,6.0]),
+        # ]
+        # inps = [[1.0, 12.0, 6.0],[2.0,5.0,1.0]]
+        # run_tests(comps, "float32", extr.Float32, *inps)
+        # run_tests(comps, "float64", extr.Float64, *inps)
+        # run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="object")
+
+        # comps = [
+        #     ("cumulative",[1.0,13.0,19.0,25.0,27.0]),
+        # ]
+        # inps = [[1.0, 12.0, 6.0, 6.0, 2.0],]
+        # run_tests(comps, "int32", extr.Int32, *inps)
+        # run_tests(comps, "int64", extr.Int64, *inps)
+        # run_tests(comps, "uint32", extr.Uint32, *inps)
+        # run_tests(comps, "uint64", extr.Uint64, *inps)
+        # run_tests(comps, "float32", extr.Float32, *inps)
+        # run_tests(comps, "float64", extr.Float64, *inps)
+        # run_tests(comps, "float64", extr.Rprice, *inps)
+        # run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="object")
+
+        # comps = [
+        #     ("unique",[1.0,12.0,6.0,2.0]),
+        # ]
+        # inps = [[1.0, 12.0, 6.0, 6.0, 2.0],]
+        # outts = pd.to_datetime([0, 1, 2, 4], unit='s')
+        # run_tests(comps, "int32", extr.Int32, *inps, outts=outts)
+        # run_tests(comps, "int64", extr.Int64, *inps, outts=outts)
+        # run_tests(comps, "uint32", extr.Uint32, *inps, outts=outts)
+        # run_tests(comps, "uint64", extr.Uint64, *inps, outts=outts)
+        # run_tests(comps, "float32", extr.Float32, *inps, outts=outts)
+        # run_tests(comps, "float64", extr.Float64, *inps, outts=outts)
+        # run_tests(comps, "float64", extr.Rprice, *inps, outts=outts)
+        # run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outts=outts, outdtype="object")
+
+        # comps = [
+        #     ("is_zero",[False, False, True, False, False, False]),
+        #     ("is_inf",[False, True, False, False, True, False]),
+        #     ("is_nan",[False, False, False, True, False, False]),
+        # ]
+        # inps = [[1.0,math.inf,0,math.nan,-math.inf,25.33],]
+        # run_tests(comps, "float32", extr.Float32, *inps, outdtype='bool')
+        # run_tests(comps, "float64", extr.Float64, *inps, outdtype='bool')
+        # run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype='bool')
+
+        # comps = [
+        #     ("is_zero",[False, True, False]),
+        # ]
+        # inps = [[1.0, 0, 25.33],]
+        # run_tests(comps, "float64", extr.Rprice, *inps, outdtype='bool')
+
+        # comps = [
+        #     ("greater",[False,False,True]),
+        #     ("greater_equal",[False,True,True]),
+        #     ("less_equal",[True,True,False]),
+        #     ("less",[True,False,False]),
+        #     ("equal",[False,True,False]),
+        #     ("not_equal",[True,False,True]),
+        # ]
+        # inps = [[0, 7, 6],[2,7,1]]
+        # run_tests(comps, "uint32", extr.Uint32, *inps, outdtype='bool')
+        # run_tests(comps, "uint64", extr.Uint64, *inps, outdtype='bool')
+        # run_tests(comps, "int32", extr.Int32, *inps, outdtype='bool')
+        # run_tests(comps, "int64", extr.Int64, *inps, outdtype='bool')
+        # run_tests(comps, "float64", extr.Rprice, *inps, outdtype='bool')
+        # run_tests(comps, "float32", extr.Float32, *inps, outdtype='bool')
+        # run_tests(comps, "float64", extr.Float64, *inps, outdtype='bool')
+        # run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="bool")
+
+        # comps = [
+        #     ("max",[2,5,9]),
+        # ]
+        # inps = [[2,0,5,9],[]]
+        # outts = pd.to_datetime([0, 2, 3], unit='s')
+        # run_tests(comps, "uint32", extr.Uint32, *inps, outts=outts)
+        # run_tests(comps, "uint64", extr.Uint64, *inps, outts=outts)
+        # run_tests(comps, "int32", extr.Int32, *inps, outts=outts)
+        # run_tests(comps, "int64", extr.Int64, *inps, outts=outts)
+        # run_tests(comps, "float64", extr.Rprice, *inps, outts=outts)
+        # run_tests(comps, "float32", extr.Float32, *inps, outts=outts)
+        # run_tests(comps, "float64", extr.Float64, *inps, outts=outts)
+        # run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outts=outts, outdtype="object")
 
         comps = [
-            ("divide",[0.5,2.4,6.0]),
+            ("min",[2,0]),
         ]
-        inps = [[1.0, 12.0, 6.0],[2.0,5.0,1.0]]
-        run_tests(comps, "float32", extr.Float32, *inps)
-        run_tests(comps, "float64", extr.Float64, *inps)
-        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="object")
-
-        comps = [
-            ("cumulative",[1.0,13.0,19.0,25.0,27.0]),
-        ]
-        inps = [[1.0, 12.0, 6.0, 6.0, 2.0],]
-        run_tests(comps, "int32", extr.Int32, *inps)
-        run_tests(comps, "int64", extr.Int64, *inps)
-        run_tests(comps, "uint32", extr.Uint32, *inps)
-        run_tests(comps, "uint64", extr.Uint64, *inps)
-        run_tests(comps, "float32", extr.Float32, *inps)
-        run_tests(comps, "float64", extr.Float64, *inps)
-        run_tests(comps, "float64", extr.Rprice, *inps)
-        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="object")
-
-        comps = [
-            ("unique",[1.0,12.0,6.0,2.0]),
-        ]
-        inps = [[1.0, 12.0, 6.0, 6.0, 2.0],]
-        outts = pd.to_datetime([0, 1, 2, 4], unit='s')
-        run_tests(comps, "int32", extr.Int32, *inps, outts=outts)
-        run_tests(comps, "int64", extr.Int64, *inps, outts=outts)
+        outts = pd.to_datetime([0, 1], unit='s')
         run_tests(comps, "uint32", extr.Uint32, *inps, outts=outts)
         run_tests(comps, "uint64", extr.Uint64, *inps, outts=outts)
+        run_tests(comps, "int32", extr.Int32, *inps, outts=outts)
+        run_tests(comps, "int64", extr.Int64, *inps, outts=outts)
+        run_tests(comps, "float64", extr.Rprice, *inps, outts=outts)
         run_tests(comps, "float32", extr.Float32, *inps, outts=outts)
         run_tests(comps, "float64", extr.Float64, *inps, outts=outts)
-        run_tests(comps, "float64", extr.Rprice, *inps, outts=outts)
         run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outts=outts, outdtype="object")
-
-        comps = [
-            ("is_zero",[False, False, True, False, False, False]),
-            ("is_inf",[False, True, False, False, True, False]),
-            ("is_nan",[False, False, False, True, False, False]),
-        ]
-        inps = [[1.0,math.inf,0,math.nan,-math.inf,25.33],]
-        run_tests(comps, "float32", extr.Float32, *inps, outdtype='bool')
-        run_tests(comps, "float64", extr.Float64, *inps, outdtype='bool')
-        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype='bool')
-
-        comps = [
-            ("is_zero",[False, True, False]),
-        ]
-        inps = [[1.0, 0, 25.33],]
-        run_tests(comps, "float64", extr.Rprice, *inps, outdtype='bool')
-
-        comps = [
-            ("greater",[False,False,True]),
-            ("greater_equal",[False,True,True]),
-            ("less_equal",[True,True,False]),
-            ("less",[True,False,False]),
-            ("equal",[False,True,False]),
-            ("not_equal",[True,False,True]),
-        ]
-        inps = [[0, 7, 6],[2,7,1]]
-        run_tests(comps, "uint32", extr.Uint32, *inps, outdtype='bool')
-        run_tests(comps, "uint64", extr.Uint64, *inps, outdtype='bool')
-        run_tests(comps, "int32", extr.Int32, *inps, outdtype='bool')
-        run_tests(comps, "int64", extr.Int64, *inps, outdtype='bool')
-        run_tests(comps, "float64", extr.Rprice, *inps, outdtype='bool')
-        run_tests(comps, "float32", extr.Float32, *inps, outdtype='bool')
-        run_tests(comps, "float64", extr.Float64, *inps, outdtype='bool')
-        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="bool")
-
-        #  fm_comp_type_add(sys, &fm_comp_constant) &&
-
-        #  fm_comp_type_add(sys, &fm_comp_ln) &&
-        #  fm_comp_type_add(sys, &fm_comp_log) &&
-        #  fm_comp_type_add(sys, &fm_comp_exp) &&
-        #  fm_comp_type_add(sys, &fm_comp_pow) &&
-        #  fm_comp_type_add(sys, &fm_comp_max) &&
-        #  fm_comp_type_add(sys, &fm_comp_min) &&
-
-         
-        #  fm_comp_average_tw_add(sys)
-        #  fm_comp_delta_add(sys) &&
-        #  fm_comp_window_add(sys) && fm_comp_percentile_add(sys) &&
-        #  fm_comp_ar_add(sys) && fm_comp_type_add(sys, &fm_comp_round) &&
 
 
 if __name__ == '__main__':
