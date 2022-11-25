@@ -12,10 +12,10 @@
 
 import unittest
 import extractor as extr
-from pandas.testing import assert_frame_equal
 import pandas as pd
+import math
 
-def run_test(comp, out, dtype, extrtype, *inps, conv=None):
+def run_test(comp, out, dtype, extrtype, *inps, conv=None, outts=None, outdtype=None):
 
     graph = extr.system.comp_graph()
     op = graph.features
@@ -26,10 +26,10 @@ def run_test(comp, out, dtype, extrtype, *inps, conv=None):
 
     pinps = []
 
-    ts = pd.to_datetime(list(range(len(out))), unit='s')
-
     for inp in inps:
         s = pd.Series(inp, dtype=dtype)
+        ts = pd.to_datetime(list(range(len(inp))), unit='s')
+
         df = pd.DataFrame(data={"val": s,
                                 "receive": ts}).set_index("receive")
 
@@ -44,28 +44,19 @@ def run_test(comp, out, dtype, extrtype, *inps, conv=None):
 
     graph.stream_ctx().run()
 
-    outs = pd.Series(out, dtype=dtype)
+    outs = pd.Series(out, dtype=outdtype if outdtype is not None else dtype)
+    ts = outts if outts is not None else pd.to_datetime(list(range(len(out))), unit='s')
     outdf = pd.DataFrame(data={"Timestamp": ts, "val": outs})
 
     pd.testing.assert_frame_equal(extr.result_as_pandas(res), outdf)
 
-def run_tests(comps, dtype, extrtype, *inps, conv=None):
+def run_tests(comps, dtype, extrtype, *inps, conv=None, outts=None, outdtype=None):
     for comp, out in comps:
-        run_test(comp, out, dtype, extrtype, *inps, conv=conv)
+        run_test(comp, out, dtype, extrtype, *inps, conv=conv, outts=outts, outdtype=outdtype)
 
 class TestExtractorArithmetic(unittest.TestCase):
 
     def test_basic_arithmetic(self):
-        comps = [
-            ("add",[3,10,7]),
-            ("diff",[-1,-2,5]),
-            ("mult",[2,24,6]),
-            ("sum",[3,10,7]),
-        ]
-        inps = [[1, 4, 6],[2,6,1]]
-        run_tests(comps, "int32", extr.Int32, *inps)
-        run_tests(comps, "int64", extr.Int64, *inps)
-
         comps = [
             ("add",[4,13,7]),
             ("diff",[0,1,5]),
@@ -75,19 +66,87 @@ class TestExtractorArithmetic(unittest.TestCase):
         inps = [[2, 7, 6],[2,6,1]]
         run_tests(comps, "uint32", extr.Uint32, *inps)
         run_tests(comps, "uint64", extr.Uint64, *inps)
+        run_tests(comps, "int32", extr.Int32, *inps)
+        run_tests(comps, "int64", extr.Int64, *inps)
         run_tests(comps, "float64", extr.Rprice, *inps)
+        run_tests(comps, "float32", extr.Float32, *inps)
+        run_tests(comps, "float64", extr.Float64, *inps)
+        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)))
 
         comps = [
-            ("add",[3.0,17.0,7.0]),
-            ("diff",[-1.0,7.0,5.0]),
-            ("mult",[2.0,60.0,6.0]),
-            ("sum",[3.0,17.0,7.0]),
             ("divide",[0.5,2.4,6.0]),
         ]
         inps = [[1.0, 12.0, 6.0],[2.0,5.0,1.0]]
         run_tests(comps, "float32", extr.Float32, *inps)
         run_tests(comps, "float64", extr.Float64, *inps)
         run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)))
+
+        comps = [
+            ("cumulative",[1.0,13.0,19.0,25.0,27.0]),
+        ]
+        inps = [[1.0, 12.0, 6.0, 6.0, 2.0],]
+        run_tests(comps, "int32", extr.Int32, *inps)
+        run_tests(comps, "int64", extr.Int64, *inps)
+        run_tests(comps, "uint32", extr.Uint32, *inps)
+        run_tests(comps, "uint64", extr.Uint64, *inps)
+        run_tests(comps, "float32", extr.Float32, *inps)
+        run_tests(comps, "float64", extr.Float64, *inps)
+        run_tests(comps, "float64", extr.Rprice, *inps)
+        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)))
+
+        comps = [
+            ("unique",[1.0,12.0,6.0,2.0]),
+        ]
+        inps = [[1.0, 12.0, 6.0, 6.0, 2.0],]
+        outts = pd.to_datetime([0, 1, 2, 4], unit='s')
+        run_tests(comps, "int32", extr.Int32, *inps, outts=outts)
+        run_tests(comps, "int64", extr.Int64, *inps, outts=outts)
+        run_tests(comps, "uint32", extr.Uint32, *inps, outts=outts)
+        run_tests(comps, "uint64", extr.Uint64, *inps, outts=outts)
+        run_tests(comps, "float32", extr.Float32, *inps, outts=outts)
+        run_tests(comps, "float64", extr.Float64, *inps, outts=outts)
+        run_tests(comps, "float64", extr.Rprice, *inps, outts=outts)
+        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outts=outts)
+
+        comps = [
+            ("is_zero",[False, False, True, False, False, False]),
+            ("is_inf",[False, True, False, False, True, False]),
+            ("is_nan",[False, False, False, True, False, False]),
+        ]
+        inps = [[1.0,math.inf,0,math.nan,-math.inf,25.33],]
+        run_tests(comps, "float32", extr.Float32, *inps, outdtype='bool')
+        run_tests(comps, "float64", extr.Float64, *inps, outdtype='bool')
+        # run_tests(comps, "float64", extr.Rprice, *inps, outdtype='bool')
+        # run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(x), outdtype='bool')
+
+        #  fm_comp_type_add(sys, &fm_comp_is_zero) &&
+        #  fm_comp_type_add(sys, &fm_comp_is_inf) &&
+
+        #  fm_comp_type_add(sys, &fm_comp_is_nan)
+
+
+        #  fm_comp_type_add(sys, &fm_comp_convert) &&
+        #  fm_comp_type_add(sys, &fm_comp_greater) &&
+        #  fm_comp_type_add(sys, &fm_comp_greater_equal) &&
+        #  fm_comp_type_add(sys, &fm_comp_less_equal) &&
+        #  fm_comp_type_add(sys, &fm_comp_less) &&
+        #  fm_comp_type_add(sys, &fm_comp_equal) &&
+        #  fm_comp_type_add(sys, &fm_comp_not_equal) &&
+        #  fm_comp_type_add(sys, &fm_comp_constant) &&
+
+        #  fm_comp_type_add(sys, &fm_comp_ln) &&
+        #  fm_comp_type_add(sys, &fm_comp_log) &&
+        #  fm_comp_type_add(sys, &fm_comp_exp) &&
+        #  fm_comp_type_add(sys, &fm_comp_pow) &&
+        #  fm_comp_type_add(sys, &fm_comp_max) &&
+        #  fm_comp_type_add(sys, &fm_comp_min) &&
+
+         
+        #  fm_comp_average_tw_add(sys)
+        #  fm_comp_delta_add(sys) &&
+        #  fm_comp_window_add(sys) && fm_comp_percentile_add(sys) &&
+        #  fm_comp_ar_add(sys) && fm_comp_type_add(sys, &fm_comp_round) &&
+
 
 if __name__ == '__main__':
     unittest.main()
