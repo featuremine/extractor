@@ -75,6 +75,7 @@ class TestExtractorArithmetic(unittest.TestCase):
         inps = [[2, 7, 6],[2,6,1]]
         run_tests(comps, "uint32", extr.Uint32, *inps)
         run_tests(comps, "uint64", extr.Uint64, *inps)
+        run_tests(comps, "float64", extr.Rprice, *inps)
 
         comps = [
             ("add",[3.0,17.0,7.0]),
@@ -86,7 +87,6 @@ class TestExtractorArithmetic(unittest.TestCase):
         inps = [[1.0, 12.0, 6.0],[2.0,5.0,1.0]]
         run_tests(comps, "float32", extr.Float32, *inps)
         run_tests(comps, "float64", extr.Float64, *inps)
-        # run_tests(comps, "float64", extr.Rprice, *inps)
         run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)))
 
 if __name__ == '__main__':
