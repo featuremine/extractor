@@ -581,3 +581,49 @@ set_tests_properties(
     ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
     TIMEOUT 100
 )
+
+add_test(
+    NAME python_ytp_book_bbo_multi_file COMMAND
+
+    "${PYTHON3_BIN}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo_multi_file.py"
+    "--ytp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/data/ytpseq_ore_bbo.ytp"
+    "--markets"
+    "NYSE,NASDAQOMX,BATS,DirectEdgeX,DirectEdgeA,NYSEArca,NASDAQOMXBX,BATSY"
+    "--imnts"
+    "APLE,APAM,BMY,BAC"
+    "--test"
+    "true"
+
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+set_tests_properties(
+    python_ytp_book_bbo_multi_file
+    PROPERTIES
+    ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+    TIMEOUT 100
+)
+
+add_test(
+    NAME python_ytp_book_trade_multi_file COMMAND
+
+    "${PYTHON3_BIN}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo_multi_file.py"
+    "--ytp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/data/ytpseq_ore_trades.ytp"
+    "--markets"
+    "NYSE,NASDAQOMX,BATS,DirectEdgeX,DirectEdgeA,NYSEArca,NASDAQOMXBX,BATSY"
+    "--imnts"
+    "APLE,APAM,BMY,BAC"
+    "--test"
+    "true"
+
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+set_tests_properties(
+    python_ytp_book_trade_multi_file
+    PROPERTIES
+    ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+    TIMEOUT 100
+)

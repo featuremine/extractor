@@ -82,6 +82,12 @@ configure_file(
 )
 
 configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/arithmetic.py"
+    "${CMAKE_BINARY_DIR}/python_dist/extractor/tests/arithmetic.py"
+    COPYONLY
+)
+
+configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/component.py"
     "${CMAKE_BINARY_DIR}/python_dist/extractor/tests/component.py"
     COPYONLY

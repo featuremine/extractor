@@ -81,6 +81,7 @@
 #include "ore_ytp_decode.h"
 #include "pow.h"
 #include "roundop.h"
+#include "seq_ore_live_split.h"
 #include "split.h"
 #include "split_by.h"
 #include "substr.h"
@@ -117,6 +118,7 @@ bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
          fm_comp_type_add(sys, &fm_comp_mp_play) &&
          fm_comp_type_add(sys, &fm_comp_mp_record) &&
          fm_comp_type_add(sys, &fm_comp_ore_live_split) &&
+         fm_comp_type_add(sys, &fm_comp_seq_ore_live_split) &&
          fm_comp_type_add(sys, &fm_comp_ore_sim_split) &&
          fm_comp_type_add(sys, &fm_comp_book_play_split) &&
          fm_comp_type_add(sys, &fm_comp_book_msg) &&
