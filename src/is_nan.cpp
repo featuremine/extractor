@@ -31,6 +31,7 @@
 #include "extractor/frame.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/rprice.hpp"
+#include "fmc++/decimal128.hpp"
 #include "fmc++/time.hpp"
 #include "op_util.hpp"
 
@@ -129,7 +130,7 @@ fm_ctx_def_t *fm_comp_is_nan_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   auto ctx_cl = make_unique<is_nan_comp_cl>();
   auto &calls = ctx_cl->calls;
 
-  using supported_types = fmc::type_list<FLOAT32, FLOAT64>;
+  using supported_types = fmc::type_list<FLOAT32, FLOAT64, DECIMAL128>;
 
   auto inp = argv[0];
 

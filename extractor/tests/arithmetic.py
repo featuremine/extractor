@@ -22,7 +22,8 @@ def run_test(comp, out, dtype, extrtype, *inps, conv=None, outts=None, outdtype=
 
     if conv is not None:
         inps = [[conv(i) for i in inp] for inp in inps]
-        out = [conv(o) for o in out]
+        if dtype == outdtype:
+            out = [conv(o) for o in out]
 
     pinps = []
 
@@ -71,7 +72,7 @@ class TestExtractorArithmetic(unittest.TestCase):
         run_tests(comps, "float64", extr.Rprice, *inps)
         run_tests(comps, "float32", extr.Float32, *inps)
         run_tests(comps, "float64", extr.Float64, *inps)
-        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)))
+        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="object")
 
         comps = [
             ("divide",[0.5,2.4,6.0]),
@@ -79,7 +80,7 @@ class TestExtractorArithmetic(unittest.TestCase):
         inps = [[1.0, 12.0, 6.0],[2.0,5.0,1.0]]
         run_tests(comps, "float32", extr.Float32, *inps)
         run_tests(comps, "float64", extr.Float64, *inps)
-        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)))
+        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="object")
 
         comps = [
             ("cumulative",[1.0,13.0,19.0,25.0,27.0]),
@@ -92,7 +93,7 @@ class TestExtractorArithmetic(unittest.TestCase):
         run_tests(comps, "float32", extr.Float32, *inps)
         run_tests(comps, "float64", extr.Float64, *inps)
         run_tests(comps, "float64", extr.Rprice, *inps)
-        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)))
+        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="object")
 
         comps = [
             ("unique",[1.0,12.0,6.0,2.0]),
@@ -106,7 +107,7 @@ class TestExtractorArithmetic(unittest.TestCase):
         run_tests(comps, "float32", extr.Float32, *inps, outts=outts)
         run_tests(comps, "float64", extr.Float64, *inps, outts=outts)
         run_tests(comps, "float64", extr.Rprice, *inps, outts=outts)
-        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outts=outts)
+        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outts=outts, outdtype="object")
 
         comps = [
             ("is_zero",[False, False, True, False, False, False]),
@@ -116,14 +117,13 @@ class TestExtractorArithmetic(unittest.TestCase):
         inps = [[1.0,math.inf,0,math.nan,-math.inf,25.33],]
         run_tests(comps, "float32", extr.Float32, *inps, outdtype='bool')
         run_tests(comps, "float64", extr.Float64, *inps, outdtype='bool')
-        # run_tests(comps, "float64", extr.Rprice, *inps, outdtype='bool')
-        # run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(x), outdtype='bool')
+        run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype='bool')
 
-        #  fm_comp_type_add(sys, &fm_comp_is_zero) &&
-        #  fm_comp_type_add(sys, &fm_comp_is_inf) &&
-
-        #  fm_comp_type_add(sys, &fm_comp_is_nan)
-
+        comps = [
+            ("is_zero",[False, True, False]),
+        ]
+        inps = [[1.0, 0, 25.33],]
+        run_tests(comps, "float64", extr.Rprice, *inps, outdtype='bool')
 
         #  fm_comp_type_add(sys, &fm_comp_convert) &&
         #  fm_comp_type_add(sys, &fm_comp_greater) &&
