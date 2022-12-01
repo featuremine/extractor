@@ -105,7 +105,7 @@ set_target_properties(
     OUTPUT_NAME "extractor"
     PREFIX ""
     SUFFIX ".so"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/python_dist/extractor"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/dist/extractor"
 )
 target_include_directories(
     extractor_module
@@ -117,8 +117,8 @@ target_include_directories(
     "${PYTHON_INCLUDE_DIRS}"
 )
 file(
-    COPY ${PROJECT_SOURCE_DIR}/python/include
-    DESTINATION "${CMAKE_BINARY_DIR}/python_dist/extractor"
+    COPY ${CMAKE_CURRENT_SOURCE_DIR}/include
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/dist/extractor"
     FILES_MATCHING
         PATTERN "*.h"
 )
