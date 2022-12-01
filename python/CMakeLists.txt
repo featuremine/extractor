@@ -116,12 +116,6 @@ target_include_directories(
     "${EXTRACTOR_SRC_DIR}"
     "${PYTHON_INCLUDE_DIRS}"
 )
-file(
-    COPY ${CMAKE_CURRENT_SOURCE_DIR}/include
-    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/dist/extractor"
-    FILES_MATCHING
-        PATTERN "*.h"
-)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     target_link_options(extractor_module PRIVATE -Wl,-rpath,@loader_path)
@@ -129,6 +123,47 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
 else()
     set_property(TARGET extractor_module PROPERTY BUILD_RPATH_USE_ORIGIN TRUE)
 endif()
+
+file(
+    COPY ${CMAKE_CURRENT_SOURCE_DIR}/include
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/dist/extractor"
+    FILES_MATCHING
+        PATTERN "*.h"
+)
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/__init__.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/__init__.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/__init__.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tests/__init__.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/arithmetic.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tests/arithmetic.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/component.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tests/component.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/scripts/test-extractor-python"
+    "${WHEEL_extractor_BUILD_DIR}/dist/scripts/test-extractor-python"
+    COPYONLY
+)
+
+file(
+    COPY "${PROJECT_SOURCE_DIR}/LICENSE"
+    DESTINATION "${WHEEL_extractor_BUILD_DIR}/dist"
+)
 
 if(CMAKE_BUILD_TYPE MATCHES DEBUG)
     set(DEBUG_FLAG "--debug")

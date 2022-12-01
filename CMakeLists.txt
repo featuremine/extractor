@@ -68,41 +68,6 @@ install(
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
 )
 
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/__init__.py"
-    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/__init__.py"
-    COPYONLY
-)
-
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/__init__.py"
-    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tests/__init__.py"
-    COPYONLY
-)
-
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/arithmetic.py"
-    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tests/arithmetic.py"
-    COPYONLY
-)
-
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/component.py"
-    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tests/component.py"
-    COPYONLY
-)
-
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/scripts/test-extractor-python"
-    "${WHEEL_extractor_BUILD_DIR}/dist/scripts/test-extractor-python"
-    COPYONLY
-)
-
-file(
-    COPY "${PROJECT_SOURCE_DIR}/LICENSE"
-    DESTINATION "${WHEEL_extractor_BUILD_DIR}/dist"
-)
-
 add_subdirectory(python)
 
 if(BUILD_TESTING)
