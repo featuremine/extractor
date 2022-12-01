@@ -41,7 +41,6 @@ fm_config()
 include(GNUInstallDirs)
 
 add_subdirectory(src)
-add_subdirectory(python)
 
 install(
     DIRECTORY "${PROJECT_SOURCE_DIR}/include/extractor"
@@ -104,57 +103,7 @@ file(
     DESTINATION "${WHEEL_extractor_BUILD_DIR}/dist"
 )
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(PYTHON_PLATFORM "manylinux_2_17_${CMAKE_SYSTEM_PROCESSOR}")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    execute_process(COMMAND sw_vers -productVersion
-                    OUTPUT_VARIABLE MACOS_VERSION
-                    OUTPUT_STRIP_TRAILING_WHITESPACE)
-    STRING(REGEX REPLACE "^([0-9]+)\\.?([0-9]+)\\.?([0-9]+)?$" "\\1" MACOS_VERSION_MAJOR "${MACOS_VERSION}")
-    STRING(REGEX REPLACE "^([0-9]+)\\.?([0-9]+)\\.?([0-9]+)?$" "\\2" MACOS_VERSION_MINOR "${MACOS_VERSION}")
-    set(PYTHON_PLATFORM "macosx_${MACOS_VERSION_MAJOR}_0_${CMAKE_SYSTEM_PROCESSOR}")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(PYTHON_PLATFORM "win_${CMAKE_SYSTEM_PROCESSOR}")
-else()
-    message(FATAL_ERROR "Platform not supported")
-endif()
-
-add_custom_target(
-    extractor-whl ALL
-
-    COMMAND
-    "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
-
-    "build"
-    "--build-base=${WHEEL_extractor_BUILD_DIR}/build"
-    "--build-lib=${WHEEL_extractor_BUILD_DIR}/build/lib"
-    ${DEBUG_FLAG}
-
-    "egg_info"
-    "--egg-base" "${WHEEL_extractor_BUILD_DIR}"
-
-    "bdist_wheel"
-    "--bdist-dir=${WHEEL_extractor_BUILD_DIR}/bdist"
-    "--dist-dir=${CMAKE_BINARY_DIR}/output"
-
-    "--plat-name=${PYTHON_PLATFORM}"
-
-    COMMAND
-    "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
-
-    "build_scripts"
-    "--executable=${PYTHON3_BIN}"
-
-    "build"
-    "--build-base=${WHEEL_extractor_BUILD_DIR}/build"
-    "--build-lib=${WHEEL_extractor_BUILD_DIR}/build/lib"
-    "--build-scripts=${WHEEL_extractor_BUILD_DIR}/build/scripts"
-    ${DEBUG_FLAG}
-
-    WORKING_DIRECTORY ${WHEEL_extractor_BUILD_DIR}/dist
-
-    DEPENDS extractor extractor_module
-)
+add_subdirectory(python)
 
 if(BUILD_TESTING)
     enable_testing()
