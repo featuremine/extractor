@@ -130,6 +130,10 @@ else()
     set_property(TARGET extractor_module PROPERTY BUILD_RPATH_USE_ORIGIN TRUE)
 endif()
 
+if(CMAKE_BUILD_TYPE MATCHES DEBUG)
+    set(DEBUG_FLAG "--debug")
+endif()
+
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
     set(PYTHON_PLATFORM "manylinux_2_17_${CMAKE_SYSTEM_PROCESSOR}")
 elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")

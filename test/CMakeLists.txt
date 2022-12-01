@@ -601,7 +601,7 @@ add_test(
 set_tests_properties(
     python_ytp_book_bbo_multi_file
     PROPERTIES
-    ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+    ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1"
     TIMEOUT 100
 )
 
@@ -624,6 +624,6 @@ add_test(
 set_tests_properties(
     python_ytp_book_trade_multi_file
     PROPERTIES
-    ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+    ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1"
     TIMEOUT 100
 )
