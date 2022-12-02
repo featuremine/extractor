@@ -34,6 +34,7 @@ set(EXTRACTOR_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(EXTRACTOR_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/package/bin")
 set(EXTRACTOR_LIB_DIR "${CMAKE_CURRENT_BINARY_DIR}/package/lib")
 set(WHEEL_extractor_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/python")
+set(WHEEL_extractor_SCRIPTS_DIR "scripts")
 
 set(FmConfig_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(FmConfig REQUIRED)
@@ -77,19 +78,6 @@ if(BUILD_TESTING)
     set(VALGRIND_COMMAND_OPTIONS "--log-fd=2 --verbose --trace-children=yes --leak-check=full --show-leak-kinds=all --track-origins=yes")
     include(CTest)
     add_subdirectory(test)
-
-    if(TEST_EXTENSIONS)
-        if(BUILD_WHEEL)
-            set(WheelPackage_DIR "${PROJECT_SOURCE_DIR}/cmake")
-            find_package(WheelPackage REQUIRED)
-            test_python_package(
-                NAME extractor_py
-                PACKAGE extractor
-                TIMEOUT 100
-                TEST "test-extractor-python"
-            )
-        endif()
-    endif()
 endif()
 
 set(CPACK_PACKAGE_VENDOR "Featuremine")

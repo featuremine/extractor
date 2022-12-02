@@ -222,3 +222,20 @@ if(BUILD_WHEEL)
         DEPENDS extractor extractor_module
     )
 endif()
+
+if(BUILD_TESTING)
+    enable_testing()
+    #add_subdirectory(tests)
+    if(TEST_EXTENSIONS)
+        if(BUILD_WHEEL)
+            set(WheelPackage_DIR "${PROJECT_SOURCE_DIR}/cmake")
+            find_package(WheelPackage REQUIRED)
+            test_python_package(
+                NAME extractor_py
+                PACKAGE extractor
+                TIMEOUT 100
+                TEST "test-extractor-python"
+            )
+        endif()
+    endif()
+endif()
