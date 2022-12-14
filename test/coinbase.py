@@ -30,9 +30,9 @@ import shutil
 import argparse
 
 src_dir = os.path.dirname(os.path.realpath(__file__))
-ytp_file = os.path.join(src_dir, 'data', 'coinbase_bulldozer.base.ytp')
-book_base_file = os.path.join(src_dir, 'data', 'coinbase_bulldozer.base.csv')
-book_test_file = os.path.join(src_dir, 'data', 'coinbase_bulldozer.test.csv')
+ytp_file = os.getenv("COINBASE_FEED_YTP")
+book_base_file = os.getenv("BOOK_BASE_FILE")
+book_test_file = os.getenv("BOOK_TEST_FILE")
 
 
 book_entries = 5
@@ -53,8 +53,8 @@ if __name__ == "__main__":
         os.remove(book_test_file)
 
     seq = ytp.sequence(ytp_file, readonly=True)
-    peer = seq.peer('mypeer')
-    ch = peer.channel(1000, "mychannel/imnts/coinbase/BTC-USD")
+    peer = seq.peer('feed_handler')
+    ch = peer.channel(1000, os.getenv("COINBASE_FEED_CH"))
     op.ytp_sequence(seq, timedelta(milliseconds=1))
     bookupd = op.ore_ytp_decode(ch)
     decoded = op.decode_data(bookupd)
@@ -68,6 +68,3 @@ if __name__ == "__main__":
 
     extr.flush()
     extr.assert_numdiff(book_base_file, book_test_file)
-
-    if os.path.exists(book_test_file):
-        os.remove(book_test_file)

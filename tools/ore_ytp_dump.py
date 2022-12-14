@@ -1,9 +1,10 @@
 import msgpack as mp
 import argparse
-import ytp
+from yamal import ytp
+import json
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description='dump ytp ORE file')
+    parser = argparse.ArgumentParser(description='dump ytp ORE channel')
     parser.add_argument("--ytp", help="ytp input file", required=True)
     parser.add_argument("--channel", help="The channel or channel prefix", required=True)
     args = parser.parse_args()
@@ -11,9 +12,12 @@ if __name__ == "__main__":
     seq = ytp.sequence(args.ytp, readonly=True)
 
     def seq_clbck(peer, channel, time, data):
-        print(mp.unpackb(data))
+        print(json.dumps(mp.unpackb(data)))
 
     seq.data_callback(args.channel, seq_clbck)
 
-    while seq.poll():
+    try:
+        while seq.poll():
+            pass
+    except BrokenPipeError:
         pass
