@@ -18,6 +18,7 @@ class TestExtractorComponent(unittest.TestCase):
     def test_load_module_success(self):
         import extractor as extr
         assert extr is not None
+        assert extr.__version__ is not None
 
 if __name__ == '__main__':
     unittest.main()

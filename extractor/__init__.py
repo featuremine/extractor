@@ -11,3 +11,4 @@
 """
 
 from .extractor import *
+from .extractor import __version__
