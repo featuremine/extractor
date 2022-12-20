@@ -65,6 +65,7 @@ struct filter_if_comp_cl {
   }
   vector<op_field_exec *> calls;
   bool updated = false;
+  fm_field_t idx = 0;
 };
 
 bool fm_comp_filter_if_call_stream_init(fm_frame_t *result, size_t args,
@@ -102,7 +103,7 @@ fm_call_def *fm_comp_filter_if_stream_call(fm_comp_def_cl comp_cl,
 
 void fm_comp_filter_if_queuer(size_t idx, fm_call_ctx_t *ctx) {
   auto *comp_cl = (filter_if_comp_cl *)ctx->comp;
-  if (idx == 1) {
+  if (comp_cl->idx == idx) {
     comp_cl->updated = true;
   }
 }
@@ -113,7 +114,7 @@ fm_ctx_def_t *fm_comp_filter_if_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
                                     fm_arg_stack_t plist) {
   auto *sys = fm_type_sys_get(csys);
 
-  if (argc != 2) {
+  if (argc != 2 && argc != 1) {
     auto *errstr = "expect one or two operator arguments";
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_ARGS, errstr);
     return nullptr;
@@ -127,6 +128,7 @@ fm_ctx_def_t *fm_comp_filter_if_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   }
 
   auto ctx_cl = make_unique<filter_if_comp_cl>();
+  ctx_cl->idx = argc - 1;
   auto &calls = ctx_cl->calls;
 
   auto bool_param_t = fm_base_type_get(sys, FM_TYPE_BOOL);
