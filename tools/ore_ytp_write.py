@@ -19,5 +19,5 @@ if __name__ == "__main__":
     ch = peer.channel(1000, args.channel)
     stream = peer.stream(ch)
 
-    for line in open(args.ore, "r") if args.decompress is None else lzma.open(args.ore, "r"):
+    for line in open(args.ore, "r") if args.decompress is False else lzma.open(args.ore, "r"):
         stream.write(0, mp.packb(json.loads(line)))
