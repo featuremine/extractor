@@ -7,57 +7,34 @@ from datetime import timedelta
 
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
-trades_base_file = os.path.join(src_dir, 'data', 'book_bbo_trades_multi_file.base.txt')
-trades_file = os.path.join(src_dir, 'data', 'book_bbo_trades_multi_file.test.txt')
-bbos_base_file = os.path.join(src_dir, 'data', 'book_bbo_bbos_multi_file.base.txt')
-bbos_file = os.path.join(src_dir, 'data', 'book_bbo_bbos_multi_file.test.txt')
+bbo_trades_base_file = os.path.join(src_dir, 'data', 'book_bbo_trades_multi_file.base.txt')
+bbo_trades_file = os.path.join(src_dir, 'data', 'book_bbo_trades_multi_file_multi_file.test.txt')
 
-trades_cnt = 500
-bbos_cnt = 1000
+cnt = 1600
 test = False
 
 
-def print_trades(x):
-    global trades_file, trades_base_file, trades_cnt, test
+def print_frame(x):
+    global bbo_trades_file, bbo_trades_base_file, cnt, test
     try:
-        f = open(trades_file, "a")
+        f = open(bbo_trades_file, "a")
         print(x, file=f)
-        print(x)
         f.close()
     except FileNotFoundError as e:
         print("File not found")
     except RuntimeError as e:
         print("RuntimeError:", str(e))
 
-    trades_cnt -= 1
-    if test and trades_cnt < 1:
-        extractor.assert_base(trades_base_file, trades_file)
-        if os.path.exists(trades_file):
-            os.remove(trades_file)
-        exit()
-
-
-def print_bbos(x):
-    global bbos_file, bbos_base_file, bbos_cnt, test
-    try:
-        f = open(bbos_file, "a")
-        print(x, file=f)
-        print(x)
-        f.close()
-    except FileNotFoundError as e:
-        print("File not found")
-    except RuntimeError as e:
-        print("RuntimeError:", str(e))
-
-    bbos_cnt -= 1
-    if test and bbos_cnt < 1:
-        extractor.assert_base(bbos_base_file, bbos_file)
-        if os.path.exists(bbos_file):
-            os.remove(bbos_file)
+    cnt -= 1
+    if test and cnt < 1:
+        extractor.assert_base(bbo_trades_base_file, bbo_trades_file)
+        if os.path.exists(bbo_trades_file):
+            os.remove(bbo_trades_file)
         exit()
 
 
 def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
+    period = timedelta(weeks=52*50)
     op = graph.features
     imnts_chs = tuple()
     mkt_imnts = []
@@ -72,38 +49,46 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
     else:
         upds = op.seq_ore_live_split(ytpfile, imnts_chs)
     headers = [op.book_header(upd) for upd in upds]
-    filtered_headers = [op.filter_if(op.is_zero(hdr.batch), hdr) for hdr in headers]
+    gothrus = [op.filter_if(op.logical_not(op.delayed(hdr.vendor, period))) for hdr in headers]
+
     levels = [op.book_build(upd, lvl) for upd in upds]
-    bbos = {(mkt_imnt[0], mkt_imnt[1]): op.combine(
+    lvlhdrs = [op.asof(hdr, lvl) for hdr, lvl in zip(headers, levels)]
+    bbos = [op.combine(
         level, (
             ("bid_prx_0", "bidprice"),
             ("ask_prx_0", "askprice"),
             ("bid_shr_0", "bidqty"),
             ("ask_shr_0", "askqty")
         ),
-        header, (("vendor", "receive"),),
-        name=f'bbo/{mkt_imnt[0]}/{mkt_imnt[1]}')
-        for level, header, mkt_imnt in zip(levels, filtered_headers, mkt_imnts)}
+        hdr, (("vendor", "receive"),)) for level, hdr in zip(levels, lvlhdrs)]
+    filtered_bbos = {(mkt_imnt[0], mkt_imnt[1]):
+                     op.filter_if(gothru, bbo, name=f'bbo/{mkt_imnt[0]}/{mkt_imnt[1]}')
+                     for gothru, bbo, mkt_imnt in zip(gothrus, bbos, mkt_imnts)}
 
-    trades = {}
+    filtered_trades = {}
     book_trades = [op.book_trades(upd) for upd in upds]
-    for trade, mkt_imnt in zip(book_trades, mkt_imnts):
-        bid, ask, unk = op.split(trade.decoration, 'decoration', ('b', 'a', 'u'))
-        bid_val = op.constant(bid, ('side', extractor.Int32, 0))
-        ask_val = op.constant(ask, ('side', extractor.Int32, 1))
-        unk_val = op.constant(unk, ('side', extractor.Int32, 2))
-        side = op.join(
-            bid_val, ask_val, unk_val, 'decoration', extractor.Array(
-                extractor.Char, 1), ('b', 'a', 'u')).side
+    for trade, gothru, mkt_imnt in zip(book_trades, gothrus, mkt_imnts):
+        const_b = op.constant(('decoration', extractor.Array(extractor.Char, 8), 'b'))
+        const_a = op.constant(('decoration', extractor.Array(extractor.Char, 8), 'a'))
+        const_u = op.constant(('decoration', extractor.Array(extractor.Char, 8), 'u'))
+        decoration_equals_a = trade.decoration == const_a  # op.equal(trade.decoration, const_a)
+        decoration_equals_b = trade.decoration == const_b  # op.equal(trade.decoration, const_a)
+        const_n_value_b = op.constant(('side', extractor.Int32, 0))
+        const_n_value_a = op.constant(('side', extractor.Int32, 1))
+        const_n_value_u = op.constant(('side', extractor.Int32, 2))
+        eq_b = op.cond(decoration_equals_b, const_n_value_b, const_n_value_u)
+        side = op.cond(decoration_equals_a, const_n_value_a, eq_b)
 
-        trades[(mkt_imnt[0], mkt_imnt[1])] = op.combine(
+        trade = op.combine(
             trade, (
                 ("trade_price", "price"),
                 ("vendor", "receive"),
                 ("qty", "qty")
             ),
-            side, (("side", "side"),),
-            name=f'trade/{mkt_imnt[0]}/{mkt_imnt[1]}')
+            side, (("side", "side"),))
+
+        name = f'trade/{mkt_imnt[0]}/{mkt_imnt[1]}'
+        filtered_trades[(mkt_imnt[0], mkt_imnt[1])] = op.filter_if(gothru, trade, name=name)
 
     for imnt in universe.get("all"):
         ticker = symbology.info(imnt)["ticker"]
@@ -112,10 +97,10 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
         cum_trades = []
         statuses = []
         for mkt in markets:
-            bbo_book_combined = bbos[(mkt, ticker)]
-            trade_combined = trades[(mkt, ticker)]
-            graph.callback(bbo_book_combined, print_bbos)
-            graph.callback(trade_combined, print_trades)
+            bbo_book_combined = filtered_bbos[(mkt, ticker)]
+            trade_combined = filtered_trades[(mkt, ticker)]
+            graph.callback(bbo_book_combined, print_frame)
+            graph.callback(trade_combined, print_frame)
             bbos_book.append(bbo_book_combined)
             trades_combined.append(trade_combined)
             cum_trade = op.cumulative(op.combine(trade_combined.qty, (("qty", "shares"),), op.convert(trade_combined.qty, extractor.Float64) * op.convert(trade_combined.price, extractor.Float64), (("qty", "notional",),), name="cum_trade/{0}/{1}".format(mkt, imnt)))
@@ -188,10 +173,8 @@ if __name__ == "__main__":
     # ]
     markets = tuple(args.markets.split(','))
 
-    if os.path.exists(trades_file):
-        os.remove(trades_file)
-    if os.path.exists(bbos_file):
-        os.remove(bbos_file)
+    if os.path.exists(bbo_trades_file):
+        os.remove(bbo_trades_file)
 
     if args.test.lower() in ('yes', 'true', 't', 'y', '1'):
         test = True
