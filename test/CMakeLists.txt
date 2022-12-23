@@ -583,7 +583,7 @@ set_tests_properties(
 )
 
 add_test(
-    NAME python_ytp_book_bbo_trade_multi_file COMMAND
+    NAME extractor_python_ytp_book_bbo_trade_multi_file COMMAND
 
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo_multi_file.py"
@@ -599,7 +599,7 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 set_tests_properties(
-    python_ytp_book_bbo_trade_multi_file
+    extractor_python_ytp_book_bbo_trade_multi_file
     PROPERTIES
     ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1"
     TIMEOUT 100
