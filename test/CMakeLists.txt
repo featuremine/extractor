@@ -114,6 +114,7 @@ extr_unit_test(
     tests
     FILES
     $<TARGET_OBJECTS:extractor_obj>
+    $<TARGET_OBJECTS:extractor_book_lib_obj>
     $<TARGET_OBJECTS:py_extractor_obj>
 )
 
