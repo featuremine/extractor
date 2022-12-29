@@ -182,7 +182,7 @@ fm_ctx_def_t *fm_comp_greater_equal_gen(fm_comp_sys_t *csys,
   vector<fm_type_decl_cp> types(nf);
   vector<int> dims(nd);
 
-  for (int idx = 0; idx < nf; ++idx) {
+  for (int idx = 0; idx < nd; ++idx) {
     dims[idx] = fm_type_frame_dim(inp, idx);
   }
 
