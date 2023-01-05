@@ -224,7 +224,6 @@ endif()
 
 if(BUILD_TESTING)
     enable_testing()
-    #add_subdirectory(tests)
     if(TEST_EXTENSIONS)
         if(BUILD_WHEEL)
             set(WheelPackage_DIR "${PROJECT_SOURCE_DIR}/cmake")
