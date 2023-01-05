@@ -1,31 +1,77 @@
 add_library(
-    extractor_obj
+    extractor_book_lib_obj
+    OBJECT
+    "book/book.cpp"
+    "book/updates.cpp"
+)
+target_link_libraries(
+    extractor_book_lib_obj
+    PUBLIC
+    ytp
+    fmc++
+)
+target_include_directories(
+    extractor_book_lib_obj
+    PUBLIC
+    "${EXTRACTOR_INC_DIR}"
+    PRIVATE
+    "${EXTRACTOR_SRC_DIR}"
+)
+
+add_library(
+    extractor_book_lib_dep
+    INTERFACE
+)
+target_link_libraries(
+    extractor_book_lib_dep
+    INTERFACE
+    ytp
+    fmc++
+)
+target_include_directories(
+    extractor_book_lib_dep
+    INTERFACE
+    "${EXTRACTOR_INC_DIR}"
+)
+
+add_library(
+    extractor_book_lib
     STATIC
+    $<TARGET_OBJECTS:extractor_book_lib_obj>
+)
+target_link_libraries(
+    extractor_book_lib
+    PUBLIC
+    extractor_book_lib_dep
+)
+
+add_library(
+    extractor_obj
+    OBJECT
     "book_build.cpp"
-	"call_obj.cpp"
-	"call_stack.cpp"
-	"comp.cpp"
-	"comp_def.cpp"
-	"comp_def_simp.cpp"
-	"comp_graph.cpp"
-	"comp_sys.cpp"
-	"csv_play.cpp"
+    "call_obj.cpp"
+    "call_stack.cpp"
+    "comp.cpp"
+    "comp_def.cpp"
+    "comp_def_simp.cpp"
+    "comp_graph.cpp"
+    "comp_sys.cpp"
+    "csv_play.cpp"
     "csv_record.cpp"
     "csv_tail.cpp"
     "cumulative.cpp"
-	"unique.cpp"
-	"exec_ctx.cpp"
-	"frame.cpp"
-	"stream_ctx.cpp"
-	"type_decl.cpp"
-	"type_error.cpp"
-	"type_space.cpp"
-	"type_sys.cpp"
+    "unique.cpp"
+    "exec_ctx.cpp"
+    "frame.cpp"
+    "stream_ctx.cpp"
+    "type_decl.cpp"
+    "type_error.cpp"
+    "type_space.cpp"
+    "type_sys.cpp"
     "split.cpp"
     "identity.cpp"
     "mp_play.cpp"
     "mp_record.cpp"
-    "book/book.cpp"
     "bbo_book_aggr.cpp"
     "bbo_aggr.cpp"
     "book_play_split.cpp"
@@ -105,6 +151,7 @@ target_link_libraries(
     PUBLIC
     fmc++
     ytp
+    extractor_book_lib_dep
 )
 target_include_directories(
     extractor_obj
@@ -122,6 +169,7 @@ target_link_libraries(
     INTERFACE
     fmc++
     ytp
+    extractor_book_lib_dep
 )
 target_include_directories(
     extractor_dep
@@ -133,17 +181,19 @@ add_library(
     extractor
     SHARED
     $<TARGET_OBJECTS:extractor_obj>
+    $<TARGET_OBJECTS:extractor_book_lib_obj>
 )
 target_link_libraries(
     extractor
     PRIVATE
     extractor_dep
+    extractor_book_lib_dep
 )
 set_target_properties(
     extractor
     PROPERTIES
     OUTPUT_NAME "extractor"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/python_dist/extractor"
+    LIBRARY_OUTPUT_DIRECTORY "${WHEEL_extractor_BUILD_DIR}/dist/extractor"
 )
 install(
     TARGETS

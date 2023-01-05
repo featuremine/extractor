@@ -23,6 +23,8 @@
 
 #pragma once
 
+#include "extractor/book/book.h"
+
 #include "fmc++/decimal128.hpp"
 #include "fmc++/time.hpp"
 
@@ -149,6 +151,8 @@ using message = std::variant<updates::add, updates::insert, updates::position,
 
 static_assert(sizeof(message) <= 88, "expecting book update message to be less "
                                      "than 88B");
+
+bool update_from_message(fmc_time64_t now, book::message &box, fm_book_t *inst);
 
 } // namespace book
 } // namespace fm

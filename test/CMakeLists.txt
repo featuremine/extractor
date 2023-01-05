@@ -34,7 +34,7 @@ macro(extr_unit_test)
         PkgConfig::GTEST
         PkgConfig::PYTHON
     )
-    add_test(NAME ${ARG_NAME} COMMAND ${ARG_NAME} ${CMAKE_CURRENT_SOURCE_DIR})
+    add_test(NAME extractor_${ARG_NAME} COMMAND ${ARG_NAME} ${CMAKE_CURRENT_SOURCE_DIR})
 endmacro()
 
 extr_unit_test(
@@ -114,6 +114,7 @@ extr_unit_test(
     tests
     FILES
     $<TARGET_OBJECTS:extractor_obj>
+    $<TARGET_OBJECTS:extractor_book_lib_obj>
     $<TARGET_OBJECTS:py_extractor_obj>
 )
 
@@ -121,7 +122,7 @@ find_program(PYTHON3_BIN "python3" REQUIRED)
 
 macro(extr_py_unit_test)
     add_test(
-        NAME py_${ARGV0} COMMAND
+        NAME extractor_py_${ARGV0} COMMAND
     
         "${PYTHON3_BIN}"
         "${CMAKE_CURRENT_SOURCE_DIR}/${ARGV0}.py"
@@ -129,9 +130,9 @@ macro(extr_py_unit_test)
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
     )
     set_tests_properties(
-        py_${ARGV0}
+        extractor_py_${ARGV0}
         PROPERTIES
-        ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+        ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
         TIMEOUT 100
     )
 endmacro()
@@ -495,7 +496,7 @@ target_link_libraries(
     ytp
     PkgConfig::GTEST
 )
-add_test(NAME ext_lib COMMAND ext_exe ${CMAKE_CURRENT_SOURCE_DIR} $<TARGET_FILE:ext_lib>)
+add_test(NAME extractor_ext_lib COMMAND ext_exe ${CMAKE_CURRENT_SOURCE_DIR} $<TARGET_FILE:ext_lib>)
 
 add_executable(
     split_sample_trade
@@ -515,7 +516,7 @@ target_link_libraries(
 )
 
 add_test(
-    NAME python_ext_test COMMAND
+    NAME extractor_python_ext_test COMMAND
 
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/ext_test.py"
@@ -524,15 +525,15 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 set_tests_properties(
-    python_ext_test
+    extractor_python_ext_test
     PROPERTIES
-    ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
     TIMEOUT 100
 )
 
 
 add_test(
-    NAME python_ema_test COMMAND
+    NAME extractor_python_ema_test COMMAND
 
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/ema_test.py"
@@ -541,14 +542,14 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 set_tests_properties(
-    python_ema_test
+    extractor_python_ema_test
     PROPERTIES
-    ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
     TIMEOUT 100
 )
 
 add_test(
-    NAME python_ytp_book_bbo COMMAND
+    NAME extractor_python_ytp_book_bbo COMMAND
 
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo.py"
@@ -558,15 +559,15 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 set_tests_properties(
-    python_ytp_book_bbo
+    extractor_python_ytp_book_bbo
     PROPERTIES
-    ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
     TIMEOUT 100
 )
 
 
 add_test(
-    NAME python_ytp_book_trade COMMAND
+    NAME extractor_python_ytp_book_trade COMMAND
 
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo.py"
@@ -576,19 +577,19 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 set_tests_properties(
-    python_ytp_book_trade
+    extractor_python_ytp_book_trade
     PROPERTIES
-    ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
     TIMEOUT 100
 )
 
 add_test(
-    NAME python_ytp_book_bbo_multi_file COMMAND
+    NAME extractor_python_ytp_book_bbo_trade_multi_file COMMAND
 
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo_multi_file.py"
     "--ytp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/data/ytpseq_ore_bbo.ytp"
+    "${CMAKE_CURRENT_SOURCE_DIR}/data/ytpseq_ore_bbo_trades.ytp"
     "--markets"
     "NYSE,NASDAQOMX,BATS,DirectEdgeX,DirectEdgeA,NYSEArca,NASDAQOMXBX,BATSY"
     "--imnts"
@@ -599,31 +600,8 @@ add_test(
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 set_tests_properties(
-    python_ytp_book_bbo_multi_file
+    extractor_python_ytp_book_bbo_trade_multi_file
     PROPERTIES
-    ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
-    TIMEOUT 100
-)
-
-add_test(
-    NAME python_ytp_book_trade_multi_file COMMAND
-
-    "${PYTHON3_BIN}"
-    "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo_multi_file.py"
-    "--ytp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/data/ytpseq_ore_trades.ytp"
-    "--markets"
-    "NYSE,NASDAQOMX,BATS,DirectEdgeX,DirectEdgeA,NYSEArca,NASDAQOMXBX,BATSY"
-    "--imnts"
-    "APLE,APAM,BMY,BAC"
-    "--test"
-    "true"
-
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
-set_tests_properties(
-    python_ytp_book_trade_multi_file
-    PROPERTIES
-    ENVIRONMENT "PYTHONPATH=${CMAKE_SOURCE_DIR}/tools:/${CMAKE_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
+    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
     TIMEOUT 100
 )
