@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "book/book.h"
+#include "extractor/book/book.h"
 #include <Python.h>
 
 #ifdef __cplusplus

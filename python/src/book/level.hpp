@@ -23,7 +23,7 @@
 
 #include <Python.h>
 
-#include "book/book.h"
+#include "extractor/book/book.h"
 #include "extractor/python/book.h"
 #include "extractor/python/decimal128.h"
 #include "extractor/python/extractor.h"

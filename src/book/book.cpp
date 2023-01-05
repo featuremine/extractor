@@ -22,7 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#include "book/book.h"
+#include "extractor/book/book.h"
 #include "fmc/decimal128.h"
 #include "fmc/time.h"
 

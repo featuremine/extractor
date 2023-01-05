@@ -24,8 +24,8 @@
  */
 
 #include "book_msg.h"
-#include "book/book.h"
 #include "extractor/arg_stack.h"
+#include "extractor/book/book.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
