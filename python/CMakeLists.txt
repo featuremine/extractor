@@ -105,7 +105,7 @@ set_target_properties(
     OUTPUT_NAME "extractor"
     PREFIX ""
     SUFFIX ".so"
-    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/python_dist/extractor"
+    LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/dist/extractor"
 )
 target_include_directories(
     extractor_module
@@ -116,16 +116,124 @@ target_include_directories(
     "${EXTRACTOR_SRC_DIR}"
     "${PYTHON_INCLUDE_DIRS}"
 )
-file(
-    COPY ${PROJECT_SOURCE_DIR}/python/include
-    DESTINATION "${CMAKE_BINARY_DIR}/python_dist/extractor"
-    FILES_MATCHING
-        PATTERN "*.h"
-)
 
 if(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
     target_link_options(extractor_module PRIVATE -Wl,-rpath,@loader_path)
     target_link_options(extractor_module PRIVATE -undefined dynamic_lookup)
 else()
     set_property(TARGET extractor_module PROPERTY BUILD_RPATH_USE_ORIGIN TRUE)
+endif()
+
+file(
+    COPY ${CMAKE_CURRENT_SOURCE_DIR}/include
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/dist/extractor"
+    FILES_MATCHING
+        PATTERN "*.h"
+)
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/__init__.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/__init__.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/__init__.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tests/__init__.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/arithmetic.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tests/arithmetic.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/component.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tests/component.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/scripts/test-extractor-python"
+    "${WHEEL_extractor_BUILD_DIR}/dist/scripts/test-extractor-python"
+    COPYONLY
+)
+
+file(
+    COPY "${PROJECT_SOURCE_DIR}/LICENSE"
+    DESTINATION "${WHEEL_extractor_BUILD_DIR}/dist"
+)
+
+if(CMAKE_BUILD_TYPE MATCHES DEBUG)
+    set(DEBUG_FLAG "--debug")
+endif()
+
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
+    set(PYTHON_PLATFORM "manylinux_2_17_${CMAKE_SYSTEM_PROCESSOR}")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
+    execute_process(COMMAND sw_vers -productVersion
+                    OUTPUT_VARIABLE MACOS_VERSION
+                    OUTPUT_STRIP_TRAILING_WHITESPACE)
+    STRING(REGEX REPLACE "^([0-9]+)\\.?([0-9]+)\\.?([0-9]+)?$" "\\1" MACOS_VERSION_MAJOR "${MACOS_VERSION}")
+    set(PYTHON_PLATFORM "macosx_${MACOS_VERSION_MAJOR}_0_${CMAKE_SYSTEM_PROCESSOR}")
+elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+    set(PYTHON_PLATFORM "win_${CMAKE_SYSTEM_PROCESSOR}")
+else()
+    message(FATAL_ERROR "Platform not supported")
+endif()
+
+if(BUILD_WHEEL)
+    add_custom_target(
+        extractor-whl ALL
+
+        COMMAND
+        "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
+
+        "build"
+        "--build-base=${WHEEL_extractor_BUILD_DIR}/build"
+        "--build-lib=${WHEEL_extractor_BUILD_DIR}/build/lib"
+        ${DEBUG_FLAG}
+
+        "egg_info"
+        "--egg-base" "${WHEEL_extractor_BUILD_DIR}"
+
+        "bdist_wheel"
+        "--bdist-dir=${WHEEL_extractor_BUILD_DIR}/bdist"
+        "--dist-dir=${CMAKE_BINARY_DIR}/output"
+
+        "--plat-name=${PYTHON_PLATFORM}"
+
+        COMMAND
+        "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
+
+        "build_scripts"
+        "--executable=${PYTHON3_BIN}"
+
+        "build"
+        "--build-base=${WHEEL_extractor_BUILD_DIR}/build"
+        "--build-lib=${WHEEL_extractor_BUILD_DIR}/build/lib"
+        "--build-scripts=${WHEEL_extractor_BUILD_DIR}/build/scripts"
+        ${DEBUG_FLAG}
+
+        WORKING_DIRECTORY ${WHEEL_extractor_BUILD_DIR}/dist
+
+        DEPENDS extractor extractor_module
+    )
+endif()
+
+if(BUILD_TESTING)
+    enable_testing()
+    if(TEST_EXTENSIONS)
+        if(BUILD_WHEEL)
+            set(WheelPackage_DIR "${PROJECT_SOURCE_DIR}/cmake")
+            find_package(WheelPackage REQUIRED)
+            test_python_package(
+                NAME extractor_py
+                PACKAGE extractor
+                TIMEOUT 100
+                TEST "test-extractor-python"
+            )
+        endif()
+    endif()
 endif()
