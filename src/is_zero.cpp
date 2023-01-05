@@ -190,7 +190,7 @@ fm_ctx_def_t *fm_comp_is_zero_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   vector<fm_type_decl_cp> types(nf);
   vector<int> dims(nd);
 
-  for (int idx = 0; idx < nf; ++idx) {
+  for (int idx = 0; idx < nd; ++idx) {
     dims[idx] = fm_type_frame_dim(inp, idx);
   }
 
