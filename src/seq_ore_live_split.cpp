@@ -56,30 +56,40 @@ struct sols_op_cl {
   std::string fname;
   std::unordered_map<std::string, int> ytp_channels;
   std::string time_ch;
+  fm::book::ore::imnt_infos_t info;
+};
+
+struct ch_ctx_t {
+  ch_ctx_t(struct sols_exe_cl *exe_cl, int32_t index)
+      : exe_cl(exe_cl), parser(imnts), index(index) {}
+  struct sols_exe_cl *exe_cl;
+  fm::book::ore::imnt_infos_t imnts;
+  fm::book::ore::parser parser;
+  fm::book::ore::imnt_info info;
+  int32_t index;
 };
 
 struct sols_exe_cl {
   ytp_sequence_t *seq = nullptr;
   cmp_mem_t cmp;
   fm::book::ore::imnt_infos_t imnts;
-  fm::book::ore::parser parser;
-  fm::book::ore::imnt_infos_t imnts_time;
-  fm::book::ore::parser parser_time;
-  std::atomic<uint32_t> fidx = 1;
-  fmc_fd fd = -1;
-  std::unordered_map<std::string, fm::book::ore::imnt_info> ytp_channels_info;
+  std::unordered_map<std::string, std::unique_ptr<ch_ctx_t>> ch_cl;
+  fm::book::ore::parser empty_parser;
+  fm::book::ore::parser *current_parser;
   sols_op_cl &cfg;
   fm_stream_ctx *exec_ctx;
   fm_call_ctx *call_ctx;
   fm_frame_t *fres;
-  bool next_file_exists = false;
-  uint32_t peek_err_cnt = 0;
   std::thread thread;
+  std::atomic<uint32_t> fidx = 1;
+  fmc_fd fd = -1;
+  uint32_t peek_err_cnt = 0;
   std::atomic<bool> thread_done = false;
   std::atomic<bool> next_file_available = false;
+  bool next_file_exists = false;
 
   sols_exe_cl(sols_op_cl &op_cl)
-      : parser(imnts), parser_time(imnts_time), cfg(op_cl) {
+      : empty_parser(imnts), current_parser(&empty_parser), cfg(op_cl) {
     fmc_error_t *err = nullptr;
     cmp_mem_init(&cmp);
     {
@@ -160,63 +170,51 @@ struct sols_exe_cl {
                                                     channel);
   }
 
-  void ch_cb(std::string_view ch_name, ytp_channel_t ch) {
+  void ch_cb(std::string_view ch_name_sv, ytp_channel_t ch) {
+    std::string ch_name(ch_name_sv.begin(), ch_name_sv.end());
     fmc_error_t *err = nullptr;
-    if (cfg.ytp_channels.find(std::string(ch_name)) != cfg.ytp_channels.end() ||
-        ch_name == cfg.time_ch) {
-      ytp_sequence_indx_cb(seq, ch, static_data_cb, this, &err);
+    if (auto where = cfg.ytp_channels.find(ch_name);
+        where != cfg.ytp_channels.end() || ch_name == cfg.time_ch) {
+      auto index = where->second;
+      auto &cl = ch_cl[ch_name];
+      if (!cl) {
+        cl = std::make_unique<ch_ctx_t>(this, index);
+      }
+      ytp_sequence_indx_cb(seq, ch, static_data_cb, cl.get(), &err);
     }
   }
 
   static void static_data_cb(void *closure, ytp_peer_t peer,
                              ytp_channel_t channel, uint64_t time, size_t sz,
                              const char *data) {
-    reinterpret_cast<sols_exe_cl *>(closure)->data_cb(
-        std::string_view(data, sz), channel);
+    auto &ctx = *reinterpret_cast<
+        decltype(ch_cl)::value_type::second_type::element_type *>(closure);
+    ctx.exe_cl->data_cb(std::string_view(data, sz), &ctx.info, ctx.parser,
+                        ctx.index);
   }
 
-  void data_cb(std::string_view data, ytp_channel_t ch) {
+  void data_cb(std::string_view data, fm::book::ore::imnt_info *info,
+               fm::book::ore::parser &parser, int32_t index) {
     auto *exe_cl = this;
-    fmc_error_t *err = nullptr;
-    size_t channel_name_sz;
-    const char *channel_name_ptr;
-    ytp_sequence_ch_name(seq, ch, &channel_name_sz, &channel_name_ptr, &err);
-    if (err) {
-      fm_exec_ctx_error_set(
-          call_ctx->exec,
-          "error reading FM Ore file %s, could not get channel name",
-          cfg.fname.c_str());
-      return;
-    }
-    std::string_view channel_name{channel_name_ptr, channel_name_sz};
-
-    auto where = ytp_channels_info.try_emplace(std::string(channel_name)).first;
-    fm::book::ore::imnt_info *info = &where->second;
-    fm::book::ore::parser &p =
-        channel_name == cfg.time_ch ? parser_time : parser;
-
-    auto commit_msg = [&]() {
+    cmp_mem_set(&cmp, data.size(), (void *)data.data());
+    auto res = parser.parse(&cmp.ctx, info);
+    if (res.is_success()) {
       auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
-      box = p.msg;
+      box = parser.msg;
+      current_parser = &parser;
       fm_stream_ctx_queue(
           exec_ctx,
-          call_ctx->deps[p.imnt->index + !exe_cl->cfg.time_ch.empty()]);
-    };
-
-    cmp_mem_set(&cmp, data.size(), (void *)data.data());
-    fm::book::ore::result res = p.parse(&cmp.ctx, info);
-    if (res.is_success()) {
-      commit_msg();
+          call_ctx->deps[parser.imnt->index + !exe_cl->cfg.time_ch.empty()]);
     } else if (res.is_time()) {
       if (!exe_cl->cfg.time_ch.empty()) {
         auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
-        box = p.msg;
+        box = parser.msg;
+        current_parser = &parser;
         fm_stream_ctx_queue(exec_ctx, call_ctx->deps[0]);
       }
     } else if (res.is_announce()) {
-      auto *msg = std::get_if<fm::book::updates::announce>(&p.msg);
-      auto idx_it = cfg.ytp_channels.find(std::string(channel_name));
-      info->index = (int32_t)idx_it->second;
+      auto *msg = std::get_if<fm::book::updates::announce>(&parser.msg);
+      info->index = index;
       info->px_denum = msg->tick;
       info->qty_denum = msg->qty_tick;
     } else if (!res.is_skip()) {
@@ -292,23 +290,19 @@ bool fm_comp_seq_ore_live_split_stream_exec(fm_frame_t *fres, size_t args,
   auto *exe_cl = (sols_exe_cl *)cl;
   auto *op_cl = (sols_op_cl *)ctx->comp;
 
-  auto &parser = exe_cl->parser;
-  auto &cmp = exe_cl->cmp;
+  auto &parser = *exe_cl->current_parser;
   exe_cl->fres = fres;
   exe_cl->exec_ctx = exec_ctx;
   exe_cl->call_ctx = ctx;
 
-  auto commit_msg = [&]() {
+  if (parser.expand) {
+    parser.msg = parser.expanded;
+    parser.expand = false;
+
     auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
     box = parser.msg;
     fm_stream_ctx_queue(
         exec_ctx, ctx->deps[parser.imnt->index + !exe_cl->cfg.time_ch.empty()]);
-  };
-
-  if (parser.expand) {
-    parser.msg = parser.expanded;
-    parser.expand = false;
-    commit_msg();
   } else {
     fmc_error_t *err = nullptr;
     bool poll = ytp_sequence_poll(exe_cl->seq, &err);

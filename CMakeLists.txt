@@ -33,15 +33,15 @@ set(EXTRACTOR_PYTHON_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/python/src")
 set(EXTRACTOR_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(EXTRACTOR_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/package/bin")
 set(EXTRACTOR_LIB_DIR "${CMAKE_CURRENT_BINARY_DIR}/package/lib")
+set(WHEEL_extractor_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/python")
+set(WHEEL_extractor_SCRIPTS_DIR "scripts")
 
 set(FmConfig_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(FmConfig REQUIRED)
 fm_config()
-execute_process(COMMAND ${PYTHON3_BIN} -c "import sys;sys.stdout.write('scripts-%d.%d' % sys.version_info[:2])" OUTPUT_VARIABLE PYTHON3_SCRIPTS_DIR)
 include(GNUInstallDirs)
 
 add_subdirectory(src)
-add_subdirectory(python)
 
 install(
     DIRECTORY "${PROJECT_SOURCE_DIR}/include/extractor"
@@ -69,110 +69,15 @@ install(
     DESTINATION "${CMAKE_INSTALL_LIBDIR}/pkgconfig"
 )
 
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/__init__.py"
-    "${CMAKE_BINARY_DIR}/python_dist/extractor/__init__.py"
-    COPYONLY
-)
-
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/__init__.py"
-    "${CMAKE_BINARY_DIR}/python_dist/extractor/tests/__init__.py"
-    COPYONLY
-)
-
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/arithmetic.py"
-    "${CMAKE_BINARY_DIR}/python_dist/extractor/tests/arithmetic.py"
-    COPYONLY
-)
-
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/component.py"
-    "${CMAKE_BINARY_DIR}/python_dist/extractor/tests/component.py"
-    COPYONLY
-)
-
-configure_file(
-    "${CMAKE_CURRENT_SOURCE_DIR}/scripts/test-extractor-python"
-    "${CMAKE_BINARY_DIR}/python_dist/scripts/test-extractor-python"
-    COPYONLY
-)
-
-file(
-    COPY "${PROJECT_SOURCE_DIR}/LICENSE"
-    DESTINATION "${CMAKE_BINARY_DIR}/python_dist"
-)
-
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(PYTHON_PLATFORM "manylinux_2_17_${CMAKE_SYSTEM_PROCESSOR}")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    execute_process(COMMAND sw_vers -productVersion
-                    OUTPUT_VARIABLE MACOS_VERSION
-                    OUTPUT_STRIP_TRAILING_WHITESPACE)
-    STRING(REGEX REPLACE "^([0-9]+)\\.?([0-9]+)\\.?([0-9]+)?$" "\\1" MACOS_VERSION_MAJOR "${MACOS_VERSION}")
-    STRING(REGEX REPLACE "^([0-9]+)\\.?([0-9]+)\\.?([0-9]+)?$" "\\2" MACOS_VERSION_MINOR "${MACOS_VERSION}")
-    set(PYTHON_PLATFORM "macosx_${MACOS_VERSION_MAJOR}_0_${CMAKE_SYSTEM_PROCESSOR}")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(PYTHON_PLATFORM "win_${CMAKE_SYSTEM_PROCESSOR}")
-else()
-    message(FATAL_ERROR "Platform not supported")
-endif()
-
-add_custom_target(
-    extractor-whl ALL
-
-    COMMAND
-    "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
-
-    "build"
-    "--build-base=${CMAKE_CURRENT_BINARY_DIR}/python_dist/build"
-    ${DEBUG_FLAG}
-
-    "egg_info"
-    "--egg-base" "${CMAKE_CURRENT_BINARY_DIR}/python_dist"
-
-    "bdist_wheel"
-    "--bdist-dir=${CMAKE_CURRENT_BINARY_DIR}/python_dist/bdist"
-    "--dist-dir=${CMAKE_BINARY_DIR}/output"
-
-    "--plat-name=${PYTHON_PLATFORM}"
-
-    COMMAND
-    "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
-
-    "build"
-    "--build-base=${CMAKE_CURRENT_BINARY_DIR}/python_dist/build"
-    ${DEBUG_FLAG}
-
-    "build_scripts"
-    "--executable=${PYTHON3_BIN}"
-    "-f"
-
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python_dist
-
-    DEPENDS extractor extractor_module
-)
+add_subdirectory(python)
 
 if(BUILD_TESTING)
     enable_testing()
+    find_program( MEMORYCHECK_COMMAND valgrind )
+    set(MEMORYCHECK_COMMAND_OPTIONS "--log-fd=2 --verbose --trace-children=yes --leak-check=full --show-leak-kinds=all --track-origins=yes")
+    set(VALGRIND_COMMAND_OPTIONS "--log-fd=2 --verbose --trace-children=yes --leak-check=full --show-leak-kinds=all --track-origins=yes")
+    include(CTest)
     add_subdirectory(test)
-    find_program(PYTHON3_BIN "python3" REQUIRED)
-    add_test(
-        NAME extractor_py COMMAND
-
-        "/bin/sh"
-        "-c"
-        "test-extractor-python"
-
-        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/python
-    )
-    set_tests_properties(
-        extractor_py
-        PROPERTIES
-        ENVIRONMENT "PYTHONPATH=${CMAKE_CURRENT_BINARY_DIR}/python_dist/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${CMAKE_CURRENT_BINARY_DIR}/python_dist/build/${PYTHON3_SCRIPTS_DIR}:$ENV{PATH}"
-        TIMEOUT 100
-    )
 endif()
 
 set(CPACK_PACKAGE_VENDOR "Featuremine")

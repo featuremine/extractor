@@ -24,8 +24,8 @@
  */
 
 #include "book_build.h"
-#include "book/book.h"
 #include "extractor/arg_stack.h"
+#include "extractor/book/book.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
@@ -168,63 +168,7 @@ bool fm_comp_book_build_stream_exec(fm_frame_t *result, size_t args,
   //    } else if (show) {
   //        cout << "no message\n";
   //    }
-  bool update = true;
-  if (!std::holds_alternative<book::updates::none>(box)) {
-    std::visit(
-        fmc::overloaded{[&](const auto &msg) { update = msg.batch != 1; },
-                        [&](const book::updates::time &msg) {},
-                        [&](const book::updates::heartbeat &msg) {},
-                        [&](const book::updates::none &msg) {}},
-        box);
-    if (!std::visit(
-            fmc::overloaded{
-                [inst, now](const book::updates::add &msg) {
-                  fm_book_add(inst, now, msg.vendor, msg.seqn, msg.id,
-                              msg.price, msg.qty, msg.is_bid);
-                  return true;
-                },
-                [inst, now](const book::updates::insert &msg) {
-                  fm_book_ins(inst, now, msg.vendor, msg.seqn, msg.id, msg.prio,
-                              msg.price, msg.qty, msg.is_bid);
-                  return true;
-                },
-                [inst, now](const book::updates::position &msg) {
-                  fm_book_pos(inst, now, msg.vendor, msg.seqn, msg.id, msg.pos,
-                              msg.price, msg.qty, msg.is_bid);
-                  return true;
-                },
-                [inst](const book::updates::cancel &msg) {
-                  return fm_book_mod(inst, msg.id, msg.price, msg.qty,
-                                     msg.is_bid);
-                },
-                [inst](const book::updates::execute &msg) {
-                  return fm_book_exe(inst, msg.id, msg.price, msg.qty,
-                                     msg.is_bid);
-                },
-                [](const book::updates::trade &msg) { return false; },
-                [](const book::updates::state &msg) { return false; },
-                [inst](const book::updates::control &msg) {
-                  fm_book_uncross_set(inst, msg.uncross);
-                  if (msg.command == 'C') {
-                    fm_book_clr(inst);
-                  }
-                  return true;
-                },
-                [inst, now](const book::updates::set &msg) {
-                  fm_book_pla(inst, now, msg.vendor, msg.seqn, msg.price,
-                              msg.qty, msg.is_bid);
-                  return true;
-                },
-                [](const book::updates::announce &msg) { return false; },
-                [](const book::updates::time &msg) { return false; },
-                [](const book::updates::heartbeat &msg) { return false; },
-                [](const book::updates::none &msg) { return false; },
-            },
-            box)) {
-      return false;
-    }
-  }
-  if (!update) {
+  if (!book::update_from_message(now, box, inst)) {
     return false;
   }
   auto it = exe_cl->fields.begin();

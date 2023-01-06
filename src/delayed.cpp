@@ -42,15 +42,12 @@
 
 struct delayed_cl {
   fmc_time64_t delayed_period;
-  fm_field_t receive_field;
 };
 
 bool fm_comp_delayed_call_stream_init(fm_frame_t *result, size_t args,
                                       const fm_frame_t *const argv[],
                                       fm_call_ctx_t *ctx, fm_call_exec_cl *cl) {
-  auto dest_f = fm_frame_get_ptr1(result, 0, 0);
-  BOOL initial_value = false;
-  memcpy(dest_f, &initial_value, sizeof(BOOL));
+  *(BOOL *)fm_frame_get_ptr1(result, 0, 0) = true;
   return true;
 }
 
@@ -62,14 +59,10 @@ bool fm_comp_delayed_stream_exec(fm_frame_t *result, size_t,
 
   auto now = fm_stream_ctx_now(s_ctx);
 
-  auto *ptr =
-      (fmc_time64_t *)fm_frame_get_cptr1(argv[0], exec_cl.receive_field, 0);
+  auto *ptr = (fmc_time64_t *)fm_frame_get_cptr1(argv[0], 0, 0);
   auto new_timeout = fmc_time64_add(*ptr, exec_cl.delayed_period);
 
-  auto new_value = !fmc_time64_less(now, new_timeout);
-
-  auto dest_f = fm_frame_get_ptr1(result, 0, 0);
-  memcpy(dest_f, &new_value, sizeof(BOOL));
+  *(BOOL *)fm_frame_get_ptr1(result, 0, 0) = !fmc_time64_less(now, new_timeout);
   return true;
 }
 
@@ -117,16 +110,21 @@ fm_ctx_def_t *fm_comp_delayed_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   auto type = fm_frame_type_get1(sys, names.size(), names.data(), types.data(),
                                  dims.size(), dims.data());
 
-  auto receive_field = fm_type_frame_field_idx(argv[0], "time");
-  if (receive_field == -1) {
-    auto *errstr = "expect operator argument with time field";
+  if (fm_type_frame_nfields(argv[0]) != 1) {
+    auto *errstr = "expect only one field in the operator argument";
+    fm_type_sys_err_custom(sys, FM_TYPE_ERROR_ARGS, errstr);
+    return nullptr;
+  }
+
+  auto fldtype = fm_type_frame_field_type(argv[0], 0);
+  if (!fm_type_equal(fldtype, fm_base_type_get(sys, FM_TYPE_TIME64))) {
+    auto *errstr = "field must be of type TIME64";
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_ARGS, errstr);
     return nullptr;
   }
 
   auto *cl = new delayed_cl{
       delayed,
-      receive_field,
   };
 
   auto *def = fm_ctx_def_new();

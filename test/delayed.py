@@ -23,7 +23,7 @@ from datetime import timedelta
 
 if __name__ == "__main__":
     def subject(op, input):
-        return op.delayed(input, timedelta(milliseconds=200))
+        return op.delayed(input.time, timedelta(milliseconds=200))
     run_live_test(
         in_data_array=[
             {"Timestamp": 0, "time": 0, "val2": 1},
