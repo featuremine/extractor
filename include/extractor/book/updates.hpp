@@ -148,6 +148,7 @@ struct time {
 
 struct heartbeat {
   fmc_time64_t vendor;
+  fmc_time64_t receive;
 };
 
 struct none {};
