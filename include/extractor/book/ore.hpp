@@ -150,8 +150,8 @@ int32_t parser::parse_hdr0(cmp_ctx_t *ctx, Msg &msg, uint32_t &left) {
                      &msg.batch, &imnt_idx)) {
     return -1;
   }
-  time = seconds + fmc_time64_from_nanos(nanoseconds);
-  msg.vendor = time - fmc_time64_from_nanos(vendoroff);
+  msg.receive = fmc_time64_from_nanos(nanoseconds);
+  msg.vendor = seconds + msg.receive - fmc_time64_from_nanos(vendoroff);
   return imnt_idx;
 }
 
@@ -175,6 +175,7 @@ inline result parser::parse_hdr(cmp_ctx_t *ctx, Msg &msg, uint32_t &left) {
 inline result parser::skip_msg(cmp_ctx_t *ctx, uint32_t &left) {
   struct {
     fmc_time64_t vendor;
+    fmc_time64_t receive;
     uint64_t seqn;
     uint64_t id;
     uint16_t batch;
@@ -311,6 +312,7 @@ inline result parser::parse_mod(cmp_ctx_t *ctx, uint32_t &left) {
   }
   book::updates::add add;
   add.vendor = cancel.vendor;
+  add.receive = cancel.receive;
   add.seqn = cancel.seqn;
   add.batch = cancel.batch;
   if (!cmp_read_many(ctx, &left, &cancel.id, &add.id, &add.price, &add.qty))
@@ -497,6 +499,7 @@ inline result parser::parse_set(cmp_ctx_t *ctx, uint32_t &left) {
 inline result parser::parse_ann(cmp_ctx_t *ctx, uint32_t &left) {
   struct {
     fmc_time64_t vendor;
+    fmc_time64_t receive;
     uint64_t seqn;
     uint64_t id;
     uint16_t batch;
@@ -530,6 +533,7 @@ inline result parser::parse_hbt(cmp_ctx_t *ctx, uint32_t &left) {
 
   book::updates::heartbeat msg;
   msg.vendor = fmc_time64_from_nanos(vendor);
+  msg.receive = fmc_time64_from_nanos(nanoseconds);
   this->msg = msg;
 
   return result::SUCCESS;
