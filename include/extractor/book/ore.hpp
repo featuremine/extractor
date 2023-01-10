@@ -150,8 +150,8 @@ int32_t parser::parse_hdr0(cmp_ctx_t *ctx, Msg &msg, uint32_t &left) {
                      &msg.batch, &imnt_idx)) {
     return -1;
   }
-  msg.receive = fmc_time64_from_nanos(nanoseconds);
-  msg.vendor = seconds + msg.receive - fmc_time64_from_nanos(vendoroff);
+  time = msg.receive = seconds + fmc_time64_from_nanos(nanoseconds);
+  msg.vendor = msg.receive - fmc_time64_from_nanos(vendoroff);
   return imnt_idx;
 }
 
