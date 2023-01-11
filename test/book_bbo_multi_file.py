@@ -49,7 +49,7 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
     else:
         upds = op.seq_ore_live_split(ytpfile, imnts_chs)
     headers = [op.book_header(upd) for upd in upds]
-    gothrus = [op.filter_if(op.logical_not(op.delayed(hdr.vendor, period))) for hdr in headers]
+    gothrus = [op.filter_if(op.logical_not(op.delayed(hdr.receive, period))) for hdr in headers]
 
     levels = [op.book_build(upd, lvl) for upd in upds]
     lvlhdrs = [op.asof(hdr, lvl) for hdr, lvl in zip(headers, levels)]
@@ -60,7 +60,7 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
             ("bid_shr_0", "bidqty"),
             ("ask_shr_0", "askqty")
         ),
-        hdr, (("vendor", "receive"),)) for level, hdr in zip(levels, lvlhdrs)]
+        hdr, (("receive", "receive"),)) for level, hdr in zip(levels, lvlhdrs)]
     filtered_bbos = {(mkt_imnt[0], mkt_imnt[1]):
                      op.filter_if(gothru, bbo, name=f'bbo/{mkt_imnt[0]}/{mkt_imnt[1]}')
                      for gothru, bbo, mkt_imnt in zip(gothrus, bbos, mkt_imnts)}
@@ -82,7 +82,7 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
         trade = op.combine(
             trade, (
                 ("trade_price", "price"),
-                ("vendor", "receive"),
+                ("receive", "receive"),
                 ("qty", "qty")
             ),
             side, (("side", "side"),))

@@ -48,6 +48,7 @@ class all_trades_op_cl {
 public:
   all_trades_op_cl(fm_type_decl_cp type) {
     vendor_field_ = fm_type_frame_field_idx(type, "vendor");
+    receive_field_ = fm_type_frame_field_idx(type, "receive");
     seqn_field_ = fm_type_frame_field_idx(type, "seqn");
     trade_price_field_ = fm_type_frame_field_idx(type, "trade_price");
     qty_field_ = fm_type_frame_field_idx(type, "qty");
@@ -57,6 +58,8 @@ public:
   ~all_trades_op_cl() {}
   void init(fm_frame_t *result) {
     *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
+        fmc_time64_start();
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, receive_field_, 0) =
         fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     fmc_decimal128_from_int(
@@ -74,6 +77,8 @@ public:
             [this, result](const book::updates::trade &m) {
               *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
                   m.vendor;
+              *(fmc_time64_t *)fm_frame_get_ptr1(result, receive_field_, 0) =
+                  m.receive;
               *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = m.seqn;
               *(fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_,
                                                      0) = m.trade_price;
@@ -87,6 +92,8 @@ public:
             [this, result](const book::updates::execute &m) {
               *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
                   m.vendor;
+              *(fmc_time64_t *)fm_frame_get_ptr1(result, receive_field_, 0) =
+                  m.receive;
               *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = m.seqn;
               *(fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_,
                                                      0) = m.trade_price;
@@ -100,8 +107,8 @@ public:
             [](auto &m) { return false; }},
         msg);
   }
-  fm_field_t vendor_field_, seqn_field_, trade_price_field_, qty_field_,
-      batch_field_, decoration_field_;
+  fm_field_t vendor_field_, receive_field_, seqn_field_, trade_price_field_,
+      qty_field_, batch_field_, decoration_field_;
 };
 
 bool fm_comp_book_trades_call_stream_init(fm_frame_t *result, size_t args,
@@ -156,10 +163,11 @@ fm_ctx_def_t *fm_comp_book_trades_gen(fm_comp_sys_t *csys,
     return nullptr;
   }
 
-  const int nf = 6;
-  const char *names[nf] = {"vendor", "seqn",  "trade_price",
-                           "qty",    "batch", "decoration"};
+  const int nf = 7;
+  const char *names[nf] = {"vendor", "receive", "seqn", "trade_price",
+                           "qty", "batch", "decoration"};
   fm_type_decl_cp types[nf] = {
+      fm_base_type_get(sys, FM_TYPE_TIME64),
       fm_base_type_get(sys, FM_TYPE_TIME64),
       fm_base_type_get(sys, FM_TYPE_UINT64),
       fm_base_type_get(sys, FM_TYPE_DECIMAL128),
