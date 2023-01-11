@@ -164,8 +164,8 @@ fm_ctx_def_t *fm_comp_book_trades_gen(fm_comp_sys_t *csys,
   }
 
   const int nf = 7;
-  const char *names[nf] = {"vendor", "receive", "seqn", "trade_price",
-                           "qty", "batch", "decoration"};
+  const char *names[nf] = {"vendor", "receive", "seqn",      "trade_price",
+                           "qty",    "batch",   "decoration"};
   fm_type_decl_cp types[nf] = {
       fm_base_type_get(sys, FM_TYPE_TIME64),
       fm_base_type_get(sys, FM_TYPE_TIME64),
