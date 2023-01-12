@@ -38,6 +38,7 @@ namespace updates {
 using namespace std;
 struct add {
   fmc_time64_t vendor;
+  fmc_time64_t receive;
   uint64_t seqn;
   uint64_t id;
   fmc::decimal128 price;
@@ -48,6 +49,7 @@ struct add {
 
 struct insert {
   fmc_time64_t vendor;
+  fmc_time64_t receive;
   uint64_t seqn;
   uint64_t id;
   uint64_t prio;
@@ -59,6 +61,7 @@ struct insert {
 
 struct position {
   fmc_time64_t vendor;
+  fmc_time64_t receive;
   uint64_t seqn;
   uint64_t id;
   fmc::decimal128 price;
@@ -70,6 +73,7 @@ struct position {
 
 struct cancel {
   fmc_time64_t vendor;
+  fmc_time64_t receive;
   uint64_t seqn;
   uint64_t id;
   fmc::decimal128 price;
@@ -80,6 +84,7 @@ struct cancel {
 
 struct execute {
   fmc_time64_t vendor;
+  fmc_time64_t receive;
   uint64_t seqn;
   uint64_t id;
   fmc::decimal128 price;
@@ -91,6 +96,7 @@ struct execute {
 
 struct trade {
   fmc_time64_t vendor;
+  fmc_time64_t receive;
   uint64_t seqn;
   fmc::decimal128 trade_price;
   fmc::decimal128 qty;
@@ -100,6 +106,7 @@ struct trade {
 
 struct state {
   fmc_time64_t vendor;
+  fmc_time64_t receive;
   uint64_t seqn;
   uint64_t id;
   fmc::decimal128 price;
@@ -110,6 +117,7 @@ struct state {
 
 struct control {
   fmc_time64_t vendor;
+  fmc_time64_t receive;
   uint64_t seqn;
   uint16_t batch;
   uint8_t uncross;
@@ -118,6 +126,7 @@ struct control {
 
 struct set {
   fmc_time64_t vendor;
+  fmc_time64_t receive;
   uint64_t seqn;
   fmc::decimal128 price;
   fmc::decimal128 qty;
@@ -139,6 +148,7 @@ struct time {
 
 struct heartbeat {
   fmc_time64_t vendor;
+  fmc_time64_t receive;
 };
 
 struct none {};
@@ -149,8 +159,8 @@ using message = std::variant<updates::add, updates::insert, updates::position,
                              updates::announce, updates::time,
                              updates::heartbeat, updates::none>;
 
-static_assert(sizeof(message) <= 88, "expecting book update message to be less "
-                                     "than 88B");
+static_assert(sizeof(message) <= 96, "expecting book update message to be less "
+                                     "than 96B");
 
 bool update_from_message(fmc_time64_t now, book::message &box, fm_book_t *inst);
 

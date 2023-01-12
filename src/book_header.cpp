@@ -69,7 +69,7 @@ public:
             [](const book::updates::none &m) { return false; },
             [&](const auto &m) {
               *(fmc_time64_t *)fm_frame_get_ptr1(result, receive_field_, 0) =
-                  fm_stream_ctx_now(ctx);
+                  m.receive;
               *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
                   m.vendor;
               *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = m.seqn;
