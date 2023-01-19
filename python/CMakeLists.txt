@@ -184,8 +184,8 @@ else()
 endif()
 
 if(BUILD_WHEEL)
-    add_custom_target(
-        extractor-whl ALL
+    add_custom_command(
+        OUTPUT "${CMAKE_BINARY_DIR}/output/extractor-${PROJECT_VERSION}-py3-none-manylinux_2_17_x86_64.whl"
 
         COMMAND
         "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
@@ -219,6 +219,10 @@ if(BUILD_WHEEL)
         WORKING_DIRECTORY ${WHEEL_extractor_BUILD_DIR}/dist
 
         DEPENDS extractor extractor_module
+    )
+    add_custom_target(
+        extractor-whl ALL
+        DEPENDS "${CMAKE_BINARY_DIR}/output/extractor-${PROJECT_VERSION}-py3-none-manylinux_2_17_x86_64.whl"
     )
 endif()
 
