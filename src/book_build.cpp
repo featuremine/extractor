@@ -30,16 +30,13 @@
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
+#include "perf_util.hpp"
 
 #include "extractor/book/updates.hpp"
 #include "fmc++/decimal128.hpp"
-#include "fmc++/mpl.hpp"
-#include "fmc++/time.hpp"
 
 #include <memory>
-#include <stdlib.h>
 #include <string.h>
-#include <string>
 #include <vector>
 
 using namespace std;
@@ -105,6 +102,9 @@ bool fm_comp_book_build_call_stream_init(fm_frame_t *result, size_t args,
 bool fm_comp_book_build_stream_exec(fm_frame_t *result, size_t args,
                                     const fm_frame_t *const argv[],
                                     fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
+  static perf_sampler_t perf_sampler("fm_comp_book_build_stream_exec");
+  perf_scoped_sampler_t perf_s(perf_sampler);
+
   auto *exe_ctx = (fm_stream_ctx *)ctx->exec;
   auto now = fm_stream_ctx_now(exe_ctx);
   auto exe_cl = (bb_exe_cl *)ctx->comp;

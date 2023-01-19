@@ -28,6 +28,7 @@
 #include "extractor/comp_sys.h"   // fm_type_sys_get
 #include "extractor/stream_ctx.h" // fm_stream_ctx_queue
 #include "fmc/error.h"            // fmc_error_t
+#include "perf_util.hpp"
 
 #include "extractor/book/ore.hpp"     // parser
 #include "extractor/book/updates.hpp" // fm::book::updates::announce
@@ -36,9 +37,7 @@
 #include "ytp/api.h" // ytp_sequence_t
 
 #include <deque>
-#include <string>
 #include <string_view>
-#include <unordered_map>
 #include <variant> // get_if
 
 static ytp_sequence_api_v1 *ytp_; // ytp_api
@@ -109,6 +108,8 @@ bool fm_comp_ore_ytp_decode_stream_exec(fm_frame_t *result, size_t args,
                                         const fm_frame_t *const argv[],
                                         fm_call_ctx_t *ctx,
                                         fm_call_exec_cl cl) {
+  static perf_sampler_t perf_sampler("fm::book::ore::parser::parse");
+
   bool updated = false;
   auto *exec_ctx = (fm_stream_ctx *)ctx->exec;
   auto *exe_cl = (ore_ytp_decode_cl *)ctx->comp;
@@ -134,7 +135,9 @@ bool fm_comp_ore_ytp_decode_stream_exec(fm_frame_t *result, size_t args,
     std::string_view data = ytpmsg.first;
     exe_cl->last_time = ytpmsg.second;
     cmp_mem_set(&cmp, data.size(), data.data());
+    perf_sampler.start();
     fm::book::ore::result res = parser.parse(&cmp.ctx);
+    perf_sampler.stop();
     queue.pop_back();
     if (res.is_success()) {
       commit_msg();
