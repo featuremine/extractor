@@ -48,8 +48,12 @@ if __name__ == "__main__":
     top_book_update = op.filter_if(changed_top_res, top_book)
 
     header = op.book_header(upd[0])
-
-    updates = op.combine(op.asof(header, top_book_update), tuple(), top_book_update, tuple())
+    updates = op.combine(
+        op.asof(header, top_book_update), (
+            ("vendor", "vendor"),
+            ("seqn", "seqn"),
+        ),
+        top_book_update, tuple())
 
     op.csv_record(updates, os.path.join(src_dir, "data/top_book_update.test.csv"))
 
