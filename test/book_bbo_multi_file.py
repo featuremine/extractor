@@ -3,6 +3,7 @@ import argparse
 import shutil
 import extractor
 from datetime import timedelta
+import functools
 
 
 src_dir = os.path.dirname(os.path.realpath(__file__))
@@ -17,20 +18,20 @@ test = False
 def print_frame(x):
     global bbo_trades_file, bbo_trades_base_file, cnt, test
     try:
-        f = open(bbo_trades_file, "a")
-        print(x, file=f)
-        f.close()
+        #f = open(bbo_trades_file, "a")
+        print(x)
+        #f.close()
     except FileNotFoundError as e:
         print("File not found")
     except RuntimeError as e:
         print("RuntimeError:", str(e))
 
-    cnt -= 1
-    if test and cnt < 1:
-        extractor.assert_base(bbo_trades_base_file, bbo_trades_file)
-        if os.path.exists(bbo_trades_file):
-            os.remove(bbo_trades_file)
-        exit()
+    # cnt -= 1
+    # if test and cnt < 1:
+    #     extractor.assert_base(bbo_trades_base_file, bbo_trades_file)
+    #     if os.path.exists(bbo_trades_file):
+    #         os.remove(bbo_trades_file)
+    #     exit()
 
 
 def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
@@ -65,6 +66,12 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
                      op.filter_if(gothru, bbo, name=f'bbo/{mkt_imnt[0]}/{mkt_imnt[1]}')
                      for gothru, bbo, mkt_imnt in zip(gothrus, bbos, mkt_imnts)}
 
+    def print_bbo(frame, imnt, mkt):
+        print(f'nbbo mkt: {mkt} imnt: {imnt}: {frame}')
+
+    #for k, oper in filtered_bbos.items():
+    #    graph.callback(oper, functools.partial(print_bbo, imnt=k[1], mkt=k[0]))
+            
     filtered_trades = {}
     book_trades = [op.book_trades(upd) for upd in upds]
     for trade, gothru, mkt_imnt in zip(book_trades, gothrus, mkt_imnts):
@@ -99,8 +106,9 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
         for mkt in markets:
             bbo_book_combined = filtered_bbos[(mkt, ticker)]
             trade_combined = filtered_trades[(mkt, ticker)]
+            #graph.callback(bbo_book_combined, functools.partial(print_bbo, imnt=ticker, mkt=mkt))
             graph.callback(bbo_book_combined, print_frame)
-            graph.callback(trade_combined, print_frame)
+            #graph.callback(trade_combined, print_frame)
             bbos_book.append(bbo_book_combined)
             trades_combined.append(trade_combined)
             cum_trade = op.cumulative(op.combine(trade_combined.qty, (("qty", "shares"),), op.convert(trade_combined.qty, extractor.Float64) * op.convert(trade_combined.price, extractor.Float64), (("qty", "notional",),), name="cum_trade/{0}/{1}".format(mkt, imnt)))
@@ -108,9 +116,15 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
             status_frame = op.constant(("receive", extractor.Time64, timedelta(seconds=0)),
                                        ("short_sale_indicator", extractor.Int32, 0))
             statuses.append(status_frame)
-        op.bbo_aggr(*bbos_book, name="nbbo/{0}".format(imnt))
+
+        def print_nbbo(frame, imnt):
+            print(f'nbbo imnt: {symbology.info(imnt)["ticker"]}: {frame}')
+            
+        bbo_aggr = op.bbo_aggr(*bbos_book, name="nbbo/{0}".format(imnt))
+        #graph.callback(bbo_aggr, functools.partial(print_nbbo, imnt=imnt))
+
         #op.last_trade(*trades_combined, name="last_trade/{0}".format(imnt))
-        op.sum(*cum_trades, name="cum_trade_total/{0}".format(imnt))
+        #op.sum(*cum_trades, name="cum_trade_total/{0}".format(imnt))
         #op.status_aggr(*statuses, name="status_aggr/{0}".format(imnt))
 
 
