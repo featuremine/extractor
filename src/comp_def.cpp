@@ -41,8 +41,8 @@ struct fm_ctx_def {
   fm_call_def *(*stream)(fm_comp_def_cl, const fm_ctx_def_cl);
   fm_call_def *(*query)(fm_comp_def_cl, const fm_ctx_def_cl);
   fm_call_queuer_p queuer = nullptr;
+  unsigned volatile_result = 0;
   int16_t inplace = 0;
-  int16_t volatile_result = 0;
   fm_ctx_def_cl closure;
 };
 
