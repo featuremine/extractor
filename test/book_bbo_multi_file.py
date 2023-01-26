@@ -31,7 +31,7 @@ def test_printer(cnt, testname):
 
 
 def stdout_printer():
-    return lambda: print(x)
+    return lambda x: print(x)
 
 
 def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile, printer):
@@ -140,8 +140,8 @@ if __name__ == "__main__":
     parser.add_argument("--imnts", help="Comma separated instrument list", required=False)
     parser.add_argument("--levels", help="Number of levels to display", type=int, required=False, default=1)
     parser.add_argument("--time", help="Time channel name", required=False, default="")
-    parser.add_argument("--testcount", help="number of lines expected in the test output", required=False, default="false")
-    parser.add_argument("--testname", help="test name", required=False, default="false")
+    parser.add_argument("--testcount", help="number of lines expected in the test output", required=False)
+    parser.add_argument("--testname", help="test name", required=False)
     args = parser.parse_args()
 
     graph = extractor.system.comp_graph()
