@@ -7,33 +7,34 @@ from datetime import timedelta
 
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
-bbo_trades_base_file = os.path.join(src_dir, 'data', 'book_bbo_trades_multi_file.base.txt')
-bbo_trades_file = os.path.join(src_dir, 'data', 'book_bbo_trades_multi_file_multi_file.test.txt')
+def test_printer(cnt, testname):
+    bbo_trades_base_file = os.path.join(src_dir, 'data', f'{testname}.base.txt')
+    bbo_trades_test_file = os.path.join(src_dir, 'data', f'{testname}.test.txt')
 
-cnt = 1600
-test = False
+    if os.path.exists(bbo_trades_test_file):
+        os.remove(bbo_trades_test_file)
 
-
-def print_frame(x):
-    global bbo_trades_file, bbo_trades_base_file, cnt, test
-    try:
-        f = open(bbo_trades_file, "a")
+    def fn(x):
+        nonlocal cnt
+        f = open(bbo_trades_test_file, "a")
         print(x, file=f)
         f.close()
-    except FileNotFoundError as e:
-        print("File not found")
-    except RuntimeError as e:
-        print("RuntimeError:", str(e))
 
-    cnt -= 1
-    if test and cnt < 1:
-        extractor.assert_base(bbo_trades_base_file, bbo_trades_file)
-        if os.path.exists(bbo_trades_file):
-            os.remove(bbo_trades_file)
-        exit()
+        cnt -= 1
+        if cnt < 1:
+            extractor.assert_base(bbo_trades_base_file, bbo_trades_test_file)
+            if os.path.exists(bbo_trades_test_file):
+                os.remove(bbo_trades_test_file)
+            exit()
+
+    return fn
 
 
-def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
+def stdout_printer():
+    return lambda x: print(x)
+
+
+def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile, printer):
     period = timedelta(weeks=52*50)
     op = graph.features
     imnts_chs = tuple()
@@ -99,8 +100,8 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
         for mkt in markets:
             bbo_book_combined = filtered_bbos[(mkt, ticker)]
             trade_combined = filtered_trades[(mkt, ticker)]
-            graph.callback(bbo_book_combined, print_frame)
-            graph.callback(trade_combined, print_frame)
+            graph.callback(bbo_book_combined, printer)
+            graph.callback(trade_combined, printer)
             bbos_book.append(bbo_book_combined)
             trades_combined.append(trade_combined)
             cum_trade = op.cumulative(op.combine(trade_combined.qty, (("qty", "shares"),), op.convert(trade_combined.qty, extractor.Float64) * op.convert(trade_combined.price, extractor.Float64), (("qty", "notional",),), name="cum_trade/{0}/{1}".format(mkt, imnt)))
@@ -139,7 +140,8 @@ if __name__ == "__main__":
     parser.add_argument("--imnts", help="Comma separated instrument list", required=False)
     parser.add_argument("--levels", help="Number of levels to display", type=int, required=False, default=1)
     parser.add_argument("--time", help="Time channel name", required=False, default="")
-    parser.add_argument("--test", help="boolean to assert against base book", required=False, default="false")
+    parser.add_argument("--testcount", help="number of lines expected in the test output", required=False)
+    parser.add_argument("--testname", help="test name", required=False)
     args = parser.parse_args()
 
     graph = extractor.system.comp_graph()
@@ -173,14 +175,11 @@ if __name__ == "__main__":
     # ]
     markets = tuple(args.markets.split(','))
 
-    if os.path.exists(bbo_trades_file):
-        os.remove(bbo_trades_file)
+    if args.testname is not None:
+        printer = test_printer(int(args.testcount), args.testname)
+    else:
+        printer = stdout_printer()
 
-    if args.test.lower() in ('yes', 'true', 't', 'y', '1'):
-        test = True
-    elif args.test.lower() in ('no', 'false', 'f', 'n', '0'):
-        test = False
-
-    setup_prod_sip(universe, symbology, markets, args.levels, args.time, graph, args.ytp)
+    setup_prod_sip(universe, symbology, markets, args.levels, args.time, graph, args.ytp, printer)
 
     graph.stream_ctx().run_live()
