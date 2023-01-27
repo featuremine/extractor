@@ -5,6 +5,49 @@ if (NOT PYTHON_FOUND)
     pkg_check_modules(PYTHON REQUIRED IMPORTED_TARGET python3)
 endif (NOT PYTHON_FOUND)
 
+function(download_archive URL MD5 FILENAME OUTPUT)
+    get_filename_component(DIR "${OUTPUT}" DIRECTORY)
+    file(MAKE_DIRECTORY "${DIR}")
+    file(MAKE_DIRECTORY "${CMAKE_BINARY_DIR}/downloads")
+    file(
+        DOWNLOAD
+        "${URL}"
+        "${CMAKE_BINARY_DIR}/downloads/${FILENAME}"
+        EXPECTED_MD5 ${MD5}
+    )
+    add_custom_command(
+        OUTPUT "${OUTPUT}"
+        DEPENDS "${CMAKE_BINARY_DIR}/downloads/${FILENAME}"
+        COMMAND /bin/sh -c "gunzip -c '${CMAKE_BINARY_DIR}/downloads/${FILENAME}' >'${OUTPUT}'"
+    )
+endfunction()
+
+download_archive(
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.0.ytp.0001.gz"
+    "de853b955e9743dda5812bd178188669" "ytpseq_ore_bbo_trades.0.ytp.0001.gz"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades.ytp.0001"
+)
+
+download_archive(
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.0.ytp.0002.gz"
+    "51b5c4d1648db3a74be63e474d6db846" "ytpseq_ore_bbo_trades.0.ytp.0002.gz"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades.ytp.0002"
+)
+
+download_archive(
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.0.ytp.0002.gz"
+    "51b5c4d1648db3a74be63e474d6db846" "ytpseq_ore_bbo_trades.0.ytp.0002.gz"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades_partial.ytp.0002"
+)
+
+add_custom_target(
+    extractor-testfiles ALL
+    DEPENDS
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades.ytp.0001"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades.ytp.0002"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades_partial.ytp.0002"
+)
+
 macro(extr_unit_test)
     set(oneValueArgs NAME)
     set(multiValueArgs FILES)
@@ -589,18 +632,45 @@ add_test(
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo_multi_file.py"
     "--ytp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/data/ytpseq_ore_bbo_trades.ytp"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades.ytp"
     "--markets"
     "NYSE,NASDAQOMX,BATS,DirectEdgeX,DirectEdgeA,NYSEArca,NASDAQOMXBX,BATSY"
     "--imnts"
-    "APLE,APAM,BMY,BAC"
-    "--test"
-    "true"
+    "SCI,STL"
+    "--testcount"
+    "291"
+    "--testname"
+    "book_bbo_trades_multi_file"
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 set_tests_properties(
     extractor_python_ytp_book_bbo_trade_multi_file
+    PROPERTIES
+    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
+    TIMEOUT 100
+)
+
+add_test(
+    NAME extractor_python_ytp_book_bbo_trade_multi_file_partial COMMAND
+
+    "${PYTHON3_BIN}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo_multi_file.py"
+    "--ytp"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades_partial.ytp"
+    "--markets"
+    "NYSE,NASDAQOMX,BATS,DirectEdgeX,DirectEdgeA,NYSEArca,NASDAQOMXBX,BATSY"
+    "--imnts"
+    "SCI,STL"
+    "--testcount"
+    "215"
+    "--testname"
+    "book_bbo_trades_multi_file_partial"
+
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+set_tests_properties(
+    extractor_python_ytp_book_bbo_trade_multi_file_partial
     PROPERTIES
     ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
     TIMEOUT 100

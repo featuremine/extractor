@@ -128,7 +128,7 @@ file(
     COPY ${CMAKE_CURRENT_SOURCE_DIR}/include
     DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/dist/extractor"
     FILES_MATCHING
-        PATTERN "*.h"
+    PATTERN "*.h"
 )
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/extractor/__init__.py"
