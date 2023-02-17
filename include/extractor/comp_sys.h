@@ -30,6 +30,7 @@
 #include "extractor/serial.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/type_decl.h"
+#include "fmc/extension.h"
 #include "fmc/platform.h"
 #include "fmc/time.h"
 #include "ytp/api.h"
@@ -43,6 +44,38 @@ typedef struct fm_comp_graph fm_comp_graph_t;
 typedef struct fm_comp fm_comp_t;
 
 typedef struct fm_result_ref fm_result_ref_t;
+
+struct fm_comp_sys_ext_path_list {
+  struct fm_comp_sys_ext_path_list *next, *prev;
+  char path[]; // FAM
+};
+
+struct fm_comp_sys_module {
+  struct fm_comp_sys *sys; // the system that owns the module
+  fmc_ext_t handle;        // module handle. Return of dlopen()
+  char *name;              // module name (e.g. "fmtron")
+  char *file;              // file full path of the library
+  struct fm_comp_sys_module *next, *prev;
+};
+
+/* Current API version: 1 (module_type_add_v1) */
+struct fm_comp_sys_ext_api {
+  void (*module_type_add_v1)(struct fm_comp_sys_module *mod,
+                             const fm_comp_def_t *def, fmc_error_t **error);
+  void (*module_type_add_v2)(struct fm_comp_sys_module *, void *,
+                             fmc_error_t **);
+  void (*module_type_add_v3)(struct fm_comp_sys_module *, void *,
+                             fmc_error_t **);
+  void (*module_type_add_v4)(struct fm_comp_sys_module *, void *,
+                             fmc_error_t **);
+  void (*module_type_add_v5)(struct fm_comp_sys_module *, void *,
+                             fmc_error_t **);
+  void *_zeros[128];
+};
+
+typedef void (*fm_comp_sys_module_init_func)(struct fm_comp_sys_ext_api *,
+                                             struct fm_comp_sys_module *,
+                                             fmc_error_t **);
 
 /**
  * @brief
@@ -143,13 +176,24 @@ FMMODFUNC void fm_comp_sys_error_set(fm_comp_sys_t *s, const char *fmt, ...);
 /**
  * @brief
  */
+FMMODFUNC struct fm_comp_sys_ext_path_list *
+fm_comp_sys_ext_path_list_get(fm_comp_sys_t *s);
+
+/**
+ * @brief
+ */
 FMMODFUNC const char *fm_comp_sys_error_msg(fm_comp_sys_t *s);
 
 /**
  * @brief Load extension module
  */
-FMMODFUNC bool fm_comp_sys_ext_load(fm_comp_sys_t *, const char *name,
-                                    const char *path);
+FMMODFUNC bool fm_comp_sys_ext_load(fm_comp_sys_t *, const char *name);
+
+/**
+ * @brief Load default search path for modules
+ */
+FMMODFUNC void fm_comp_sys_paths_set_default(struct fm_comp_sys *sys,
+                                             fmc_error_t **error);
 
 /**
  * @brief Serializes the graph

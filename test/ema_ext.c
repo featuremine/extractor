@@ -350,11 +350,16 @@ fm_comp_def_t ema_comp_def = {
 
 /**
  * Registers the operator definition in the computational system.
- * The name of this function MUST start with FmInit_ to allow the system
+ * The name of this function MUST start with ExtractorInit_ to allow the system
  * extension loader to find the function in external modules.
  *
- * @param sys computing system
+ * @param api extractor API functions
+ * @param mod loaded module
+ * @param error
  */
-FMMODFUNC void FmInit_ema(fm_comp_sys_t *sys) {
-  fm_comp_type_add(sys, &ema_comp_def);
+FMMODFUNC void ExtractorInit_ema(struct fm_comp_sys_ext_api *api,
+                                 struct fm_comp_sys_module *mod,
+                                 fmc_error_t **error) {
+  fmc_error_clear(error);
+  api->module_type_add_v1(mod, &ema_comp_def, error);
 }

@@ -102,9 +102,51 @@ public:
   bool exec(fm::query_context &ctx) { return false; }
 };
 
-extern "C" FMMODFUNC void FmInit_ext_lib(fm_comp_sys_t *sys) {
-  fm::fm_cpp_comp_type_add<timer_count>(sys, "timer_count");
-  fm::fm_cpp_comp_type_add<timer_count_avg>(sys, "timer_count_avg");
+/**
+ * Computation definition
+ * It must provide the following information to describe a computation:
+ * name: used by the computing system to identify the computation, this name
+ * MUST be unique. generate: reference to the operator's generator function
+ * destroy: reference to the operator's destruction function
+ * closure: pointer to the closure that is shared between all operator instances
+ */
+fm_comp_def_t timer_count_def = {
+    "timer_count",                      // name
+    &fm_cpp_comp_generate<timer_count>, // generate
+    &fm_cpp_comp_destroy<timer_count>,  // destroy
+    NULL                                // closure
+};
+
+fm_comp_def_t timer_count_avg_def = {
+    "timer_count_avg",                      // name
+    &fm_cpp_comp_generate<timer_count_avg>, // generate
+    &fm_cpp_comp_destroy<timer_count_avg>,  // destroy
+    NULL                                    // closure
+};
+
+/**
+ * Registers the operator definition in the computational system.
+ * The name of this function MUST start with ExtractorInit_ to allow the system
+ * extension loader to find the function in external modules.
+ *
+ * @param api extractor API functions
+ * @param mod loaded module
+ * @param error
+ */
+extern "C" FMMODFUNC void ExtractorInit_ext_lib(struct fm_comp_sys_ext_api *api,
+                                                struct fm_comp_sys_module *mod,
+                                                fmc_error_t **error) {
+  fmc_error_clear(error);
+
+  api->module_type_add_v1(mod, &timer_count_def, error);
+  if (*error) {
+    return;
+  }
+
+  api->module_type_add_v1(mod, &timer_count_avg_def, error);
+  if (*error) {
+    return;
+  }
 }
 
 } // namespace fm

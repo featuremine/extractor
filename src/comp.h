@@ -71,7 +71,7 @@ FMMODFUNC void fm_comp_set_args(fm_comp_t *, fm_type_decl_cp, fm_arg_stack_t);
 /**
  * @brief
  */
-FMMODFUNC const fm_arg_buffer_t *fm_comp_arg_buffer(const fm_comp *obj);
+FMMODFUNC const fm_arg_buffer_t *fm_comp_arg_buffer(const struct fm_comp *obj);
 
 /**
  * @brief

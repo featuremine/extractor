@@ -73,7 +73,7 @@ void fm_comp_call_destroy(fm_comp_t *);
 /**
  * @brief
  */
-const char *fm_comp_type(const fm_comp *obj);
+const char *fm_comp_type(const struct fm_comp *obj);
 
 #ifdef __cplusplus
 }

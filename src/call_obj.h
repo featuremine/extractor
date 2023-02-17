@@ -124,7 +124,7 @@ void fm_call_obj_result_set(fm_call_obj_t *call, fm_frame_t *frame);
  */
 void fm_call_obj_setup_set(fm_call_obj_t *call, fm_setup_func_p setfunc);
 
-fm_call_ctx *fm_call_obj_ctx(fm_call_obj_t *call);
+struct fm_call_ctx *fm_call_obj_ctx(fm_call_obj_t *call);
 
 /**
  * @brief

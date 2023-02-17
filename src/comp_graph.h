@@ -95,13 +95,13 @@ FMMODFUNC fm_comp_node_t *fm_comp_graph_add(fm_comp_graph_t *graph,
  * @brief associate a name with the node
  */
 FMMODFUNC bool fm_comp_node_name_add(fm_comp_graph_t *g, const char *name,
-                                     fm_comp_node *node);
+                                     struct fm_comp_node *node);
 
 /**
  * @brief find a node associated with a given name
  */
-FMMODFUNC fm_comp_node *fm_comp_node_name_find(fm_comp_graph_t *g,
-                                               const char *name);
+FMMODFUNC struct fm_comp_node *fm_comp_node_name_find(fm_comp_graph_t *g,
+                                                      const char *name);
 
 /**
  * @brief generate a unique name for a computation
