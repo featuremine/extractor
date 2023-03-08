@@ -1,430 +1,430 @@
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1400                24.35               700                 2017-10-18 13:44:09.530806943 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1400                24.35               800                 2017-10-18 13:44:09.530806943 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1100                24.3                1100                2017-10-18 13:44:09.530976325 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1100                24.35               100                 2017-10-18 13:44:09.530976325 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1400                24.35               700                 2017-10-18 13:44:09.531646981 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.28               100                 2017-10-18 13:44:09.532070659 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               100                 2017-10-18 13:44:09.532070659 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               200                 2017-10-18 13:44:09.533040598 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   0                   0                   0                   0                   2017-10-18 13:44:09.537076830 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1600                24.35               300                 2017-10-18 13:44:09.537076830 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1600                24.35               700                 2017-10-18 13:44:09.861650563 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1700                24.35               700                 2017-10-18 13:44:09.861728154 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                300                 24.35               100                 2017-10-18 13:44:09.861739777 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                300                 24.3                500                 2017-10-18 13:44:09.861739777 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1600                24.35               700                 2017-10-18 13:44:09.861769877 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1400                24.35               700                 2017-10-18 13:44:09.861847363 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1300                24.35               100                 2017-10-18 13:44:09.861883401 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1400                24.35               600                 2017-10-18 13:44:09.861901663 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1100                24.35               100                 2017-10-18 13:44:09.862208001 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1100                24.3                1100                2017-10-18 13:44:11.433559603 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                300                 24.35               200                 2017-10-18 13:44:11.485662333 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1400                24.35               700                 2017-10-18 13:44:11.485662333 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                300                 24.35               400                 2017-10-18 13:44:11.485673151 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1100                24.35               100                 2017-10-18 13:44:11.485673673 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                300                 24.35               200                 2017-10-18 13:44:11.485734447 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                300                 24.35               100                 2017-10-18 13:44:11.630983293 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               300                 2017-10-18 13:44:13.236932151 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               200                 2017-10-18 13:44:13.236932151 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               300                 2017-10-18 13:44:13.236960113 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               400                 2017-10-18 13:44:13.236988388 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.3                100                 2017-10-18 13:44:13.237014479 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               100                 2017-10-18 13:44:13.237014479 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               300                 2017-10-18 13:44:13.237030968 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               100                 2017-10-18 13:44:13.237046182 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               100                 2017-10-18 13:44:13.237341485 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.34               100                 34.3                100                 2017-10-18 13:44:13.237361729 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.34               100                 34.31               100                 2017-10-18 13:44:13.237361729 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               200                 34.26               500                 2017-10-18 13:44:13.237425960 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.26               500                 2017-10-18 13:44:13.237425960 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               200                 2017-10-18 13:44:13.237456746 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               200                 2017-10-18 13:44:13.237475395 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               100                 2017-10-18 13:44:13.237488344 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               100                 2017-10-18 13:44:13.237533763 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               200                 2017-10-18 13:44:13.238263554 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.34               100                 34.3                100                 2017-10-18 13:44:13.238674998 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1100                24.3                1100                2017-10-18 13:44:13.279555186 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               400                 2017-10-18 13:44:13.280779145 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.3                100                 2017-10-18 13:44:13.280897542 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               300                 2017-10-18 13:44:13.280939161 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.3                100                 2017-10-18 13:44:13.280957520 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               200                 2017-10-18 13:44:13.280971705 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               200                 34.3                100                 2017-10-18 13:44:13.280986160 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               100                 2017-10-18 13:44:13.280995056 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               200                 34.29               500                 2017-10-18 13:44:13.281110137 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.25               200                 2017-10-18 13:44:13.281125731 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.37               200                 34.31               100                 2017-10-18 13:44:13.281161174 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.37               200                 34.3                200                 2017-10-18 13:44:13.281161174 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               100                 34.3                200                 2017-10-18 13:44:13.281178161 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.31               100                 34.29               500                 2017-10-18 13:44:13.281214639 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.3                200                 2017-10-18 13:44:13.281214639 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.37               100                 34.27               100                 2017-10-18 13:44:13.281241849 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.31               100                 34.29               400                 2017-10-18 13:44:13.281261928 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.31               100                 34.29               300                 2017-10-18 13:44:13.281274937 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.3                100                 2017-10-18 13:44:13.281288482 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.31               100                 34.29               200                 2017-10-18 13:44:13.281316712 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               200                 34.3                100                 2017-10-18 13:44:13.281316712 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.3                100                 2017-10-18 13:44:13.281535856 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.3                200                 2017-10-18 13:44:13.281560324 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.26               500                 2017-10-18 13:44:13.281584367 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               200                 34.3                200                 2017-10-18 13:44:13.281602941 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.31               100                 34.29               100                 2017-10-18 13:44:13.281631380 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.3                200                 2017-10-18 13:44:13.281660713 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.3                200                 2017-10-18 13:44:13.281688280 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.34               200                 34.26               500                 2017-10-18 13:44:13.281701892 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.34               100                 34.26               500                 2017-10-18 13:44:13.281716190 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               300                 34.29               100                 2017-10-18 13:44:13.281757637 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.38               100                 34.26               500                 2017-10-18 13:44:13.281757637 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.26               500                 2017-10-18 13:44:13.281850546 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.3                100                 2017-10-18 13:44:13.281850546 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.25               300                 2017-10-18 13:44:13.281860724 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.25               400                 2017-10-18 13:44:13.281930498 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               200                 34.26               500                 2017-10-18 13:44:13.281951114 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.27               100                 2017-10-18 13:44:13.281969100 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.27               500                 2017-10-18 13:44:13.282241180 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.27               500                 2017-10-18 13:44:13.282241180 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.3                100                 2017-10-18 13:44:13.282241180 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.26               500                 2017-10-18 13:44:13.282903067 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.26               600                 2017-10-18 13:44:13.282915435 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.26               700                 2017-10-18 13:44:13.282957360 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.26               800                 2017-10-18 13:44:13.283776804 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.26               900                 2017-10-18 13:44:13.283801600 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               300                 34.3                100                 2017-10-18 13:44:13.443630792 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.3                100                 2017-10-18 13:44:13.443797618 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               200                 34.3                100                 2017-10-18 13:44:13.443851530 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.3                200                 2017-10-18 13:44:13.443867929 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               200                 34.3                200                 2017-10-18 13:44:13.443893313 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.3                200                 2017-10-18 13:44:13.443913877 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.26               500                 2017-10-18 13:44:13.444164060 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.37               100                 34.27               100                 2017-10-18 13:44:13.444164060 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.3                100                 2017-10-18 13:44:13.444186873 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.38               100                 34.26               500                 2017-10-18 13:44:13.444246731 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.37               100                 34.27               500                 2017-10-18 13:44:13.444324336 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.3                100                 2017-10-18 13:44:13.657310731 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.26               400                 2017-10-18 13:44:13.657334715 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.29               300                 2017-10-18 13:44:13.657365985 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.38               100                 34.29               100                 2017-10-18 13:44:13.657503336 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.38               100                 34.29               200                 2017-10-18 13:44:13.657524816 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.38               100                 34.29               300                 2017-10-18 13:44:13.657556407 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.38               100                 34.29               400                 2017-10-18 13:44:13.657586760 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.37               100                 34.29               100                 2017-10-18 13:44:13.657586760 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.25               500                 2017-10-18 13:44:13.657626643 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.38               100                 34.29               500                 2017-10-18 13:44:13.657639399 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               500                 2017-10-18 13:44:13.657723776 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.37               100                 34.29               100                 2017-10-18 13:44:13.657804563 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.37               100                 34.27               400                 2017-10-18 13:44:13.657839916 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.29               400                 2017-10-18 13:44:13.712459363 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.29               500                 2017-10-18 13:44:13.712493672 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               400                 2017-10-18 13:44:13.766566053 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1100                24.35               100                 2017-10-18 13:44:13.789608903 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               300                 2017-10-18 13:44:13.794983737 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               200                 2017-10-18 13:44:13.795004025 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.38               100                 34.29               200                 2017-10-18 13:44:13.842344716 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               100                 2017-10-18 13:44:13.842474788 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.3                200                 2017-10-18 13:44:13.842501603 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.3                300                 2017-10-18 13:44:13.842519424 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               200                 2017-10-18 13:44:13.842568241 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.3                400                 2017-10-18 13:44:13.842568241 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               300                 2017-10-18 13:44:13.842599175 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               200                 2017-10-18 13:44:13.842609405 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.3                200                 2017-10-18 13:44:13.842619948 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               400                 2017-10-18 13:44:13.842660747 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               300                 2017-10-18 13:44:13.842682756 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               100                 2017-10-18 13:44:13.842700630 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.3                100                 2017-10-18 13:44:13.842918887 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.3                100                 2017-10-18 13:44:13.843029402 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.3                200                 2017-10-18 13:44:13.843055211 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.3                300                 2017-10-18 13:44:13.843076847 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               100                 2017-10-18 13:44:13.843223422 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.37               100                 34.29               100                 2017-10-18 13:44:13.843275405 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               200                 2017-10-18 13:44:13.843275405 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.31               100                 2017-10-18 13:44:13.843286797 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.37               100                 34.29               200                 2017-10-18 13:44:13.843339323 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               300                 2017-10-18 13:44:13.843521997 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               400                 2017-10-18 13:44:13.843545027 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               300                 2017-10-18 13:44:13.843560606 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               400                 2017-10-18 13:44:13.843620516 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               500                 2017-10-18 13:44:13.843753397 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               200                 2017-10-18 13:44:13.862430818 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               100                 2017-10-18 13:44:13.862499669 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.29               100                 2017-10-18 13:44:13.862557113 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               300                 2017-10-18 13:44:13.862557113 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               400                 2017-10-18 13:44:14.017522066 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               500                 2017-10-18 13:44:14.017551459 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.32               100                 34.31               400                 2017-10-18 13:44:14.017583101 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               400                 2017-10-18 13:44:14.017622128 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               500                 2017-10-18 13:44:14.017664469 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               400                 2017-10-18 13:44:14.017700336 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               400                 2017-10-18 13:44:14.017718486 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               300                 2017-10-18 13:44:14.017741128 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               300                 2017-10-18 13:44:14.017758533 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               200                 2017-10-18 13:44:14.017919585 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.25               500                 2017-10-18 13:44:14.017934687 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.29               100                 2017-10-18 13:44:14.017960548 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.32               100                 2017-10-18 13:44:14.018035553 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               100                 2017-10-18 13:44:14.018071852 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               300                 2017-10-18 13:44:14.018094807 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.34               100                 34.25               500                 2017-10-18 13:44:14.018126621 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               400                 2017-10-18 13:44:14.018139898 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.3                300                 2017-10-18 13:44:14.018170759 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.32               100                 2017-10-18 13:44:14.018170759 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.32               100                 2017-10-18 13:44:14.018182046 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               200                 2017-10-18 13:44:14.018195651 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.31               100                 2017-10-18 13:44:14.018214493 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               200                 2017-10-18 13:44:14.018214493 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               300                 2017-10-18 13:44:14.018227137 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               300                 2017-10-18 13:44:14.018235862 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.31               200                 2017-10-18 13:44:14.018246836 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.31               100                 2017-10-18 13:44:14.018253535 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               400                 2017-10-18 13:44:14.018261298 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               300                 2017-10-18 13:44:14.018285177 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.32               100                 2017-10-18 13:44:14.018285177 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.32               200                 2017-10-18 13:44:14.018306702 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.32               200                 2017-10-18 13:44:14.018319010 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.32               300                 2017-10-18 13:44:14.018333092 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.32               100                 2017-10-18 13:44:14.018363028 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.32               100                 2017-10-18 13:44:14.018363028 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.32               400                 2017-10-18 13:44:14.018378019 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.32               300                 2017-10-18 13:44:14.018387012 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.32               400                 2017-10-18 13:44:14.018419556 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               400                 2017-10-18 13:44:14.018432311 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.32               300                 2017-10-18 13:44:14.018458656 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.32               100                 2017-10-18 13:44:14.018458656 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.32               200                 2017-10-18 13:44:14.018553458 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.34               100                 34.32               100                 2017-10-18 13:44:14.018581032 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.32               300                 2017-10-18 13:44:14.018598437 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               200                 34.32               300                 2017-10-18 13:44:14.018796712 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.32               200                 2017-10-18 13:44:14.023299999 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.32               100                 2017-10-18 13:44:14.126471579 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               300                 2017-10-18 13:44:14.126495145 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.34               100                 34.25               500                 2017-10-18 13:44:14.126506231 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.31               100                 2017-10-18 13:44:14.126521967 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.32               300                 2017-10-18 13:44:14.126549325 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.36               300                 34.3                300                 2017-10-18 13:44:14.126588955 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.32               200                 2017-10-18 13:44:14.126820869 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.32               100                 2017-10-18 13:44:14.126844689 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               300                 34.31               200                 2017-10-18 13:44:14.127031587 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   24.4                1400                24.35               600                 2017-10-18 13:44:15.866745471 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.37               100                 34.29               100                 2017-10-18 13:44:16.240092463 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.37               100                 34.27               400                 2017-10-18 13:44:16.240121752 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               300                 2017-10-18 13:44:16.240150816 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               100                 2017-10-18 13:44:16.240168847 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               200                 2017-10-18 13:44:16.240623749 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.31               100                 2017-10-18 13:44:16.240717649 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.29               100                 2017-10-18 13:44:16.240797340 
-idx askprice            askqty              bidprice            bidqty              receive                       
-0   34.33               100                 34.28               100                 2017-10-18 13:44:16.240912474 
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:01:58.826964296 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:02:28.277497865 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:02:46.249997422 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:03:08.556087277 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:03:26.509465329 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:03:49.028436243 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:04:11.513465560 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:04:42.288958691 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:04:59.088966459 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:05:21.087523907 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:05:45.383031688 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:05:59.465469300 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:06:23.491554781 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:06:45.308983094 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:07:07.914522558 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:07:25.179979175 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:07:52.789953544 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:08:16.858438938 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:08:41.076037406 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:09:04.333498500 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 16:09:15.757306240 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:09:30.633539013 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:09:50.873231574 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:10:15.036482378 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:10:30.563019603 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:10:58.667445302 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:11:21.015581697 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:11:35.912050679 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:12:04.349984332 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:12:29.573518604 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:12:44.091029964 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:13:01.460576243 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:13:25.410962782 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:13:45.255525507 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:14:11.109550721 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:14:31.843548573 2             
+idx price               qty                 receive                       side          
+0   25.87               100                 2017-10-14 16:14:45.610818311 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:15:00.949129648 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:15:17.742467828 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:15:36.861424751 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:15:59.320939347 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:16:16.051148705 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:16:44.137947559 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:17:00.088091969 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:17:23.213046528 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:17:37.870952099 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:18:01.854608230 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:18:15.848477497 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:18:33.316011592 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:18:47.842949740 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:19:11.369966760 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:19:30.693531692 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:19:53.573447495 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:20:11.091480419 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:20:36.081977114 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:20:51.000417709 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:21:18.639014117 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:21:36.556367464 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:21:54.995625555 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:22:06.833621710 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:22:26.432124108 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:22:58.789580397 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:23:15.673697493 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:23:37.667579270 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:24:00.881132796 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:24:17.856030069 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:24:41.862614221 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:24:56.008081026 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:25:17.723603695 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:25:33.848084770 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:25:55.052096195 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:26:28.507193751 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:26:49.926558285 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:27:10.238225318 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:27:38.068110212 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:28:13.326741121 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:28:28.284564152 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:28:53.053552180 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:29:12.475546173 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:29:35.797060728 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:29:47.829565845 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:30:16.687696002 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:30:35.281061090 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:30:52.893559023 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:31:19.282598927 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:31:47.338110566 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:32:05.799179106 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:32:16.262119583 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:32:40.111623801 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:33:01.524211578 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:33:28.016091346 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:33:51.442667394 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:34:15.601193562 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:34:46.476110540 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:35:07.389635585 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:35:27.581094890 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:35:52.824141837 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:36:16.959050379 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:36:40.369648896 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:36:56.466094471 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:37:12.504135005 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:37:31.420603677 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:37:45.847640946 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:38:06.534618332 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:38:21.102660238 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:38:44.131208270 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:39:10.539112962 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:39:33.519104965 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:39:48.876072384 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:40:10.129673056 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:40:36.838594257 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:40:57.741630300 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:41:23.775155238 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:41:38.925044119 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:41:59.082596965 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:42:18.948152512 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:42:48.452082216 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:43:05.394631937 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:43:26.657042860 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:43:44.049542844 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:43:53.785543881 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:44:08.304060712 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:44:29.305067554 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:44:42.868522197 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:45:03.889153167 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:45:27.225632615 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:45:48.825670771 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:46:04.301076784 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:46:19.463627561 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:46:34.525018215 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:46:54.600166298 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:47:10.364592604 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:47:27.121584422 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:47:44.201563388 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:48:03.145160086 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:48:27.966131754 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:48:50.862117253 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:49:08.032164424 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:49:31.639982461 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:49:51.378654144 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:50:08.316178664 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:50:32.742151804 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:50:53.548593468 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:51:13.127181775 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:51:43.383592069 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:52:11.204222664 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:52:29.179653011 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:52:53.468133933 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:53:16.214722074 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:53:35.971622481 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:53:53.516593910 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:54:15.685705214 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:54:38.991186775 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:55:09.738141193 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:55:32.189090318 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:55:48.181157350 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:56:12.372668936 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:56:29.165187425 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:56:47.184621207 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:57:17.144682094 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:57:37.799520894 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:57:55.402002155 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:58:15.568561561 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:58:46.778593532 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:59:06.313588820 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:59:27.758565992 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 16:59:52.231490015 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:00:09.373114526 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:00:22.697516642 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:00:34.887072041 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:01:01.763142973 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:01:22.545621961 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:01:37.875997386 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:02:06.156091466 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:02:19.672514282 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:02:49.753481291 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:03:17.858088798 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:03:39.623611427 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:04:19.245989643 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:04:40.567602775 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:05:01.167614586 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:05:28.337481625 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:05:42.704565905 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:05:55.587978251 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:06:19.493630900 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:06:47.509523607 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:07:07.189680442 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:07:29.010140225 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:07:52.532708056 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:08:12.815656460 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:08:35.177191309 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:08:52.734690234 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:09:16.041197426 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:09:41.413786269 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:09:57.534181036 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:10:19.059646099 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:10:37.381121635 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:10:57.931675389 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:11:12.302684046 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:11:35.313142798 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:11:51.096161194 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:12:08.369222775 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:12:35.348799847 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:12:55.067659631 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:13:12.492237314 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:13:41.045776717 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:14:00.930623479 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:14:22.220617145 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:14:37.563711315 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:15:01.896188609 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:15:18.843236893 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:15:43.565690636 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:16:04.109692908 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:16:23.702272064 2             
+idx price               qty                 receive                       side          
+0   25.83               100                 2017-10-14 17:16:51.560722522 2             
