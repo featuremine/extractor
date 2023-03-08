@@ -637,8 +637,10 @@ add_test(
     "NYSE,NASDAQOMX,BATS,DirectEdgeX,DirectEdgeA,NYSEArca,NASDAQOMXBX,BATSY"
     "--imnts"
     "SCI,STL"
-    "--test"
-    "true"
+    "--testcount"
+    "291"
+    "--testname"
+    "book_bbo_trades_multi_file"
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
