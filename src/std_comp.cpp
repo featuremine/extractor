@@ -51,6 +51,7 @@
 #include "fields.h"
 #include "filter_if.h"
 #include "filter_unless.h"
+#include "skip_unless.h"
 #include "frame_ytp_decode.h"
 #include "frame_ytp_encode.h"
 #include "greater.h"
@@ -136,6 +137,7 @@ bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
          fm_comp_type_add(sys, &fm_comp_trigger) &&
          fm_comp_type_add(sys, &fm_comp_logical_and) &&
          fm_comp_type_add(sys, &fm_comp_filter_unless) &&
+         fm_comp_type_add(sys, &fm_comp_skip_unless) &&
          fm_comp_type_add(sys, &fm_comp_greater) &&
          fm_comp_type_add(sys, &fm_comp_greater_equal) &&
          fm_comp_type_add(sys, &fm_comp_less_equal) &&
