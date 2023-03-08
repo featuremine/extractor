@@ -23,16 +23,15 @@
 
 extern "C" {
 #include "skip_unless.h"
-#include "arg_stack.h"
-#include "comp_def.h"
-#include "stream_ctx.h"
-#include "time64.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+#include "extractor/stream_ctx.h"
+#include "fmc/time.h"
 }
 
-#include "decimal64.hpp"
-#include "frame.hpp"
-#include "time64.hpp"
-#include <fmc++/mpl.hpp>
+#include "fmc++/rprice.hpp"
+#include "extractor/frame.hpp"
+#include "fmc++/mpl.hpp"
 
 #include <memory>
 #include <stdlib.h>

@@ -26,8 +26,12 @@
 #ifndef __FM_SKIP_UNLESS_H__
 #define __FM_SKIP_UNLESS_H__
 
-#include "arg_stack.h"
-#include "comp_def.h"
+#include "extractor/arg_stack.h"
+#include "extractor/comp_def.h"
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 fm_ctx_def_t *fm_comp_skip_unless_gen(fm_comp_sys_t *sys, fm_comp_def_cl,
                                       unsigned, fm_type_decl_cp[],
@@ -38,5 +42,9 @@ void fm_comp_skip_unless_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 const fm_comp_def_t fm_comp_skip_unless = {"skip_unless",
                                            &fm_comp_skip_unless_gen,
                                            &fm_comp_skip_unless_destroy, NULL};
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // __FM_SKIP_UNLESS_H__
