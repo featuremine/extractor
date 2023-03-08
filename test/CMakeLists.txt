@@ -30,13 +30,13 @@ download_archive(
 
 download_archive(
     "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.1.ytp.0002.gz"
-    "7d36051d0cb6dc99ececea20a34c9875" "ytpseq_ore_bbo_trades.1.ytp.0002.gz"
+    "e270d4f51de89e97ee44551dac6d3483" "ytpseq_ore_bbo_trades.1.ytp.0002.gz"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades.ytp.0002"
 )
 
 download_archive(
     "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.1.ytp.0002.gz"
-    "7d36051d0cb6dc99ececea20a34c9875" "ytpseq_ore_bbo_trades.1.ytp.0002.gz"
+    "e270d4f51de89e97ee44551dac6d3483" "ytpseq_ore_bbo_trades.1.ytp.0002.gz"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades_partial.ytp.0002"
 )
 
@@ -651,27 +651,27 @@ set_tests_properties(
     TIMEOUT 100
 )
 
-# add_test(
-#     NAME extractor_python_ytp_book_bbo_trade_multi_file_partial COMMAND
+add_test(
+    NAME extractor_python_ytp_book_bbo_trade_multi_file_partial COMMAND
 
-#     "${PYTHON3_BIN}"
-#     "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo_multi_file.py"
-#     "--ytp"
-#     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades_partial.ytp"
-#     "--markets"
-#     "NYSE,NASDAQOMX,BATS,DirectEdgeX,DirectEdgeA,NYSEArca,NASDAQOMXBX,BATSY"
-#     "--imnts"
-#     "APLE,APAM,BMY,BAC"
-#     "--testcount"
-#     "215"
-#     "--testname"
-#     "book_bbo_trades_multi_file_partial"
+    "${PYTHON3_BIN}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo_multi_file.py"
+    "--ytp"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades_partial.ytp"
+    "--markets"
+    "NYSE,NASDAQOMX,BATS,DirectEdgeX,DirectEdgeA,NYSEArca,NASDAQOMXBX,BATSY"
+    "--imnts"
+    "APLE,APAM,BMY,BAC"
+    "--testcount"
+    "215"
+    "--testname"
+    "book_bbo_trades_multi_file_partial"
 
-#     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-# )
-# set_tests_properties(
-#     extractor_python_ytp_book_bbo_trade_multi_file_partial
-#     PROPERTIES
-#     ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
-#     TIMEOUT 100
-# )
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+set_tests_properties(
+    extractor_python_ytp_book_bbo_trade_multi_file_partial
+    PROPERTIES
+    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
+    TIMEOUT 100
+)

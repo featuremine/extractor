@@ -21,7 +21,6 @@ def test_printer(cnt, testname):
         f.close()
 
         cnt -= 1
-        print("COUNTER IS", cnt)
         if cnt < 1:
             extractor.assert_base(bbo_trades_base_file, bbo_trades_test_file)
             if os.path.exists(bbo_trades_test_file):
