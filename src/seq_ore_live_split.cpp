@@ -186,8 +186,8 @@ struct sols_exe_cl {
   static void static_data_cb(void *closure, ytp_peer_t peer,
                              ytp_channel_t channel, uint64_t time, size_t sz,
                              const char *data) {
-    auto &ctx = *reinterpret_cast<decltype(
-        ch_cl)::value_type::second_type::element_type *>(closure);
+    auto &ctx = *reinterpret_cast<
+        decltype(ch_cl)::value_type::second_type::element_type *>(closure);
     ctx.exe_cl->data_cb(std::string_view(data, sz), &ctx.info, ctx.parser,
                         ctx.index);
   }
