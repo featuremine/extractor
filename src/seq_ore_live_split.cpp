@@ -55,7 +55,6 @@
 struct sols_op_cl {
   std::string fname;
   std::unordered_map<std::string, int> ytp_channels;
-  std::string time_ch;
   fm::book::ore::imnt_infos_t info;
 };
 
@@ -174,7 +173,7 @@ struct sols_exe_cl {
     std::string ch_name(ch_name_sv.begin(), ch_name_sv.end());
     fmc_error_t *err = nullptr;
     if (auto where = cfg.ytp_channels.find(ch_name);
-        where != cfg.ytp_channels.end() || ch_name == cfg.time_ch) {
+        where != cfg.ytp_channels.end()) {
       auto index = where->second;
       auto &cl = ch_cl[ch_name];
       if (!cl) {
@@ -187,8 +186,8 @@ struct sols_exe_cl {
   static void static_data_cb(void *closure, ytp_peer_t peer,
                              ytp_channel_t channel, uint64_t time, size_t sz,
                              const char *data) {
-    auto &ctx = *reinterpret_cast<
-        decltype(ch_cl)::value_type::second_type::element_type *>(closure);
+    auto &ctx = *reinterpret_cast<decltype(
+        ch_cl)::value_type::second_type::element_type *>(closure);
     ctx.exe_cl->data_cb(std::string_view(data, sz), &ctx.info, ctx.parser,
                         ctx.index);
   }
@@ -202,16 +201,12 @@ struct sols_exe_cl {
       auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
       box = parser.msg;
       current_parser = &parser;
-      fm_stream_ctx_queue(
-          exec_ctx,
-          call_ctx->deps[parser.imnt->index + !exe_cl->cfg.time_ch.empty()]);
+      fm_stream_ctx_queue(exec_ctx, call_ctx->deps[index]);
     } else if (res.is_time()) {
-      if (!exe_cl->cfg.time_ch.empty()) {
-        auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
-        box = parser.msg;
-        current_parser = &parser;
-        fm_stream_ctx_queue(exec_ctx, call_ctx->deps[0]);
-      }
+      auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
+      box = parser.msg;
+      current_parser = &parser;
+      fm_stream_ctx_queue(exec_ctx, call_ctx->deps[index]);
     } else if (res.is_announce()) {
       auto *msg = std::get_if<fm::book::updates::announce>(&parser.msg);
       info->index = index;
@@ -301,8 +296,7 @@ bool fm_comp_seq_ore_live_split_stream_exec(fm_frame_t *fres, size_t args,
 
     auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
     box = parser.msg;
-    fm_stream_ctx_queue(
-        exec_ctx, ctx->deps[parser.imnt->index + !exe_cl->cfg.time_ch.empty()]);
+    fm_stream_ctx_queue(exec_ctx, ctx->deps[parser.imnt->index]);
   } else {
     fmc_error_t *err = nullptr;
     bool poll = ytp_sequence_poll(exe_cl->seq, &err);
@@ -373,33 +367,34 @@ fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     return param_error();
   }
   auto arg_count = fm_type_tuple_size(ptype);
-  if (arg_count == 3) {
-    if (!fm_type_is_cstring(fm_type_tuple_arg(ptype, 2))) {
+  bool has_time = arg_count == 3;
+  if (has_time) {
+    if (!fm_type_is_cstring(fm_type_tuple_arg(ptype, 1))) {
       return param_error();
     }
   } else if (arg_count != 2) {
     return param_error();
   }
   if (!fm_type_is_cstring(fm_type_tuple_arg(ptype, 0)) ||
-      !fm_type_is_tuple(fm_type_tuple_arg(ptype, 1))) {
+      !fm_type_is_tuple(fm_type_tuple_arg(ptype, 1 + has_time))) {
     return param_error();
   }
 
   auto cl = std::make_unique<sols_op_cl>();
   cl->fname = STACK_POP(plist, const char *);
 
-  auto split_param = fm_type_tuple_arg(ptype, 1);
-  unsigned split_count = fm_type_tuple_size(split_param);
   int idx_cnt = 0;
+  if (has_time) {
+    cl->ytp_channels.emplace(STACK_POP(plist, const char *), idx_cnt++);
+  }
+
+  auto split_param = fm_type_tuple_arg(ptype, 1 + has_time);
+  unsigned split_count = fm_type_tuple_size(split_param);
   for (unsigned i = 0; i < split_count; ++i) {
     if (!fm_type_is_cstring(fm_type_tuple_arg(split_param, i))) {
       return param_error();
     }
     cl->ytp_channels.emplace(STACK_POP(plist, const char *), idx_cnt++);
-  }
-
-  if (arg_count == 3) {
-    cl->time_ch = STACK_POP(plist, const char *);
   }
 
   auto rec_t =
@@ -411,7 +406,7 @@ fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   }
 
   auto *def = fm_ctx_def_new();
-  fm_ctx_def_volatile_set(def, split_count + !cl->time_ch.empty());
+  fm_ctx_def_volatile_set(def, split_count + has_time);
   fm_ctx_def_type_set(def, type);
   fm_ctx_def_closure_set(def, cl.release());
   fm_ctx_def_stream_call_set(def, &fm_comp_seq_ore_live_split_stream_call);

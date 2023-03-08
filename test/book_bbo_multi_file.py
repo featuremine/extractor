@@ -7,35 +7,34 @@ from datetime import timedelta
 
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
-def test_printer(cnt, testname):
-    bbo_trades_base_file = os.path.join(src_dir, 'data', f'{testname}.base.txt')
-    bbo_trades_test_file = os.path.join(src_dir, 'data', f'{testname}.test.txt')
+bbo_trades_base_file = os.path.join(src_dir, 'data', 'book_bbo_trades_multi_file.base.txt')
+bbo_trades_file = os.path.join(src_dir, 'data', 'book_bbo_trades_multi_file_multi_file.test.txt')
 
-    if os.path.exists(bbo_trades_test_file):
-        os.remove(bbo_trades_test_file)
+cnt = 680
+test = False
 
-    def fn(x):
-        nonlocal cnt
-        f = open(bbo_trades_test_file, "a")
+
+def print_frame(x):
+    global bbo_trades_file, bbo_trades_base_file, cnt, test
+    try:
+        f = open(bbo_trades_file, "a")
         print(x, file=f)
         f.close()
+    except FileNotFoundError as e:
+        print("File not found")
+    except RuntimeError as e:
+        print("RuntimeError:", str(e))
 
-        cnt -= 1
-        if cnt < 1:
-            extractor.assert_base(bbo_trades_base_file, bbo_trades_test_file)
-            if os.path.exists(bbo_trades_test_file):
-                os.remove(bbo_trades_test_file)
-            exit()
-
-    return fn
-
-
-def stdout_printer():
-    return lambda x: print(x)
+    cnt -= 1
+    if test and cnt < 1:
+        extractor.assert_base(bbo_trades_base_file, bbo_trades_file)
+        if os.path.exists(bbo_trades_file):
+            os.remove(bbo_trades_file)
+        exit()
 
 
-def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile, printer):
-    period = timedelta(weeks=52*50)
+def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile):
+    period = timedelta(weeks=52 * 50)
     op = graph.features
     imnts_chs = tuple()
     mkt_imnts = []
@@ -44,31 +43,28 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile, p
         for mkt in markets:
             imnts_chs += ("channels/imnts/{0}/{1}".format(mkt, ticker),)  # E.G. "channels/imnts/NYSE/APLE"
             mkt_imnts += [(mkt, ticker)]
-    if time_ch:
-        time_upds, *upds = op.seq_ore_live_split(ytpfile, imnts_chs, time_ch)
-        graph.callback(time_upds, lambda frame: print(frame))
-    else:
-        upds = op.seq_ore_live_split(ytpfile, imnts_chs)
+
+    time_upd, *upds = op.seq_ore_live_split(ytpfile, time_ch, imnts_chs)
+    gothru = op.filter_if(op.logical_not(op.delayed(op.book_msg(time_upd, "time"), period)))
     headers = [op.book_header(upd) for upd in upds]
-    gothrus = [op.filter_if(op.logical_not(op.delayed(hdr.receive, period))) for hdr in headers]
 
     levels = [op.book_build(upd, lvl) for upd in upds]
     lvlhdrs = [op.asof(hdr, lvl) for hdr, lvl in zip(headers, levels)]
     bbos = [op.combine(
         level, (
             ("bid_prx_0", "bidprice"),
-            ("ask_prx_0", "askprice"),
-            ("bid_shr_0", "bidqty"),
-            ("ask_shr_0", "askqty")
+            ("ask_prx_0", "askprice")
         ),
+        op.convert(op.round(level.bid_shr_0), extractor.Int32), (("bid_shr_0", "bidqty"),),
+        op.convert(op.round(level.ask_shr_0), extractor.Int32), (("ask_shr_0", "askqty"),),
         hdr, (("receive", "receive"),)) for level, hdr in zip(levels, lvlhdrs)]
     filtered_bbos = {(mkt_imnt[0], mkt_imnt[1]):
                      op.filter_if(gothru, bbo, name=f'bbo/{mkt_imnt[0]}/{mkt_imnt[1]}')
-                     for gothru, bbo, mkt_imnt in zip(gothrus, bbos, mkt_imnts)}
+                     for bbo, mkt_imnt in zip(bbos, mkt_imnts)}
 
     filtered_trades = {}
     book_trades = [op.book_trades(upd) for upd in upds]
-    for trade, gothru, mkt_imnt in zip(book_trades, gothrus, mkt_imnts):
+    for trade, mkt_imnt in zip(book_trades, mkt_imnts):
         const_b = op.constant(('decoration', extractor.Array(extractor.Char, 8), 'b'))
         const_a = op.constant(('decoration', extractor.Array(extractor.Char, 8), 'a'))
         const_u = op.constant(('decoration', extractor.Array(extractor.Char, 8), 'u'))
@@ -80,16 +76,19 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile, p
         eq_b = op.cond(decoration_equals_b, const_n_value_b, const_n_value_u)
         side = op.cond(decoration_equals_a, const_n_value_a, eq_b)
 
+        qty_decimal64 = op.round(trade.qty)
+        qty_int32 = op.convert(qty_decimal64, extractor.Int32)
+
         trade = op.combine(
             trade, (
                 ("trade_price", "price"),
-                ("receive", "receive"),
-                ("qty", "qty")
+                ("receive", "receive")
             ),
+            qty_int32, (("qty", "qty"),),
             side, (("side", "side"),))
 
         name = f'trade/{mkt_imnt[0]}/{mkt_imnt[1]}'
-        filtered_trades[(mkt_imnt[0], mkt_imnt[1])] = op.filter_if(gothru, trade, name=name)
+        filtered_trades[(mkt_imnt[0], mkt_imnt[1])] = op.skip_unless(gothru, trade, name=name)
 
     for imnt in universe.get("all"):
         ticker = symbology.info(imnt)["ticker"]
@@ -100,18 +99,18 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile, p
         for mkt in markets:
             bbo_book_combined = filtered_bbos[(mkt, ticker)]
             trade_combined = filtered_trades[(mkt, ticker)]
-            graph.callback(bbo_book_combined, printer)
-            graph.callback(trade_combined, printer)
+            graph.callback(bbo_book_combined, print_frame)
+            graph.callback(trade_combined, print_frame)
             bbos_book.append(bbo_book_combined)
             trades_combined.append(trade_combined)
-            cum_trade = op.cumulative(op.combine(trade_combined.qty, (("qty", "shares"),), op.convert(trade_combined.qty, extractor.Float64) * op.convert(trade_combined.price, extractor.Float64), (("qty", "notional",),), name="cum_trade/{0}/{1}".format(mkt, imnt)))
+            cum_trade = op.cum_trade(trade_combined, name="cum_trade/{0}/{1}".format(mkt, imnt))
             cum_trades.append(cum_trade)
             status_frame = op.constant(("receive", extractor.Time64, timedelta(seconds=0)),
                                        ("short_sale_indicator", extractor.Int32, 0))
             statuses.append(status_frame)
         op.bbo_aggr(*bbos_book, name="nbbo/{0}".format(imnt))
         #op.last_trade(*trades_combined, name="last_trade/{0}".format(imnt))
-        op.sum(*cum_trades, name="cum_trade_total/{0}".format(imnt))
+        op.cum_trade_total(*cum_trades, name="cum_trade_total/{0}".format(imnt))
         #op.status_aggr(*statuses, name="status_aggr/{0}".format(imnt))
 
 
@@ -139,11 +138,16 @@ if __name__ == "__main__":
     parser.add_argument("--markets", help="Comma separated markets list", required=False)
     parser.add_argument("--imnts", help="Comma separated instrument list", required=False)
     parser.add_argument("--levels", help="Number of levels to display", type=int, required=False, default=1)
-    parser.add_argument("--time", help="Time channel name", required=False, default="")
-    parser.add_argument("--testcount", help="number of lines expected in the test output", required=False)
-    parser.add_argument("--testname", help="test name", required=False)
+    parser.add_argument("--time", help="Time channel name", required=False, default="channels/seconds")
+    parser.add_argument("--test", help="boolean to assert against base book", required=False, default="false")
+    parser.add_argument(
+        "--license",
+        help="Extractor license (defaults to '../test/test.lic' if not provided)",
+        required=False,
+        default="../test/test.lic")
     args = parser.parse_args()
 
+    extractor.set_license(args.license)
     graph = extractor.system.comp_graph()
     op = graph.features
 
@@ -175,11 +179,14 @@ if __name__ == "__main__":
     # ]
     markets = tuple(args.markets.split(','))
 
-    if args.testname is not None:
-        printer = test_printer(int(args.testcount), args.testname)
-    else:
-        printer = stdout_printer()
+    if os.path.exists(bbo_trades_file):
+        os.remove(bbo_trades_file)
 
-    setup_prod_sip(universe, symbology, markets, args.levels, args.time, graph, args.ytp, printer)
+    if args.test.lower() in ('yes', 'true', 't', 'y', '1'):
+        test = True
+    elif args.test.lower() in ('no', 'false', 'f', 'n', '0'):
+        test = False
+
+    setup_prod_sip(universe, symbology, markets, args.levels, args.time, graph, args.ytp)
 
     graph.stream_ctx().run_live()
