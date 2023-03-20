@@ -44,13 +44,10 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile, p
         for mkt in markets:
             imnts_chs += ("channels/imnts/{0}/{1}".format(mkt, ticker),)  # E.G. "channels/imnts/NYSE/APLE"
             mkt_imnts += [(mkt, ticker)]
-    if time_ch:
-        time_upds, *upds = op.seq_ore_live_split(ytpfile, imnts_chs, time_ch)
-        graph.callback(time_upds, lambda frame: print(frame))
-    else:
-        upds = op.seq_ore_live_split(ytpfile, imnts_chs)
+
+    time_upd, *upds = op.seq_ore_live_split(ytpfile, time_ch, imnts_chs)
+    gothru = op.filter_if(op.logical_not(op.delayed(op.book_msg(time_upd, "time"), period)))
     headers = [op.book_header(upd) for upd in upds]
-    gothrus = [op.filter_if(op.logical_not(op.delayed(hdr.receive, period))) for hdr in headers]
 
     levels = [op.book_build(upd, lvl) for upd in upds]
     lvlhdrs = [op.asof(hdr, lvl) for hdr, lvl in zip(headers, levels)]
@@ -64,11 +61,11 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile, p
         hdr, (("receive", "receive"),)) for level, hdr in zip(levels, lvlhdrs)]
     filtered_bbos = {(mkt_imnt[0], mkt_imnt[1]):
                      op.filter_if(gothru, bbo, name=f'bbo/{mkt_imnt[0]}/{mkt_imnt[1]}')
-                     for gothru, bbo, mkt_imnt in zip(gothrus, bbos, mkt_imnts)}
+                     for bbo, mkt_imnt in zip(bbos, mkt_imnts)}
 
     filtered_trades = {}
     book_trades = [op.book_trades(upd) for upd in upds]
-    for trade, gothru, mkt_imnt in zip(book_trades, gothrus, mkt_imnts):
+    for trade, mkt_imnt in zip(book_trades, mkt_imnts):
         const_b = op.constant(('decoration', extractor.Array(extractor.Char, 8), 'b'))
         const_a = op.constant(('decoration', extractor.Array(extractor.Char, 8), 'a'))
         const_u = op.constant(('decoration', extractor.Array(extractor.Char, 8), 'u'))
@@ -89,7 +86,7 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile, p
             side, (("side", "side"),))
 
         name = f'trade/{mkt_imnt[0]}/{mkt_imnt[1]}'
-        filtered_trades[(mkt_imnt[0], mkt_imnt[1])] = op.filter_if(gothru, trade, name=name)
+        filtered_trades[(mkt_imnt[0], mkt_imnt[1])] = op.skip_unless(gothru, trade, name=name)
 
     for imnt in universe.get("all"):
         ticker = symbology.info(imnt)["ticker"]
@@ -139,7 +136,7 @@ if __name__ == "__main__":
     parser.add_argument("--markets", help="Comma separated markets list", required=False)
     parser.add_argument("--imnts", help="Comma separated instrument list", required=False)
     parser.add_argument("--levels", help="Number of levels to display", type=int, required=False, default=1)
-    parser.add_argument("--time", help="Time channel name", required=False, default="")
+    parser.add_argument("--time", help="Time channel name", required=False, default="channels/seconds")
     parser.add_argument("--testcount", help="number of lines expected in the test output", required=False)
     parser.add_argument("--testname", help="test name", required=False)
     args = parser.parse_args()

@@ -58,8 +58,11 @@ bool fm_comp_data_bar_stream_exec(fm_frame_t *result, size_t args,
   comp_cl->last_ = now;
 
   if (last < start) {
-    *(fmc_time64_t *)fm_frame_get_ptr1(result, comp_cl->start_id, 0) = start;
-    bool skipped = (last + comp_cl->period_) < start;
+    fmc_time64_t close =
+        comp_cl->period_ * ((last - comp_cl->offset_) / comp_cl->period_ + 1) +
+        comp_cl->offset_;
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, comp_cl->start_id, 0) = close;
+    bool skipped = (last + comp_cl->period_) < close;
     *(bool *)fm_frame_get_ptr1(result, comp_cl->skipped_id, 0) = skipped;
     return true;
   }

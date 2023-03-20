@@ -82,6 +82,7 @@
 #include "pow.h"
 #include "roundop.h"
 #include "seq_ore_live_split.h"
+#include "skip_unless.h"
 #include "split.h"
 #include "split_by.h"
 #include "substr.h"
@@ -143,6 +144,7 @@ bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
          fm_comp_type_add(sys, &fm_comp_equal) &&
          fm_comp_type_add(sys, &fm_comp_not_equal) &&
          fm_comp_type_add(sys, &fm_comp_filter_if) &&
+         fm_comp_type_add(sys, &fm_comp_skip_unless) &&
          fm_comp_type_add(sys, &fm_comp_logical_or) &&
          fm_comp_type_add(sys, &fm_comp_find_substr) &&
          fm_comp_type_add(sys, &fm_comp_substr) &&
