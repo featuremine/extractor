@@ -23,20 +23,20 @@ function(download_archive URL MD5 FILENAME OUTPUT)
 endfunction()
 
 download_archive(
-    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.0.ytp.0001.gz"
-    "de853b955e9743dda5812bd178188669" "ytpseq_ore_bbo_trades.0.ytp.0001.gz"
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.1.ytp.0001.gz"
+    "2cbef2b01aa096a289be63f48613293e" "ytpseq_ore_bbo_trades.1.ytp.0001.gz"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades.ytp.0001"
 )
 
 download_archive(
-    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.0.ytp.0002.gz"
-    "51b5c4d1648db3a74be63e474d6db846" "ytpseq_ore_bbo_trades.0.ytp.0002.gz"
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.1.ytp.0002.gz"
+    "e270d4f51de89e97ee44551dac6d3483" "ytpseq_ore_bbo_trades.1.ytp.0002.gz"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades.ytp.0002"
 )
 
 download_archive(
-    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.0.ytp.0002.gz"
-    "51b5c4d1648db3a74be63e474d6db846" "ytpseq_ore_bbo_trades.0.ytp.0002.gz"
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.1.ytp.0002.gz"
+    "e270d4f51de89e97ee44551dac6d3483" "ytpseq_ore_bbo_trades.1.ytp.0002.gz"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades_partial.ytp.0002"
 )
 
@@ -636,7 +636,7 @@ add_test(
     "--markets"
     "NYSE,NASDAQOMX,BATS,DirectEdgeX,DirectEdgeA,NYSEArca,NASDAQOMXBX,BATSY"
     "--imnts"
-    "SCI,STL"
+    "APLE,APAM,BMY,BAC"
     "--testcount"
     "291"
     "--testname"
@@ -661,7 +661,7 @@ add_test(
     "--markets"
     "NYSE,NASDAQOMX,BATS,DirectEdgeX,DirectEdgeA,NYSEArca,NASDAQOMXBX,BATSY"
     "--imnts"
-    "SCI,STL"
+    "APLE,APAM,BMY,BAC"
     "--testcount"
     "215"
     "--testname"
