@@ -48,6 +48,7 @@ bool fm_comp_field_stream_exec(fm_frame_t *result, size_t,
                                const fm_frame_t *const argv[],
                                fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
   auto idx = (int64_t)ctx->comp;
+  fm_frame_reserve0(result, fm_frame_dim(argv[0], 0));
   fm_frame_proj_assign(result, argv[0], idx);
   return true;
 }

@@ -100,35 +100,19 @@ def split_by_test(graph, op, m, trades_in):
 def split_test(graph, op, m, trades_in):
     trade_imnt_split = op.split(trades_in, "ticker", tuple([x["NASDAQOMX"] for x in tickers]))
     bars = [module_compute_bar_ex(graph, trd, m)[0] for trd in trade_imnt_split]
-    out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
-                         tuple([x["NASDAQOMX"] for x in tickers]))
 
-    ticker_f = op.field(out_stream, "ticker")
-    ticker_A = op.constant(("ticker", extr.Array(extr.Char, 16), "A"))
-    ticker_AA = op.constant(("ticker", extr.Array(extr.Char, 16), "AA"))
-    ticker_BA = op.constant(("ticker", extr.Array(extr.Char, 16), "BA"))
+    triggers = {
+        "A": op.constant(("time", extr.Time64, pd.to_datetime('2017-10-18T13:35:00.000000000'))),
+        "AA": op.constant(("time", extr.Time64, pd.to_datetime('2017-10-18T10:40:00.000000000'))),
+        "BA": op.constant(("time", extr.Time64, pd.to_datetime('2017-10-18T10:00:00.000000000')))
+    }
 
-    ts_f = op.trigger(out_stream)
-    ts_A = op.constant(("time", extr.Time64, pd.to_datetime('2017-10-18T13:35:00.000000000')))
-    ts_AA = op.constant(("time", extr.Time64, pd.to_datetime('2017-10-18T10:40:00.000000000')))
-    ts_BA = op.constant(("time", extr.Time64, pd.to_datetime('2017-10-18T10:00:00.000000000')))
+    usable_tickers = tuple([x["NASDAQOMX"] for x in tickers])
 
-    out_stream_filtered = op.filter_if(
-        op.logical_or(
-            op.logical_and(
-                ticker_f == ticker_A,
-                ts_f >= ts_A
-            ),
-            op.logical_and(
-                ticker_f == ticker_AA,
-                ts_f >= ts_AA
-            ),
-            op.logical_and(
-                ticker_f == ticker_BA,
-                ts_f >= ts_BA
-            ),
-        ),
-        out_stream)
+    filtered_bars = [op.filter_if(op.trigger(bar) >= triggers[ticker], bar) for ticker, bar in zip(usable_tickers, bars)]
+
+    out_stream_filtered = op.join(*filtered_bars, "ticker", extr.Array(extr.Char, 16),
+                                  tuple([x["NASDAQOMX"] for x in tickers]))
 
     return op.accumulate(out_stream_filtered)
 
@@ -179,6 +163,11 @@ if __name__ == "__main__":
     psbar = run(split_by_test, single_test_post, m)
     pbar = run(split_test, single_test_post, m)
 
+    psbar.to_csv("psbar", index=False)
+    pbar.to_csv("pbar", index=False)
+    print("split_by",len(psbar))
+    print("split",len(pbar))
+    print(pbar[~pbar.apply(tuple,1).isin(psbar.apply(tuple,1))])
     assert_frame_equal(pbar, psbar)
 
     ret = run(multi_test, multi_test_post, m)

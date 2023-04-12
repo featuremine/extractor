@@ -86,6 +86,7 @@ bool fm_comp_filter_if_stream_exec(fm_frame_t *result, size_t args,
       return false;
   }
   if (comp_cl->updated) {
+    fm_frame_reserve0(result, fm_frame_dim(argv[args - 1], 0));
     fm_frame_assign(result, argv[args - 1]);
     comp_cl->updated = false;
     return true;
