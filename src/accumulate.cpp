@@ -89,7 +89,7 @@ struct accum_cl {
     fm_frame_reserve0(data_, nd_new);
     for (int j = nd_old; j < nd_new; ++j) {
       memcpy(fm_frame_get_ptr1(data_, indices_[nf - 1], j), &curr,
-            sizeof(fmc_time64_t));
+             sizeof(fmc_time64_t));
     }
     for (unsigned i = 0; i < nf - 1; ++i) {
       fm_frame_field_copy_from0(data_, indices_[i], inp_, i, nd_old);
