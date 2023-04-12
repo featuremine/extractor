@@ -447,6 +447,9 @@ extr_py_unit_test(
 extr_py_unit_test(
     numerical
 )
+extr_py_unit_test(
+    error_reporting
+)
 
 add_library(
     ema_ext

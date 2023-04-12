@@ -106,13 +106,20 @@ size_t fm_call_obj_size(fm_call_obj_t *obj) {
 size_t fm_call_obj_argc(fm_call_obj_t *call) { return call->argc; }
 
 bool fm_call_obj_exec(fm_call_obj_t *obj) {
+  if (fm_exec_ctx_is_error(obj->ctx.exec)) {
+    return false;
+  }
   if (obj->setup)
     obj->setup(obj);
   bool res =
       obj->exec(obj->result, obj->argc, obj->argv, &obj->ctx, obj->exec_cl);
   if (res) {
-    for (auto &clbck : obj->clbcks)
+    for (auto &clbck : obj->clbcks) {
+      if (fm_exec_ctx_is_error(obj->ctx.exec)) {
+        break;
+      }
       (clbck.clbck)(obj->result, clbck.cl, &obj->ctx);
+    }
   }
   return res;
 }
