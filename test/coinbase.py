@@ -62,7 +62,8 @@ if __name__ == "__main__":
     levels = op.book_build(decoded, 10)
     op.csv_record(levels, book_test_file)
 
-    graph.callback(levels, n_entries)
+    close_data = op.time_lag(levels, timedelta(milliseconds=0), timedelta(0))
+    graph.callback(close_data, n_entries)
 
     graph.stream_ctx().run_live()
 
