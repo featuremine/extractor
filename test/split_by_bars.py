@@ -163,11 +163,6 @@ if __name__ == "__main__":
     psbar = run(split_by_test, single_test_post, m)
     pbar = run(split_test, single_test_post, m)
 
-    psbar.to_csv("psbar", index=False)
-    pbar.to_csv("pbar", index=False)
-    print("split_by",len(psbar))
-    print("split",len(pbar))
-    print(pbar[~pbar.apply(tuple,1).isin(psbar.apply(tuple,1))])
     assert_frame_equal(pbar, psbar)
 
     ret = run(multi_test, multi_test_post, m)
