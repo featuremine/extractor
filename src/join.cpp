@@ -63,40 +63,24 @@ bool fm_comp_join_stream_exec(fm_frame_t *result, size_t,
                               fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
   auto *ctx_cl = (join_comp_cl *)ctx->comp;
   while (!ctx_cl->inputs.empty()) {
-    auto *frame = ctx_cl->pool_.get(result);
+    auto *frame = result;
     auto idx = ctx_cl->inputs.front();
     ctx_cl->inputs.pop_front();
     auto *inp = argv[idx];
     auto nd_from = fm_frame_dim(inp, 0);
     auto nd_to = fm_frame_dim(frame, 0);
-    if (nd_from != nd_to)
-      fm_frame_reserve0(frame, nd_from);
+    fm_frame_reserve0(frame, nd_from + nd_to);
     for (auto &&[from, to] : ctx_cl->fields) {
-      fm_frame_field_copy(frame, to, inp, from);
+      fm_frame_field_copy_from0(frame, to, inp, from, nd_to);
     }
     auto &label = ctx_cl->labels[idx];
     auto *where = fm_frame_get_ptr1(frame, ctx_cl->label_idx, 0);
     memcpy(where, label.data(), label.size());
 
-    for (int i = 1; i < nd_from; ++i) {
+    for (int i = nd_to; i < nd_from + nd_to; ++i) {
       where = fm_frame_get_ptr1(frame, ctx_cl->label_idx, i);
       memset(where, 0, label.size());
     }
-    ctx_cl->queue_.push_back(frame);
-  }
-
-  if (!ctx_cl->queue_.empty()) {
-    auto *frame = ctx_cl->queue_.front();
-    ctx_cl->queue_.pop_front();
-    fm_frame_swap(result, frame);
-    ctx_cl->pool_.release(frame);
-  }
-
-  if (!ctx_cl->queue_.empty()) {
-    auto *stream_ctx = (fm_stream_ctx_t *)ctx->exec;
-    auto now = fm_stream_ctx_now(stream_ctx);
-    auto handle = ctx->handle;
-    fm_stream_ctx_schedule(stream_ctx, handle, now);
   }
   return true;
 }
