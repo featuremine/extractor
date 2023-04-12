@@ -62,25 +62,24 @@ bool fm_comp_join_stream_exec(fm_frame_t *result, size_t,
                               const fm_frame_t *const argv[],
                               fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
   auto *ctx_cl = (join_comp_cl *)ctx->comp;
+  auto *frame = result;
+  auto nd_old = 0;
   while (!ctx_cl->inputs.empty()) {
-    auto *frame = result;
     auto idx = ctx_cl->inputs.front();
     ctx_cl->inputs.pop_front();
     auto *inp = argv[idx];
-    auto nd_from = fm_frame_dim(inp, 0);
-    auto nd_to = fm_frame_dim(frame, 0);
-    fm_frame_reserve0(frame, nd_from + nd_to);
+    auto nd_inp = fm_frame_dim(inp, 0);
+    auto nd_new = nd_inp + nd_old;
+    fm_frame_reserve0(frame, nd_new);
     for (auto &&[from, to] : ctx_cl->fields) {
-      fm_frame_field_copy_from0(frame, to, inp, from, nd_to);
+      fm_frame_field_copy_from0(frame, to, inp, from, nd_old);
     }
     auto &label = ctx_cl->labels[idx];
-    auto *where = fm_frame_get_ptr1(frame, ctx_cl->label_idx, 0);
-    memcpy(where, label.data(), label.size());
-
-    for (int i = nd_to; i < nd_from + nd_to; ++i) {
-      where = fm_frame_get_ptr1(frame, ctx_cl->label_idx, i);
-      memset(where, 0, label.size());
+    for (int i = nd_old; i < nd_new; ++i) {
+      auto *where = fm_frame_get_ptr1(frame, ctx_cl->label_idx, i);
+      memcpy(where, label.data(), label.size());
     }
+    nd_old = nd_new;
   }
   return true;
 }
