@@ -91,6 +91,7 @@ add_library(
     "divide.cpp"
     "convert.cpp"
     "join.cpp"
+    "last.cpp"
     "trigger.cpp"
     "mm_file.cpp"
     "arg_stack.cpp"

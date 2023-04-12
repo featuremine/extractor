@@ -61,6 +61,7 @@
 #include "is_nan.h"
 #include "is_zero.h"
 #include "join.h"
+#include "last.h"
 #include "less.h"
 #include "less_equal.h"
 #include "ln.h"
@@ -134,6 +135,7 @@ bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
          fm_comp_type_add(sys, &fm_comp_divide) &&
          fm_comp_type_add(sys, &fm_comp_convert) &&
          fm_comp_type_add(sys, &fm_comp_join) &&
+         fm_comp_type_add(sys, &fm_comp_last) &&
          fm_comp_type_add(sys, &fm_comp_trigger) &&
          fm_comp_type_add(sys, &fm_comp_logical_and) &&
          fm_comp_type_add(sys, &fm_comp_filter_unless) &&

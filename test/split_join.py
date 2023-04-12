@@ -50,7 +50,7 @@ if __name__ == "__main__":
                              ("qty", "qty"),
                              ("side", "side")))
 
-    trade = op.join(Q_split, T_split, "market",
+    trade = op.last(Q_split, T_split, "market",
                     extr.Array(extr.Char, 16),
                     ("NASDAQ", "NASDAQ"))
 

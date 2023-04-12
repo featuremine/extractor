@@ -110,7 +110,7 @@ def setup_prod_sip(universe, symbology, graph, ytpfile):
             bid_val = op.constant(bid, ('side', extractor.Int32, 0))
             ask_val = op.constant(ask, ('side', extractor.Int32, 1))
             unk_val = op.constant(unk, ('side', extractor.Int32, 2))
-            side = op.join(
+            side = op.last(
                 bid_val, ask_val, unk_val, 'decoration', extractor.Array(
                     extractor.Char, 1), ('b', 'a', 'u')).side
 
