@@ -45,7 +45,6 @@ using namespace std;
 
 struct join_comp_cl {
   deque<int> inputs;
-  frame_pool pool_;
   deque<fm_frame_t *> queue_;
   vector<string> labels;
   vector<pair<fm_field_t, fm_field_t>> fields;
