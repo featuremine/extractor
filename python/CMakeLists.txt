@@ -237,7 +237,14 @@ if(BUILD_TESTING)
                 PACKAGE extractor
                 TIMEOUT 100
                 TEST "test-extractor-python"
+                PYTHONPATH "${WHEEL_yamal_BUILD_DIR}/build/lib"
             )
-        endif()
+
+            add_custom_target(
+                extractor_py ALL
+                DEPENDS yamal-whl
+            )
+        
+            endif()
     endif()
 endif()
