@@ -45,10 +45,9 @@ jobs:
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@main
+      uses: featuremine/actions/package/build@make_install_removal
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.33'
         cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
         #TODO: Add test_pypi_token when extractor name is available
@@ -80,10 +79,9 @@ jobs:
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@main
+      uses: featuremine/actions/package/build@make_install_removal
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
-        yamal_version: '7.2.33'
         cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
 
