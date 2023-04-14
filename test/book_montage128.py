@@ -180,10 +180,10 @@ if __name__ == "__main__":
     nbbos = [op.bbo_aggr(*x) for x in zip(*bbos)]
     nbbo_refs = [graph.get_ref(comp) for comp in nbbos]
 
-    out_book_nbbos = op.join(*book_nbbos, "ticker", extr.Array(extr.Char, 16),
+    out_book_nbbos = op.last(*book_nbbos, "ticker", extr.Array(extr.Char, 16),
                              tuple([x["NASDAQOMX"] for x in tickers]))
 
-    out_nbbos = op.join(*nbbos, "ticker", extr.Array(extr.Char, 16),
+    out_nbbos = op.last(*nbbos, "ticker", extr.Array(extr.Char, 16),
                         tuple([x["NASDAQOMX"] for x in tickers]))
 
     nbbos_aggr = op.accumulate(out_nbbos)

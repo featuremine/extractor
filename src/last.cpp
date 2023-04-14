@@ -13,7 +13,7 @@
  *****************************************************************************/
 
 /**
- * @file join.cpp
+ * @file last.cpp
  * @author Maxim Trokhimtchouk
  * @date 20 Apr 2018
  * @brief File contains C++ definitions of the comp object
@@ -22,7 +22,7 @@
  * @see http://www.featuremine.com
  */
 
-#include "join.h"
+#include "last.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
@@ -43,60 +43,52 @@
 
 using namespace std;
 
-struct join_comp_cl {
-  deque<int> inputs;
-  deque<fm_frame_t *> queue_;
+struct last_comp_cl {
+  int input;
   vector<string> labels;
   vector<pair<fm_field_t, fm_field_t>> fields;
   fm_field_t label_idx;
 };
 
-bool fm_comp_join_call_stream_init(fm_frame_t *result, size_t args,
+bool fm_comp_last_call_stream_init(fm_frame_t *result, size_t args,
                                    const fm_frame_t *const argv[],
                                    fm_call_ctx_t *ctx, fm_call_exec_cl *cl) {
   return true;
 }
 
-bool fm_comp_join_stream_exec(fm_frame_t *result, size_t,
+bool fm_comp_last_stream_exec(fm_frame_t *result, size_t,
                               const fm_frame_t *const argv[],
                               fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
-  auto *ctx_cl = (join_comp_cl *)ctx->comp;
-  auto *frame = result;
-  auto nd_old = 0;
-  while (!ctx_cl->inputs.empty()) {
-    auto idx = ctx_cl->inputs.front();
-    ctx_cl->inputs.pop_front();
-    auto *inp = argv[idx];
-    auto nd_inp = fm_frame_dim(inp, 0);
-    auto nd_new = nd_inp + nd_old;
-    fm_frame_reserve0(frame, nd_new);
-    for (auto &&[from, to] : ctx_cl->fields) {
-      fm_frame_field_copy_from0(frame, to, inp, from, nd_old);
-    }
-    auto &label = ctx_cl->labels[idx];
-    for (int i = nd_old; i < nd_new; ++i) {
-      auto *where = fm_frame_get_ptr1(frame, ctx_cl->label_idx, i);
-      memcpy(where, label.data(), label.size());
-    }
-    nd_old = nd_new;
+  auto *ctx_cl = (last_comp_cl *)ctx->comp;
+  auto idx = ctx_cl->input;
+  auto *inp = argv[idx];
+  auto nd_from = fm_frame_dim(inp, 0);
+  auto nd_to = fm_frame_dim(result, 0);
+  if (nd_from != nd_to)
+    fm_frame_reserve0(result, nd_from);
+  for (auto &&[from, to] : ctx_cl->fields) {
+    fm_frame_field_copy(result, to, inp, from);
   }
+  auto &label = ctx_cl->labels[idx];
+  auto *where = fm_frame_get_ptr1(result, ctx_cl->label_idx, 0);
+  memcpy(where, label.data(), label.size());
   return true;
 }
 
-fm_call_def *fm_comp_join_stream_call(fm_comp_def_cl comp_cl,
+fm_call_def *fm_comp_last_stream_call(fm_comp_def_cl comp_cl,
                                       const fm_ctx_def_cl ctx_cl) {
   auto *def = fm_call_def_new();
-  fm_call_def_init_set(def, fm_comp_join_call_stream_init);
-  fm_call_def_exec_set(def, fm_comp_join_stream_exec);
+  fm_call_def_init_set(def, fm_comp_last_call_stream_init);
+  fm_call_def_exec_set(def, fm_comp_last_stream_exec);
   return def;
 }
 
-void fm_comp_join_queuer(size_t idx, fm_call_ctx_t *ctx) {
-  auto *ctx_cl = (join_comp_cl *)ctx->comp;
-  ctx_cl->inputs.push_back(idx);
+void fm_comp_last_queuer(size_t idx, fm_call_ctx_t *ctx) {
+  auto *ctx_cl = (last_comp_cl *)ctx->comp;
+  ctx_cl->input = idx;
 }
 
-fm_ctx_def_t *fm_comp_join_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
+fm_ctx_def_t *fm_comp_last_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
                                unsigned argc, fm_type_decl_cp argv[],
                                fm_type_decl_cp ptype, fm_arg_stack_t plist) {
   auto *sys = fm_type_sys_get(csys);
@@ -144,7 +136,7 @@ fm_ctx_def_t *fm_comp_join_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     names[idx] = fm_type_frame_field_name(in_t, idx);
     types[idx] = fm_type_frame_field_type(in_t, idx);
     if (strcmp(names[idx], label) == 0) {
-      auto *error = "join label cannot be the same one of the fields";
+      auto *error = "last label cannot be the same one of the fields";
       fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS, error);
       return nullptr;
     }
@@ -173,7 +165,7 @@ fm_ctx_def_t *fm_comp_join_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     return nullptr;
   }
 
-  auto *ctx_cl = new join_comp_cl();
+  auto *ctx_cl = new last_comp_cl();
 
   for (int idx = 0; idx < nf; ++idx) {
     auto to_idx = fm_type_frame_field_idx(type, names[idx]);
@@ -186,14 +178,14 @@ fm_ctx_def_t *fm_comp_join_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   fm_ctx_def_inplace_set(def, false);
   fm_ctx_def_type_set(def, type);
   fm_ctx_def_closure_set(def, ctx_cl);
-  fm_ctx_def_queuer_set(def, &fm_comp_join_queuer);
-  fm_ctx_def_stream_call_set(def, &fm_comp_join_stream_call);
+  fm_ctx_def_queuer_set(def, &fm_comp_last_queuer);
+  fm_ctx_def_stream_call_set(def, &fm_comp_last_stream_call);
   fm_ctx_def_query_call_set(def, nullptr);
   return def;
 }
 
-void fm_comp_join_destroy(fm_comp_def_cl cl, fm_ctx_def_t *def) {
-  auto *ctx_cl = (join_comp_cl *)fm_ctx_def_closure(def);
+void fm_comp_last_destroy(fm_comp_def_cl cl, fm_ctx_def_t *def) {
+  auto *ctx_cl = (last_comp_cl *)fm_ctx_def_closure(def);
   if (ctx_cl != nullptr)
     delete ctx_cl;
 }

@@ -45,7 +45,7 @@ if __name__ == "__main__":
     op = graph.features
     upds = op.ore_live_split(args.yamal, imnts)
     levels = [op.book_build(upd, args.levels) for upd in upds]
-    joint_stream = op.join(*levels, "ticker", extr.Array(extr.Char, 16), imnts)
+    joint_stream = op.last(*levels, "ticker", extr.Array(extr.Char, 16), imnts)
     trigger = op.trigger(joint_stream)
     out_stream = op.combine(trigger, tuple(), joint_stream, tuple())
     graph.callback(out_stream, lambda frame: print(frame))

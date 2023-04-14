@@ -83,7 +83,7 @@ if __name__ == "__main__":
     nbbos = [op.bbo_aggr(*x) for x in zip(*bbos)]
 
     bars = [compute_diff(nbbo) for nbbo in nbbos]
-    out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
+    out_stream = op.last(*bars, "ticker", extr.Array(extr.Char, 16),
                          tuple([x["NASDAQOMX"] for x in tickers]))
 
     op.csv_record(out_stream, bar_file)

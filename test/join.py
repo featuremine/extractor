@@ -60,7 +60,7 @@ if __name__ == "__main__":
                           ("one", extr.Int64),
                              ("two", extr.Int64)))
 
-    join = op.join(pd_in, csv_in, "name", extr.Array(extr.Char, 16), ("pd", "csv"))
+    join = op.last(pd_in, csv_in, "name", extr.Array(extr.Char, 16), ("pd", "csv"))
 
     accum = op.accumulate(join)
 
