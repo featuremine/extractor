@@ -18,7 +18,7 @@ add_subproject(
     GIT_REVISION "v7.2.33"
     VERSION "7.2.33"
     GIT_URL "https://github.com/featuremine/yamal.git"
-    TARGETS fmc++ ytp py_yamal_dep yamal-whl WHEEL_yamal_BUILD_DIR
+    TARGETS fmc++ ytp py_yamal_dep yamal-whl
 )
 
 option (BUILD_TESTING "Enable build of the unit tests and their execution." ON)
