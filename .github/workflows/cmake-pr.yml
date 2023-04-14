@@ -45,7 +45,7 @@ jobs:
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@make_install_removal
+      uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         cpack: TGZ
@@ -79,7 +79,7 @@ jobs:
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@make_install_removal
+      uses: featuremine/actions/package/build@main
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         cpack: TGZ
