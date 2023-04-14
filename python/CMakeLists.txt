@@ -245,6 +245,6 @@ if(BUILD_TESTING)
                 DEPENDS yamal-whl
             )
         
-            endif()
+        endif()
     endif()
 endif()
