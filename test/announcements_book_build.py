@@ -42,7 +42,7 @@ def main_live(ore_path, symbols, out_path, with_time):
         upds = op.ore_live_split(ore_path, symbols)
     levels = [op.book_build(upd, 1) for upd in upds]
 
-    all_levels = op.join(*levels, "ticker", extr.Array(extr.Char, 7), symbols)
+    all_levels = op.last(*levels, "ticker", extr.Array(extr.Char, 7), symbols)
 
     op.csv_record(all_levels, out_path)
 
@@ -75,7 +75,7 @@ def main(ore_path, symbols, out_path):
     upds = op.book_play_split(ore_path, symbols)
     levels = [op.book_build(upd, 1) for upd in upds]
 
-    all_levels = op.join(*levels, "ticker", extr.Array(extr.Char, 7), symbols)
+    all_levels = op.last(*levels, "ticker", extr.Array(extr.Char, 7), symbols)
 
     op.csv_record(all_levels, out_path)
 

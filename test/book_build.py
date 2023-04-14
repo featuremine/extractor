@@ -73,7 +73,7 @@ if __name__ == "__main__":
         op = graph.features
         upds = book_split(op, in_file)
         levels = [op.book_build(upd, 5) for upd in upds]
-        joint_stream = op.join(*levels, "ticker", extr.Array(extr.Char, 16),
+        joint_stream = op.last(*levels, "ticker", extr.Array(extr.Char, 16),
                                ("2_YEAR", "3_YEAR", "10_YEAR"))
         trigger = op.trigger(joint_stream)
         out_stream = op.combine(trigger, tuple(), joint_stream, tuple())

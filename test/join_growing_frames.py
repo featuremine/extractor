@@ -38,7 +38,7 @@ if __name__ == "__main__":
     acc1 = op.accumulate(upd1, reset)
     acc2 = op.accumulate(upd2, reset)
 
-    join = op.join(acc1, acc2, "upd", extr.Array(extr.Char, 25), ("acc1", "acc2"))
+    join = op.last(acc1, acc2, "upd", extr.Array(extr.Char, 25), ("acc1", "acc2"))
 
     count1 = timedelta(seconds=1)
     count2 = timedelta(seconds=2)

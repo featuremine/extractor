@@ -41,7 +41,7 @@ if __name__ == "__main__":
     exec_msgs = op.fields(op.book_msg(upd[0], "execute"), ("batch", "qty", "seqn", "trade_price", "vendor"))
     all_msgs = op.fields(op.book_trades(upd[0]), ("batch", "qty", "seqn", "trade_price", "vendor"))
 
-    dirty_msgs = op.join(trade_msgs, exec_msgs, "type", extr.Array(extr.Char, 16), ("trade_msgs", "exec_msgs"))
+    dirty_msgs = op.last(trade_msgs, exec_msgs, "type", extr.Array(extr.Char, 16), ("trade_msgs", "exec_msgs"))
     merged_msgs = op.fields(dirty_msgs, ("batch", "qty", "seqn", "trade_price", "vendor"))
 
     merged_aggr = op.accumulate(merged_msgs)

@@ -80,16 +80,19 @@ struct accum_cl {
     }
   }
   void push(fm_stream_ctx_t *ctx) {
-    auto nd = fm_frame_dim(data_, 0);
+    auto nd_old = fm_frame_dim(data_, 0);
+    auto nd_inp = fm_frame_dim(inp_, 0);
+    auto nd_new = nd_old + nd_inp;
     auto nf = indices_.size();
     auto curr = fm_stream_ctx_now(ctx);
 
-    fm_frame_reserve0(data_, nd + 1);
-    memcpy(fm_frame_get_ptr1(data_, indices_[nf - 1], nd), &curr,
-           sizeof(fmc_time64_t));
-
+    fm_frame_reserve0(data_, nd_new);
+    for (int j = nd_old; j < nd_new; ++j) {
+      memcpy(fm_frame_get_ptr1(data_, indices_[nf - 1], j), &curr,
+             sizeof(fmc_time64_t));
+    }
     for (unsigned i = 0; i < nf - 1; ++i) {
-      fm_frame_field_copy_from0(data_, indices_[i], inp_, i, nd);
+      fm_frame_field_copy_from0(data_, indices_[i], inp_, i, nd_old);
     }
     updated_ = true;
   }

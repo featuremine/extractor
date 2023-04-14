@@ -51,7 +51,7 @@ if __name__ == "__main__":
 
     delayed_in_two = op.time_lag(data_in_two, timedelta(milliseconds=40), timedelta(milliseconds=10))
 
-    join = op.join(data_in_one, delayed_in_two, "name", extr.Array(extr.Char, 16), ("one", "two"))
+    join = op.last(data_in_one, delayed_in_two, "name", extr.Array(extr.Char, 16), ("one", "two"))
 
     one = op.accumulate(join)
 
