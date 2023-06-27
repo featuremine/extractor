@@ -53,12 +53,14 @@ struct bbo_aggr_exec_cl_impl : bbo_aggr_exec_cl {
   bbo_aggr_exec_cl_impl() : zero_(0) {}
 
   void init(fm_frame_t *result, const fm_frame_t *const argv[]) override {
+    rec = fm_frame_field(argv[0], "receive");
+
     pxs[trade_side::BID] = fm_frame_field(argv[0], "bidprice");
     pxs[trade_side::ASK] = fm_frame_field(argv[0], "askprice");
     qts[trade_side::BID] = fm_frame_field(argv[0], "bidqty");
     qts[trade_side::ASK] = fm_frame_field(argv[0], "askqty");
 
-    rec = fm_frame_field(result, "receive");
+    out_rec = fm_frame_field(result, "receive");
 
     out_pxs[trade_side::BID] = fm_frame_field(result, "bidprice");
     out_pxs[trade_side::ASK] = fm_frame_field(result, "askprice");
@@ -73,7 +75,13 @@ struct bbo_aggr_exec_cl_impl : bbo_aggr_exec_cl {
 
   void exec(fm_frame_t *result, size_t argc, const fm_frame_t *const argv[],
             fmc_time64_t now) override {
-    *(fmc_time64_t *)fm_frame_get_ptr1(result, rec, 0) = now;
+    fmc_time64_t rcv = {0};
+    for (size_t i = 0; i < argc; ++i) {
+      auto in_rcv = *(fmc_time64_t *)fm_frame_get_cptr1(argv[i], rec, 0);
+      rcv.value = std::max(rcv.value, in_rcv.value);
+    }
+    *(fmc_time64_t *)fm_frame_get_ptr1(result, out_rec, 0) = rcv;
+
     for (auto side : trade_side::all()) {
       better<Price> cmp(side);
       auto best_px = sided<Price>()[side];
@@ -100,6 +108,7 @@ struct bbo_aggr_exec_cl_impl : bbo_aggr_exec_cl {
   sided<fm_field_t> pxs;
   sided<fm_field_t> qts;
   fm_field_t rec;
+  fm_field_t out_rec;
   sided<fm_field_t> out_pxs;
   sided<fm_field_t> out_qts;
   Quantity zero_;
