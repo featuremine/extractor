@@ -351,17 +351,23 @@ public:
 class trade_event_op : public book_event_op {
 public:
   trade_event_op(fm_type_sys_t *sys) {
-    const int nf = 6;
+    const int nf = 10;
     int dims[1] = {1};
     const char *names[nf] = {"vendor", "seqn",  "trade_price",
-                             "qty",    "batch", "decoration"};
+                             "qty",    "batch", "decoration",
+                             "sale_condition", "sale_condition2",
+                             "sale_condition3", "sale_condition4"};
     fm_type_decl_cp types[nf] = {
         fm_base_type_get(sys, FM_TYPE_TIME64),
         fm_base_type_get(sys, FM_TYPE_UINT64),
         fm_base_type_get(sys, FM_TYPE_DECIMAL128),
         fm_base_type_get(sys, FM_TYPE_DECIMAL128),
         fm_base_type_get(sys, FM_TYPE_UINT16),
-        fm_array_type_get(sys, fm_base_type_get(sys, FM_TYPE_CHAR), 8)};
+        fm_array_type_get(sys, fm_base_type_get(sys, FM_TYPE_CHAR), 4),
+        fm_base_type_get(sys, FM_TYPE_UINT8),
+        fm_base_type_get(sys, FM_TYPE_UINT8),
+        fm_base_type_get(sys, FM_TYPE_UINT8),
+        fm_base_type_get(sys, FM_TYPE_UINT8)};
     type_ = fm_frame_type_get1(sys, nf, names, types, 1, dims);
     vendor_field_ = fm_type_frame_field_idx(type_, "vendor");
     seqn_field_ = fm_type_frame_field_idx(type_, "seqn");
@@ -369,6 +375,10 @@ public:
     qty_field_ = fm_type_frame_field_idx(type_, "qty");
     batch_field_ = fm_type_frame_field_idx(type_, "batch");
     decoration_field_ = fm_type_frame_field_idx(type_, "decoration");
+    sale_condition_field_ = fm_type_frame_field_idx(type_, "sale_condition");
+    sale_condition2_field_ = fm_type_frame_field_idx(type_, "sale_condition2");
+    sale_condition3_field_ = fm_type_frame_field_idx(type_, "sale_condition3");
+    sale_condition4_field_ = fm_type_frame_field_idx(type_, "sale_condition4");
   }
   void init(fm_frame_t *result) override {
     *(fmc_time64_t *)fm_frame_get_ptr1(result, vendor_field_, 0) =
@@ -381,7 +391,11 @@ public:
         fmc::decimal128();
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
     memset((char *)fm_frame_get_ptr1(result, decoration_field_, 0), 0,
-           sizeof(char) * 8);
+           sizeof(char) * 4);
+    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition_field_, 0) = 5;
+    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition2_field_, 0) = 5;
+    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition3_field_, 0) = 5;
+    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition4_field_, 0) = 5;
   }
   bool exec(const book::message &msg, fm_frame_t *result) override {
     if (auto pval = std::get_if<book::updates::trade>(&msg)) {
@@ -393,13 +407,18 @@ public:
       *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) = pval->qty;
       *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = pval->batch;
       memcpy((char *)fm_frame_get_ptr1(result, decoration_field_, 0),
-             pval->decoration, sizeof(char) * 8);
+             pval->decoration, sizeof(char) * 4);
+      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition_field_, 0) = pval->sale_condition[0];
+      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition2_field_, 0) = pval->sale_condition[1];
+      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition3_field_, 0) = pval->sale_condition[2];
+      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition4_field_, 0) = pval->sale_condition[3];
       return true;
     }
     return false;
   }
   fm_field_t vendor_field_, seqn_field_, trade_price_field_, qty_field_,
-      batch_field_, decoration_field_;
+      batch_field_, decoration_field_, sale_condition_field_,
+      sale_condition2_field_, sale_condition3_field_, sale_condition4_field_;
 };
 
 class state_event_op : public book_event_op {
