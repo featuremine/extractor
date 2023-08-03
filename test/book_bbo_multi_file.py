@@ -66,9 +66,9 @@ def setup_prod_sip(universe, symbology, markets, lvl, time_ch, graph, ytpfile, p
     filtered_trades = {}
     book_trades = [op.book_trades(upd) for upd in upds]
     for trade, mkt_imnt in zip(book_trades, mkt_imnts):
-        const_b = op.constant(('decoration', extractor.Array(extractor.Char, 8), 'b'))
-        const_a = op.constant(('decoration', extractor.Array(extractor.Char, 8), 'a'))
-        const_u = op.constant(('decoration', extractor.Array(extractor.Char, 8), 'u'))
+        const_b = op.constant(('decoration', extractor.Array(extractor.Char, 4), 'b'))
+        const_a = op.constant(('decoration', extractor.Array(extractor.Char, 4), 'a'))
+        const_u = op.constant(('decoration', extractor.Array(extractor.Char, 4), 'u'))
         decoration_equals_a = trade.decoration == const_a  # op.equal(trade.decoration, const_a)
         decoration_equals_b = trade.decoration == const_b  # op.equal(trade.decoration, const_a)
         const_n_value_b = op.constant(('side', extractor.Int32, 0))
