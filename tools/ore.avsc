@@ -472,27 +472,11 @@
             "type": "fixed", 
             "namespace": "com.featuremine.ore.message", 
             "name": "decoration", 
-            "size": 4
+            "size": 8
           }
         ], 
         "name": "decoration"
-      },
-      {
-        "type": "int", 
-        "name": "sale_condition"
-      }, 
-      {
-        "type": "int", 
-        "name": "sale_condition2"
-      }, 
-      {
-        "type": "int", 
-        "name": "sale_condition3"
-      }, 
-      {
-        "type": "int", 
-        "name": "sale_condition4"
-      }, 
+      }
     ]
   }, 
   {
