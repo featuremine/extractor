@@ -119,13 +119,13 @@ public:
               memset((char *)fm_frame_get_ptr1(result, decoration_field_, 0), 0,
                      sizeof(char) * 4);
               *(uint8_t *)fm_frame_get_ptr1(result, sale_condition_field_, 0) =
-                  5;
+                  0;
               *(uint8_t *)fm_frame_get_ptr1(result, sale_condition2_field_, 0) =
-                  5;
+                  0;
               *(uint8_t *)fm_frame_get_ptr1(result, sale_condition3_field_, 0) =
-                  5;
+                  0;
               *(uint8_t *)fm_frame_get_ptr1(result, sale_condition4_field_, 0) =
-                  5;
+                  0;
               return true;
             },
             [](auto &m) { return false; }},
