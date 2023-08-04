@@ -353,9 +353,10 @@ public:
   trade_event_op(fm_type_sys_t *sys) {
     const int nf = 10;
     int dims[1] = {1};
-    const char *names[nf] = {"vendor", "seqn",  "trade_price",
-                             "qty",    "batch", "decoration",
-                             "sale_condition", "sale_condition2",
+    const char *names[nf] = {"vendor",          "seqn",
+                             "trade_price",     "qty",
+                             "batch",           "decoration",
+                             "sale_condition",  "sale_condition2",
                              "sale_condition3", "sale_condition4"};
     fm_type_decl_cp types[nf] = {
         fm_base_type_get(sys, FM_TYPE_TIME64),
@@ -408,10 +409,14 @@ public:
       *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = pval->batch;
       memcpy((char *)fm_frame_get_ptr1(result, decoration_field_, 0),
              pval->decoration, sizeof(char) * 4);
-      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition_field_, 0) = pval->decoration[4];
-      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition2_field_, 0) = pval->decoration[5];
-      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition3_field_, 0) = pval->decoration[6];
-      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition4_field_, 0) = pval->decoration[7];
+      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition_field_, 0) =
+          pval->decoration[4];
+      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition2_field_, 0) =
+          pval->decoration[5];
+      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition3_field_, 0) =
+          pval->decoration[6];
+      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition4_field_, 0) =
+          pval->decoration[7];
       return true;
     }
     return false;
