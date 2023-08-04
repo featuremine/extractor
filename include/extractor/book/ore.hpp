@@ -440,10 +440,7 @@ inline result parser::parse_trd(cmp_ctx_t *ctx, uint32_t &left) {
     return result::ERR;
   }
 
-  if (size > 8 || !ctx->read(ctx, msg.decoration, std::min(size, 4U)))
-    return result::ERR;
-
-  if (size > 4 && !ctx->read(ctx, msg.sale_condition, size - 4))
+  if (size > 8 || !ctx->read(ctx, msg.decoration, size))
     return result::ERR;
 
   --left;
