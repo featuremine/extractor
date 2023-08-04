@@ -101,8 +101,7 @@ struct trade {
   fmc::decimal128 trade_price;
   fmc::decimal128 qty;
   uint16_t batch;
-  char decoration[4] = {0, 0, 0, 0};
-  uint8_t sale_condition[4] = {5, 5, 5, 5};
+  char decoration[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 };
 
 struct state {
