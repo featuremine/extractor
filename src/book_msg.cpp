@@ -392,10 +392,10 @@ public:
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
     memset((char *)fm_frame_get_ptr1(result, decoration_field_, 0), 0,
            sizeof(char) * 4);
-    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition_field_, 0) = 5;
-    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition2_field_, 0) = 5;
-    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition3_field_, 0) = 5;
-    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition4_field_, 0) = 5;
+    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition_field_, 0) = 0;
+    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition2_field_, 0) = 0;
+    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition3_field_, 0) = 0;
+    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition4_field_, 0) = 0;
   }
   bool exec(const book::message &msg, fm_frame_t *result) override {
     if (auto pval = std::get_if<book::updates::trade>(&msg)) {
@@ -408,10 +408,10 @@ public:
       *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = pval->batch;
       memcpy((char *)fm_frame_get_ptr1(result, decoration_field_, 0),
              pval->decoration, sizeof(char) * 4);
-      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition_field_, 0) = pval->sale_condition[0];
-      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition2_field_, 0) = pval->sale_condition[1];
-      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition3_field_, 0) = pval->sale_condition[2];
-      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition4_field_, 0) = pval->sale_condition[3];
+      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition_field_, 0) = pval->decoration[4];
+      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition2_field_, 0) = pval->decoration[5];
+      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition3_field_, 0) = pval->decoration[6];
+      *(uint8_t *)fm_frame_get_ptr1(result, sale_condition4_field_, 0) = pval->decoration[7];
       return true;
     }
     return false;
