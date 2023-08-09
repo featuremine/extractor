@@ -194,7 +194,6 @@ struct sols_exe_cl {
 
   void data_cb(std::string_view data, fm::book::ore::imnt_info *info,
                fm::book::ore::parser &parser, int32_t index) {
-    auto *exe_cl = this;
     cmp_mem_set(&cmp, data.size(), (void *)data.data());
     auto res = parser.parse(&cmp.ctx, info);
     if (res.is_success()) {
