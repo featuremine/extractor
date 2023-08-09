@@ -54,6 +54,10 @@ public:
     qty_field_ = fm_type_frame_field_idx(type, "qty");
     batch_field_ = fm_type_frame_field_idx(type, "batch");
     decoration_field_ = fm_type_frame_field_idx(type, "decoration");
+    sale_condition_field_ = fm_type_frame_field_idx(type, "sale_condition");
+    sale_condition2_field_ = fm_type_frame_field_idx(type, "sale_condition2");
+    sale_condition3_field_ = fm_type_frame_field_idx(type, "sale_condition3");
+    sale_condition4_field_ = fm_type_frame_field_idx(type, "sale_condition4");
   }
   ~all_trades_op_cl() {}
   void init(fm_frame_t *result) {
@@ -69,7 +73,11 @@ public:
         (fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0), 0);
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
     memset((char *)fm_frame_get_ptr1(result, decoration_field_, 0), 0,
-           sizeof(char) * 8);
+           sizeof(char) * 4);
+    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition_field_, 0) = 0;
+    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition2_field_, 0) = 0;
+    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition3_field_, 0) = 0;
+    *(uint8_t *)fm_frame_get_ptr1(result, sale_condition4_field_, 0) = 0;
   }
   bool exec(const book::message &msg, fm_frame_t *result) {
     return std::visit(
@@ -86,7 +94,15 @@ public:
                   m.qty;
               *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = m.batch;
               memcpy((char *)fm_frame_get_ptr1(result, decoration_field_, 0),
-                     m.decoration, sizeof(char) * 8);
+                     m.decoration, sizeof(char) * 4);
+              *(uint8_t *)fm_frame_get_ptr1(result, sale_condition_field_, 0) =
+                  m.decoration[4];
+              *(uint8_t *)fm_frame_get_ptr1(result, sale_condition2_field_, 0) =
+                  m.decoration[5];
+              *(uint8_t *)fm_frame_get_ptr1(result, sale_condition3_field_, 0) =
+                  m.decoration[6];
+              *(uint8_t *)fm_frame_get_ptr1(result, sale_condition4_field_, 0) =
+                  m.decoration[7];
               return true;
             },
             [this, result](const book::updates::execute &m) {
@@ -101,14 +117,23 @@ public:
                   m.qty;
               *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = m.batch;
               memset((char *)fm_frame_get_ptr1(result, decoration_field_, 0), 0,
-                     sizeof(char) * 8);
+                     sizeof(char) * 4);
+              *(uint8_t *)fm_frame_get_ptr1(result, sale_condition_field_, 0) =
+                  0;
+              *(uint8_t *)fm_frame_get_ptr1(result, sale_condition2_field_, 0) =
+                  0;
+              *(uint8_t *)fm_frame_get_ptr1(result, sale_condition3_field_, 0) =
+                  0;
+              *(uint8_t *)fm_frame_get_ptr1(result, sale_condition4_field_, 0) =
+                  0;
               return true;
             },
             [](auto &m) { return false; }},
         msg);
   }
   fm_field_t vendor_field_, receive_field_, seqn_field_, trade_price_field_,
-      qty_field_, batch_field_, decoration_field_;
+      qty_field_, batch_field_, decoration_field_, sale_condition_field_,
+      sale_condition2_field_, sale_condition3_field_, sale_condition4_field_;
 };
 
 bool fm_comp_book_trades_call_stream_init(fm_frame_t *result, size_t args,
@@ -163,9 +188,18 @@ fm_ctx_def_t *fm_comp_book_trades_gen(fm_comp_sys_t *csys,
     return nullptr;
   }
 
-  const int nf = 7;
-  const char *names[nf] = {"vendor", "receive", "seqn",      "trade_price",
-                           "qty",    "batch",   "decoration"};
+  const int nf = 11;
+  const char *names[nf] = {"vendor",
+                           "receive",
+                           "seqn",
+                           "trade_price",
+                           "qty",
+                           "batch",
+                           "decoration",
+                           "sale_condition",
+                           "sale_condition2",
+                           "sale_condition3",
+                           "sale_condition4"};
   fm_type_decl_cp types[nf] = {
       fm_base_type_get(sys, FM_TYPE_TIME64),
       fm_base_type_get(sys, FM_TYPE_TIME64),
@@ -173,7 +207,11 @@ fm_ctx_def_t *fm_comp_book_trades_gen(fm_comp_sys_t *csys,
       fm_base_type_get(sys, FM_TYPE_DECIMAL128),
       fm_base_type_get(sys, FM_TYPE_DECIMAL128),
       fm_base_type_get(sys, FM_TYPE_UINT16),
-      fm_array_type_get(sys, fm_base_type_get(sys, FM_TYPE_CHAR), 8)};
+      fm_array_type_get(sys, fm_base_type_get(sys, FM_TYPE_CHAR), 4),
+      fm_base_type_get(sys, FM_TYPE_UINT8),
+      fm_base_type_get(sys, FM_TYPE_UINT8),
+      fm_base_type_get(sys, FM_TYPE_UINT8),
+      fm_base_type_get(sys, FM_TYPE_UINT8)};
   int dims[1] = {1};
   auto type = fm_frame_type_get1(sys, nf, names, types, 1, dims);
   if (!type) {
