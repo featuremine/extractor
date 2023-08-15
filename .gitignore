@@ -15,6 +15,7 @@ doc
 *_test.mp
 *.test
 
+build
 build/*
 .vscode/*
 .idea/*
