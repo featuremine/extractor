@@ -27,6 +27,7 @@
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
+#include "fmc/process.h"
 #include "ytp/peer.h"
 #include "ytp/sequence.h"
 #include "ytp/yamal.h"
@@ -41,6 +42,7 @@
 
 #include <algorithm>
 #include <atomic>
+#include <optional>
 #include <fcntl.h>
 #include <memory>
 #include <stdlib.h>
@@ -56,6 +58,7 @@ struct sols_op_cl {
   std::string fname;
   std::unordered_map<std::string, int> ytp_channels;
   fm::book::ore::imnt_infos_t info;
+  std::optional<int> affinity;
 };
 
 struct ch_ctx_t {
@@ -115,6 +118,11 @@ struct sols_exe_cl {
 
     thread = std::thread([this]() {
       fmc_error_t *err;
+      if (cfg.affinity) {
+        fmc_runtime_error_unless(!err)
+          << "could not set CPU affinity in seq_ore_live_split";
+      }
+      fmc_set_cur_affinity(*cfg.affinity, &err);
       while (!thread_done) {
         if (!next_file_available) {
           std::string next_file = file_name(fidx + 1);
@@ -356,8 +364,9 @@ fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   }
 
   auto param_error = [&]() {
-    auto *errstr = "expect yamal file and a tuple of symbols as "
-                   "parameters";
+    auto *errstr = "expect yamal file, optional time channel, a tuple of security channels, "
+                   "and an optional CPU affinity for the auxillary thread as parameters; "
+                   "you must specify time channel if you specify affinity";
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS, errstr);
     return nullptr;
   };
@@ -366,19 +375,20 @@ fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     return param_error();
   }
   auto arg_count = fm_type_tuple_size(ptype);
-  bool has_time = arg_count == 3;
+  bool has_time = arg_count >= 3;
+  bool has_affinity = arg_count == 4;
   if (has_time) {
     if (!fm_type_is_cstring(fm_type_tuple_arg(ptype, 1))) {
       return param_error();
     }
-  } else if (arg_count != 2) {
-    return param_error();
   }
   if (!fm_type_is_cstring(fm_type_tuple_arg(ptype, 0)) ||
       !fm_type_is_tuple(fm_type_tuple_arg(ptype, 1 + has_time))) {
     return param_error();
   }
-
+  if (arg_count < 2 || arg_count > 4) {
+    return param_error();
+  }
   auto cl = std::make_unique<sols_op_cl>();
   cl->fname = STACK_POP(plist, const char *);
 
@@ -394,6 +404,14 @@ fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       return param_error();
     }
     cl->ytp_channels.emplace(STACK_POP(plist, const char *), idx_cnt++);
+  }
+
+  if (has_affinity) {
+    uint64_t affinity;
+    if (!fm_arg_try_uinteger(fm_type_tuple_arg(ptype, 3), &plist, &affinity)) {
+      return param_error();
+    }
+    *(cl->affinity) = affinity;
   }
 
   auto rec_t =
