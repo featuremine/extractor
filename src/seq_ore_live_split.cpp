@@ -381,7 +381,7 @@ fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   bool has_affinity = arg_count == 4;
   if (arg_count < 2 || arg_count > 4) {
     return param_error();
-  } 
+  }
   if (has_time) {
     if (!fm_type_is_cstring(fm_type_tuple_arg(ptype, 1))) {
       return param_error();
