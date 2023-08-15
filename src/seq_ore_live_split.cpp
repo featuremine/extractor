@@ -119,9 +119,9 @@ struct sols_exe_cl {
     thread = std::thread([this]() {
       fmc_error_t *err;
       if (cfg.affinity) {
+        fmc_set_cur_affinity(*cfg.affinity, &err);
         fmc_runtime_error_unless(!err)
             << "could not set CPU affinity in seq_ore_live_split";
-        fmc_set_cur_affinity(*cfg.affinity, &err);
       }
       while (!thread_done) {
         if (!next_file_available) {
@@ -413,7 +413,7 @@ fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     if (!fm_arg_try_uinteger(fm_type_tuple_arg(ptype, 3), &plist, &affinity)) {
       return param_error();
     }
-    *(cl->affinity) = affinity;
+    cl->affinity = affinity;
   }
 
   auto rec_t =
