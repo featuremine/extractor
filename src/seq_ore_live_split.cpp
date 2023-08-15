@@ -121,8 +121,8 @@ struct sols_exe_cl {
       if (cfg.affinity) {
         fmc_runtime_error_unless(!err)
             << "could not set CPU affinity in seq_ore_live_split";
+        fmc_set_cur_affinity(*cfg.affinity, &err);
       }
-      fmc_set_cur_affinity(*cfg.affinity, &err);
       while (!thread_done) {
         if (!next_file_available) {
           std::string next_file = file_name(fidx + 1);
