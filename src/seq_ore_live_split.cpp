@@ -26,8 +26,8 @@
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "fmc/time.h"
 #include "fmc/process.h"
+#include "fmc/time.h"
 #include "ytp/peer.h"
 #include "ytp/sequence.h"
 #include "ytp/yamal.h"
@@ -42,9 +42,9 @@
 
 #include <algorithm>
 #include <atomic>
-#include <optional>
 #include <fcntl.h>
 #include <memory>
+#include <optional>
 #include <stdlib.h>
 #include <string.h>
 #include <string>
@@ -120,7 +120,7 @@ struct sols_exe_cl {
       fmc_error_t *err;
       if (cfg.affinity) {
         fmc_runtime_error_unless(!err)
-          << "could not set CPU affinity in seq_ore_live_split";
+            << "could not set CPU affinity in seq_ore_live_split";
       }
       fmc_set_cur_affinity(*cfg.affinity, &err);
       while (!thread_done) {
@@ -364,9 +364,11 @@ fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   }
 
   auto param_error = [&]() {
-    auto *errstr = "expect yamal file, optional time channel, a tuple of security channels, "
-                   "and an optional CPU affinity for the auxillary thread as parameters; "
-                   "you must specify time channel if you specify affinity";
+    auto *errstr =
+        "expect yamal file, optional time channel, a tuple of security "
+        "channels, "
+        "and an optional CPU affinity for the auxillary thread as parameters; "
+        "you must specify time channel if you specify affinity";
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS, errstr);
     return nullptr;
   };
