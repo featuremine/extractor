@@ -379,6 +379,9 @@ fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   auto arg_count = fm_type_tuple_size(ptype);
   bool has_time = arg_count >= 3;
   bool has_affinity = arg_count == 4;
+  if (arg_count < 2 || arg_count > 4) {
+    return param_error();
+  } 
   if (has_time) {
     if (!fm_type_is_cstring(fm_type_tuple_arg(ptype, 1))) {
       return param_error();
@@ -388,9 +391,7 @@ fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       !fm_type_is_tuple(fm_type_tuple_arg(ptype, 1 + has_time))) {
     return param_error();
   }
-  if (arg_count < 2 || arg_count > 4) {
-    return param_error();
-  }
+
   auto cl = std::make_unique<sols_op_cl>();
   cl->fname = STACK_POP(plist, const char *);
 
