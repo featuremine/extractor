@@ -33,7 +33,7 @@
 #include "extractor/type_sys.h"
 #include "fmc++/mpl.hpp"
 #include "utils.hpp"
-#include "wrapper.hpp"
+#include <fmc++/python/wrapper.hpp>
 
 #include <cassert>
 #include <errno.h>
@@ -48,7 +48,7 @@
 #include <numpy/arrayobject.h>
 
 using namespace fm;
-using namespace python;
+using namespace fmc::python;
 using namespace std;
 
 struct df_row_parser {
@@ -326,7 +326,7 @@ fm_ctx_def_t *fm_comp_base_py_play_gen(bool immediate, fm_comp_sys_t *csys,
   int dims[1] = {1};
 
   auto field_error = [sys](size_t field_idx, const char *str) {
-    string errstr = str;
+    std::string errstr = str;
     errstr.append(" for field ");
     errstr.append(to_string(field_idx));
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS, errstr.c_str());
@@ -337,7 +337,7 @@ fm_ctx_def_t *fm_comp_base_py_play_gen(bool immediate, fm_comp_sys_t *csys,
     auto *row_desc = fm_type_tuple_arg(row_descs, i);
     auto field_tuple_size = fm_type_tuple_size(row_desc);
     if (field_tuple_size != 2) {
-      string errstr = "invalid field description size ";
+      std::string errstr = "invalid field description size ";
       errstr.append(to_string(field_tuple_size));
       errstr.append("; expected 2");
       return field_error(i, errstr.c_str());
@@ -357,7 +357,7 @@ fm_ctx_def_t *fm_comp_base_py_play_gen(bool immediate, fm_comp_sys_t *csys,
 
     if (!fm_type_is_simple(types[i])) {
       auto *typestr = fm_type_to_str(types[i]);
-      auto errstr = string("expect simple type, got: ") + typestr;
+      auto errstr = std::string("expect simple type, got: ") + typestr;
       free(typestr);
       return field_error(i, errstr.c_str());
     }

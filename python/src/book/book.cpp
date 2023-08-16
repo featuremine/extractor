@@ -36,7 +36,7 @@ struct BookStruct {
 typedef struct {
   PyObject_HEAD;
   unsigned done_;
-  fm::python::object book_;
+  fmc::python::object book_;
   Book *book() { return (Book *)book_.get_ref(); }
 } LevelsIter;
 
@@ -122,7 +122,7 @@ PyObject *LevelsIter_new(Book *book) {
   if (!self)
     return nullptr;
   self->done_ = 0;
-  self->book_ = fm::python::object::from_borrowed((PyObject *)book);
+  self->book_ = fmc::python::object::from_borrowed((PyObject *)book);
   return (PyObject *)self;
 }
 

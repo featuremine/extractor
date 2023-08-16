@@ -30,7 +30,7 @@
 #pragma once
 
 using namespace fm;
-using namespace python;
+using namespace fmc::python;
 
 struct custom_cl {
   custom_cl(object op_obj) : op_obj_(op_obj) {}
@@ -111,12 +111,12 @@ fm_ctx_def_t *fm_comp_custom_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
                                  fm_type_decl_cp ptype, fm_arg_stack_t plist) {
   auto *sys = fm_type_sys_get(csys);
 
-  fm::python::object op_class;
+  fmc::python::object op_class;
 
   auto args_sz = ptype ? fm_type_tuple_size(ptype) : 0;
   int j = !closure;
   if (closure != nullptr) {
-    op_class = fm::python::object::from_borrowed((PyObject *)closure);
+    op_class = fmc::python::object::from_borrowed((PyObject *)closure);
     ++args_sz;
   } else {
     auto error = [&]() {
@@ -134,7 +134,7 @@ fm_ctx_def_t *fm_comp_custom_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     auto *param0 = fm_type_tuple_arg(ptype, 0);
     if (!fm_type_is_record(param0) || !fm_type_equal(rec_t, param0))
       return error();
-    op_class = fm::python::object::from_borrowed(STACK_POP(plist, PyObject *));
+    op_class = fmc::python::object::from_borrowed(STACK_POP(plist, PyObject *));
     if (!PyType_Check(op_class.get_ref())) {
       return error();
     }
@@ -151,14 +151,14 @@ fm_ctx_def_t *fm_comp_custom_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     return nullptr;
   }
 
-  auto type_tup = fm::python::object::from_new(PyTuple_New(argc));
+  auto type_tup = fmc::python::object::from_new(PyTuple_New(argc));
   for (size_t i = 0; i < argc; ++i) {
     auto nfields = fm_type_frame_nfields(argv[i]);
-    auto fields_tup = fm::python::object::from_new(PyTuple_New(nfields));
+    auto fields_tup = fmc::python::object::from_new(PyTuple_New(nfields));
     for (size_t j = 0; j < nfields; ++j) {
       auto f_type = fm_type_frame_field_type(argv[i], j);
-      auto field_tup = fm::python::object::from_new(PyTuple_New(2));
-      auto py_type = fm::python::object::from_new(
+      auto field_tup = fmc::python::object::from_new(PyTuple_New(2));
+      auto py_type = fmc::python::object::from_new(
           (PyObject *)py_type_from_fm_type(f_type));
       if (!(bool)py_type) {
         const char *errstr = "Unsupported type in input";
@@ -225,7 +225,7 @@ fm_ctx_def_t *fm_comp_custom_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     return nullptr;
   }
 
-  auto raw_dim = fm::python::object::from_borrowed(
+  auto raw_dim = fmc::python::object::from_borrowed(
       PyTuple_GetItem(out_type_tup.get_ref(), 0));
 
   int dim = PyLong_AsLong(raw_dim.get_ref());
@@ -235,7 +235,7 @@ fm_ctx_def_t *fm_comp_custom_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     return nullptr;
   }
 
-  auto raw_type_tup = fm::python::object::from_borrowed(
+  auto raw_type_tup = fmc::python::object::from_borrowed(
       PyTuple_GetItem(out_type_tup.get_ref(), 1));
 
   if (!PyTuple_Check(raw_type_tup.get_ref())) {
@@ -254,7 +254,7 @@ fm_ctx_def_t *fm_comp_custom_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   int dims[1] = {dim};
 
   for (int i = 0; i < tup_size; ++i) {
-    auto item = fm::python::object::from_borrowed(
+    auto item = fmc::python::object::from_borrowed(
         PyTuple_GetItem(raw_type_tup.get_ref(), i));
     if (!PyTuple_Check(item.get_ref())) {
       return type_error();
@@ -263,14 +263,14 @@ fm_ctx_def_t *fm_comp_custom_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       return type_error();
     }
     auto raw_name =
-        fm::python::object::from_borrowed(PyTuple_GetItem(item.get_ref(), 1));
+        fmc::python::object::from_borrowed(PyTuple_GetItem(item.get_ref(), 1));
     if (!PyUnicode_Check(raw_name.get_ref())) {
       const char *errstr = "Provided name is not a string";
       fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS, errstr);
       return nullptr;
     }
     auto raw_type =
-        fm::python::object::from_borrowed(PyTuple_GetItem(item.get_ref(), 0));
+        fmc::python::object::from_borrowed(PyTuple_GetItem(item.get_ref(), 0));
     if (!PyType_Check(raw_type.get_ref()) &&
         !PyObject_IsInstance(raw_type.get_ref(),
                              (PyObject *)&ExtractorArrayTypeType)) {

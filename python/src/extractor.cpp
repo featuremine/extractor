@@ -43,7 +43,7 @@
 #include "tuple_msg.hpp"
 #include "tuple_split.hpp"
 #include "utils.hpp"
-#include "wrapper.hpp"
+#include <fmc++/python/wrapper.hpp>
 
 #include "fmc/files.h"
 #include "fmc/platform.h"
@@ -245,9 +245,9 @@ static int python_to_stack_arg(fm_type_sys_t *tsys, PyObject *obj,
     HEAP_STACK_PUSH(s, channel);
     *type = fm_record_type_get(tsys, "ytp_channel_wrapper",
                                sizeof(ytp_channel_wrapper));
-  } else if (fm::python::datetime::is_timedelta_type(obj) ||
-             fm::python::datetime::is_pandas_timestamp_type(obj)) {
-    fm::python::datetime dt(fm::python::object::from_borrowed(obj));
+  } else if (fmc::python::datetime::is_timedelta_type(obj) ||
+             fmc::python::datetime::is_pandas_timestamp_type(obj)) {
+    fmc::python::datetime dt(fmc::python::object::from_borrowed(obj));
     auto tm = static_cast<fmc_time64_t>(dt);
     HEAP_STACK_PUSH(s, tm);
     *type = fm_base_type_get(tsys, FM_TYPE_TIME64);

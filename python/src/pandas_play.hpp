@@ -44,7 +44,7 @@
 
 #include "fmc++/python/wrapper.hpp"
 #include "fmc++/strings.hpp"
-#include "wrapper.hpp"
+#include <fmc++/python/wrapper.hpp>
 #include <extractor/python/decimal128.hpp>
 #include <fmc++/python/wrapper.hpp>
 #include <numpy/arrayobject.h>
@@ -52,7 +52,7 @@
 #include "extractor/type_sys.h"
 
 using namespace fm;
-using namespace python;
+using namespace fmc::python;
 using namespace std;
 
 struct pandas_play_info {
@@ -98,7 +98,7 @@ static bool add_column_parser(fm_exec_ctx_t *ctx, fm_frame_t *frame,
 
   auto error = [ctx, name, decl, dtype](const char *options) {
     auto *typestr = fm_type_to_str(decl);
-    auto errstr = string("invalid object type in DataFrame in column ") + name +
+    auto errstr = std::string("invalid object type in DataFrame in column ") + name +
                   ".\n" + "\tcannot convert type " + dtype.str() + " to " +
                   typestr + ", expecting: " + options;
     fm_exec_ctx_error_set(ctx, errstr.c_str());
@@ -191,7 +191,7 @@ static bool add_column_parser(fm_exec_ctx_t *ctx, fm_frame_t *frame,
     case FM_TYPE_LAST:
     default:
       auto *typestr = fm_type_to_str(decl);
-      auto errstr = string("unsupported type ") + typestr +
+      auto errstr = std::string("unsupported type ") + typestr +
                     " in extractor frame type description for column " + name +
                     ".\n";
       fm_exec_ctx_error_set(ctx, errstr.c_str());
@@ -215,7 +215,7 @@ static bool add_column_parser(fm_exec_ctx_t *ctx, fm_frame_t *frame,
     }
   } else {
     auto *typestr = fm_type_to_str(decl);
-    auto errstr = string("unsupported type ") + typestr +
+    auto errstr = std::string("unsupported type ") + typestr +
                   " in extractor frame type description for column " + name +
                   ".\n";
     fm_exec_ctx_error_set(ctx, errstr.c_str());
@@ -229,7 +229,7 @@ static bool add_column_parser(fm_exec_ctx_t *ctx, fm_frame_t *frame,
 bool pandas_parse_one(fm_exec_ctx_t *ctx, pandas_play_exec_cl *cl,
                       fm_frame_t *frame, int row) {
   auto error = [ctx](const char *msg) {
-    auto errstr = string("error parsing field.\n\t") + msg + "\n";
+    auto errstr = std::string("error parsing field.\n\t") + msg + "\n";
     fm_exec_ctx_error_set(ctx, errstr.c_str());
     return false;
   };
@@ -665,7 +665,7 @@ fm_ctx_def_t *fm_comp_pandas_play_gen(fm_comp_sys_t *csys,
   int dims[1] = {1};
 
   auto field_error = [sys](size_t field_idx, const char *str) {
-    string errstr = str;
+    std::string errstr = str;
     errstr.append(" for field ");
     errstr.append(to_string(field_idx));
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS, errstr.c_str());
@@ -676,7 +676,7 @@ fm_ctx_def_t *fm_comp_pandas_play_gen(fm_comp_sys_t *csys,
     auto *row_desc = fm_type_tuple_arg(row_descs, i);
     auto field_tuple_size = fm_type_tuple_size(row_desc);
     if (field_tuple_size != 2) {
-      string errstr = "invalid field description size ";
+      std::string errstr = "invalid field description size ";
       errstr.append(to_string(field_tuple_size));
       errstr.append("; expected 2");
       return field_error(i, errstr.c_str());
@@ -696,7 +696,7 @@ fm_ctx_def_t *fm_comp_pandas_play_gen(fm_comp_sys_t *csys,
 
     if (!fm_type_is_simple(types[i])) {
       auto *typestr = fm_type_to_str(types[i]);
-      auto errstr = string("expect simple type, got: ") + typestr;
+      auto errstr = std::string("expect simple type, got: ") + typestr;
       free(typestr);
       return field_error(i, errstr.c_str());
     }

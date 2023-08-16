@@ -32,7 +32,7 @@
 #include "extractor/type_sys.h"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
-#include "wrapper.hpp"
+#include <fmc++/python/wrapper.hpp>
 #include <cassert>
 #include <errno.h>
 #include <functional>
@@ -70,7 +70,7 @@ static int python_to_stack_arg(fm_type_sys_t *tsys, PyObject *obj,
 
 namespace fm {
 using namespace std;
-using namespace python;
+using namespace fmc::python;
 using namespace chrono;
 
 using df_column_check = function<bool(object, fm_call_ctx_t *)>;
@@ -138,7 +138,7 @@ df_type_check get_df_type_checker(fm_type_decl_cp decl) {
   return df_type_check();
 }
 
-df_column_check get_df_column_check(string col, fm_type_decl_cp decl) {
+df_column_check get_df_column_check(std::string col, fm_type_decl_cp decl) {
   auto checker = get_df_type_checker(decl);
   if (!checker) {
     return df_column_check();
@@ -291,7 +291,7 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
 
     case FM_TYPE_TIME64:
       return [](void *ptr, PyObject *obj) {
-        if (!fm::python::datetime::is_timedelta_type(obj))
+        if (!fmc::python::datetime::is_timedelta_type(obj))
           return false;
         auto h = duration_cast<nanoseconds>(
             hours(24 * PyLong_AsLong(PyObject_GetAttrString(obj, "days"))));
@@ -326,8 +326,8 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
       return [](void *ptr, PyObject *obj) { return false; };
     }
     if (fm_type_base_enum(fm_type_array_of(decl)) != FM_TYPE_CHAR) {
-      string mesage = string("Unsupported base type of array: ") +
-                      to_string(fm_type_base_enum(fm_type_array_of(decl)));
+      std::string mesage = std::string("Unsupported base type of array: ") +
+                           to_string(fm_type_base_enum(fm_type_array_of(decl)));
       PyErr_SetString(PyExc_RuntimeError, mesage.data());
       return [](void *ptr, PyObject *obj) { return false; };
     }
@@ -414,7 +414,7 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
       auto sec = duration_cast<seconds>(us);
       auto tmp = duration_cast<microseconds>(sec);
       auto rem = us - tmp;
-      return fm::python::datetime::timedelta(d.count(), sec.count(),
+      return fmc::python::datetime::timedelta(d.count(), sec.count(),
                                              rem.count())
           .steal_ref();
     } break;
@@ -425,8 +425,8 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
       break;
     case FM_TYPE_LAST:
     default:
-      string mesage = string("Unsupported base type: ") +
-                      to_string(fm_type_base_enum(decl));
+      std::string mesage = std::string("Unsupported base type: ") +
+                           to_string(fm_type_base_enum(decl));
       PyErr_SetString(PyExc_RuntimeError, mesage.data());
       return nullptr;
     }
@@ -436,8 +436,8 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
       return nullptr;
     }
     if (fm_type_base_enum(fm_type_array_of(decl)) != FM_TYPE_CHAR) {
-      string mesage = string("Unsupported base type of array: ") +
-                      to_string(fm_type_base_enum(fm_type_array_of(decl)));
+      std::string mesage = std::string("Unsupported base type of array: ") +
+                           to_string(fm_type_base_enum(fm_type_array_of(decl)));
       PyErr_SetString(PyExc_RuntimeError, mesage.data());
       return nullptr;
     }
@@ -504,7 +504,7 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       auto sec = duration_cast<seconds>(us);
       auto tmp = duration_cast<microseconds>(sec);
       auto rem = us - tmp;
-      return fm::python::datetime::timedelta(d.count(), sec.count(),
+      return fmc::python::datetime::timedelta(d.count(), sec.count(),
                                              rem.count())
           .steal_ref();
     } break;
@@ -515,8 +515,8 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       break;
     case FM_TYPE_LAST:
     default:
-      string mesage = string("Unsupported base type: ") +
-                      to_string(fm_type_base_enum(decl));
+      std::string mesage = std::string("Unsupported base type: ") +
+                           to_string(fm_type_base_enum(decl));
       PyErr_SetString(PyExc_RuntimeError, mesage.data());
       return nullptr;
     }
@@ -526,8 +526,8 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       return nullptr;
     }
     if (fm_type_base_enum(fm_type_array_of(decl)) != FM_TYPE_CHAR) {
-      string mesage = string("Unsupported base type of array: ") +
-                      to_string(fm_type_base_enum(fm_type_array_of(decl)));
+      std::string mesage = std::string("Unsupported base type of array: ") +
+                           to_string(fm_type_base_enum(fm_type_array_of(decl)));
       PyErr_SetString(PyExc_RuntimeError, mesage.data());
       return nullptr;
     }
@@ -548,7 +548,7 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
   return nullptr;
 }
 
-py_field_parse get_df_column_parse(string col, fm_type_decl_cp decl,
+py_field_parse get_df_column_parse(std::string col, fm_type_decl_cp decl,
                                    fm_field_t idx) {
   auto convert = get_py_field_converter(decl);
   if (idx == -1 || !convert) {
@@ -672,13 +672,13 @@ PyObject *gen_array(FM_BASE_TYPE fm_type, int type, int ndims, npy_intp *f_dims,
     Py_XDECREF(date_type);
     array = PyArray_SimpleNewFromDescr(ndims, f_dims, descr);
   } else if (fm_type == FM_TYPE_CHAR) {
-    auto np = fm::python::object::from_new(PyImport_ImportModule("numpy"));
+    auto np = fmc::python::object::from_new(PyImport_ImportModule("numpy"));
     if (!np) {
       PyErr_SetString(PyExc_RuntimeError, "Unable to import numpy");
       return nullptr;
     }
-    auto type = np["dtype"](fm::python::object::from_new(PyUnicode_FromString(
-        (string("S") + to_string(elem_size / sizeof(char))).c_str())));
+    auto type = np["dtype"](fmc::python::object::from_new(PyUnicode_FromString(
+        (std::string("S") + to_string(elem_size / sizeof(char))).c_str())));
     PyArray_Descr *descr;
     PyArray_DescrConverter(type.steal_ref(), &descr);
     array = PyArray_SimpleNewFromDescr(ndims, f_dims, descr);
@@ -854,7 +854,7 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
              fm_frame_get_cptr1(frame, i, 0), elem_size * f_dims[0]);
     }
 
-    auto np = fm::python::object::from_new(PyImport_ImportModule("numpy"));
+    auto np = fmc::python::object::from_new(PyImport_ImportModule("numpy"));
     if (!np) {
       PyErr_SetString(PyExc_RuntimeError, "Unable to import numpy");
       cleanup();
@@ -888,8 +888,8 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
 
     if (fm_type == FM_TYPE_CHAR) {
       auto tmp_array = np["char"]["decode"](
-          fm::python::object::from_borrowed(array),
-          fm::python::object::from_new(PyUnicode_FromString("UTF-8")));
+          fmc::python::object::from_borrowed(array),
+          fmc::python::object::from_new(PyUnicode_FromString("UTF-8")));
       if (!tmp_array) {
         if (!PyErr_Occurred()) {
           PyErr_SetString(PyExc_RuntimeError, "Unable to decode the "
@@ -1037,7 +1037,7 @@ inline short type_size(fm_type_decl_cp decl) {
   return 4;
 }
 
-string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
+std::string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
   if (fm_type_is_base(decl)) {
     switch (fm_type_base_enum(decl)) {
     case FM_TYPE_INT8:
@@ -1066,27 +1066,27 @@ string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
     case FM_TYPE_FLOAT32: {
       char buf[20];
       auto view = fmc::to_string_view_double(buf, *(FLOAT32 *)ptr, 9);
-      return string(view.data(), view.size());
+      return std::string(view.data(), view.size());
     } break;
     case FM_TYPE_FLOAT64: {
       char buf[20];
       auto view = fmc::to_string_view_double(buf, *(FLOAT64 *)ptr, 9);
-      return string(view.data(), view.size());
+      return std::string(view.data(), view.size());
     } break;
     case FM_TYPE_RPRICE: {
       double val;
       fmc_rprice_to_double(&val, (RPRICE *)ptr);
       char buf[20];
       auto view = fmc::to_string_view_double(buf, val, 9);
-      return string(view.data(), view.size());
+      return std::string(view.data(), view.size());
     } break;
     case FM_TYPE_DECIMAL128: {
       char str[FMC_DECIMAL128_STR_SIZE];
       fmc_decimal128_to_str(str, (DECIMAL128 *)ptr);
-      return string(str);
+      return std::string(str);
     } break;
     case FM_TYPE_CHAR:
-      return string((const char *)ptr, 1);
+      return std::string((const char *)ptr, 1);
       break;
     case FM_TYPE_TIME64: {
       using namespace std;
@@ -1122,7 +1122,7 @@ string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
     }
     auto sz = fm_type_array_size(decl);
     auto str_size = strnlen((const char *)ptr, sz);
-    return string((const char *)ptr, str_size);
+    return std::string((const char *)ptr, str_size);
   }
   return "";
 }

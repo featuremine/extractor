@@ -34,7 +34,7 @@
 #include <datetime.h>
 #include <limits>
 #include <type_traits>
-#include <wrapper.hpp>
+#include <fmc++/python/wrapper.hpp>
 
 #include "upcast_util.hpp"
 #include <extractor/python/decimal128.hpp>
@@ -208,7 +208,7 @@ static PyObject *ExtractorBaseTypeTime64_from_timedelta(PyObject *self,
   if (!PyArg_ParseTuple(args, "O", &delta)) {
     return nullptr;
   }
-  if (!fm::python::datetime::is_timedelta_type(delta)) {
+  if (!fmc::python::datetime::is_timedelta_type(delta)) {
     PyErr_SetString(PyExc_TypeError, "expecting timedelta object");
     return nullptr;
   };
@@ -232,7 +232,7 @@ static PyObject *ExtractorBaseTypeTime64_as_timedelta(PyObject *self) {
   int64_t us = ns / 1000;
   int64_t sec = us / 1000000;
   us = us - sec * 1000000;
-  return fm::python::datetime::timedelta(0, sec, us).steal_ref();
+  return fmc::python::datetime::timedelta(0, sec, us).steal_ref();
 }
 
 static PyObject *ExtractorBaseTypeTime64_from_nanos(PyObject *self,
@@ -329,7 +329,7 @@ PyObject *ExtractorBaseTypeTime64::tp_new(PyTypeObject *type, PyObject *args,
   if (!PyArg_ParseTuple(args, "O", &input))
     error("cannot parse tuple");
 
-  fm::python::datetime dt(fm::python::object::from_borrowed(input));
+  fmc::python::datetime dt(fmc::python::object::from_borrowed(input));
   auto time64 = static_cast<fmc_time64_t>(dt);
   auto *err = PyErr_Occurred();
   if (err == nullptr)

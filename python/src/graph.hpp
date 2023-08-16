@@ -764,7 +764,7 @@ static PyObject *ExtractorStreamContext_run_to(ExtractorStreamContext *ctx_obj,
                                                PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args, "O", &obj) ||
-      !fm::python::datetime::is_timedelta_type(obj)) {
+      !fmc::python::datetime::is_timedelta_type(obj)) {
     PyErr_SetString(PyExc_RuntimeError, "expecting a timedelta object");
     return nullptr;
   }
