@@ -224,6 +224,8 @@ if(BUILD_WHEEL)
         extractor-whl ALL
         DEPENDS "${CMAKE_BINARY_DIR}/output/extractor-${PROJECT_VERSION}-py3-none-manylinux_2_17_x86_64.whl"
     )
+    set(WHEEL_extractor_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}" CACHE INTERNAL "Wheel path for extractor" FORCE)
+    set(WHEEL_extractor_SCRIPTS "${CMAKE_CURRENT_BINARY_DIR}" CACHE INTERNAL "Wheel script path for extractor" FORCE)
 endif()
 
 if(BUILD_TESTING)
