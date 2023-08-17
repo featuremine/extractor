@@ -132,37 +132,37 @@ file(
 )
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/extractor/__init__.py"
-    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/__init__.py"
+    "${CMAKE_CURRENT_BINARY_DIR}/dist/extractor/__init__.py"
     COPYONLY
 )
 
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/__init__.py"
-    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tests/__init__.py"
+    "${CMAKE_CURRENT_BINARY_DIR}/dist/extractor/tests/__init__.py"
     COPYONLY
 )
 
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/arithmetic.py"
-    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tests/arithmetic.py"
+    "${CMAKE_CURRENT_BINARY_DIR}/dist/extractor/tests/arithmetic.py"
     COPYONLY
 )
 
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tests/component.py"
-    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tests/component.py"
+    "${CMAKE_CURRENT_BINARY_DIR}/dist/extractor/tests/component.py"
     COPYONLY
 )
 
 configure_file(
     "${CMAKE_CURRENT_SOURCE_DIR}/scripts/test-extractor-python"
-    "${WHEEL_extractor_BUILD_DIR}/dist/scripts/test-extractor-python"
+    "${CMAKE_CURRENT_BINARY_DIR}/dist/scripts/test-extractor-python"
     COPYONLY
 )
 
 file(
     COPY "${PROJECT_SOURCE_DIR}/LICENSE"
-    DESTINATION "${WHEEL_extractor_BUILD_DIR}/dist"
+    DESTINATION "${CMAKE_CURRENT_BINARY_DIR}/dist"
 )
 
 if(CMAKE_BUILD_TYPE MATCHES DEBUG)
@@ -191,15 +191,15 @@ if(BUILD_WHEEL)
         "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
 
         "build"
-        "--build-base=${WHEEL_extractor_BUILD_DIR}/build"
-        "--build-lib=${WHEEL_extractor_BUILD_DIR}/build/lib"
+        "--build-base=${CMAKE_CURRENT_BINARY_DIR}/build"
+        "--build-lib=${CMAKE_CURRENT_BINARY_DIR}/build/lib"
         ${DEBUG_FLAG}
 
         "egg_info"
-        "--egg-base" "${WHEEL_extractor_BUILD_DIR}"
+        "--egg-base" "${CMAKE_CURRENT_BINARY_DIR}"
 
         "bdist_wheel"
-        "--bdist-dir=${WHEEL_extractor_BUILD_DIR}/bdist"
+        "--bdist-dir=${CMAKE_CURRENT_BINARY_DIR}/bdist"
         "--dist-dir=${CMAKE_BINARY_DIR}/output"
 
         "--plat-name=${PYTHON_PLATFORM}"
@@ -211,12 +211,12 @@ if(BUILD_WHEEL)
         "--executable=${PYTHON3_BIN}"
 
         "build"
-        "--build-base=${WHEEL_extractor_BUILD_DIR}/build"
-        "--build-lib=${WHEEL_extractor_BUILD_DIR}/build/lib"
-        "--build-scripts=${WHEEL_extractor_BUILD_DIR}/build/scripts"
+        "--build-base=${CMAKE_CURRENT_BINARY_DIR}/build"
+        "--build-lib=${CMAKE_CURRENT_BINARY_DIR}/build/lib"
+        "--build-scripts=${CMAKE_CURRENT_BINARY_DIR}/build/scripts"
         ${DEBUG_FLAG}
 
-        WORKING_DIRECTORY ${WHEEL_extractor_BUILD_DIR}/dist
+        WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/dist
 
         DEPENDS extractor extractor_module
     )
