@@ -30,11 +30,14 @@
 extern "C" {
 #endif
 
-typedef fm_comp_sys_t *(*pyextrfunc_get)(PyObject *);
+typedef fm_comp_sys_t *(*comp_sys_get)(PyObject *);
+int (*trade_sideside)(PyObject *);
 
 struct py_extractor_api_v1 {
   bool (*comp_sys_check)(PyObject *);
-  pyextrfunc_get comp_sys;
+  bool (*trade_side_check)(PyObject *);
+  comp_sys_get comp_sys;
+  trade_sideside trade_side_side;
 };
 
 struct PyAPIWrapper {

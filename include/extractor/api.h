@@ -40,6 +40,7 @@ typedef void *fm_frame_clbck_cl;
 typedef void (*compsys_unaryfunc) (fm_comp_sys_t *);
 typedef fm_type_sys_t* (*compsys_typesys) (fm_comp_sys_t *);
 typedef fm_comp_graph_t* (*compsys_graph) (fm_comp_sys_t *);
+typedef bool (*compsys_typeadd) (fm_comp_sys_t *, const fm_comp_def_t *def);
 
 typedef fm_stream_ctx_t* (*compsys_streamctx) (fm_comp_sys_t *, fm_comp_graph_t *);
 typedef fm_stream_ctx_t* (*compsys_streamctx_rec) (fm_comp_sys_t *, fm_comp_graph_t *, fm_writer, void *);
@@ -67,6 +68,18 @@ unsigned (*typeframe_nfields)(fm_type_decl_cp);
 const char * (*typeframe_fieldname)(fm_type_decl_cp, int);
 const void * (*frame_getcptr1) (const fm_frame_t *, fm_field_t, int);
 
+typedef void *fm_comp_def_cl;
+typedef fm_ctx_def_t *(*fm_comp_def_gen)(fm_comp_sys_t *sys, fm_comp_def_cl,
+                                         unsigned, fm_type_decl_cp[],
+                                         fm_type_decl_cp, fm_arg_stack_t);
+typedef void (*fm_comp_def_destroy)(fm_comp_def_cl, fm_ctx_def_t *);
+typedef struct {
+  const char *name;
+  fm_comp_def_gen generate;
+  fm_comp_def_destroy destroy;
+  fm_comp_def_cl closure;
+} fm_comp_def_t;
+
 struct extractor_api_v1 {
   // Clean up system
   compsys_unaryfunc cleanup;
@@ -82,6 +95,8 @@ struct extractor_api_v1 {
   compsys_streamctx_rec stream_ctx_replayed;
   // Get error msg
   compsys_errormsg error_msg;
+  // Add computation definition to computational system
+  compsys_typeadd compsys_type_add;
 
   // Find computation node in graph
   graph_compfind comp_find;
@@ -109,10 +124,6 @@ struct extractor_api_v1 {
   typeframe_fieldname typeframe_field_name;
   // Get frame data
   frame_getcptr1 frame_get_cptr1;
-
-private:
-  fm_comp_t *obj_ = nullptr;
-
 };
 
 // function that you can call to return the actual sequence api structure
