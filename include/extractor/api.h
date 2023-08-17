@@ -59,6 +59,14 @@ typedef void (*fm_frame_clbck_p)(const fm_frame_t *, fm_frame_clbck_cl,
 fm_result_ref_t *(*comp_getref)(fm_comp_t *) {
 void (*comp_clbckset)(fm_comp_t *, fm_frame_clbck_p, fm_frame_clbck_cl) {
 
+typedef const struct fm_type_decl *fm_type_decl_cp;
+typedef struct fm_frame fm_frame_t;
+
+fm_type_decl_cp (*comp_resulttype)(const fm_comp_t *);
+unsigned (*typeframe_nfields)(fm_type_decl_cp);
+const char * (*typeframe_fieldname)(fm_type_decl_cp, int);
+const void * (*frame_getcptr1) (const fm_frame_t *, fm_field_t, int);
+
 struct extractor_api_v1 {
   // Clean up system
   compsys_unaryfunc cleanup;
@@ -92,6 +100,15 @@ struct extractor_api_v1 {
 
   // Set callback to computation
   comp_clbckset comp_clbck_set;
+
+  // Get computation result type
+  comp_resulttype comp_result_type;
+  // Get type number of fields
+  typeframe_nfields typeframe_nfields;
+  // Get type field name
+  typeframe_fieldname typeframe_field_name;
+  // Get frame data
+  frame_getcptr1 frame_get_cptr1;
 
 private:
   fm_comp_t *obj_ = nullptr;
