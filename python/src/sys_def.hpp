@@ -25,6 +25,7 @@
 
 #include "extractor/comp_def.h"
 #include "extractor/std_comp.h"
+#include "extractor/python/system.hpp"
 
 #include "custom.hpp"
 #include "module.hpp"
@@ -32,12 +33,6 @@
 #include <Python.h>
 #include <memory>
 #include <string>
-
-typedef struct {
-  PyObject_HEAD fm_comp_sys_t *sys;
-  vector<fm_comp_def_t> custom;
-  bool to_delete;
-} ExtractorSystem;
 
 ExtractorSystem *ExtractorSystem_lazy(ExtractorSystem *obj) {
   auto *self = (ExtractorSystem *)obj;
