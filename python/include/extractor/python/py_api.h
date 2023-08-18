@@ -24,7 +24,7 @@
 #pragma once
 
 #include <Python.h>
-#include <ytp/api.h>
+#include <extractor/api.h>
 
 #ifdef __cplusplus
 extern "C" {

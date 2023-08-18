@@ -22,7 +22,7 @@
  */
 
 extern "C" {
-#include "ytp/api.h"
+#include "extractor/api.h"
 #include "extractor/comp_sys.h"
 #include "extractor/type_sys.h"
 #include "extractor/stream_ctx.h"

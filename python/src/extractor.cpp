@@ -25,6 +25,7 @@
 
 #include "extractor/python/book.h"
 #include "extractor/python/side.h"
+#include "extractor/python/py_api.h"
 #include "ytp.h"
 
 #include "comp.hpp"
@@ -136,6 +137,72 @@ static PyObject *Extractor_result_as_pandas(PyObject *self, PyObject *args,
   return result_as_pandas(result, index);
 }
 
+static PyObject *PyExtractorAPIWrapper_new(PyTypeObject *subtype, PyObject *args,
+                                  PyObject *kwds) {
+  auto *self = (PyExtractorAPIWrapper *)subtype->tp_alloc(subtype, 0);
+  if (!self) {
+    return nullptr;
+  }
+  return (PyObject *)self;
+}
+
+static int PyExtractorAPIWrapper_init(PyExtractorAPIWrapper *self, PyObject *args,
+                             PyObject *kwds) {
+  self->api = nullptr;
+  return 0;
+}
+
+static void PyExtractorAPIWrapper_dealloc(PyExtractorAPIWrapper *self) {
+  Py_TYPE(self)->tp_free((PyObject *)self);
+}
+
+static PyTypeObject PyExtractorAPIWrapperType = {
+    PyVarObject_HEAD_INIT(NULL, 0) "extractor.APIWrapper", /* tp_name */
+    sizeof(PyExtractorAPIWrapper),                            /* tp_basicsize */
+    0,                                               /* tp_itemsize */
+    (destructor)PyExtractorAPIWrapper_dealloc,                /* tp_dealloc */
+    0,                                               /* tp_print */
+    0,                                               /* tp_getattr */
+    0,                                               /* tp_setattr */
+    0,                                               /* tp_reserved */
+    0,                                               /* tp_repr */
+    0,                                               /* tp_as_number */
+    0,                                               /* tp_as_sequence */
+    0,                                               /* tp_as_mapping */
+    0,                                               /* tp_hash  */
+    0,                                               /* tp_call */
+    0,                                               /* tp_str */
+    0,                                               /* tp_getattro */
+    0,                                               /* tp_setattro */
+    0,                                               /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,        /* tp_flags */
+    "Extractor API Wrapper",                               /* tp_doc */
+    0,                                               /* tp_traverse */
+    0,                                               /* tp_clear */
+    0,                                               /* tp_richcompare */
+    0,                                               /* tp_weaklistoffset */
+    0,                                               /* tp_iter */
+    0,                                               /* tp_iternext */
+    0,                                               /* tp_methods */
+    0,                                               /* tp_members */
+    0,                                               /* tp_getset */
+    0,                                               /* tp_base */
+    0,                                               /* tp_dict */
+    0,                                               /* tp_descr_get */
+    0,                                               /* tp_descr_set */
+    0,                                               /* tp_dictoffset */
+    (initproc)PyExtractorAPIWrapper_init,                     /* tp_init */
+    0,                                               /* tp_alloc */
+    PyExtractorAPIWrapper_new,                                /* tp_new */
+};
+
+PyObject *ExtractorModule_api_v1(PyObject *self) {
+  PyExtractorAPIWrapper *api = (PyExtractorAPIWrapper *)PyExtractorAPIWrapper_new(
+      (PyTypeObject *)&PyExtractorAPIWrapperType, nullptr, nullptr);
+  api->api = extractor_api_v1_get();
+  return (PyObject *)api;
+}
+
 static PyMethodDef extractorMethods[] = {
     {"flush", Extractor_fflush, METH_NOARGS,
      "Flush user space file buffers.\n"
@@ -153,6 +220,7 @@ static PyMethodDef extractorMethods[] = {
      "The desired computation object must be passed as the first argument.\n"
      "As an optional second parameter, the column name of the desired index "
      "can be specified."},
+    {"api_v1", (PyCFunction)ExtractorModule_api_v1, METH_NOARGS, "Obtain Python Extractor V1 API"},
     {NULL, NULL, 0, NULL} /* Sentinel */
 };
 
