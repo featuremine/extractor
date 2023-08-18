@@ -190,5 +190,6 @@ bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
          fm_comp_activated_timer_add(sys) && fm_comp_data_bar_add(sys) &&
          fm::fm_cpp_comp_type_add<fm::timer>(sys, "timer") &&
          fm::fm_cpp_comp_type_add<fm::clock_timer>(sys, "clock_timer") &&
-         fm::fm_cpp_comp_type_add<fm::cum_trade>(sys, "cum_trade");
+         fm::fm_cpp_comp_type_add<fm::cum_trade>(sys, "cum_trade") &&
+         fm::fm_cpp_comp_type_add<fm::cum_trade_total>(sys, "cum_trade_total");
 }
