@@ -22,7 +22,6 @@
 
 #include "fmc++/rprice.hpp"
 #include <Python.h>
-#include <extractor/python/extractor.h>
 #include <extractor/python/rprice.h>
 #include <extractor/python/type_utils.hpp>
 
