@@ -268,8 +268,7 @@ PyObject *ExtractorSystem_new() {
   if (self == nullptr)
     return nullptr;
 
-  self->sys = nullptr;
-  return (PyObject *)self;
+  return (PyObject *) ExtractorSystem_lazy(self);
 }
 
 bool ExtractorSystem_Check(PyObject *obj) {
