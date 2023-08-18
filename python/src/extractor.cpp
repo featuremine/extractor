@@ -23,6 +23,7 @@
 
 #define PY_SSIZE_T_CLEAN
 
+#include "extractor/api.h"
 #include "extractor/python/book.h"
 #include "extractor/python/side.h"
 #include "extractor/python/py_api.h"
