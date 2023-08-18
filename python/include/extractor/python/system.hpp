@@ -5,7 +5,7 @@
 
 typedef struct {
   PyObject_HEAD fm_comp_sys_t *sys;
-  vector<fm_comp_def_t> custom;
+  std::vector<fm_comp_def_t> custom;
   bool to_delete;
 } ExtractorSystem;
 
