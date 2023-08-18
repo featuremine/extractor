@@ -26,6 +26,7 @@
 #include "extractor/comp_def.h"
 #include "extractor/std_comp.h"
 #include "extractor/python/system.hpp"
+#include "extractor/python/extractor.h"
 
 #include "custom.hpp"
 #include "module.hpp"

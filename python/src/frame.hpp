@@ -26,6 +26,7 @@
 #include "comp.h"
 #include "comp_graph.h"
 #include "extractor/comp_sys.h"
+#include "extractor/python/extractor.h"
 
 #include "utils.hpp"
 #include <fmc++/python/wrapper.hpp>

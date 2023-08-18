@@ -27,6 +27,7 @@
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/python/context.h"
+#include "extractor/python/extractor.h"
 
 #include "fmc++/mpl.hpp"
 #include "frame.hpp"
