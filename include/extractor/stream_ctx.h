@@ -27,24 +27,11 @@
 #include "extractor/handle.h"
 #include "fmc/platform.h"
 #include "fmc/time.h"
+#include "extractor/api.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @brief defines stream execution context object
- * Execution context object is responsible for execution of
- * the compute graph. A specific execution context is first created
- * from a given compute graph. In the process it initializes
- * various operations and creates a call stack for efficient
- * computation of the compute graph. It is also used to communicate
- * the operation call the current execution context of the system,
- * such as the query range or the current time of execution. It
- * also provides ability to access event loop methods in the case
- * of stream execution context.
- */
-typedef struct fm_stream_ctx fm_stream_ctx_t;
 
 typedef void *fm_ctx_cl;
 

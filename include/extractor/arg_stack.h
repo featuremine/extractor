@@ -31,20 +31,11 @@
 
 #include "fmc/alignment.h"
 #include "fmc/platform.h"
+#include "extractor/api.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef struct {
-  size_t size;
-  char *cursor;
-} fm_arg_stack_header_t;
-
-typedef struct {
-  fm_arg_stack_header_t header;
-  char buffer[1];
-} fm_arg_stack_t;
 
 #define STACK_ARGS(stack)                                                      \
   (fm_arg_stack_t{{stack.header.size, &(stack).buffer[0] + stack.header.size}})

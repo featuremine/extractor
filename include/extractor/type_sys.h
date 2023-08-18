@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "extractor/api.h"
 #include "extractor/arg_stack.h"
 #include "extractor/type_decl.h"
 #include "fmc/platform.h"
@@ -37,13 +38,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-/**
- * @brief type system object
- *
- * object used to store data relevant to type systems.
- */
-typedef struct fm_type_sys fm_type_sys_t;
 
 /**
  * @brief enum for type systems errors

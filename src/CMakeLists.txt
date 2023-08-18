@@ -48,6 +48,7 @@ target_link_libraries(
 add_library(
     extractor_obj
     OBJECT
+    "api.cpp"
     "book_build.cpp"
     "call_obj.cpp"
     "call_stack.cpp"

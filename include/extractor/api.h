@@ -30,26 +30,55 @@
 extern "C" {
 #endif
 
-typedef struct fm_comp_sys_t fm_comp_sys_t;
-typedef struct fm_type_sys_t fm_type_sys_t;
-typedef struct fm_comp_graph_t fm_comp_graph_t;
-typedef struct fm_stream_ctx_t fm_stream_ctx_t;
-typedef struct fm_comp_t fm_comp_t;
-typedef struct fm_exec_ctx fm_exec_ctx_t;
 typedef void *fm_frame_clbck_cl;
+
+typedef struct fm_comp_sys fm_comp_sys_t;
+typedef struct fm_type_sys fm_type_sys_t;
+
+/**
+ * @brief defines stream execution context object
+ * Execution context object is responsible for execution of
+ * the compute graph. A specific execution context is first created
+ * from a given compute graph. In the process it initializes
+ * various operations and creates a call stack for efficient
+ * computation of the compute graph. It is also used to communicate
+ * the operation call the current execution context of the system,
+ * such as the query range or the current time of execution. It
+ * also provides ability to access event loop methods in the case
+ * of stream execution context.
+ */
+typedef struct fm_stream_ctx fm_stream_ctx_t;
+typedef struct fm_exec_ctx fm_exec_ctx_t;
+typedef struct fm_frame fm_frame_t;
+typedef struct fm_call_ctx fm_call_ctx_t;
+typedef struct fm_ctx_def fm_ctx_def_t;
+typedef struct fm_result_ref fm_result_ref_t;
+typedef struct fm_comp_graph fm_comp_graph_t;
+typedef struct fm_comp fm_comp_t;
 
 typedef void (*fm_frame_clbck_p)(const fm_frame_t *, fm_frame_clbck_cl,
                                  fm_call_ctx_t *);
 
 typedef const struct fm_type_decl *fm_type_decl_cp;
-typedef struct fm_frame fm_frame_t;
 
 typedef int fm_field_t;
 typedef void *fm_comp_def_cl;
+
+typedef struct {
+  size_t size;
+  char *cursor;
+} fm_arg_stack_header_t;
+
+typedef struct {
+  fm_arg_stack_header_t header;
+  char buffer[1];
+} fm_arg_stack_t;
+
 typedef fm_ctx_def_t *(*fm_comp_def_gen)(fm_comp_sys_t *sys, fm_comp_def_cl,
                                          unsigned, fm_type_decl_cp[],
                                          fm_type_decl_cp, fm_arg_stack_t);
 typedef void (*fm_comp_def_destroy)(fm_comp_def_cl, fm_ctx_def_t *);
+
 typedef struct {
   const char *name;
   fm_comp_def_gen generate;
@@ -76,7 +105,7 @@ struct extractor_api_v1 {
   bool (*comp_type_add) (fm_comp_sys_t *, const fm_comp_def_t *def);
 
   // Find computation node in graph
-  fm_comp_t * (*comp_find) (fm_comp_graph_t *, const char*)
+  fm_comp_t * (*comp_find) (fm_comp_graph_t *, const char*);
 
   // Stream context, process one
   bool (*stream_ctx_proc_one) (fm_stream_ctx_t *, fmc_time64_t);

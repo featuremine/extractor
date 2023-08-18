@@ -4,10 +4,7 @@
 #include <sstream>
 
 #include "extractor/python/side.h"
-
-struct TradeSideStruct {
-  PyObject_VAR_HEAD fmc::trade_side side_;
-};
+#include "extractor/python/side.hpp"
 
 static void TradeSide_dealloc(PyObject *self) { Py_TYPE(self)->tp_free(self); }
 

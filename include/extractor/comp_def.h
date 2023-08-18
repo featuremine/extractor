@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "extractor/api.h"
 #include "extractor/arg_stack.h"
 #include "extractor/call_ctx.h"
 #include "extractor/frame_base.h"
@@ -56,24 +57,7 @@ typedef struct fm_call_def fm_call_def_t;
 
 typedef const void *fm_ctx_def_cl;
 
-typedef struct fm_ctx_def fm_ctx_def_t;
-
 typedef void *fm_comp_def_cl;
-
-typedef struct fm_comp_sys fm_comp_sys_t;
-
-typedef fm_ctx_def_t *(*fm_comp_def_gen)(fm_comp_sys_t *sys, fm_comp_def_cl,
-                                         unsigned, fm_type_decl_cp[],
-                                         fm_type_decl_cp, fm_arg_stack_t);
-
-typedef void (*fm_comp_def_destroy)(fm_comp_def_cl, fm_ctx_def_t *);
-
-typedef struct {
-  const char *name;
-  fm_comp_def_gen generate;
-  fm_comp_def_destroy destroy;
-  fm_comp_def_cl closure;
-} fm_comp_def_t;
 
 /**
  * @brief
