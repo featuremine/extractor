@@ -197,10 +197,15 @@ static PyTypeObject PyExtractorAPIWrapperType = {
     PyExtractorAPIWrapper_new,                                /* tp_new */
 };
 
+static py_extractor_api_v1 py_api_inst{
+    ExtractorGraph_new
+};
+
 PyObject *ExtractorModule_api_v1(PyObject *self) {
   PyExtractorAPIWrapper *api = (PyExtractorAPIWrapper *)PyExtractorAPIWrapper_new(
       (PyTypeObject *)&PyExtractorAPIWrapperType, nullptr, nullptr);
   api->api = extractor_api_v1_get();
+  api->py_api = &py_api_inst;
   return (PyObject *)api;
 }
 

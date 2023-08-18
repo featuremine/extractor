@@ -31,10 +31,7 @@ extern "C" {
 #endif
 
 struct py_extractor_api_v1 {
-  bool (*comp_sys_check)(PyObject *);
-  bool (*trade_side_check)(PyObject *);
-  fm_comp_sys_t *(*comp_sys_get)(PyObject *);
-  int (*trade_side_side)(PyObject *);
+  PyObject *(*graph_new)(fm_comp_sys_t *sys, fm_comp_graph_t *graph, bool to_delete);
 };
 
 struct PyExtractorAPIWrapper {
