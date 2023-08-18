@@ -484,6 +484,11 @@ PyMODINIT_FUNC fm_extractor_py_init(void) {
   PyModule_AddObject(m, "System", (PyObject *)&ExtractorSystemType);
   PyModule_AddObject(m, "system", ExtractorSystem_new());
 
+  if (PyType_Ready(&PyExtractorAPIWrapperType) < 0)
+    return NULL;
+  Py_INCREF(&PyExtractorAPIWrapperType);
+  PyModule_AddObject(m, "APIWrapper", (PyObject *)&PyExtractorAPIWrapperType);
+
   if (!TradeSide_AddType(m))
     return NULL;
 
