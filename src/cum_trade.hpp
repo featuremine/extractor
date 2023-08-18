@@ -22,24 +22,13 @@
 #pragma once
 
 #include "fmc++/rprice.hpp"
-#include "feature/common.hpp"
-
-#include <comp_def.hpp>
 #include <fmc++/mpl.hpp>
-#include <frame.hpp>
 
-namespace jubilee {
+#include <extractor/comp_def.hpp>
+#include <extractor/common.hpp>
+#include <extractor/frame.hpp>
 
-/**
- * @brief cum trade frame definition
- *
- * defines frame for cum trade
- */
-FRAME(cum_trade_frame, 1);
-FIELD(shares, INT64);
-FIELD(notional, FLOAT64);
-FIELDS(shares, notional);
-END_FRAME(cum_trade_frame);
+namespace fm {
 
 /**
  * @brief cum trade computation class
@@ -77,7 +66,7 @@ public:
     auto trade = get<0>(input())[0];
     auto res = result()[0];
     res.shares() += trade.qty();
-    res.notional() += trade.qty() * to<double>(trade.price());
+    res.notional() += trade.qty() * fmc::to<double>(trade.price());
     return true;
   }
 
