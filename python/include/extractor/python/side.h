@@ -32,9 +32,7 @@
 extern "C" {
 #endif
 
-struct TradeSideStruct {
-  PyObject_VAR_HEAD fmc::trade_side side_;
-};
+typedef struct TradeSideStruct TradeSideS;
 
 FMMODFUNC extern TradeSideS _TradeSide_UNKNOWN;
 FMMODFUNC extern TradeSideS _TradeSide_BID;
