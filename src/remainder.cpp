@@ -73,8 +73,9 @@ struct remainder_comp_cl {
 };
 
 bool fm_comp_remainder_call_stream_init(fm_frame_t *result, size_t args,
-                                     const fm_frame_t *const argv[],
-                                     fm_call_ctx_t *ctx, fm_call_exec_cl *cl) {
+                                        const fm_frame_t *const argv[],
+                                        fm_call_ctx_t *ctx,
+                                        fm_call_exec_cl *cl) {
   auto &calls = (*(remainder_comp_cl *)ctx->comp).calls;
   for (auto &call : calls) {
     call->exec(result, args, argv);
@@ -83,8 +84,8 @@ bool fm_comp_remainder_call_stream_init(fm_frame_t *result, size_t args,
 }
 
 bool fm_comp_remainder_stream_exec(fm_frame_t *result, size_t args,
-                                const fm_frame_t *const argv[],
-                                fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
+                                   const fm_frame_t *const argv[],
+                                   fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
   auto &calls = (*(remainder_comp_cl *)ctx->comp).calls;
   for (auto &call : calls) {
     call->exec(result, args, argv);
@@ -93,7 +94,7 @@ bool fm_comp_remainder_stream_exec(fm_frame_t *result, size_t args,
 }
 
 fm_call_def *fm_comp_remainder_stream_call(fm_comp_def_cl comp_cl,
-                                        const fm_ctx_def_cl ctx_cl) {
+                                           const fm_ctx_def_cl ctx_cl) {
   auto *def = fm_call_def_new();
   fm_call_def_init_set(def, fm_comp_remainder_call_stream_init);
   fm_call_def_exec_set(def, fm_comp_remainder_stream_exec);
@@ -102,7 +103,8 @@ fm_call_def *fm_comp_remainder_stream_call(fm_comp_def_cl comp_cl,
 
 template <class... Ts>
 remainder_field_exec *get_remainder_field_exec(fmc::type_list<Ts...>,
-                                         fm_type_decl_cp f_type, int idx) {
+                                               fm_type_decl_cp f_type,
+                                               int idx) {
   remainder_field_exec *result = nullptr;
   auto create = [&](auto t) {
     using Tt = decltype(t);
@@ -118,8 +120,9 @@ remainder_field_exec *get_remainder_field_exec(fmc::type_list<Ts...>,
 }
 
 fm_ctx_def_t *fm_comp_remainder_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
-                                 unsigned argc, fm_type_decl_cp argv[],
-                                 fm_type_decl_cp ptype, fm_arg_stack_t plist) {
+                                    unsigned argc, fm_type_decl_cp argv[],
+                                    fm_type_decl_cp ptype,
+                                    fm_arg_stack_t plist) {
   auto *sys = fm_type_sys_get(csys);
   if (argc != 2) {
     auto *errstr = "expect two operator arguments";

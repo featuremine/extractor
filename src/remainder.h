@@ -31,14 +31,14 @@
 extern "C" {
 #endif
 
-fm_ctx_def_t *fm_comp_remainder_gen(fm_comp_sys_t *sys, fm_comp_def_cl, unsigned,
-                                 fm_type_decl_cp[], fm_type_decl_cp,
-                                 fm_arg_stack_t);
+fm_ctx_def_t *fm_comp_remainder_gen(fm_comp_sys_t *sys, fm_comp_def_cl,
+                                    unsigned, fm_type_decl_cp[],
+                                    fm_type_decl_cp, fm_arg_stack_t);
 
 void fm_comp_remainder_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 
 const fm_comp_def_t fm_comp_remainder = {"remainder", &fm_comp_remainder_gen,
-                                      &fm_comp_remainder_destroy, NULL};
+                                         &fm_comp_remainder_destroy, NULL};
 
 #ifdef __cplusplus
 }
