@@ -81,6 +81,7 @@
 #include "ore_sim_split.h"
 #include "ore_ytp_decode.h"
 #include "pow.h"
+#include "remainder.h"
 #include "roundop.h"
 #include "seq_ore_live_split.h"
 #include "skip_unless.h"
@@ -133,6 +134,7 @@ bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
          fm_comp_type_add(sys, &fm_comp_combine) &&
          fm_comp_type_add(sys, &fm_comp_diff) &&
          fm_comp_type_add(sys, &fm_comp_divide) &&
+         fm_comp_type_add(sys, &fm_comp_remainder) &&
          fm_comp_type_add(sys, &fm_comp_convert) &&
          fm_comp_type_add(sys, &fm_comp_join) &&
          fm_comp_type_add(sys, &fm_comp_last) &&
