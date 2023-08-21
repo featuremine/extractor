@@ -40,20 +40,6 @@ extern "C" {
 #endif
 
 /**
- * @brief enum for type systems errors
- */
-typedef enum {
-  FM_TYPE_ERROR_OK = 0,
-  FM_TYPE_ERROR_CHILD,
-  FM_TYPE_ERROR_DUPLICATE,
-  FM_TYPE_ERROR_DIM,
-  FM_TYPE_ERROR_ARGS,
-  FM_TYPE_ERROR_PARAMS,
-  FM_TYPE_ERROR_UNKNOWN,
-  FM_TYPE_ERROR_LAST
-} FM_TYPE_ERROR;
-
-/**
  * @brief creates type system object
  *
  * Function creates type system object and returns @c fm_type_sys_t.

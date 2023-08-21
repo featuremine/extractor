@@ -31,6 +31,7 @@ extern "C" {
 #endif
 
 struct py_extractor_api_v1 {
+  PyObject *(*resultref_new)(fm_result_ref_t *);
   PyObject *(*graph_new)(fm_comp_sys_t *sys, fm_comp_graph_t *graph, bool to_delete);
 };
 

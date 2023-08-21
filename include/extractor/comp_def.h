@@ -44,18 +44,8 @@
 extern "C" {
 #endif
 
-typedef bool (*fm_call_init_p)(fm_frame_t *, size_t,
-                               const fm_frame_t *const argv[], fm_call_ctx_t *,
-                               fm_call_exec_cl *);
-
-typedef void (*fm_call_destroy_p)(fm_call_exec_cl);
-
 typedef fmc_time64_range_t (*fm_call_range_p)(const fm_call_ctx_t *,
                                               fm_call_exec_cl);
-
-typedef struct fm_call_def fm_call_def_t;
-
-typedef const void *fm_ctx_def_cl;
 
 typedef void *fm_comp_def_cl;
 

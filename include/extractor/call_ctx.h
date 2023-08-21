@@ -28,6 +28,7 @@
 #include "extractor/exec_ctx.h"
 #include "extractor/frame.h"
 #include "extractor/handle.h"
+#include "extractor/api.h"
 #include "fmc/platform.h"
 
 #ifdef __cplusplus
@@ -44,8 +45,6 @@ typedef const void *fm_comp_ctx_p;
  */
 typedef fm_exec_ctx_t *fm_exec_ctx_p;
 
-typedef void *fm_call_exec_cl;
-
 /**
  * @brief defines context structure for a call
  */
@@ -58,11 +57,6 @@ typedef struct fm_call_ctx {
 } fm_call_ctx_t;
 
 /**
- * @brief pointer to a queuing callback
- */
-typedef void (*fm_call_queuer_p)(size_t, fm_call_ctx_t *);
-
-/**
  * @brief typedef to a call function pointer
  *
  * The actual function used to execute the operation. It is provided
@@ -70,10 +64,6 @@ typedef void (*fm_call_queuer_p)(size_t, fm_call_ctx_t *);
  * It should return true if result has changed.
  * @return bool indication of change of result
  */
-typedef bool (*fm_call_exec_p)(fm_frame_t *, size_t,
-                               const fm_frame_t *const argv[], fm_call_ctx_t *,
-                               fm_call_exec_cl);
-
 typedef struct fm_comp_clbck {
   fm_frame_clbck_p clbck;
   fm_frame_clbck_cl cl;
