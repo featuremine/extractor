@@ -36,16 +36,6 @@ extern "C" {
 #endif
 
 /**
- * @brief type definition of the context provided by computation generator
- */
-typedef const void *fm_comp_ctx_p;
-
-/**
- * @brief pointer to a generic execution context
- */
-typedef fm_exec_ctx_t *fm_exec_ctx_p;
-
-/**
  * @brief defines context structure for a call
  */
 typedef struct fm_call_ctx {

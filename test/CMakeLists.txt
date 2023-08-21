@@ -66,7 +66,9 @@ macro(extr_unit_test)
         ${ARG_NAME}
         PUBLIC
         "${EXTRACTOR_INC_DIR}"
+        "${EXTRACTOR_API_INC_DIR}"
         "${EXTRACTOR_PYTHON_INC_DIR}"
+        "${EXTRACTOR_PYTHON_API_INC_DIR}"
         "${EXTRACTOR_SRC_DIR}"
     )
     target_link_libraries(
@@ -460,6 +462,7 @@ target_include_directories(
     ema_ext
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 target_link_libraries(
     ema_ext
@@ -486,6 +489,7 @@ target_include_directories(
     book_play_ext
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
     "${EXTRACTOR_SRC_DIR}"
 )
 target_link_libraries(
@@ -511,6 +515,7 @@ target_include_directories(
     ext_lib
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 target_link_libraries(
     ext_lib
@@ -534,6 +539,7 @@ target_include_directories(
     ext_exe
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 target_link_libraries(
     ext_exe
@@ -552,6 +558,7 @@ target_include_directories(
     split_sample_trade
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 target_link_libraries(
     split_sample_trade

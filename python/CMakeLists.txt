@@ -29,7 +29,9 @@ target_include_directories(
     py_extractor_obj
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
     "${EXTRACTOR_PYTHON_INC_DIR}"
+    "${EXTRACTOR_PYTHON_API_INC_DIR}"
     "${EXTRACTOR_PYTHON_SRC_DIR}"
     "${EXTRACTOR_SRC_DIR}"
     "${CMAKE_CURRENT_SOURCE_DIR}"
@@ -59,7 +61,9 @@ target_include_directories(
     py_extractor_dep
     INTERFACE
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
     "${EXTRACTOR_PYTHON_INC_DIR}"
+    "${EXTRACTOR_PYTHON_API_INC_DIR}"
     "${EXTRACTOR_PYTHON_SRC_DIR}"
     "${PYTHON_INCLUDE_DIRS}"
 )
@@ -111,7 +115,9 @@ target_include_directories(
     extractor_module
     PRIVATE
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
     "${EXTRACTOR_PYTHON_INC_DIR}"
+    "${EXTRACTOR_PYTHON_API_INC_DIR}"
     "${EXTRACTOR_PYTHON_SRC_DIR}"
     "${EXTRACTOR_SRC_DIR}"
     "${PYTHON_INCLUDE_DIRS}"

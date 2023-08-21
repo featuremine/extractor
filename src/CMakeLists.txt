@@ -14,6 +14,7 @@ target_include_directories(
     extractor_book_lib_obj
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
     PRIVATE
     "${EXTRACTOR_SRC_DIR}"
 )
@@ -32,6 +33,7 @@ target_include_directories(
     extractor_book_lib_dep
     INTERFACE
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 
 add_library(
@@ -160,6 +162,7 @@ target_include_directories(
     extractor_obj
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
     "${EXTRACTOR_SRC_DIR}"
 )
 
@@ -178,6 +181,8 @@ target_include_directories(
     extractor_dep
     INTERFACE
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 
 add_library(

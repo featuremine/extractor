@@ -123,6 +123,16 @@ typedef const void *fm_ctx_def_cl;
  */
 typedef void (*fm_call_queuer_p) (size_t, fm_call_ctx_t *);
 
+/**
+ * @brief type definition of the context provided by computation generator
+ */
+typedef const void *fm_comp_ctx_p;
+
+/**
+ * @brief pointer to a generic execution context
+ */
+typedef fm_exec_ctx_t *fm_exec_ctx_p;
+
 struct extractor_api_v1 {
   // Clean up system
   void (*comp_sys_cleanup) (fm_comp_sys_t *);
@@ -234,6 +244,8 @@ struct extractor_api_v1 {
                                              const char *names[],
                                              fm_type_decl_cp types[],
                                              unsigned nd, int dims[]);
+
+  fm_type_decl_cp (*type_frame_field_type)(fm_type_decl_cp td, int i);
 
 };
 
