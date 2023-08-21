@@ -23,7 +23,7 @@
 
 #include "extractor/book/book.h"
 #include "extractor/python/book.h"
-#include "extractor/python/side.h"
+#include "extractor/python/py_api.h"
 
 #include "book/level.hpp"
 #include "fmc++/side.hpp"

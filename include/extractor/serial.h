@@ -23,6 +23,7 @@
 #pragma once
 
 #include "fmc/platform.h"
+#include "extractor/api.h"
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -30,7 +31,6 @@ extern "C" {
 #endif
 
 typedef bool (*fm_reader)(void *data, size_t limit, void *closure);
-typedef size_t (*fm_writer)(const void *data, size_t count, void *closure);
 
 #ifdef __cplusplus
 }

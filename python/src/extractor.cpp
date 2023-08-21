@@ -25,7 +25,6 @@
 
 #include "extractor/api.h"
 #include "extractor/python/book.h"
-#include "extractor/python/side.h"
 #include "extractor/python/py_api.h"
 #include "ytp.h"
 
@@ -199,7 +198,9 @@ static PyTypeObject PyExtractorAPIWrapperType = {
 
 static py_extractor_api_v1 py_api_inst{
     ExtractorResultRef_new,
-    ExtractorGraph_new
+    ExtractorGraph_new,
+    TradeSide_TypeCheck,
+    TradeSide_Side
 };
 
 PyObject *ExtractorModule_api_v1(PyObject *self) {

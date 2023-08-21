@@ -36,17 +36,6 @@ extern "C" {
 #endif
 
 /**
- * @brief defines context structure for a call
- */
-typedef struct fm_call_ctx {
-  fm_comp_ctx_p comp;
-  fm_exec_ctx_p exec;
-  fm_call_handle_t handle;
-  size_t depc;
-  const fm_call_handle_t *deps;
-} fm_call_ctx_t;
-
-/**
  * @brief typedef to a call function pointer
  *
  * The actual function used to execute the operation. It is provided

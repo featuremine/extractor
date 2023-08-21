@@ -3,8 +3,11 @@
 #include "fmc++/side.hpp"
 #include <sstream>
 
-#include "extractor/python/side.h"
-#include "extractor/python/side.hpp"
+#include "extractor/python/py_api.h"
+
+struct TradeSideStruct {
+  PyObject_VAR_HEAD fmc::trade_side side_;
+};
 
 static void TradeSide_dealloc(PyObject *self) { Py_TYPE(self)->tp_free(self); }
 

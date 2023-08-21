@@ -23,10 +23,10 @@
 
 #pragma once
 
-#include "extractor/serial.h"
-#include "extractor/handle.h"
-#include "extractor/type_decl.h"
 #include "fmc/time.h"
+#include "fmc/rational64.h"
+#include "fmc/rprice.h"
+#include "fmc/decimal128.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -132,6 +132,101 @@ typedef const void *fm_comp_ctx_p;
  * @brief pointer to a generic execution context
  */
 typedef fm_exec_ctx_t *fm_exec_ctx_p;
+
+typedef size_t (*fm_writer)(const void *data, size_t count, void *closure);
+
+/**
+ * @brief execution point object
+ *
+ * Execution point object represents a reference to call stack item
+ */
+typedef size_t fm_call_handle_t;
+
+
+/**
+ * @brief enum for base types
+ *
+ * Defines based types for type declaration
+ */
+
+// NOTE: Move these definitions to the common library
+typedef int8_t INT8;
+typedef int16_t INT16;
+typedef int32_t INT32;
+typedef int64_t INT64;
+typedef uint8_t UINT8;
+typedef uint16_t UINT16;
+typedef uint32_t UINT32;
+typedef uint64_t UINT64;
+typedef float FLOAT32;
+typedef double FLOAT64;
+typedef fmc_rational64_t RATIONAL64;
+typedef fmc_rprice_t RPRICE;
+typedef fmc_decimal128_t DECIMAL128;
+typedef fmc_time64_t TIME64;
+typedef char CHAR;
+typedef wchar_t WCHAR;
+#ifndef FM_SYS_WIN
+typedef bool BOOL;
+#else
+#include <windows.h>
+#endif
+
+typedef enum {
+  FM_TYPE_INT8 = 0,
+  FM_TYPE_INT16,
+  FM_TYPE_INT32,
+  FM_TYPE_INT64,
+  FM_TYPE_UINT8,
+  FM_TYPE_UINT16,
+  FM_TYPE_UINT32,
+  FM_TYPE_UINT64,
+  FM_TYPE_FLOAT32,
+  FM_TYPE_FLOAT64,
+  FM_TYPE_RATIONAL64,
+  FM_TYPE_RPRICE,
+  FM_TYPE_DECIMAL128,
+  FM_TYPE_TIME64,
+  FM_TYPE_CHAR,
+  FM_TYPE_WCHAR,
+  FM_TYPE_BOOL,
+  FM_TYPE_LAST
+} FM_BASE_TYPE;
+
+#define STACK_OFF(stack, what)                                                 \
+  (char *)((size_t)(stack).header.cursor &                                     \
+           (~((FMC_WORDSIZE - 1) & (sizeof(what) - 1))))
+
+#define STACK_CHECK(stack, what)                                               \
+  (STACK_OFF((stack), what) >= &(stack).buffer[0] + sizeof(what))
+
+#define STACK_PUSH(stack, what)                                                \
+  ((stack).header.cursor = STACK_OFF((stack), (what)) - sizeof(what),          \
+   memcpy((stack).header.cursor, (void *)&(what), sizeof(what)))
+
+#define STACK_SAFE_PUSH(stack, what)                                           \
+  (STACK_CHECK((stack), (what)) ? (STACK_PUSH((stack), (what)), true) : false)
+
+#define HEAP_STACK_PUSH(stack, what)                                           \
+  (STACK_CHECK((*stack), (what))                                               \
+       ? (STACK_PUSH((*stack), (what)), true)                                  \
+       : (fm_arg_stack_double(&stack) ? STACK_SAFE_PUSH((*stack), (what))      \
+                                      : false))
+
+#define STACK_POP(stack, what)                                                 \
+  ((stack).header.cursor = STACK_OFF((stack), what) - sizeof(what),            \
+   *(what *)(stack).header.cursor)
+
+/**
+ * @brief defines context structure for a call
+ */
+typedef struct fm_call_ctx {
+  fm_comp_ctx_p comp;
+  fm_exec_ctx_p exec;
+  fm_call_handle_t handle;
+  size_t depc;
+  const fm_call_handle_t *deps;
+} fm_call_ctx_t;
 
 struct extractor_api_v1 {
   // Clean up system

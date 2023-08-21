@@ -36,6 +36,8 @@
 #include "fmc/rprice.h"
 #include "fmc/time.h"
 
+#include "extractor/api.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -46,56 +48,6 @@ extern "C" {
  * object used to store data relevant to type declaration.
  */
 typedef const struct fm_type_decl *fm_type_decl_cp;
-
-/**
- * @brief enum for base types
- *
- * Defines based types for type declaration
- */
-
-// NOTE: Move these definitions to the common library
-typedef int8_t INT8;
-typedef int16_t INT16;
-typedef int32_t INT32;
-typedef int64_t INT64;
-typedef uint8_t UINT8;
-typedef uint16_t UINT16;
-typedef uint32_t UINT32;
-typedef uint64_t UINT64;
-typedef float FLOAT32;
-typedef double FLOAT64;
-typedef fmc_rational64_t RATIONAL64;
-typedef fmc_rprice_t RPRICE;
-typedef fmc_decimal128_t DECIMAL128;
-typedef fmc_time64_t TIME64;
-typedef char CHAR;
-typedef wchar_t WCHAR;
-#ifndef FM_SYS_WIN
-typedef bool BOOL;
-#else
-#include <windows.h>
-#endif
-
-typedef enum {
-  FM_TYPE_INT8 = 0,
-  FM_TYPE_INT16,
-  FM_TYPE_INT32,
-  FM_TYPE_INT64,
-  FM_TYPE_UINT8,
-  FM_TYPE_UINT16,
-  FM_TYPE_UINT32,
-  FM_TYPE_UINT64,
-  FM_TYPE_FLOAT32,
-  FM_TYPE_FLOAT64,
-  FM_TYPE_RATIONAL64,
-  FM_TYPE_RPRICE,
-  FM_TYPE_DECIMAL128,
-  FM_TYPE_TIME64,
-  FM_TYPE_CHAR,
-  FM_TYPE_WCHAR,
-  FM_TYPE_BOOL,
-  FM_TYPE_LAST
-} FM_BASE_TYPE;
 
 typedef const char *(*fm_base_type_parser)(const char *, const char *, void *,
                                            const char *);

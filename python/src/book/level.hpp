@@ -26,7 +26,7 @@
 #include "extractor/book/book.h"
 #include "extractor/python/book.h"
 #include "extractor/python/decimal128.h"
-#include "extractor/python/side.h"
+#include "extractor/python/py_api.h"
 
 #include "fmc++/decimal128.hpp"
 #include "fmc++/python/wrapper.hpp"
