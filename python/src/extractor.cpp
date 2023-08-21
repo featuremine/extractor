@@ -198,6 +198,7 @@ static PyTypeObject PyExtractorAPIWrapperType = {
 };
 
 static py_extractor_api_v1 py_api_inst{
+    ExtractorResultRef_new,
     ExtractorGraph_new
 };
 

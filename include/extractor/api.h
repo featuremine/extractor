@@ -197,6 +197,8 @@ struct extractor_api_v1 {
 
   // Get frame data
   const void * (*frame_get_cptr1) (const fm_frame_t *, fm_field_t, int);
+  // Get frame data
+  void * (*frame_get_ptr1) (fm_frame_t *, fm_field_t, int);
   // Get frame field
   fm_field_t (*frame_field) (const fm_frame_t *, const char *);
   // Get result reference data
@@ -216,6 +218,22 @@ struct extractor_api_v1 {
   void (*ctx_def_stream_call_set) (fm_ctx_def_t *, fm_call_def_t * (*stream) (fm_comp_def_cl, const fm_ctx_def_cl));
   void (*ctx_def_query_call_set) (fm_ctx_def_t *, fm_call_def_t * (*query) (fm_comp_def_cl, const fm_ctx_def_cl));
   fm_ctx_def_cl (*ctx_def_closure) (fm_ctx_def_t *);
+
+  fm_type_decl_cp (*base_type_get)(fm_type_sys_t *ts, FM_BASE_TYPE t);
+  fm_type_decl_cp (*array_type_get)(fm_type_sys_t *ts, fm_type_decl_cp td, unsigned s);
+  bool (*type_is_array)(fm_type_decl_cp td);
+  unsigned (*type_array_size)(fm_type_decl_cp);
+  fm_type_decl_cp (*type_array_of)(fm_type_decl_cp td);
+  char * (*type_to_str)(fm_type_decl_cp);
+  int (*type_frame_field_idx)(fm_type_decl_cp td, const char *);
+
+  fm_type_decl_cp (*frame_type)(const fm_frame_t *);
+  bool (*type_is_frame)(fm_type_decl_cp td);
+  void (*frame_reserve)(fm_frame_t *, ...);
+  fm_type_decl_cp (*frame_type_get1)(fm_type_sys_t *ts, unsigned num,
+                                             const char *names[],
+                                             fm_type_decl_cp types[],
+                                             unsigned nd, int dims[]);
 
 };
 

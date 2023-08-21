@@ -28,6 +28,7 @@ extern "C" {
 #include "extractor/stream_ctx.h"
 #include "extractor/exec_ctx.h"
 #include <extractor/comp_sys_capture.h>
+#include <extractor/frame.h>
 #include "comp.h"
 }
 
@@ -65,6 +66,7 @@ static struct extractor_api_v1 api_v1 {
   fm_type_is_tuple,
   fm_type_tuple_size,
   fm_frame_get_cptr1,
+  fm_frame_get_ptr1,
   fm_frame_field,
   fm_data_get,
   fm_call_def_new,
@@ -79,7 +81,18 @@ static struct extractor_api_v1 api_v1 {
   fm_ctx_def_queuer_set,
   fm_ctx_def_stream_call_set,
   fm_ctx_def_query_call_set,
-  fm_ctx_def_closure
+  fm_ctx_def_closure,
+  fm_base_type_get,
+  fm_array_type_get,
+  fm_type_is_array,
+  fm_type_array_size,
+  fm_type_array_of,
+  fm_type_to_str,
+  fm_type_frame_field_idx,
+  fm_frame_type,
+  fm_type_is_frame,
+  fm_frame_reserve,
+  fm_frame_type_get1
 
 };
 
