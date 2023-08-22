@@ -454,32 +454,6 @@ extr_py_unit_test(
 )
 
 add_library(
-    ema_ext
-    SHARED
-    "ema_ext.c"
-)
-target_include_directories(
-    ema_ext
-    PUBLIC
-    "${EXTRACTOR_INC_DIR}"
-    "${EXTRACTOR_API_INC_DIR}"
-)
-target_link_libraries(
-    ema_ext
-    PUBLIC
-    extractor
-    ytp
-)
-set_target_properties(
-    ema_ext
-    PROPERTIES
-    OUTPUT_NAME "ema"
-    VERSION "1.0.0"
-    SOVERSION "0"
-)
-
-
-add_library(
     book_play_ext
     SHARED
     "book_play_ext.c"

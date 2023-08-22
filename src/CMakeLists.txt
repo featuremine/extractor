@@ -207,3 +207,28 @@ install(
     TARGETS
     extractor
 )
+
+add_library(
+    ema_ext
+    SHARED
+    "../test/ema_ext.c"
+)
+target_include_directories(
+    ema_ext
+    PUBLIC
+    "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
+)
+target_link_libraries(
+    ema_ext
+    PUBLIC
+    extractor
+    ytp
+)
+set_target_properties(
+    ema_ext
+    PROPERTIES
+    OUTPUT_NAME "ema"
+    VERSION "1.0.0"
+    SOVERSION "0"
+)
