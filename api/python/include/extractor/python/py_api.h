@@ -35,6 +35,9 @@ struct py_extractor_api_v1 {
   PyObject *(*graph_new)(fm_comp_sys_t *sys, fm_comp_graph_t *graph, bool to_delete);
   bool (*tradeside_check)(PyObject *);
   int (*tradeside_side)(PyObject *);
+  PyObject *(*tradeside_bid)();
+  PyObject *(*tradeside_ask)();
+  PyObject *(*tradeside_unknown)();
 };
 
 struct PyExtractorAPIWrapper {

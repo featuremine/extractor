@@ -341,6 +341,17 @@ struct extractor_api_v1 {
                                              unsigned nd, int dims[]);
 
   fm_type_decl_cp (*type_frame_field_type)(fm_type_decl_cp td, int i);
+  fm_type_decl_cp (*cstring_type_get)(fm_type_sys_t *ts);
+  fm_type_decl_cp (*tuple_type_get)(fm_type_sys_t *ts, unsigned num, ...);
+
+  fm_comp_t *(*comp_decl)(fm_comp_sys_t *csys, fm_comp_graph_t *graph,
+                                  const char *comp, unsigned nargs,
+                                  fm_type_decl_cp type, ...);
+
+  fm_type_decl_cp (*frame_type_get)(fm_type_sys_t *ts, unsigned nf,
+                                            unsigned nd, ...);
+  fm_type_decl_cp (*type_type_get)(fm_type_sys_t *ts);
+  const char *(*type_sys_errmsg)(fm_type_sys_t *ts);
 
 };
 

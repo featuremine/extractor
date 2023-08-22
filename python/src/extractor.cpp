@@ -200,7 +200,10 @@ static py_extractor_api_v1 py_api_inst{
     ExtractorResultRef_new,
     ExtractorGraph_new,
     TradeSide_TypeCheck,
-    TradeSide_Side
+    TradeSide_Side,
+    TradeSide_Bid,
+    TradeSide_Ask,
+    TradeSide_Unknown,
 };
 
 PyObject *ExtractorModule_api_v1(PyObject *self) {

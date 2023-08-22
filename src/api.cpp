@@ -93,7 +93,15 @@ static struct extractor_api_v1 api_v1 {
   fm_type_is_frame,
   fm_frame_reserve,
   fm_frame_type_get1,
-  fm_type_frame_field_type
+  fm_type_frame_field_type,
+
+  fm_cstring_type_get,
+  fm_tuple_type_get,
+
+  fm_comp_decl,
+  fm_frame_type_get,
+  fm_type_type_get,
+  fm_type_sys_errmsg
 
 };
 
