@@ -38,8 +38,8 @@ struct py_extractor_api_v1 {
 };
 
 struct PyExtractorAPIWrapper {
-  PyObject_HEAD extractor_api_v1 *api;
-  py_extractor_api_v1 *py_api;
+  PyObject_HEAD struct extractor_api_v1 *api;
+  struct py_extractor_api_v1 *py_api;
 };
 
 typedef struct TradeSideStruct TradeSideS;
@@ -58,6 +58,12 @@ FMMODFUNC int TradeSide_Side(PyObject *obj);
 typedef struct {
   PyObject_HEAD fm_comp_sys_t *sys;
 } ExtractorSystemStruct;
+
+typedef struct {
+  PyObject_HEAD fm_comp_sys_t *sys_;
+  fm_comp_graph_t *graph_;
+  fm_comp_t *comp_;
+} ExtractorComputation;
 
 #ifdef __cplusplus
 }
