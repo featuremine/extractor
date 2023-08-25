@@ -454,33 +454,6 @@ extr_py_unit_test(
 )
 
 add_library(
-    book_play_ext
-    SHARED
-    "book_play_ext.c"
-    "../src/book_play_split.cpp"
-)
-target_include_directories(
-    book_play_ext
-    PUBLIC
-    "${EXTRACTOR_INC_DIR}"
-    "${EXTRACTOR_API_INC_DIR}"
-    "${EXTRACTOR_SRC_DIR}"
-)
-target_link_libraries(
-    book_play_ext
-    PUBLIC
-    extractor
-    ytp
-)
-set_target_properties(
-    book_play_ext
-    PROPERTIES
-    OUTPUT_NAME "book_play"
-    VERSION "1.0.0"
-    SOVERSION "0"
-)
-
-add_library(
     ext_lib
     SHARED
     "ext_lib.cpp"

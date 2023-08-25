@@ -44,6 +44,6 @@ fm_comp_def_t book_play_split_comp_def = {
  *
  * @param sys computing system
  */
-void FmInit_book_play_split(fm_comp_sys_t *sys) {
+FMMODFUNC void FmInit_book_play_split(fm_comp_sys_t *sys) {
   fm_comp_type_add(sys, &book_play_split_comp_def);
 }
