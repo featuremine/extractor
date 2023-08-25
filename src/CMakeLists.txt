@@ -187,7 +187,7 @@ target_include_directories(
 
 add_library(
     extractor
-    STATIC
+    SHARED
     $<TARGET_OBJECTS:extractor_obj>
     $<TARGET_OBJECTS:extractor_book_lib_obj>
 )

@@ -355,9 +355,7 @@ struct extractor_api_v1 {
 
 };
 
-// function that you can call to return the actual sequence api structure
-// pointer
-struct extractor_api_v1 *extractor_api_v1_get();
+FMMODFUNC struct extractor_api_v1 *extractor_api_v1_get();
 
 #ifdef __cplusplus
 }
