@@ -66,7 +66,9 @@ macro(extr_unit_test)
         ${ARG_NAME}
         PUBLIC
         "${EXTRACTOR_INC_DIR}"
+        "${EXTRACTOR_API_INC_DIR}"
         "${EXTRACTOR_PYTHON_INC_DIR}"
+        "${EXTRACTOR_PYTHON_API_INC_DIR}"
         "${EXTRACTOR_SRC_DIR}"
     )
     target_link_libraries(
@@ -452,57 +454,6 @@ extr_py_unit_test(
 )
 
 add_library(
-    ema_ext
-    SHARED
-    "ema_ext.c"
-)
-target_include_directories(
-    ema_ext
-    PUBLIC
-    "${EXTRACTOR_INC_DIR}"
-)
-target_link_libraries(
-    ema_ext
-    PUBLIC
-    extractor
-    ytp
-)
-set_target_properties(
-    ema_ext
-    PROPERTIES
-    OUTPUT_NAME "ema"
-    VERSION "1.0.0"
-    SOVERSION "0"
-)
-
-
-add_library(
-    book_play_ext
-    SHARED
-    "book_play_ext.c"
-    "../src/book_play_split.cpp"
-)
-target_include_directories(
-    book_play_ext
-    PUBLIC
-    "${EXTRACTOR_INC_DIR}"
-    "${EXTRACTOR_SRC_DIR}"
-)
-target_link_libraries(
-    book_play_ext
-    PUBLIC
-    extractor
-    ytp
-)
-set_target_properties(
-    book_play_ext
-    PROPERTIES
-    OUTPUT_NAME "book_play"
-    VERSION "1.0.0"
-    SOVERSION "0"
-)
-
-add_library(
     ext_lib
     SHARED
     "ext_lib.cpp"
@@ -511,6 +462,7 @@ target_include_directories(
     ext_lib
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 target_link_libraries(
     ext_lib
@@ -534,6 +486,7 @@ target_include_directories(
     ext_exe
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 target_link_libraries(
     ext_exe
@@ -552,6 +505,7 @@ target_include_directories(
     split_sample_trade
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 target_link_libraries(
     split_sample_trade

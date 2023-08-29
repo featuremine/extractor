@@ -23,9 +23,9 @@
 
 #define PY_SSIZE_T_CLEAN
 
-#include "extractor/python/extractor.h"
+#include "extractor/api.h"
 #include "extractor/python/book.h"
-#include "extractor/python/side.h"
+#include "extractor/python/py_api.h"
 #include "ytp.h"
 
 #include "comp.hpp"
@@ -43,7 +43,7 @@
 #include "tuple_msg.hpp"
 #include "tuple_split.hpp"
 #include "utils.hpp"
-#include "wrapper.hpp"
+#include <fmc++/python/wrapper.hpp>
 
 #include "fmc/files.h"
 #include "fmc/platform.h"
@@ -137,6 +137,80 @@ static PyObject *Extractor_result_as_pandas(PyObject *self, PyObject *args,
   return result_as_pandas(result, index);
 }
 
+static PyObject *PyExtractorAPIWrapper_new(PyTypeObject *subtype,
+                                           PyObject *args, PyObject *kwds) {
+  auto *self = (PyExtractorAPIWrapper *)subtype->tp_alloc(subtype, 0);
+  if (!self) {
+    return nullptr;
+  }
+  return (PyObject *)self;
+}
+
+static int PyExtractorAPIWrapper_init(PyExtractorAPIWrapper *self,
+                                      PyObject *args, PyObject *kwds) {
+  self->api = nullptr;
+  return 0;
+}
+
+static void PyExtractorAPIWrapper_dealloc(PyExtractorAPIWrapper *self) {
+  Py_TYPE(self)->tp_free((PyObject *)self);
+}
+
+static PyTypeObject PyExtractorAPIWrapperType = {
+    PyVarObject_HEAD_INIT(NULL, 0) "extractor.APIWrapper", /* tp_name */
+    sizeof(PyExtractorAPIWrapper),                         /* tp_basicsize */
+    0,                                                     /* tp_itemsize */
+    (destructor)PyExtractorAPIWrapper_dealloc,             /* tp_dealloc */
+    0,                                                     /* tp_print */
+    0,                                                     /* tp_getattr */
+    0,                                                     /* tp_setattr */
+    0,                                                     /* tp_reserved */
+    0,                                                     /* tp_repr */
+    0,                                                     /* tp_as_number */
+    0,                                                     /* tp_as_sequence */
+    0,                                                     /* tp_as_mapping */
+    0,                                                     /* tp_hash  */
+    0,                                                     /* tp_call */
+    0,                                                     /* tp_str */
+    0,                                                     /* tp_getattro */
+    0,                                                     /* tp_setattro */
+    0,                                                     /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,              /* tp_flags */
+    "Extractor API Wrapper",                               /* tp_doc */
+    0,                                                     /* tp_traverse */
+    0,                                                     /* tp_clear */
+    0,                                                     /* tp_richcompare */
+    0,                                    /* tp_weaklistoffset */
+    0,                                    /* tp_iter */
+    0,                                    /* tp_iternext */
+    0,                                    /* tp_methods */
+    0,                                    /* tp_members */
+    0,                                    /* tp_getset */
+    0,                                    /* tp_base */
+    0,                                    /* tp_dict */
+    0,                                    /* tp_descr_get */
+    0,                                    /* tp_descr_set */
+    0,                                    /* tp_dictoffset */
+    (initproc)PyExtractorAPIWrapper_init, /* tp_init */
+    0,                                    /* tp_alloc */
+    PyExtractorAPIWrapper_new,            /* tp_new */
+};
+
+static py_extractor_api_v1 py_api_inst{
+    ExtractorResultRef_new, ExtractorGraph_new, TradeSide_TypeCheck,
+    TradeSide_Side,         TradeSide_Bid,      TradeSide_Ask,
+    TradeSide_Unknown,
+};
+
+PyObject *ExtractorModule_api_v1(PyObject *self) {
+  PyExtractorAPIWrapper *api =
+      (PyExtractorAPIWrapper *)PyExtractorAPIWrapper_new(
+          (PyTypeObject *)&PyExtractorAPIWrapperType, nullptr, nullptr);
+  api->api = extractor_api_v1_get();
+  api->py_api = &py_api_inst;
+  return (PyObject *)api;
+}
+
 static PyMethodDef extractorMethods[] = {
     {"flush", Extractor_fflush, METH_NOARGS,
      "Flush user space file buffers.\n"
@@ -154,6 +228,8 @@ static PyMethodDef extractorMethods[] = {
      "The desired computation object must be passed as the first argument.\n"
      "As an optional second parameter, the column name of the desired index "
      "can be specified."},
+    {"api_v1", (PyCFunction)ExtractorModule_api_v1, METH_NOARGS,
+     "Obtain Python Extractor V1 API"},
     {NULL, NULL, 0, NULL} /* Sentinel */
 };
 
@@ -245,9 +321,9 @@ static int python_to_stack_arg(fm_type_sys_t *tsys, PyObject *obj,
     HEAP_STACK_PUSH(s, channel);
     *type = fm_record_type_get(tsys, "ytp_channel_wrapper",
                                sizeof(ytp_channel_wrapper));
-  } else if (fm::python::datetime::is_timedelta_type(obj) ||
-             fm::python::datetime::is_pandas_timestamp_type(obj)) {
-    fm::python::datetime dt(fm::python::object::from_borrowed(obj));
+  } else if (fmc::python::datetime::is_timedelta_type(obj) ||
+             fmc::python::datetime::is_pandas_timestamp_type(obj)) {
+    fmc::python::datetime dt(fmc::python::object::from_borrowed(obj));
     auto tm = static_cast<fmc_time64_t>(dt);
     HEAP_STACK_PUSH(s, tm);
     *type = fm_base_type_get(tsys, FM_TYPE_TIME64);
@@ -415,6 +491,11 @@ PyMODINIT_FUNC fm_extractor_py_init(void) {
   Py_INCREF(&ExtractorSystemType);
   PyModule_AddObject(m, "System", (PyObject *)&ExtractorSystemType);
   PyModule_AddObject(m, "system", ExtractorSystem_new());
+
+  if (PyType_Ready(&PyExtractorAPIWrapperType) < 0)
+    return NULL;
+  Py_INCREF(&PyExtractorAPIWrapperType);
+  PyModule_AddObject(m, "APIWrapper", (PyObject *)&PyExtractorAPIWrapperType);
 
   if (!TradeSide_AddType(m))
     return NULL;

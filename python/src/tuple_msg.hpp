@@ -33,7 +33,7 @@
 #include "extractor/type_sys.h"
 #include "fmc++/mpl.hpp"
 #include "utils.hpp"
-#include "wrapper.hpp"
+#include <fmc++/python/wrapper.hpp>
 
 #include <cassert>
 #include <errno.h>
@@ -48,7 +48,7 @@
 #include <numpy/arrayobject.h>
 
 using namespace fm;
-using namespace python;
+using namespace fmc::python;
 using namespace std;
 
 py_field_conv get_py_field_checked_converter(fm_type_decl_cp decl) {
@@ -211,7 +211,7 @@ py_field_conv get_py_field_checked_converter(fm_type_decl_cp decl) {
   return py_field_conv();
 }
 
-py_field_parse get_tuple_parse(const string &col, fm_type_decl_cp decl,
+py_field_parse get_tuple_parse(const std::string &col, fm_type_decl_cp decl,
                                fm_field_t idx) {
   auto convert = get_py_field_checked_converter(decl);
   if (idx == -1 || !convert) {
@@ -242,7 +242,7 @@ py_field_parse get_tuple_parse(const string &col, fm_type_decl_cp decl,
 }
 
 struct namedtuple_parser {
-  namedtuple_parser(string class_name, fm_type_decl_cp decl)
+  namedtuple_parser(std::string class_name, fm_type_decl_cp decl)
       : class_name_(class_name) {
     assert(fm_type_is_frame(decl));
     auto nfields = fm_type_frame_nfields(decl);
@@ -275,7 +275,7 @@ struct namedtuple_parser {
     }
     return true;
   }
-  string class_name_;
+  std::string class_name_;
   vector<py_field_parse> parses_;
 };
 
@@ -361,7 +361,7 @@ fm_ctx_def_t *fm_comp_tuple_msg_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   int dims[1] = {1};
 
   auto field_error = [sys](size_t field_idx, const char *str) {
-    string errstr = str;
+    std::string errstr = str;
     errstr.append(" for field ");
     errstr.append(to_string(field_idx));
     fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS, errstr.c_str());
@@ -372,7 +372,7 @@ fm_ctx_def_t *fm_comp_tuple_msg_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
     auto *row_desc = fm_type_tuple_arg(row_descs, i);
     auto field_tuple_size = fm_type_tuple_size(row_desc);
     if (field_tuple_size != 2) {
-      string errstr = "invalid field description size ";
+      std::string errstr = "invalid field description size ";
       errstr.append(to_string(field_tuple_size));
       errstr.append("; expected 2");
       return field_error(i, errstr.c_str());
@@ -392,7 +392,7 @@ fm_ctx_def_t *fm_comp_tuple_msg_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
     if (!fm_type_is_simple(types[i])) {
       auto *typestr = fm_type_to_str(types[i]);
-      auto errstr = string("expect simple type, got: ") + typestr;
+      auto errstr = std::string("expect simple type, got: ") + typestr;
       free(typestr);
       return field_error(i, errstr.c_str());
     }

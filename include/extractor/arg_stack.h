@@ -29,22 +29,13 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "extractor/api.h"
 #include "fmc/alignment.h"
 #include "fmc/platform.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef struct {
-  size_t size;
-  char *cursor;
-} fm_arg_stack_header_t;
-
-typedef struct {
-  fm_arg_stack_header_t header;
-  char buffer[1];
-} fm_arg_stack_t;
 
 #define STACK_ARGS(stack)                                                      \
   (fm_arg_stack_t{{stack.header.size, &(stack).buffer[0] + stack.header.size}})
@@ -67,30 +58,6 @@ FMMODFUNC fm_arg_stack_t *fm_arg_stack_realloc(fm_arg_stack_t *ptr,
 FMMODFUNC bool fm_arg_stack_double(fm_arg_stack_t **ptr);
 FMMODFUNC fm_arg_stack_t fm_arg_stack_args(fm_arg_stack_t *stack);
 FMMODFUNC void fm_arg_stack_free(fm_arg_stack_t *ptr);
-
-#define STACK_OFF(stack, what)                                                 \
-  (char *)((size_t)(stack).header.cursor &                                     \
-           (~((FMC_WORDSIZE - 1) & (sizeof(what) - 1))))
-
-#define STACK_CHECK(stack, what)                                               \
-  (STACK_OFF((stack), what) >= &(stack).buffer[0] + sizeof(what))
-
-#define STACK_PUSH(stack, what)                                                \
-  ((stack).header.cursor = STACK_OFF((stack), (what)) - sizeof(what),          \
-   memcpy((stack).header.cursor, (void *)&(what), sizeof(what)))
-
-#define STACK_SAFE_PUSH(stack, what)                                           \
-  (STACK_CHECK((stack), (what)) ? (STACK_PUSH((stack), (what)), true) : false)
-
-#define HEAP_STACK_PUSH(stack, what)                                           \
-  (STACK_CHECK((*stack), (what))                                               \
-       ? (STACK_PUSH((*stack), (what)), true)                                  \
-       : (fm_arg_stack_double(&stack) ? STACK_SAFE_PUSH((*stack), (what))      \
-                                      : false))
-
-#define STACK_POP(stack, what)                                                 \
-  ((stack).header.cursor = STACK_OFF((stack), what) - sizeof(what),            \
-   *(what *)(stack).header.cursor)
 
 #ifdef __cplusplus
 }

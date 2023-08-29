@@ -24,6 +24,7 @@
 #pragma once
 
 #include "call_ctx_base.h"
+#include "extractor/api.h"
 #include "extractor/type_decl.h"
 #include "fmc/platform.h"
 

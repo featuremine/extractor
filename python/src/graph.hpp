@@ -27,6 +27,7 @@
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/python/context.h"
+#include "extractor/python/extractor.h"
 
 #include "fmc++/mpl.hpp"
 #include "frame.hpp"
@@ -764,7 +765,7 @@ static PyObject *ExtractorStreamContext_run_to(ExtractorStreamContext *ctx_obj,
                                                PyObject *args) {
   PyObject *obj;
   if (!PyArg_ParseTuple(args, "O", &obj) ||
-      !fm::python::datetime::is_timedelta_type(obj)) {
+      !fmc::python::datetime::is_timedelta_type(obj)) {
     PyErr_SetString(PyExc_RuntimeError, "expecting a timedelta object");
     return nullptr;
   }

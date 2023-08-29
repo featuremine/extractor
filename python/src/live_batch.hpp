@@ -34,7 +34,7 @@
 #include "extractor/type_sys.h"
 #include "fmc++/mpl.hpp"
 #include "utils.hpp"
-#include "wrapper.hpp"
+#include <fmc++/python/wrapper.hpp>
 
 #include <cassert>
 #include <errno.h>
@@ -49,7 +49,7 @@
 #include <numpy/arrayobject.h>
 
 using namespace fm;
-using namespace python;
+using namespace fmc::python;
 using namespace std;
 
 struct live_batch {
