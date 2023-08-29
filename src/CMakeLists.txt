@@ -92,6 +92,7 @@ add_library(
     "combine.cpp"
     "diff.cpp"
     "divide.cpp"
+    "remainder.cpp"
     "convert.cpp"
     "join.cpp"
     "last.cpp"
