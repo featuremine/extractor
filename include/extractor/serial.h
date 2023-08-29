@@ -30,7 +30,6 @@
 extern "C" {
 #endif
 
-typedef bool (*fm_reader)(void *data, size_t limit, void *closure);
 
 #ifdef __cplusplus
 }

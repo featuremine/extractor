@@ -134,6 +134,7 @@ typedef const void *fm_comp_ctx_p;
 typedef fm_exec_ctx_t *fm_exec_ctx_p;
 
 typedef size_t (*fm_writer)(const void *data, size_t count, void *closure);
+typedef bool (*fm_reader)(void *data, size_t limit, void *closure);
 
 /**
  * @brief execution point object
@@ -243,7 +244,7 @@ struct extractor_api_v1 {
                                           fm_writer, void *);
   // Get replayed stream context
   fm_stream_ctx_t *(*stream_ctx_replayed)(fm_comp_sys_t *, fm_comp_graph_t *,
-                                          fm_writer, void *);
+                                          fm_reader, void *);
   // Queue call handle for execution on stream context
   void (*stream_ctx_queue)(fm_stream_ctx_t *ctx, fm_call_handle_t handle);
   // Schedule call handle for execution on stream context
@@ -261,7 +262,7 @@ struct extractor_api_v1 {
   fmc_time64_t (*stream_ctx_now)(fm_stream_ctx_t *);
 
   // Get error msg
-  char *(*comp_sys_error_msg)(fm_comp_sys_t *);
+  const char *(*comp_sys_error_msg)(fm_comp_sys_t *);
   // Add computation definition to computational system
   bool (*comp_type_add)(fm_comp_sys_t *, const fm_comp_def_t *def);
 
@@ -334,7 +335,7 @@ struct extractor_api_v1 {
   fm_type_decl_cp (*array_type_get)(fm_type_sys_t *ts, fm_type_decl_cp td,
                                     unsigned s);
   bool (*type_is_array)(fm_type_decl_cp td);
-  unsigned (*type_array_size)(fm_type_decl_cp);
+  size_t (*type_array_size)(fm_type_decl_cp);
   fm_type_decl_cp (*type_array_of)(fm_type_decl_cp td);
   char *(*type_to_str)(fm_type_decl_cp);
   int (*type_frame_field_idx)(fm_type_decl_cp td, const char *);
