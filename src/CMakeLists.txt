@@ -14,6 +14,7 @@ target_include_directories(
     extractor_book_lib_obj
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
     PRIVATE
     "${EXTRACTOR_SRC_DIR}"
 )
@@ -32,6 +33,7 @@ target_include_directories(
     extractor_book_lib_dep
     INTERFACE
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 
 add_library(
@@ -48,6 +50,7 @@ target_link_libraries(
 add_library(
     extractor_obj
     OBJECT
+    "api.cpp"
     "book_build.cpp"
     "call_obj.cpp"
     "call_stack.cpp"
@@ -160,6 +163,7 @@ target_include_directories(
     extractor_obj
     PUBLIC
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
     "${EXTRACTOR_SRC_DIR}"
 )
 
@@ -178,6 +182,8 @@ target_include_directories(
     extractor_dep
     INTERFACE
     "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 
 add_library(
@@ -201,4 +207,57 @@ set_target_properties(
 install(
     TARGETS
     extractor
+)
+
+add_library(
+    ema_ext
+    SHARED
+    "../test/ema_ext.c"
+)
+target_include_directories(
+    ema_ext
+    PUBLIC
+    "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
+)
+target_link_libraries(
+    ema_ext
+    PUBLIC
+    extractor
+    ytp
+)
+set_target_properties(
+    ema_ext
+    PROPERTIES
+    OUTPUT_NAME "ema"
+    VERSION "1.0.0"
+    SOVERSION "0"
+)
+
+add_library(
+    book_play_ext
+    SHARED
+    "../test/book_play_ext.c"
+    "book_play_split.cpp"
+)
+target_include_directories(
+    book_play_ext
+    PUBLIC
+    "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
+    "${EXTRACTOR_SRC_DIR}"
+)
+target_link_libraries(
+    book_play_ext
+    PUBLIC
+    extractor
+    ytp
+)
+set_target_properties(
+    book_play_ext
+    PROPERTIES
+    OUTPUT_NAME "book_play"
+    VERSION "1.0.0"
+    SOVERSION "0"
+    LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/test"
 )

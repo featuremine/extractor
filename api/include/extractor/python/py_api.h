@@ -1,6 +1,6 @@
 /******************************************************************************
 
-        COPYRIGHT (c) 2017 by Featuremine Corporation.
+        COPYRIGHT (c) 2022 by Featuremine Corporation.
         This software has been provided pursuant to a License Agreement
         containing restrictions on its use.  This software contains
         valuable trade secrets and proprietary information of
@@ -13,24 +13,38 @@
  *****************************************************************************/
 
 /**
- * @file side.h
- * @author Andres Rangel
- * @date 9 Mar 2020
- * @brief File contains C declaration of the call context
+ * @file py_api.h
+ * @date 4 Oct 2022
+ * @brief File contains C declaration of yamal sequence Python API
  *
- * This file contains declarations of the call context
+ * File contains C declaration of yamal sequence Python API
  * @see http://www.featuremine.com
  */
 
 #pragma once
 
 #include <Python.h>
-
-#include "fmc/platform.h"
+#include <extractor/api.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+struct py_extractor_api_v1 {
+  PyObject *(*resultref_new)(fm_result_ref_t *);
+  PyObject *(*graph_new)(fm_comp_sys_t *sys, fm_comp_graph_t *graph,
+                         bool to_delete);
+  bool (*tradeside_check)(PyObject *);
+  int (*tradeside_side)(PyObject *);
+  PyObject *(*tradeside_bid)();
+  PyObject *(*tradeside_ask)();
+  PyObject *(*tradeside_unknown)();
+};
+
+struct PyExtractorAPIWrapper {
+  PyObject_HEAD struct extractor_api_v1 *api;
+  struct py_extractor_api_v1 *py_api;
+};
 
 typedef struct TradeSideStruct TradeSideS;
 
@@ -44,6 +58,16 @@ FMMODFUNC extern TradeSideS _TradeSide_ASK;
 
 FMMODFUNC bool TradeSide_TypeCheck(PyObject *obj);
 FMMODFUNC int TradeSide_Side(PyObject *obj);
+
+typedef struct {
+  PyObject_HEAD fm_comp_sys_t *sys;
+} ExtractorSystemStruct;
+
+typedef struct {
+  PyObject_HEAD fm_comp_sys_t *sys_;
+  fm_comp_graph_t *graph_;
+  fm_comp_t *comp_;
+} ExtractorComputation;
 
 #ifdef __cplusplus
 }

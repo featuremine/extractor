@@ -24,7 +24,6 @@
 
 #include <Python.h>
 #include <extractor/python/decimal128.h>
-#include <extractor/python/extractor.h>
 #include <extractor/python/rational64.h>
 #include <extractor/python/rprice.h>
 #include <fenv.h>

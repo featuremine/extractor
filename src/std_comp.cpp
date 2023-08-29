@@ -101,6 +101,7 @@
 #include "ar.hpp"
 #include "average_tw.hpp"
 #include "comp_sys.hpp"
+#include "cum_trade.hpp"
 #include "data_bar.hpp"
 #include "delta.hpp"
 #include "extractor/comp_def.hpp"
@@ -190,5 +191,7 @@ bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
          fm_comp_perf_timer_add(sys, (void *)&sys->samples_) &&
          fm_comp_activated_timer_add(sys) && fm_comp_data_bar_add(sys) &&
          fm::fm_cpp_comp_type_add<fm::timer>(sys, "timer") &&
-         fm::fm_cpp_comp_type_add<fm::clock_timer>(sys, "clock_timer");
+         fm::fm_cpp_comp_type_add<fm::clock_timer>(sys, "clock_timer") &&
+         fm::fm_cpp_comp_type_add<fm::cum_trade>(sys, "cum_trade") &&
+         fm::fm_cpp_comp_type_add<fm::cum_trade_total>(sys, "cum_trade_total");
 }

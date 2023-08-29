@@ -45,8 +45,8 @@ END_FRAME(nbbo_frame);
 
 FRAME(bbo_frame, 1);
 FIELD(receive, TIME64);
-FIELD(bidprice, DECIMAL128);
-FIELD(askprice, DECIMAL128);
+FIELD(bidprice, RPRICE);
+FIELD(askprice, RPRICE);
 FIELD(bidqty, INT32);
 FIELD(askqty, INT32);
 FIELDS(receive, bidprice, askprice, bidqty, askqty);
@@ -54,7 +54,7 @@ END_FRAME(bbo_frame);
 
 FRAME(short_trade_frame, 1);
 FIELD(receive, TIME64);
-FIELD(price, DECIMAL128);
+FIELD(price, RPRICE);
 FIELD(qty, INT32);
 FIELDS(receive, price, qty);
 END_FRAME(short_trade_frame);

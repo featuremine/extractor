@@ -34,7 +34,7 @@
 #include "extractor/type_sys.h"
 #include "fmc++/mpl.hpp"
 #include "utils.hpp"
-#include "wrapper.hpp"
+#include <fmc++/python/wrapper.hpp>
 
 #include <cassert>
 #include <errno.h>
@@ -46,13 +46,13 @@
 #include <vector>
 
 using namespace fm;
-using namespace python;
+using namespace fmc::python;
 using namespace std;
 
 struct tuple_split_comp_cl {
-  string split_field;
-  string buffer;
-  unordered_map<string, unsigned> map;
+  std::string split_field;
+  std::string buffer;
+  unordered_map<std::string, unsigned> map;
 };
 
 bool fm_comp_tuple_split_call_stream_init(fm_frame_t *result, size_t args,
@@ -176,8 +176,8 @@ fm_ctx_def_t *fm_comp_tuple_split_gen(fm_comp_sys_t *csys,
 
   auto split_param = fm_type_tuple_arg(ptype, 1);
   if (!fm_type_is_tuple(split_param)) {
-    string errstr = "expect second parameter to be a tuple of split "
-                    "values, instead got ";
+    std::string errstr = "expect second parameter to be a tuple of split "
+                         "values, instead got ";
     char *type_str = fm_type_to_str(split_param);
     if (!type_str) {
       fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS,
@@ -206,7 +206,7 @@ fm_ctx_def_t *fm_comp_tuple_split_gen(fm_comp_sys_t *csys,
 
   for (unsigned i = 0; i < split_count; ++i) {
     auto value = STACK_POP(plist, const char *);
-    string key(value);
+    std::string key(value);
     ctx_cl->map.emplace(key, i);
   }
 

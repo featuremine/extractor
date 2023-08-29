@@ -24,20 +24,4 @@
 
 #pragma once
 
-#include "fmc/platform.h"
-#include <stddef.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-/**
- * @brief execution point object
- *
- * Execution point object represents a reference to call stack item
- */
-typedef size_t fm_call_handle_t;
-
-#ifdef __cplusplus
-}
-#endif
+#include "extractor/api.h"

@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "extractor/api.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/frame_base.h"
@@ -37,12 +38,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-typedef struct fm_comp_graph fm_comp_graph_t;
-
-typedef struct fm_comp fm_comp_t;
-
-typedef struct fm_result_ref fm_result_ref_t;
 
 /**
  * @brief

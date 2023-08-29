@@ -15,8 +15,8 @@ find_package(Subproject REQUIRED)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subproject(
     NAME yamal
-    GIT_REVISION "v7.2.36"
-    VERSION "7.2.36"
+    GIT_REVISION "v7.2.37"
+    VERSION "7.2.37"
     GIT_URL "https://github.com/featuremine/yamal.git"
     TARGETS fmc++ ytp py_yamal_dep yamal-whl
 )
@@ -33,8 +33,10 @@ set(EXTRACTOR_PYTHON_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/python/src")
 set(EXTRACTOR_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
 set(EXTRACTOR_BIN_DIR "${CMAKE_CURRENT_BINARY_DIR}/package/bin")
 set(EXTRACTOR_LIB_DIR "${CMAKE_CURRENT_BINARY_DIR}/package/lib")
-set(WHEEL_extractor_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/python")
-set(WHEEL_extractor_SCRIPTS_DIR "scripts")
+set(WHEEL_extractor_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/python" CACHE INTERNAL "Wheel path for extractor" FORCE)
+set(WHEEL_extractor_SCRIPTS_DIR "scripts" CACHE INTERNAL "Wheel script path for extractor" FORCE)
+set(EXTRACTOR_API_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/api/include" CACHE INTERNAL "API include directory path for extractor" FORCE)
+set(EXTRACTOR_PYTHON_API_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/api/python/include" CACHE INTERNAL "Python API include directory path for extractor" FORCE)
 
 set(FmConfig_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(FmConfig REQUIRED)
