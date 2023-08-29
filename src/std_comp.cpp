@@ -101,6 +101,7 @@
 #include "ar.hpp"
 #include "average_tw.hpp"
 #include "comp_sys.hpp"
+#include "cum_trade.hpp"
 #include "data_bar.hpp"
 #include "delta.hpp"
 #include "extractor/comp_def.hpp"
@@ -108,7 +109,6 @@
 #include "sample.hpp"
 #include "timer.hpp"
 #include "window.hpp"
-#include "cum_trade.hpp"
 
 bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
   return fm_comp_type_add(sys, &fm_comp_csv_play) &&

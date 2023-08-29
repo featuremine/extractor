@@ -32,9 +32,9 @@
 #include "extractor/type_sys.h"
 #include "fmc++/decimal128.hpp"
 #include "fmc++/mpl.hpp"
-#include <fmc++/python/wrapper.hpp>
 #include <cassert>
 #include <errno.h>
+#include <fmc++/python/wrapper.hpp>
 #include <functional>
 #include <stdlib.h>
 #include <string>
@@ -415,7 +415,7 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
       auto tmp = duration_cast<microseconds>(sec);
       auto rem = us - tmp;
       return fmc::python::datetime::timedelta(d.count(), sec.count(),
-                                             rem.count())
+                                              rem.count())
           .steal_ref();
     } break;
     case FM_TYPE_BOOL:
@@ -505,7 +505,7 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       auto tmp = duration_cast<microseconds>(sec);
       auto rem = us - tmp;
       return fmc::python::datetime::timedelta(d.count(), sec.count(),
-                                             rem.count())
+                                              rem.count())
           .steal_ref();
     } break;
     case FM_TYPE_BOOL:

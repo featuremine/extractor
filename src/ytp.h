@@ -24,8 +24,8 @@
 
 #pragma once
 
-#include "ytp/api.h"
 #include "extractor/frame.h"
+#include "ytp/api.h"
 
 #ifdef __cplusplus
 extern "C" {

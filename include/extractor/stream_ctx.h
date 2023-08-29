@@ -24,10 +24,10 @@
 
 #pragma once
 
+#include "extractor/api.h"
 #include "extractor/handle.h"
 #include "fmc/platform.h"
 #include "fmc/time.h"
-#include "extractor/api.h"
 
 #ifdef __cplusplus
 extern "C" {

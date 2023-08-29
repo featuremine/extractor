@@ -24,9 +24,9 @@
 #pragma once
 
 #include "extractor/comp_def.h"
-#include "extractor/std_comp.h"
-#include "extractor/python/system.hpp"
 #include "extractor/python/extractor.h"
+#include "extractor/python/system.hpp"
+#include "extractor/std_comp.h"
 
 #include "custom.hpp"
 #include "module.hpp"
@@ -268,7 +268,7 @@ PyObject *ExtractorSystem_new() {
   if (self == nullptr)
     return nullptr;
 
-  return (PyObject *) ExtractorSystem_lazy(self);
+  return (PyObject *)ExtractorSystem_lazy(self);
 }
 
 bool ExtractorSystem_Check(PyObject *obj) {

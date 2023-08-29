@@ -177,7 +177,7 @@ fm_ctx_def_t *fm_comp_tuple_split_gen(fm_comp_sys_t *csys,
   auto split_param = fm_type_tuple_arg(ptype, 1);
   if (!fm_type_is_tuple(split_param)) {
     std::string errstr = "expect second parameter to be a tuple of split "
-                    "values, instead got ";
+                         "values, instead got ";
     char *type_str = fm_type_to_str(split_param);
     if (!type_str) {
       fm_type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS,

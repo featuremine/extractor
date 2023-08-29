@@ -29,8 +29,8 @@
 #include "extractor/python/extractor.h"
 
 #include "utils.hpp"
-#include <fmc++/python/wrapper.hpp>
 #include <Python.h>
+#include <fmc++/python/wrapper.hpp>
 
 using namespace fm;
 using namespace fmc::python;

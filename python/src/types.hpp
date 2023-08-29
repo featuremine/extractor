@@ -32,9 +32,9 @@
 #include <Python.h>
 #include <comp_base.hpp>
 #include <datetime.h>
+#include <fmc++/python/wrapper.hpp>
 #include <limits>
 #include <type_traits>
-#include <fmc++/python/wrapper.hpp>
 
 #include "upcast_util.hpp"
 #include <extractor/python/decimal128.hpp>

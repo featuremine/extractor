@@ -29,9 +29,9 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "extractor/api.h"
 #include "fmc/alignment.h"
 #include "fmc/platform.h"
-#include "extractor/api.h"
 
 #ifdef __cplusplus
 extern "C" {

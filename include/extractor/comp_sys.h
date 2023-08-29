@@ -24,6 +24,7 @@
 
 #pragma once
 
+#include "extractor/api.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/frame_base.h"
@@ -33,7 +34,6 @@
 #include "fmc/platform.h"
 #include "fmc/time.h"
 #include "ytp/api.h"
-#include "extractor/api.h"
 
 #ifdef __cplusplus
 extern "C" {

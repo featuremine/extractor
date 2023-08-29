@@ -44,7 +44,6 @@
 
 #include "fmc++/python/wrapper.hpp"
 #include "fmc++/strings.hpp"
-#include <fmc++/python/wrapper.hpp>
 #include <extractor/python/decimal128.hpp>
 #include <fmc++/python/wrapper.hpp>
 #include <numpy/arrayobject.h>
@@ -98,9 +97,9 @@ static bool add_column_parser(fm_exec_ctx_t *ctx, fm_frame_t *frame,
 
   auto error = [ctx, name, decl, dtype](const char *options) {
     auto *typestr = fm_type_to_str(decl);
-    auto errstr = std::string("invalid object type in DataFrame in column ") + name +
-                  ".\n" + "\tcannot convert type " + dtype.str() + " to " +
-                  typestr + ", expecting: " + options;
+    auto errstr = std::string("invalid object type in DataFrame in column ") +
+                  name + ".\n" + "\tcannot convert type " + dtype.str() +
+                  " to " + typestr + ", expecting: " + options;
     fm_exec_ctx_error_set(ctx, errstr.c_str());
     free(typestr);
     return false;

@@ -101,17 +101,11 @@ TradeSideS _TradeSide_BID = {
 TradeSideS _TradeSide_ASK = {
     PyVarObject_HEAD_INIT(&TradeSide_type, 2){fmc::trade_side::SIDE::ASK}};
 
-PyObject *TradeSide_Bid() {
-  return TradeSide_BID;
-}
+PyObject *TradeSide_Bid() { return TradeSide_BID; }
 
-PyObject *TradeSide_Ask() {
-  return TradeSide_ASK;
-}
+PyObject *TradeSide_Ask() { return TradeSide_ASK; }
 
-PyObject *TradeSide_Unknown() {
-  return TradeSide_UNKNOWN;
-}
+PyObject *TradeSide_Unknown() { return TradeSide_UNKNOWN; }
 
 PyObject *TradeSide_method_other_side(PyObject *self) {
   if (self == TradeSide_BID) {

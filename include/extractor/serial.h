@@ -22,8 +22,8 @@
 
 #pragma once
 
-#include "fmc/platform.h"
 #include "extractor/api.h"
+#include "fmc/platform.h"
 #include <stdint.h>
 
 #ifdef __cplusplus

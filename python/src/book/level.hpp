@@ -31,8 +31,8 @@
 #include "fmc++/decimal128.hpp"
 #include "fmc++/python/wrapper.hpp"
 #include "fmc++/side.hpp"
-#include <fmc++/python/wrapper.hpp>
 #include <datetime.h>
+#include <fmc++/python/wrapper.hpp>
 
 typedef struct {
   PyObject_HEAD fm_levels_t *levels_;

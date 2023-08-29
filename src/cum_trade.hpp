@@ -24,8 +24,8 @@
 #include "fmc++/rprice.hpp"
 #include <fmc++/mpl.hpp>
 
-#include <extractor/comp_def.hpp>
 #include <extractor/common.hpp>
+#include <extractor/comp_def.hpp>
 #include <extractor/frame.hpp>
 
 namespace fm {
@@ -145,4 +145,4 @@ public:
   bool exec(fm::query_context &ctx) { return false; }
 };
 
-} // namespace jubilee
+} // namespace fm

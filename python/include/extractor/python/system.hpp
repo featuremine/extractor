@@ -8,4 +8,3 @@ typedef struct {
   std::vector<fm_comp_def_t> custom;
   bool to_delete;
 } ExtractorSystem;
-
