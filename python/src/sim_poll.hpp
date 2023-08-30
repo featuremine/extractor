@@ -34,7 +34,7 @@
 #include "extractor/type_sys.h"
 #include "fmc++/mpl.hpp"
 #include "utils.hpp"
-#include "wrapper.hpp"
+#include <fmc++/python/wrapper.hpp>
 
 #include <cassert>
 #include <errno.h>
@@ -49,12 +49,12 @@
 #include <numpy/arrayobject.h>
 
 using namespace fm;
-using namespace python;
+using namespace fmc::python;
 using namespace std;
 
 struct sim_poll {
   enum status { ERR = 0, DATA, DONE };
-  sim_poll(object iter, string fld)
+  sim_poll(object iter, std::string fld)
       : frm_it_(iter), fld_(fld), next_time_(fmc_time64_start()) {}
   status iter_process_next(fm_call_ctx_t *ctx) {
     auto py_error_check = [&](status s) {
@@ -115,7 +115,7 @@ struct sim_poll {
 
   fmc_time64_t iter_next_time() { return next_time_; }
 
-  bool read_timestamp(fm::python::object row_ob) {
+  bool read_timestamp(fmc::python::object row_ob) {
     auto tm_obj = row_ob[fld_];
     if (!tm_obj) {
       return false;
@@ -151,7 +151,7 @@ struct sim_poll {
   object frm_it_;
   object row_it_;
   object row_ob_;
-  string fld_;
+  std::string fld_;
   fmc_time64_t next_time_;
 };
 
@@ -234,7 +234,7 @@ fm_ctx_def_t *fm_comp_sim_poll_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   }
 
   try {
-    auto *cl = new sim_poll(clbl, string(field_str));
+    auto *cl = new sim_poll(clbl, std::string(field_str));
     auto *def = fm_ctx_def_new();
     fm_ctx_def_inplace_set(def, false);
     fm_ctx_def_type_set(def, type);

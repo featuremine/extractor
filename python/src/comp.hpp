@@ -28,7 +28,7 @@
 
 #include "comp_base.hpp"
 #include "types.hpp"
-#include "wrapper.hpp"
+#include <fmc++/python/wrapper.hpp>
 
 #include <Python.h>
 
@@ -189,18 +189,18 @@ static PyObject *ExtractorComputation_getattr(PyObject *obj, char *name) {
     auto type = fm_comp_result_type(comp);
     if (fields) {
       auto nfields = fm_type_frame_nfields(type);
-      auto ret = fm::python::object::from_new(PyDict_New());
+      auto ret = fmc::python::object::from_new(PyDict_New());
       for (auto i = 0U; i < nfields; ++i) {
         auto fieldtype = fm_type_frame_field_type(type, i);
         auto fieldname = fm_type_frame_field_name(type, i);
-        auto pytype = fm::python::object::from_new(
+        auto pytype = fmc::python::object::from_new(
             (PyObject *)py_type_from_fm_type(fieldtype));
         PyDict_SetItemString(ret.get_ref(), fieldname, pytype.get_ref());
       }
       return ret.steal_ref();
     } else if (shape) {
       auto dims = fm_type_frame_ndims(type);
-      auto ret = fm::python::object::from_new(PyTuple_New(dims));
+      auto ret = fmc::python::object::from_new(PyTuple_New(dims));
       for (auto i = 0U; i < dims; ++i) {
         auto dim = fm_type_frame_dim(type, i);
         PyTuple_SetItem(ret.get_ref(), i, PyLong_FromLong(dim));
@@ -364,7 +364,7 @@ PyObject *ConstGen(PyObject *obj, fm_comp_sys_t *sys, fm_comp_graph *graph) {
 
     comp = fm_comp_decl(sys, graph, "constant", 0, constant_param_t, "const",
                         type, val);
-  } else if (fm::python::datetime::is_timedelta_type(obj)) {
+  } else if (fmc::python::datetime::is_timedelta_type(obj)) {
     auto h = 24 * PyLong_AsLong(PyObject_GetAttrString(obj, "days"));
     auto sec = PyLong_AsLong(PyObject_GetAttrString(obj, "seconds"));
     auto us = PyLong_AsLong(PyObject_GetAttrString(obj, "microseconds"));

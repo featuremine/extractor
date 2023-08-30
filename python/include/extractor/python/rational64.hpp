@@ -22,7 +22,6 @@
 
 #include "fmc++/rational64.hpp"
 #include <Python.h>
-#include <extractor/python/extractor.h>
 #include <extractor/python/rational64.h>
 #include <extractor/python/type_utils.hpp>
 

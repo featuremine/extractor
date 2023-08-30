@@ -26,13 +26,14 @@
 #include "comp.h"
 #include "comp_graph.h"
 #include "extractor/comp_sys.h"
+#include "extractor/python/extractor.h"
 
 #include "utils.hpp"
-#include "wrapper.hpp"
 #include <Python.h>
+#include <fmc++/python/wrapper.hpp>
 
 using namespace fm;
-using namespace python;
+using namespace fmc::python;
 
 typedef struct {
   PyObject_HEAD fm_comp_sys_t *sys_;
@@ -781,7 +782,7 @@ static PyObject *ExtractorSubFrame_getattr(PyObject *obj, PyObject *attr_name) {
   if (field < 0) {
     auto ret = validate_non_fields();
     if (!ret) {
-      auto err = string("no attribute <") + name + ">";
+      auto err = std::string("no attribute <") + name + ">";
       PyErr_SetString(PyExc_AttributeError, err.c_str());
     }
     return ret;

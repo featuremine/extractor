@@ -26,44 +26,43 @@
 #include "extractor/book/book.h"
 #include "extractor/python/book.h"
 #include "extractor/python/decimal128.h"
-#include "extractor/python/extractor.h"
-#include "extractor/python/side.h"
+#include "extractor/python/py_api.h"
 
 #include "fmc++/decimal128.hpp"
 #include "fmc++/python/wrapper.hpp"
 #include "fmc++/side.hpp"
-#include "wrapper.hpp"
 #include <datetime.h>
+#include <fmc++/python/wrapper.hpp>
 
 typedef struct {
   PyObject_HEAD fm_levels_t *levels_;
-  fm::python::object book_;
+  fmc::python::object book_;
   Book *book() { return (Book *)book_.get_ref(); }
 } Levels;
 
 typedef struct {
   PyObject_HEAD fm_level_t *level_;
-  fm::python::object levels_;
+  fmc::python::object levels_;
   Levels *levels() { return (Levels *)levels_.get_ref(); }
 } Level;
 
 typedef struct {
   PyObject_HEAD;
   unsigned done_;
-  fm::python::object levels_;
+  fmc::python::object levels_;
   Levels *levels() { return (Levels *)levels_.get_ref(); }
 } LevelIter;
 
 typedef struct {
   PyObject_HEAD fm_order_t *order_;
-  fm::python::object level_;
+  fmc::python::object level_;
   Level *level() { return (Level *)level_.get_ref(); }
 } Order;
 
 typedef struct {
   PyObject_HEAD;
   unsigned done_;
-  fm::python::object level_;
+  fmc::python::object level_;
   Level *level() { return (Level *)level_.get_ref(); }
 } OrderIter;
 
@@ -90,7 +89,7 @@ static PyObject *Order_rec(Order *self, void *) {
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
   auto rem = us - tmp;
-  return fm::python::datetime::timedelta(0, sec.count(), rem.count())
+  return fmc::python::datetime::timedelta(0, sec.count(), rem.count())
       .steal_ref();
 }
 
@@ -102,7 +101,7 @@ static PyObject *Order_ven(Order *self, void *) {
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
   auto rem = us - tmp;
-  return fm::python::datetime::timedelta(0, sec.count(), rem.count())
+  return fmc::python::datetime::timedelta(0, sec.count(), rem.count())
       .steal_ref();
 }
 
@@ -178,7 +177,7 @@ static PyObject *Order_new(fm_order_t *order, Level *lvl) {
   if (!self)
     return nullptr;
   self->order_ = order;
-  self->level_ = fm::python::object::from_borrowed((PyObject *)lvl);
+  self->level_ = fmc::python::object::from_borrowed((PyObject *)lvl);
   return (PyObject *)self;
 }
 
@@ -252,7 +251,7 @@ PyObject *OrderIter_new(Level *level) {
   if (!self)
     return nullptr;
   self->done_ = 0;
-  self->level_ = fm::python::object::from_borrowed((PyObject *)level);
+  self->level_ = fmc::python::object::from_borrowed((PyObject *)level);
   return (PyObject *)self;
 }
 
@@ -363,7 +362,7 @@ static PyObject *Level_new(fm_level_t *level, Levels *levels) {
   if (!self)
     return nullptr;
   self->level_ = level;
-  self->levels_ = fm::python::object::from_borrowed((PyObject *)levels);
+  self->levels_ = fmc::python::object::from_borrowed((PyObject *)levels);
   return (PyObject *)self;
 }
 
@@ -440,7 +439,7 @@ PyObject *LevelIter_new(Levels *levels) {
   if (!self)
     return nullptr;
   self->done_ = 0;
-  self->levels_ = fm::python::object::from_borrowed((PyObject *)levels);
+  self->levels_ = fmc::python::object::from_borrowed((PyObject *)levels);
   return (PyObject *)self;
 }
 
@@ -542,6 +541,6 @@ static PyObject *Levels_new(fm_levels_t *levels, Book *book) {
   if (!self)
     return nullptr;
   self->levels_ = levels;
-  self->book_ = fm::python::object::from_borrowed((PyObject *)book);
+  self->book_ = fmc::python::object::from_borrowed((PyObject *)book);
   return (PyObject *)self;
 }

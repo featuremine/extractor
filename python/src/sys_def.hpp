@@ -24,6 +24,8 @@
 #pragma once
 
 #include "extractor/comp_def.h"
+#include "extractor/python/extractor.h"
+#include "extractor/python/system.hpp"
 #include "extractor/std_comp.h"
 
 #include "custom.hpp"
@@ -32,12 +34,6 @@
 #include <Python.h>
 #include <memory>
 #include <string>
-
-typedef struct {
-  PyObject_HEAD fm_comp_sys_t *sys;
-  vector<fm_comp_def_t> custom;
-  bool to_delete;
-} ExtractorSystem;
 
 ExtractorSystem *ExtractorSystem_lazy(ExtractorSystem *obj) {
   auto *self = (ExtractorSystem *)obj;
@@ -272,8 +268,7 @@ PyObject *ExtractorSystem_new() {
   if (self == nullptr)
     return nullptr;
 
-  self->sys = nullptr;
-  return (PyObject *)self;
+  return (PyObject *)ExtractorSystem_lazy(self);
 }
 
 bool ExtractorSystem_Check(PyObject *obj) {

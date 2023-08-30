@@ -25,14 +25,9 @@
 
 #include "comp.h"
 #include "extractor/comp_sys.h"
+#include "extractor/python/py_api.h"
 
 #include <Python.h>
-
-typedef struct {
-  PyObject_HEAD fm_comp_sys_t *sys_;
-  fm_comp_graph_t *graph_;
-  fm_comp_t *comp_;
-} ExtractorComputation;
 
 PyObject *ExtractorComputation_new(fm_comp_t *, fm_comp_sys_t *,
                                    fm_comp_graph_t *);

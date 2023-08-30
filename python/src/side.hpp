@@ -1,9 +1,11 @@
 #pragma once
 
+extern "C" {
+#include "extractor/python/py_api.h"
+}
+
 #include "fmc++/side.hpp"
 #include <sstream>
-
-#include "extractor/python/side.h"
 
 struct TradeSideStruct {
   PyObject_VAR_HEAD fmc::trade_side side_;
@@ -98,6 +100,12 @@ TradeSideS _TradeSide_BID = {
 
 TradeSideS _TradeSide_ASK = {
     PyVarObject_HEAD_INIT(&TradeSide_type, 2){fmc::trade_side::SIDE::ASK}};
+
+PyObject *TradeSide_Bid() { return TradeSide_BID; }
+
+PyObject *TradeSide_Ask() { return TradeSide_ASK; }
+
+PyObject *TradeSide_Unknown() { return TradeSide_UNKNOWN; }
 
 PyObject *TradeSide_method_other_side(PyObject *self) {
   if (self == TradeSide_BID) {
