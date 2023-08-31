@@ -21,6 +21,7 @@
  * @see http://www.featuremine.com
  */
 
+#include "extractor/api.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
@@ -355,6 +356,9 @@ fm_comp_def_t ema_comp_def = {
  *
  * @param sys computing system
  */
-FMMODFUNC void FmInit_ema(fm_comp_sys_t *sys) {
-  fm_comp_type_add(sys, &ema_comp_def);
+FMMODFUNC void ExtractorInit_ema(struct extractor_api_v1 *api,
+                                 struct fm_comp_sys_module *mod,
+                                 fmc_error_t **error) {
+  fmc_error_clear(error);
+  api->module_type_add(mod, &ema_comp_def, error);
 }

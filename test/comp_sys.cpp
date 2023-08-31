@@ -22,6 +22,7 @@
  */
 
 #include "extractor/comp_sys.h"
+#include "extractor/comp_sys_capture.h"
 #include "comp.h"
 #include "extractor/comp_def_simp.h"
 #include "extractor/frame.h"
@@ -73,6 +74,32 @@ fm_frame_t *fm_frame_from_type(fm_frame_alloc_t *alloc, fm_type_decl_cp type) {
   alloc->array.push_back(obj);
   return obj;
 }
+
+fm_stream_ctx_t *fm_stream_ctx_recorded(fm_comp_sys_t *,
+                                        fm_comp_graph_t *,
+                                        fm_writer w, void *cl) {
+  return nullptr;
+}
+
+fm_stream_ctx_t *fm_stream_ctx_replayed(fm_comp_sys_t *,
+                                        fm_comp_graph_t *,
+                                        fm_reader w, void *cl) {
+  return nullptr;
+}
+
+const void *fm_frame_get_cptr1(const fm_frame_t *, fm_field_t, int) {
+  return nullptr;
+}
+void *fm_frame_get_ptr1(fm_frame_t *, fm_field_t, int) {
+  return nullptr;
+}
+fm_field_t fm_frame_field(const fm_frame_t *, const char *) {
+  return fm_field_t();
+}
+fm_type_decl_cp fm_frame_type(const fm_frame_t *) {
+  return nullptr;
+}
+void fm_frame_reserve(fm_frame_t *, ...) {}
 
 extern "C" {
 fm_type_decl_cp char_comp_type(fm_type_sys_t *, unsigned, fm_type_decl_cp[]);

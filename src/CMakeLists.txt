@@ -230,6 +230,7 @@ set_target_properties(
     ema_ext
     PROPERTIES
     OUTPUT_NAME "ema"
+    PREFIX ""
     VERSION "1.0.0"
     SOVERSION "0"
 )
@@ -257,6 +258,7 @@ set_target_properties(
     book_play_ext
     PROPERTIES
     OUTPUT_NAME "book_play"
+    PREFIX ""
     VERSION "1.0.0"
     SOVERSION "0"
     LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/test"

@@ -58,28 +58,12 @@
 #define EXTRACTOR_MOD_SEARCHPATH_SYSLOCAL "/usr/local/lib/extractor/modules"
 #define EXTRACTOR_MOD_SEARCHPATH_ENV "EXTRACTORPATH"
 #define EXTRACTOR_MOD_SEARCHPATH_ENV_SEP ":"
-#if defined(FMC_SYS_LINUX)
-#define EXTRACTOR_LIB_SUFFIX ".so"
-#elif defined(FMC_SYS_MACH)
-#define EXTRACTOR_LIB_SUFFIX ".dylib"
-#endif
 #else
 #define EXTRACTOR_MOD_SEARCHPATH_ENV_SEP ";"
 #error "Unsupported operating system"
 #endif
 
-#define EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX "ExtractorInit_"
-
 using namespace std;
-
-static void fm_comp_sys_module_destroy(struct fm_comp_sys_module *mod) {
-  if (mod->name)
-    free(mod->name);
-  if (mod->file)
-    free(mod->file);
-  if (mod->handle)
-    fmc_ext_close(mod->handle);
-}
 
 fm_comp_sys_t *fm_comp_sys_new(char **errmsg) {
   auto *s = new fm_comp_sys();
@@ -382,111 +366,6 @@ void fm_comp_sys_paths_set_default(struct fm_comp_sys *sys,
   return;
 cleanup:
   fm_comp_sys_ext_path_list_del(&tmpls);
-}
-
-static struct fm_comp_sys_module *
-mod_load(struct fm_comp_sys *sys, const char *dir, const char *modstr,
-         const char *mod_lib, const char *mod_func, fmc_error_t **error,
-         bool *should_skip) {
-  fmc_error_clear(error);
-  *should_skip = false;
-  fm_comp_sys_module_init_func mod_init;
-  struct fm_comp_sys_module *m;
-  int psz = fmc_path_join(NULL, 0, dir, mod_lib) + 1;
-  char lib_path[psz];
-  fmc_path_join(lib_path, psz, dir, mod_lib);
-
-  struct fm_comp_sys_module mod;
-  memset(&mod, 0, sizeof(mod));
-
-  mod.handle = fmc_ext_open(lib_path, error);
-  if (*error) {
-    *should_skip = true;
-    goto cleanup;
-  }
-
-  // Check if init function is available
-  mod_init =
-      (fm_comp_sys_module_init_func)fmc_ext_sym(mod.handle, mod_func, error);
-  if (*error) {
-    *should_skip = true;
-    goto cleanup;
-  }
-
-  // append the mod to the system
-  mod.sys = sys;
-  mod.name = fmc_cstr_new(modstr, error);
-  if (*error)
-    goto cleanup;
-  mod.file = fmc_cstr_new(lib_path, error);
-  if (*error)
-    goto cleanup;
-
-  fmc_error_clear(error);
-  mod_init(extractor_api_v1_get(), &mod, error);
-  if (*error) {
-    fmc_error_set(error, "failed to load module %s with error: %s", modstr,
-                  fmc_error_msg(*error));
-    goto cleanup;
-  }
-
-  m = (struct fm_comp_sys_module *)calloc(1, sizeof(mod));
-  if (!m) {
-    fmc_error_set2(error, FMC_ERROR_MEMORY);
-    goto cleanup;
-  }
-  memcpy(m, &mod, sizeof(mod));
-  DL_APPEND(sys->modules, m);
-
-  return m;
-
-cleanup:
-  fm_comp_sys_module_destroy(&mod);
-  return NULL;
-}
-
-struct fm_comp_sys_module *fm_comp_sys_module_get(struct fm_comp_sys *sys,
-                                                  const char *mod,
-                                                  fmc_error_t **error) {
-  fmc_error_clear(error);
-
-  // If the module exists, get it
-  struct fm_comp_sys_module *mhead = sys->modules;
-  struct fm_comp_sys_module *mitem;
-  DL_FOREACH(mhead, mitem) {
-    if (!strcmp(mitem->name, mod)) {
-      return mitem;
-    }
-  }
-
-  struct fm_comp_sys_module *ret = NULL;
-  char mod_lib[strlen(mod) + strlen(EXTRACTOR_LIB_SUFFIX) + 1];
-  sprintf(mod_lib, "%s%s", mod, EXTRACTOR_LIB_SUFFIX);
-
-  int pathlen = fmc_path_join(NULL, 0, mod, mod_lib) + 1;
-  char mod_lib_2[pathlen];
-  fmc_path_join(mod_lib_2, pathlen, mod, mod_lib);
-
-  char mod_func[strlen(EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX) + strlen(mod) + 1];
-  sprintf(mod_func, "%s%s", EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX, mod);
-  struct fm_comp_sys_ext_path_list *head = sys->search_paths;
-  struct fm_comp_sys_ext_path_list *item;
-  bool should_skip = true;
-  DL_FOREACH(head, item) {
-    ret =
-        mod_load(sys, item->path, mod, mod_lib, mod_func, error, &should_skip);
-    if (should_skip) {
-      ret = mod_load(sys, item->path, mod, mod_lib_2, mod_func, error,
-                     &should_skip);
-    }
-    if (!should_skip) {
-      break;
-    }
-  }
-  if (should_skip) {
-    fmc_error_set(error, "component module %s was not found", mod);
-  }
-  return ret;
 }
 
 bool fm_comp_sys_ext_load(fm_comp_sys_t *s, const char *name) {

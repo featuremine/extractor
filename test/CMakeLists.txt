@@ -129,6 +129,7 @@ extr_unit_test(
     NAME
     comp_sys
     FILES
+    "${EXTRACTOR_SRC_DIR}/api.cpp"
     "${EXTRACTOR_SRC_DIR}/arg_stack.cpp"
     "${EXTRACTOR_SRC_DIR}/arg_serial.cpp"
     "${EXTRACTOR_SRC_DIR}/comp.cpp"
@@ -474,6 +475,7 @@ set_target_properties(
     ext_lib
     PROPERTIES
     OUTPUT_NAME "ext_lib"
+    PREFIX ""
     VERSION "1.0.0"
     SOVERSION "0"
 )
@@ -495,7 +497,13 @@ target_link_libraries(
     ytp
     PkgConfig::GTEST
 )
-add_test(NAME extractor_ext_lib COMMAND ext_exe ${CMAKE_CURRENT_SOURCE_DIR} $<TARGET_FILE:ext_lib>)
+add_test(NAME extractor_ext_lib COMMAND ext_exe)
+set_tests_properties(
+    extractor_ext_lib
+    PROPERTIES
+    ENVIRONMENT "EXTRACTORPATH=${CMAKE_CURRENT_BINARY_DIR}"
+    TIMEOUT 100
+)
 
 add_executable(
     split_sample_trade
@@ -520,14 +528,13 @@ add_test(
 
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/ext_test.py"
-    $<TARGET_FILE:ext_lib>
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 set_tests_properties(
     extractor_python_ext_test
     PROPERTIES
-    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_yamal_BUILD_DIR}/build/lib:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
+    ENVIRONMENT "EXTRACTORPATH=$<TARGET_FILE_DIR:ext_lib>;PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_yamal_BUILD_DIR}/build/lib:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
     TIMEOUT 100
 )
 
@@ -537,14 +544,13 @@ add_test(
 
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/ema_test.py"
-    $<TARGET_FILE:ema_ext>
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 set_tests_properties(
     extractor_python_ema_test
     PROPERTIES
-    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_yamal_BUILD_DIR}/build/lib:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
+    ENVIRONMENT "EXTRACTORPATH=$<TARGET_FILE_DIR:ema_ext>;PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_yamal_BUILD_DIR}/build/lib:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
     TIMEOUT 100
 )
 
