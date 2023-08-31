@@ -143,8 +143,19 @@ FMMODFUNC const char *fm_comp_sys_error_msg(fm_comp_sys_t *s);
 /**
  * @brief Load extension module
  */
-FMMODFUNC bool fm_comp_sys_ext_load(fm_comp_sys_t *, const char *name,
-                                    const char *path);
+FMMODFUNC bool fm_comp_sys_ext_load(fm_comp_sys_t *, const char *name);
+
+
+/**
+ * @brief Load default search path for modules
+ */
+FMMODFUNC void fm_comp_sys_paths_set_default(struct fm_comp_sys *sys,
+                                             fmc_error_t **error);
+
+/**
+ * @brief
+ */
+FMMODFUNC struct fm_comp_sys_ext_path_list *fm_comp_sys_ext_path_list_get(fm_comp_sys_t *s);
 
 /**
  * @brief Serializes the graph

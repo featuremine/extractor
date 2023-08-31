@@ -45,11 +45,17 @@ ExtractorSystem *ExtractorSystem_lazy(ExtractorSystem *obj) {
       free(errmsg);
       return nullptr;
     }
+    fmc_error_t *error;
+    fm_comp_sys_paths_set_default(self->sys, &error);
+    if (error) {
+      PyErr_SetString(PyExc_RuntimeError, "Unable to set default search path");
+      return nullptr;
+    }
     fm_comp_sys_std_comp(self->sys);
     fm_comp_sys_py_comp(self->sys);
     self->to_delete = true;
     for (auto &&comp : self->custom) {
-      if (!fm_comp_type_add(obj->sys, &(obj->custom.back()))) {
+      if (!fm_comp_type_add(obj->sys, &comp)) {
         PyErr_SetString(PyExc_TypeError, "Unable to add custom operator");
         return nullptr;
       }
@@ -109,16 +115,15 @@ static void ExtractorSystem_dealloc(ExtractorSystem *self) {
 static PyObject *ExtractorSystem_load_ext(ExtractorSystem *obj,
                                           PyObject *args) {
   const char *name;
-  const char *path;
-  if (!PyArg_ParseTuple(args, "ss", &name, &path)) {
-    PyErr_SetString(PyExc_RuntimeError, "expecting module name and path");
+  if (!PyArg_ParseTuple(args, "s", &name)) {
+    PyErr_SetString(PyExc_RuntimeError, "expecting module name");
     return nullptr;
   }
   auto *self = ExtractorSystem_lazy(obj);
   if (!self)
     return nullptr;
   auto *sys = self->sys;
-  if (!fm_comp_sys_ext_load(sys, name, path)) {
+  if (!fm_comp_sys_ext_load(sys, name)) {
     PyErr_SetString(PyExc_RuntimeError, fm_comp_sys_error_msg(sys));
     return nullptr;
   }

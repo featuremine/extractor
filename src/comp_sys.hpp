@@ -22,6 +22,8 @@
  * @see http://www.featuremine.com
  */
 
+#pragma once
+
 #include "comp.h"
 #include "comp_graph.h"
 #include "extractor/arg_stack.h"
@@ -61,4 +63,6 @@ struct fm_comp_sys {
   unordered_map<string, fm_module_t *> modules_;
   unsigned modules_suff_;
   fmc::counter::samples samples_;
+  struct fm_comp_sys_module *modules;
+  struct fm_comp_sys_ext_path_list *search_paths;
 };

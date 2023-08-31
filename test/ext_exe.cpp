@@ -53,8 +53,7 @@ TEST(ext_lib, check) {
   ASSERT_NE(sys, nullptr);
 
   const char *name = "__none__";
-  const char *path = "__does_not_exist__";
-  ASSERT_FALSE(fm_comp_sys_ext_load(sys, name, path));
+  ASSERT_FALSE(fm_comp_sys_ext_load(sys, name));
 
   fm_comp_sys_del(sys);
 }
@@ -74,7 +73,7 @@ TEST(ext_lib, stream) {
   ASSERT_TRUE(fm_comp_sys_std_comp(sys));
 
   const char *name = "ext_lib";
-  auto res = fm_comp_sys_ext_load(sys, name, lib_path.c_str());
+  auto res = fm_comp_sys_ext_load(sys, name);
 
   ASSERT_TRUE(res);
 

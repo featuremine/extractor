@@ -27,6 +27,7 @@
 #include "fmc/rational64.h"
 #include "fmc/rprice.h"
 #include "fmc/time.h"
+#include <fmc/extension.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -228,6 +229,23 @@ typedef struct fm_call_ctx {
   const fm_call_handle_t *deps;
 } fm_call_ctx_t;
 
+struct fm_comp_sys_ext_path_list {
+  struct fm_comp_sys_ext_path_list *next, *prev;
+  char path[]; // FAM
+};
+
+struct fm_comp_sys_module {
+  struct fm_comp_sys *sys; // the system that owns the module
+  fmc_ext_t handle;        // module handle. Return of dlopen()
+  char *name;              // module name (e.g. "fmtron")
+  char *file;              // file full path of the library
+  struct fm_comp_sys_module *next, *prev;
+};
+
+typedef void (*fm_comp_sys_module_init_func)(struct extractor_api_v1 *,
+                                             struct fm_comp_sys_module *,
+                                             fmc_error_t **);
+
 struct extractor_api_v1 {
   // Clean up system
   void (*comp_sys_cleanup)(fm_comp_sys_t *);
@@ -360,6 +378,8 @@ struct extractor_api_v1 {
                                     ...);
   fm_type_decl_cp (*type_type_get)(fm_type_sys_t *ts);
   const char *(*type_sys_errmsg)(fm_type_sys_t *ts);
+  void (*module_type_add)(struct fm_comp_sys_module *mod,
+                          const fm_comp_def_t *def, fmc_error_t **error);
 };
 
 FMMODFUNC struct extractor_api_v1 *extractor_api_v1_get();
