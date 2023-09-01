@@ -242,6 +242,12 @@ struct fm_comp_sys_module {
   struct fm_comp_sys_module *next, *prev;
 };
 
+struct extractor_api_v1;
+
+typedef void (*fm_comp_sys_module_init_func)(struct extractor_api_v1 *,
+                                             struct fm_comp_sys_module *,
+                                             fmc_error_t **);
+
 struct extractor_api_v1 {
   // Clean up system
   void (*comp_sys_cleanup)(fm_comp_sys_t *);
@@ -379,10 +385,6 @@ struct extractor_api_v1 {
 };
 
 FMMODFUNC struct extractor_api_v1 *extractor_api_v1_get();
-
-typedef void (*fm_comp_sys_module_init_func)(struct extractor_api_v1 *,
-                                             struct fm_comp_sys_module *,
-                                             fmc_error_t **);
 
 #ifdef __cplusplus
 }
