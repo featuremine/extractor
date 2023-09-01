@@ -45,7 +45,8 @@ fm_comp_def_t book_play_split_comp_def = {
  * @param sys computing system
  */
 FMMODFUNC void ExtractorInit_book_play_split(struct extractor_api_v1 *api,
-                                             fm_comp_sys_t *sys, fmc_error_t **error) {
+                                             fm_comp_sys_t *sys,
+                                             fmc_error_t **error) {
   fmc_error_clear(error);
   fm_comp_type_add(sys, &book_play_split_comp_def);
 }
