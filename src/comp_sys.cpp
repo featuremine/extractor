@@ -434,18 +434,32 @@ void fm_comp_sys_ext_path_list_del(struct fm_comp_sys_ext_path_list **phead) {
 
 void fm_comp_sys_ext_path_list_set(struct fm_comp_sys_ext_path_list **head,
                                    const char **paths, fmc_error_t **error) {
+  fmc_error_clear(error);
+  struct fm_comp_sys_ext_path_list *tmp = NULL;
   for (unsigned int i = 0; paths && paths[i]; ++i) {
-    fm_comp_sys_ext_path_list_add(head, paths[i], error);
+    fm_comp_sys_ext_path_list_add(&tmp, paths[i], error);
     if (*error) {
-      fm_comp_sys_ext_path_list_del(head);
+      fm_comp_sys_ext_path_list_del(&tmp);
       return;
     }
   }
+  fm_comp_sys_ext_path_list_del(head);
+  *head = tmp;
 }
 
-struct fm_comp_sys_ext_path_list *
-fm_comp_sys_ext_path_list_get(fm_comp_sys_t *s) {
+struct fm_comp_sys_ext_path_list *fm_comp_sys_paths_get(fm_comp_sys_t *s) {
   return s->search_paths;
+}
+
+void fm_comp_sys_paths_set(struct fm_comp_sys *sys, const char **paths, fmc_error_t **error) {
+  fm_comp_sys_ext_path_list_set(&sys->search_paths, paths, error);
+}
+
+void fm_comp_sys_paths_add(struct fm_comp_sys *sys, const char *path, fmc_error_t **error) {
+  fmc_error_clear(error);
+  if (path) {
+    fm_comp_sys_ext_path_list_add(&sys->search_paths, path, error);
+  }
 }
 
 void fm_comp_sys_paths_set_default(struct fm_comp_sys *sys,

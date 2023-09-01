@@ -234,14 +234,6 @@ struct fm_comp_sys_ext_path_list {
   char path[]; // FAM
 };
 
-struct fm_comp_sys_module {
-  struct fm_comp_sys *sys; // the system that owns the module
-  fmc_ext_t handle;        // module handle. Return of dlopen()
-  char *name;              // module name (e.g. "fmtron")
-  char *file;              // file full path of the library
-  struct fm_comp_sys_module *next, *prev;
-};
-
 struct extractor_api_v1;
 
 typedef void (*fm_comp_sys_module_init_v1)(struct extractor_api_v1 *,
@@ -382,12 +374,11 @@ struct extractor_api_v1 {
   const char *(*type_sys_errmsg)(fm_type_sys_t *ts);
   struct fm_comp_sys_ext_path_list *(*comp_sys_ext_path_list_get)(fm_comp_sys_t *s);
   void (*comp_sys_paths_set_default)(struct fm_comp_sys *sys, fmc_error_t **error);
-  void (*comp_sys_ext_path_list_set)(struct fm_comp_sys_ext_path_list **head,
-                                     const char **paths, fmc_error_t **error);
-  void (*comp_sys_ext_path_list_add)(struct fm_comp_sys_ext_path_list **phead,
-                                     const char *path, fmc_error_t **error);
 
+  void (*comp_sys_paths_set)(struct fm_comp_sys *sys, const char **paths, fmc_error_t **error);
+  void (*comp_sys_paths_add)(struct fm_comp_sys *sys, const char *path, fmc_error_t **error);
   void (*comp_sys_ext_path_list_del)(struct fm_comp_sys_ext_path_list **phead);
+
 };
 
 FMMODFUNC struct extractor_api_v1 *extractor_api_v1_get();
