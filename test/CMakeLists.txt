@@ -638,3 +638,21 @@ set_tests_properties(
     ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_yamal_BUILD_DIR}/build/lib:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
     TIMEOUT 100
 )
+
+add_test(
+    NAME extractor_python_custom_book_play_split COMMAND
+
+    "${PYTHON3_BIN}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/custom_book_play_split.py"
+    "--input"
+    "${CMAKE_CURRENT_SOURCE_DIR}/data/coinbase_BTC-USD.ore"
+
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+
+set_tests_properties(
+    extractor_python_custom_book_play_split
+    PROPERTIES
+    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_yamal_BUILD_DIR}/build/lib:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
+    TIMEOUT 100
+)

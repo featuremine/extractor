@@ -257,7 +257,7 @@ target_link_libraries(
 set_target_properties(
     book_play_ext
     PROPERTIES
-    OUTPUT_NAME "book_play"
+    OUTPUT_NAME "book_play_split"
     PREFIX ""
     VERSION "1.0.0"
     SOVERSION "0"
