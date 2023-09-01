@@ -158,8 +158,8 @@ static PyObject *ExtractorSystem_module(ExtractorSystem *obj, PyObject *args,
   }
 }
 
-static PyObject *ExtractorSystem_get_paths(ExtractorSystem *self, PyObject *args,
-                                           PyObject *kwds) {
+static PyObject *ExtractorSystem_get_paths(ExtractorSystem *self,
+                                           PyObject *args, PyObject *kwds) {
   static char *kwlist[] = {NULL /* Sentinel */};
 
   if (!PyArg_ParseTupleAndKeywords(args, kwds, "", kwlist)) {
@@ -187,8 +187,8 @@ static PyObject *ExtractorSystem_get_paths(ExtractorSystem *self, PyObject *args
   return paths;
 }
 
-static PyObject *ExtractorSystem_set_paths(ExtractorSystem *self, PyObject *args,
-                                           PyObject *kwds) {
+static PyObject *ExtractorSystem_set_paths(ExtractorSystem *self,
+                                           PyObject *args, PyObject *kwds) {
   static char *kwlist[] = {(char *)"paths", NULL /* Sentinel */};
 
   PyObject *paths_obj = NULL;
@@ -257,10 +257,10 @@ static PyMethodDef ExtractorSystem_methods[] = {
      "Receives as the second argument the desired name for the custom "
      "computation.\n"
      "The computation names must be unique."},
-    {"get_paths", (PyCFunction)ExtractorSystem_get_paths, METH_VARARGS | METH_KEYWORDS,
-     "Not implemented."},
-    {"set_paths", (PyCFunction)ExtractorSystem_set_paths, METH_VARARGS | METH_KEYWORDS,
-     "Not implemented."},
+    {"get_paths", (PyCFunction)ExtractorSystem_get_paths,
+     METH_VARARGS | METH_KEYWORDS, "Not implemented."},
+    {"set_paths", (PyCFunction)ExtractorSystem_set_paths,
+     METH_VARARGS | METH_KEYWORDS, "Not implemented."},
     {NULL} /* Sentinel */
 };
 
@@ -335,7 +335,7 @@ PyObject *ExtractorSystem_new() {
     }
   }
 
-  return (PyObject*) self;
+  return (PyObject *)self;
 }
 
 bool ExtractorSystem_Check(PyObject *obj) {

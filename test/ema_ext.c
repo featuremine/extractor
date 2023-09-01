@@ -357,8 +357,7 @@ fm_comp_def_t ema_comp_def = {
  * @param sys computing system
  */
 FMMODFUNC void ExtractorInit_ema(struct extractor_api_v1 *api,
-                                 fm_comp_sys_t *sys,
-                                 fmc_error_t **error) {
+                                 fm_comp_sys_t *sys, fmc_error_t **error) {
   fmc_error_clear(error);
   api->comp_type_add(sys, &ema_comp_def);
 }

@@ -451,11 +451,13 @@ struct fm_comp_sys_ext_path_list *fm_comp_sys_paths_get(fm_comp_sys_t *s) {
   return s->search_paths;
 }
 
-void fm_comp_sys_paths_set(struct fm_comp_sys *sys, const char **paths, fmc_error_t **error) {
+void fm_comp_sys_paths_set(struct fm_comp_sys *sys, const char **paths,
+                           fmc_error_t **error) {
   fm_comp_sys_ext_path_list_set(&sys->search_paths, paths, error);
 }
 
-void fm_comp_sys_paths_add(struct fm_comp_sys *sys, const char *path, fmc_error_t **error) {
+void fm_comp_sys_paths_add(struct fm_comp_sys *sys, const char *path,
+                           fmc_error_t **error) {
   fmc_error_clear(error);
   if (path) {
     fm_comp_sys_ext_path_list_add(&sys->search_paths, path, error);

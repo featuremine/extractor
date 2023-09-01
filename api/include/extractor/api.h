@@ -237,8 +237,7 @@ struct fm_comp_sys_ext_path_list {
 struct extractor_api_v1;
 
 typedef void (*fm_comp_sys_module_init_v1)(struct extractor_api_v1 *,
-                                           fm_comp_sys_t *,
-                                           fmc_error_t **);
+                                           fm_comp_sys_t *, fmc_error_t **);
 
 struct extractor_api_v1 {
   // Clean up system
@@ -372,13 +371,16 @@ struct extractor_api_v1 {
                                     ...);
   fm_type_decl_cp (*type_type_get)(fm_type_sys_t *ts);
   const char *(*type_sys_errmsg)(fm_type_sys_t *ts);
-  struct fm_comp_sys_ext_path_list *(*comp_sys_ext_path_list_get)(fm_comp_sys_t *s);
-  void (*comp_sys_paths_set_default)(struct fm_comp_sys *sys, fmc_error_t **error);
+  struct fm_comp_sys_ext_path_list *(*comp_sys_ext_path_list_get)(
+      fm_comp_sys_t *s);
+  void (*comp_sys_paths_set_default)(struct fm_comp_sys *sys,
+                                     fmc_error_t **error);
 
-  void (*comp_sys_paths_set)(struct fm_comp_sys *sys, const char **paths, fmc_error_t **error);
-  void (*comp_sys_paths_add)(struct fm_comp_sys *sys, const char *path, fmc_error_t **error);
+  void (*comp_sys_paths_set)(struct fm_comp_sys *sys, const char **paths,
+                             fmc_error_t **error);
+  void (*comp_sys_paths_add)(struct fm_comp_sys *sys, const char *path,
+                             fmc_error_t **error);
   void (*comp_sys_ext_path_list_del)(struct fm_comp_sys_ext_path_list **phead);
-
 };
 
 FMMODFUNC struct extractor_api_v1 *extractor_api_v1_get();
