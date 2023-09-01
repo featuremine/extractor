@@ -158,13 +158,8 @@ static PyObject *ExtractorSystem_module(ExtractorSystem *obj, PyObject *args,
   }
 }
 
-static PyObject *ExtractorSystem_get_paths(ExtractorSystem *self,
-                                           PyObject *args, PyObject *kwds) {
-  static char *kwlist[] = {NULL /* Sentinel */};
-
-  if (!PyArg_ParseTupleAndKeywords(args, kwds, "", kwlist)) {
-    return NULL;
-  }
+static PyObject *ExtractorSystem_getpaths(ExtractorSystem *self,
+                                          void *closure) {
 
   struct fm_comp_sys_ext_path_list *list = fm_comp_sys_paths_get(self->sys);
   struct fm_comp_sys_ext_path_list *p = NULL;
@@ -187,18 +182,12 @@ static PyObject *ExtractorSystem_get_paths(ExtractorSystem *self,
   return paths;
 }
 
-static PyObject *ExtractorSystem_set_paths(ExtractorSystem *self,
-                                           PyObject *args, PyObject *kwds) {
-  static char *kwlist[] = {(char *)"paths", NULL /* Sentinel */};
-
-  PyObject *paths_obj = NULL;
-  if (!PyArg_ParseTupleAndKeywords(args, kwds, "O", kwlist, &paths_obj)) {
-    return NULL;
-  }
+static int ExtractorSystem_setpaths(ExtractorSystem *self, PyObject *paths_obj,
+                                    void *closure) {
 
   if (!PyList_Check(paths_obj)) {
     PyErr_SetString(PyExc_RuntimeError, "paths must be a list");
-    return NULL;
+    return -1;
   }
 
   Py_ssize_t sz = PyList_Size(paths_obj);
@@ -225,12 +214,22 @@ static PyObject *ExtractorSystem_set_paths(ExtractorSystem *self,
     goto do_cleanup;
   }
   free(paths);
-  Py_RETURN_NONE;
+  return 0;
 
 do_cleanup:
   free(paths);
-  return NULL;
+  return -1;
 }
+
+static PyGetSetDef ExtractorSystem_getseters[] = {
+    {(char *)"paths", (getter)ExtractorSystem_getpaths,
+     (setter)ExtractorSystem_setpaths,
+     (char *)"Returns The Extractor feature generator object.\n"
+             "The returned object can be used to add new feature instances to "
+             "the graph.",
+     NULL},
+    {NULL, NULL, NULL, NULL, NULL} /* Sentinel */
+};
 
 static PyMethodDef ExtractorSystem_methods[] = {
     {"load_ext", (PyCFunction)ExtractorSystem_load_ext, METH_VARARGS,
@@ -257,10 +256,6 @@ static PyMethodDef ExtractorSystem_methods[] = {
      "Receives as the second argument the desired name for the custom "
      "computation.\n"
      "The computation names must be unique."},
-    {"get_paths", (PyCFunction)ExtractorSystem_get_paths,
-     METH_VARARGS | METH_KEYWORDS, "Not implemented."},
-    {"set_paths", (PyCFunction)ExtractorSystem_set_paths,
-     METH_VARARGS | METH_KEYWORDS, "Not implemented."},
     {NULL} /* Sentinel */
 };
 
@@ -293,7 +288,7 @@ static PyTypeObject ExtractorSystemType = {
     0,                                                 /* tp_iternext */
     ExtractorSystem_methods,                           /* tp_methods */
     0,                                                 /* tp_members */
-    0,                                                 /* tp_getset */
+    ExtractorSystem_getseters,                         /* tp_getset */
     0,                                                 /* tp_base */
     0,                                                 /* tp_dict */
     0,                                                 /* tp_descr_get */
