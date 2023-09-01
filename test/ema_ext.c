@@ -351,7 +351,7 @@ fm_comp_def_t ema_comp_def = {
 
 /**
  * Registers the operator definition in the computational system.
- * The name of this function MUST start with FmInit_ to allow the system
+ * The name of this function MUST start with ExtractorInit_ to allow the system
  * extension loader to find the function in external modules.
  *
  * @param sys computing system

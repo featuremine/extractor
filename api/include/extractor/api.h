@@ -380,7 +380,6 @@ struct extractor_api_v1 {
                              fmc_error_t **error);
   void (*comp_sys_paths_add)(struct fm_comp_sys *sys, const char *path,
                              fmc_error_t **error);
-  void (*comp_sys_ext_path_list_del)(struct fm_comp_sys_ext_path_list **phead);
 };
 
 FMMODFUNC struct extractor_api_v1 *extractor_api_v1_get();
