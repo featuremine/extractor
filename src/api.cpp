@@ -28,9 +28,9 @@ extern "C" {
 #include "extractor/exec_ctx.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/type_sys.h"
+#include "fmc/string.h"
 #include <extractor/comp_sys_capture.h>
 #include <extractor/frame.h>
-#include "fmc/string.h"
 }
 
 #include "comp_sys.hpp"
@@ -50,7 +50,7 @@ extern "C" {
 #define EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX "ExtractorInit_"
 
 static void module_type_add(struct fm_comp_sys_module *mod,
-                               const fm_comp_def_t *def, fmc_error_t **error) {
+                            const fm_comp_def_t *def, fmc_error_t **error) {
   fmc_error_clear(error);
   fm_comp_type_add(mod->sys, def);
 }
@@ -86,7 +86,6 @@ static struct extractor_api_v1 api_v1 {
 struct extractor_api_v1 *extractor_api_v1_get() {
   return &api_v1;
 }
-
 
 static struct fm_comp_sys_module *
 mod_load(struct fm_comp_sys *sys, const char *dir, const char *modstr,
