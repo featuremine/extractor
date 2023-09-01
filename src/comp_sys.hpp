@@ -67,15 +67,6 @@ struct fm_comp_sys {
   struct fm_comp_sys_ext_path_list *search_paths;
 };
 
-static void fm_comp_sys_module_destroy(struct fm_comp_sys_module *mod) {
-  if (mod->name)
-    free(mod->name);
-  if (mod->file)
-    free(mod->file);
-  if (mod->handle)
-    fmc_ext_close(mod->handle);
-}
-
 struct fm_comp_sys_module *fm_comp_sys_module_get(struct fm_comp_sys *sys,
                                                   const char *mod,
                                                   fmc_error_t **error);

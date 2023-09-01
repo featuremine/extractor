@@ -151,6 +151,15 @@ FMMODFUNC bool fm_comp_sys_ext_load(fm_comp_sys_t *, const char *name);
 FMMODFUNC void fm_comp_sys_paths_set_default(struct fm_comp_sys *sys,
                                              fmc_error_t **error);
 
+FMMODFUNC void
+fm_comp_sys_ext_path_list_set(struct fm_comp_sys_ext_path_list **head,
+                              const char **paths, fmc_error_t **error);
+
+FMMODFUNC void fm_comp_sys_ext_path_list_add(struct fm_comp_sys_ext_path_list **phead,
+                                             const char *path, fmc_error_t **error);
+
+FMMODFUNC void fm_comp_sys_ext_path_list_del(struct fm_comp_sys_ext_path_list **phead);
+
 /**
  * @brief
  */

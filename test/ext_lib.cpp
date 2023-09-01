@@ -135,19 +135,11 @@ fm_comp_def_t timer_count_avg_def = {
  * @param error
  */
 extern "C" FMMODFUNC void ExtractorInit_ext_lib(struct extractor_api_v1 *api,
-                                                struct fm_comp_sys_module *mod,
+                                                fm_comp_sys_t *sys,
                                                 fmc_error_t **error) {
   fmc_error_clear(error);
-
-  api->module_type_add(mod, &timer_count_def, error);
-  if (*error) {
-    return;
-  }
-
-  api->module_type_add(mod, &timer_count_avg_def, error);
-  if (*error) {
-    return;
-  }
+  api->comp_type_add(sys, &timer_count_def);
+  api->comp_type_add(sys, &timer_count_avg_def);
 }
 
 } // namespace fm
