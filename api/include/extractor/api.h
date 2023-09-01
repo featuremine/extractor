@@ -382,6 +382,9 @@ struct extractor_api_v1 {
   const char *(*type_sys_errmsg)(fm_type_sys_t *ts);
   void (*module_type_add)(struct fm_comp_sys_module *mod,
                           const fm_comp_def_t *def, fmc_error_t **error);
+  void (*module_type_add_func)(fm_comp_sys_module_init_func, struct fm_comp_sys_module *mod,
+                               const fm_comp_def_t *def, fmc_error_t **error);
+  struct fm_comp_sys_ext_path_list *(*comp_sys_ext_path_list_get)(fm_comp_sys_t *s);
 };
 
 FMMODFUNC struct extractor_api_v1 *extractor_api_v1_get();
