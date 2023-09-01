@@ -24,10 +24,10 @@
 #pragma once
 
 #include "fmc/decimal128.h"
+#include "fmc/extension.h"
 #include "fmc/rational64.h"
 #include "fmc/rprice.h"
 #include "fmc/time.h"
-#include "fmc/extension.h"
 
 #ifdef __cplusplus
 extern "C" {
