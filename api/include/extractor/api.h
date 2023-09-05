@@ -23,6 +23,7 @@
 
 #pragma once
 
+#include "fmc/alignment.h"
 #include "fmc/decimal128.h"
 #include "fmc/extension.h"
 #include "fmc/rational64.h"
