@@ -60,7 +60,10 @@ static struct extractor_api_v1 api_v1 {
       fm_comp_decl, fm_frame_type_get, fm_type_type_get, fm_type_sys_errmsg,
 
       fm_comp_sys_paths_get, fm_comp_sys_paths_set_default,
-      fm_comp_sys_paths_set, fm_comp_sys_paths_add
+      fm_comp_sys_paths_set, fm_comp_sys_paths_add,
+
+      fm_type_sys_err_set, fm_type_equal,
+      fm_frame_field_type
 };
 
 struct extractor_api_v1 *extractor_api_v1_get() {
