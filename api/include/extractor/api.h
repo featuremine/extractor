@@ -387,7 +387,6 @@ struct extractor_api_v1 {
   void (*type_sys_err_set)(fm_type_sys_t *ts, FM_TYPE_ERROR errnum);
   bool (*type_equal)(fm_type_decl_cp a, fm_type_decl_cp b);
   fm_type_decl_cp (*frame_field_type)(const fm_frame_t *, const char *);
-  void (*type_sys_err_set)(fm_type_sys_t *ts, FM_TYPE_ERROR errnum);
 
 };
 
