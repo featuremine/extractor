@@ -323,12 +323,6 @@ PyObject *ExtractorSystem_new() {
   fm_comp_sys_std_comp(self->sys);
   fm_comp_sys_py_comp(self->sys);
   self->to_delete = true;
-  for (auto &&comp : self->custom) {
-    if (!fm_comp_type_add(self->sys, &comp)) {
-      PyErr_SetString(PyExc_TypeError, "Unable to add custom operator");
-      return nullptr;
-    }
-  }
 
   return (PyObject *)self;
 }
