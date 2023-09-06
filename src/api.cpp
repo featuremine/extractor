@@ -22,15 +22,15 @@
  */
 
 extern "C" {
-#include "extractor/api.h"
 #include "comp.h"
+#include "fmc/string.h"
+#include "extractor/api.h"
 #include "extractor/comp_sys.h"
+#include "extractor/comp_sys_capture.h"
 #include "extractor/exec_ctx.h"
+#include "extractor/frame.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/type_sys.h"
-#include "fmc/string.h"
-#include <extractor/comp_sys_capture.h>
-#include <extractor/frame.h>
 }
 
 static struct extractor_api_v1 api_v1 {

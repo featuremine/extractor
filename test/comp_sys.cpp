@@ -94,6 +94,9 @@ fm_field_t fm_frame_field(const fm_frame_t *, const char *) {
 }
 fm_type_decl_cp fm_frame_type(const fm_frame_t *) { return nullptr; }
 void fm_frame_reserve(fm_frame_t *, ...) {}
+fm_type_decl_cp fm_frame_field_type(const fm_frame_t *frame, const char *name) {
+  return nullptr;
+}
 
 extern "C" {
 fm_type_decl_cp char_comp_type(fm_type_sys_t *, unsigned, fm_type_decl_cp[]);
