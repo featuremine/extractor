@@ -230,7 +230,6 @@ target_include_directories(
 target_link_libraries(
     ema_ext
     PUBLIC
-    extractor
     ytp
 )
 set_target_properties(
@@ -258,7 +257,6 @@ target_include_directories(
 target_link_libraries(
     book_play_ext
     PUBLIC
-    extractor
     ytp
 )
 set_target_properties(
