@@ -64,8 +64,8 @@ static bool ema_ext_comp_stream_init(fm_frame_t *result, size_t args,
 
   // Compute the sum of the values held in the dependency result frames
   for (unsigned i = args_offs; i < args; ++i) {
-    // Use api_->frame_get_cptr1 to obtain the value stored in the desired field of
-    // input i
+    // Use api_->frame_get_cptr1 to obtain the value stored in the desired field
+    // of input i
     *res += *(double *)api_->frame_get_cptr1(argv[i], 0, 0);
   }
 
@@ -109,8 +109,8 @@ static bool ema_ext_comp_stream_exec(fm_frame_t *result, size_t args,
   // Skip the trigger argument
   int args_offs = (args > 1);
   for (unsigned i = args_offs; i < args; ++i) {
-    // Use api_->frame_get_cptr1 to obtain the value stored in the desired field of
-    // input i
+    // Use api_->frame_get_cptr1 to obtain the value stored in the desired field
+    // of input i
     *res += alpha * *(double *)api_->frame_get_cptr1(argv[i], 0, 0);
   }
 
@@ -279,7 +279,8 @@ static fm_ctx_def_t *ema_ext_comp_gen(fm_comp_sys_t *csys, fm_comp_def_cl ccl,
   int dims[1] = {1};
 
   // Generate the type declaration of the result frame type
-  fm_type_decl_cp ret_type = api_->frame_type_get1(sys, 1, names, types, 1, dims);
+  fm_type_decl_cp ret_type =
+      api_->frame_type_get1(sys, 1, names, types, 1, dims);
   if (!ret_type) {
     const char *errstr = "unable to create result frame type";
     api_->type_sys_err_custom(sys, FM_TYPE_ERROR_ARGS, errstr);
