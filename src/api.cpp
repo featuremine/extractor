@@ -65,7 +65,7 @@ static struct extractor_api_v1 api_v1 {
       fm_comp_sys_ext_load,
 
       fm_type_sys_err_set, fm_type_equal, fm_frame_field_type,
-      fm_type_is_float
+      fm_type_is_float, fm_record_type_get
 };
 
 struct extractor_api_v1 *extractor_api_v1_get() {

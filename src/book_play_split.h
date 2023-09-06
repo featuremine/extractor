@@ -26,6 +26,7 @@
 
 #pragma once
 
+#include "extractor/api.h"
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 
