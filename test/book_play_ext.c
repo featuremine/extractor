@@ -37,7 +37,7 @@ fm_comp_def_t book_play_split_comp_def = {
     NULL                              // closure
 };
 
-static struct extractor_api_v1 * api_ = NULL;
+static struct extractor_api_v1 *api_ = NULL;
 
 struct extractor_api_v1 *extractor_api_v1_get() {
   return api_;

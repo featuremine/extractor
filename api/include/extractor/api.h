@@ -388,7 +388,8 @@ struct extractor_api_v1 {
   bool (*type_equal)(fm_type_decl_cp a, fm_type_decl_cp b);
   fm_type_decl_cp (*frame_field_type)(const fm_frame_t *, const char *);
   bool (*type_is_float)(fm_type_decl_cp td);
-  fm_type_decl_cp (*record_type_get)(fm_type_sys_t *ts, const char *name, size_t s);
+  fm_type_decl_cp (*record_type_get)(fm_type_sys_t *ts, const char *name,
+                                     size_t s);
 };
 
 FMMODFUNC struct extractor_api_v1 *extractor_api_v1_get();
