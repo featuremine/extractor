@@ -188,7 +188,7 @@ target_include_directories(
 
 add_library(
     extractor
-    SHARED
+    STATIC
     $<TARGET_OBJECTS:extractor_obj>
     $<TARGET_OBJECTS:extractor_book_lib_obj>
 )
@@ -197,6 +197,13 @@ target_link_libraries(
     PRIVATE
     extractor_dep
     extractor_book_lib_dep
+)
+target_include_directories(
+    extractor
+    PUBLIC
+    "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 set_target_properties(
     extractor
