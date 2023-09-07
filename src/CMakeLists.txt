@@ -188,7 +188,7 @@ target_include_directories(
 
 add_library(
     extractor
-    SHARED
+    STATIC
     $<TARGET_OBJECTS:extractor_obj>
     $<TARGET_OBJECTS:extractor_book_lib_obj>
 )
@@ -197,6 +197,13 @@ target_link_libraries(
     PRIVATE
     extractor_dep
     extractor_book_lib_dep
+)
+target_include_directories(
+    extractor
+    PUBLIC
+    "${EXTRACTOR_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
+    "${EXTRACTOR_API_INC_DIR}"
 )
 set_target_properties(
     extractor
@@ -223,13 +230,13 @@ target_include_directories(
 target_link_libraries(
     ema_ext
     PUBLIC
-    extractor
     ytp
 )
 set_target_properties(
     ema_ext
     PROPERTIES
     OUTPUT_NAME "ema"
+    PREFIX ""
     VERSION "1.0.0"
     SOVERSION "0"
 )
@@ -250,13 +257,13 @@ target_include_directories(
 target_link_libraries(
     book_play_ext
     PUBLIC
-    extractor
     ytp
 )
 set_target_properties(
     book_play_ext
     PROPERTIES
-    OUTPUT_NAME "book_play"
+    OUTPUT_NAME "book_play_split"
+    PREFIX ""
     VERSION "1.0.0"
     SOVERSION "0"
     LIBRARY_OUTPUT_DIRECTORY "${PROJECT_BINARY_DIR}/test"

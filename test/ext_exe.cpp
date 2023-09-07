@@ -36,9 +36,6 @@
 #include "fmc++/time.hpp"
 #include <string>
 
-std::string src_dir;
-std::string lib_path;
-
 TEST(ext_lib, check) {
   using namespace std;
 
@@ -53,8 +50,7 @@ TEST(ext_lib, check) {
   ASSERT_NE(sys, nullptr);
 
   const char *name = "__none__";
-  const char *path = "__does_not_exist__";
-  ASSERT_FALSE(fm_comp_sys_ext_load(sys, name, path));
+  ASSERT_FALSE(fm_comp_sys_ext_load(sys, name));
 
   fm_comp_sys_del(sys);
 }
@@ -74,7 +70,10 @@ TEST(ext_lib, stream) {
   ASSERT_TRUE(fm_comp_sys_std_comp(sys));
 
   const char *name = "ext_lib";
-  auto res = fm_comp_sys_ext_load(sys, name, lib_path.c_str());
+  fmc_error_t *error;
+  fm_comp_sys_paths_set_default(sys, &error);
+  ASSERT_EQ(error, nullptr);
+  auto res = fm_comp_sys_ext_load(sys, name);
 
   ASSERT_TRUE(res);
 
@@ -113,7 +112,5 @@ TEST(ext_lib, stream) {
 
 GTEST_API_ int main(int argc, char **argv) {
   testing::InitGoogleTest(&argc, argv);
-  src_dir = argv[1];
-  lib_path = argv[2];
   return RUN_ALL_TESTS();
 }
