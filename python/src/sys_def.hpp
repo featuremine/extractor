@@ -35,30 +35,6 @@
 #include <memory>
 #include <string>
 
-ExtractorSystem *ExtractorSystem_lazy(ExtractorSystem *obj) {
-  auto *self = (ExtractorSystem *)obj;
-  if (self->sys == nullptr) {
-    char *errmsg;
-    self->sys = fm_comp_sys_new(&errmsg);
-    if (!self->sys) {
-      PyErr_SetString(PyExc_RuntimeError, errmsg);
-      free(errmsg);
-      return nullptr;
-    }
-    fm_comp_sys_std_comp(self->sys);
-    fm_comp_sys_py_comp(self->sys);
-    self->to_delete = true;
-    for (auto &&comp : self->custom) {
-      if (!fm_comp_type_add(obj->sys, &(obj->custom.back()))) {
-        PyErr_SetString(PyExc_TypeError, "Unable to add custom operator");
-        return nullptr;
-      }
-    }
-  }
-
-  return self;
-}
-
 static PyObject *ExtractorSystem_extend(PyObject *self, PyObject *args,
                                         PyObject *keywds) {
   PyObject *py_class = nullptr;
@@ -78,7 +54,7 @@ static PyObject *ExtractorSystem_extend(PyObject *self, PyObject *args,
     return nullptr;
   }
 
-  auto obj = ExtractorSystem_lazy((ExtractorSystem *)self);
+  auto obj = (ExtractorSystem *)self;
   Py_INCREF(py_class);
   obj->custom.emplace_back(fm_comp_def_t{strclone(comp_name),
                                          &fm_comp_custom_gen,
@@ -109,16 +85,12 @@ static void ExtractorSystem_dealloc(ExtractorSystem *self) {
 static PyObject *ExtractorSystem_load_ext(ExtractorSystem *obj,
                                           PyObject *args) {
   const char *name;
-  const char *path;
-  if (!PyArg_ParseTuple(args, "ss", &name, &path)) {
-    PyErr_SetString(PyExc_RuntimeError, "expecting module name and path");
+  if (!PyArg_ParseTuple(args, "s", &name)) {
+    PyErr_SetString(PyExc_RuntimeError, "expecting module name");
     return nullptr;
   }
-  auto *self = ExtractorSystem_lazy(obj);
-  if (!self)
-    return nullptr;
-  auto *sys = self->sys;
-  if (!fm_comp_sys_ext_load(sys, name, path)) {
+  auto *sys = obj->sys;
+  if (!fm_comp_sys_ext_load(sys, name)) {
     PyErr_SetString(PyExc_RuntimeError, fm_comp_sys_error_msg(sys));
     return nullptr;
   }
@@ -126,12 +98,9 @@ static PyObject *ExtractorSystem_load_ext(ExtractorSystem *obj,
 }
 
 static PyObject *ExtractorSystem_comp_graph(ExtractorSystem *obj) {
-  auto *self = ExtractorSystem_lazy(obj);
-  if (!self)
-    return nullptr;
-  auto *sys = self->sys;
+  auto *sys = obj->sys;
   if (auto *graph = fm_comp_graph_get(sys); graph) {
-    if (auto *py_g = ExtractorGraph_py_new((PyObject *)self, sys, graph, true);
+    if (auto *py_g = ExtractorGraph_py_new((PyObject *)obj, sys, graph, true);
         py_g) {
       return py_g;
     } else {
@@ -171,10 +140,7 @@ static PyObject *ExtractorSystem_module(ExtractorSystem *obj, PyObject *args,
     return nullptr;
   }
 
-  auto *self = ExtractorSystem_lazy(obj);
-  if (!self)
-    return nullptr;
-  auto *sys = self->sys;
+  auto *sys = obj->sys;
   vector<fm_module_comp_t *> inputs(ninps);
   if (auto *m = fm_module_new(name, ninps, inputs.data()); m) {
     PyObject *input_placeholders = PyList_New(ninps);
@@ -191,6 +157,79 @@ static PyObject *ExtractorSystem_module(ExtractorSystem *obj, PyObject *args,
     return nullptr;
   }
 }
+
+static PyObject *ExtractorSystem_getpaths(ExtractorSystem *self,
+                                          void *closure) {
+
+  struct fm_comp_sys_ext_path_list *list = fm_comp_sys_paths_get(self->sys);
+  struct fm_comp_sys_ext_path_list *p = NULL;
+  size_t count = 0;
+
+  p = list;
+  while (p) {
+    ++count;
+    p = p->next;
+  }
+
+  PyObject *paths = PyList_New(count);
+
+  p = list;
+  for (size_t i = 0; i < count; ++i) {
+    PyList_SetItem(paths, i, PyUnicode_FromString(p->path));
+    p = p->next;
+  }
+
+  return paths;
+}
+
+static int ExtractorSystem_setpaths(ExtractorSystem *self, PyObject *paths_obj,
+                                    void *closure) {
+
+  if (!PyList_Check(paths_obj)) {
+    PyErr_SetString(PyExc_RuntimeError, "paths must be a list");
+    return -1;
+  }
+
+  Py_ssize_t sz = PyList_Size(paths_obj);
+
+  const char **paths = (const char **)calloc(sz + 1, sizeof(char *));
+  if (!paths) {
+    PyErr_SetString(PyExc_RuntimeError, "unable to allocate memory");
+    goto do_cleanup;
+  }
+
+  for (Py_ssize_t i = 0; i < sz; ++i) {
+    PyObject *value_obj = PyList_GetItem(paths_obj, i);
+    if (!PyUnicode_Check(value_obj)) {
+      PyErr_SetString(PyExc_RuntimeError, "array of string was expected");
+      goto do_cleanup;
+    }
+    paths[i] = PyUnicode_AsUTF8(value_obj);
+  }
+
+  fmc_error_t *err;
+  fm_comp_sys_paths_set(self->sys, paths, &err);
+  if (err) {
+    PyErr_SetString(PyExc_RuntimeError, fmc_error_msg(err));
+    goto do_cleanup;
+  }
+  free(paths);
+  return 0;
+
+do_cleanup:
+  free(paths);
+  return -1;
+}
+
+static PyGetSetDef ExtractorSystem_getseters[] = {
+    {(char *)"paths", (getter)ExtractorSystem_getpaths,
+     (setter)ExtractorSystem_setpaths,
+     (char *)"Returns The Extractor feature generator object.\n"
+             "The returned object can be used to add new feature instances to "
+             "the graph.",
+     NULL},
+    {NULL, NULL, NULL, NULL, NULL} /* Sentinel */
+};
 
 static PyMethodDef ExtractorSystem_methods[] = {
     {"load_ext", (PyCFunction)ExtractorSystem_load_ext, METH_VARARGS,
@@ -249,7 +288,7 @@ static PyTypeObject ExtractorSystemType = {
     0,                                                 /* tp_iternext */
     ExtractorSystem_methods,                           /* tp_methods */
     0,                                                 /* tp_members */
-    0,                                                 /* tp_getset */
+    ExtractorSystem_getseters,                         /* tp_getset */
     0,                                                 /* tp_base */
     0,                                                 /* tp_dict */
     0,                                                 /* tp_descr_get */
@@ -268,7 +307,24 @@ PyObject *ExtractorSystem_new() {
   if (self == nullptr)
     return nullptr;
 
-  return (PyObject *)ExtractorSystem_lazy(self);
+  char *errmsg;
+  self->sys = fm_comp_sys_new(&errmsg);
+  if (!self->sys) {
+    PyErr_SetString(PyExc_RuntimeError, errmsg);
+    free(errmsg);
+    return nullptr;
+  }
+  fmc_error_t *error;
+  fm_comp_sys_paths_set_default(self->sys, &error);
+  if (error) {
+    PyErr_SetString(PyExc_RuntimeError, "Unable to set default search path");
+    return nullptr;
+  }
+  fm_comp_sys_std_comp(self->sys);
+  fm_comp_sys_py_comp(self->sys);
+  self->to_delete = true;
+
+  return (PyObject *)self;
 }
 
 bool ExtractorSystem_Check(PyObject *obj) {
@@ -278,8 +334,5 @@ bool ExtractorSystem_Check(PyObject *obj) {
 fm_comp_sys_t *ExtractorSystem_get(PyObject *obj) {
   if (!ExtractorSystem_Check(obj))
     return nullptr;
-  auto *py_sys = ExtractorSystem_lazy((ExtractorSystem *)obj);
-  if (!py_sys)
-    return nullptr;
-  return py_sys->sys;
+  return ((ExtractorSystem *)obj)->sys;
 }

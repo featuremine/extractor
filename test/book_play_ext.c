@@ -21,7 +21,7 @@
  */
 
 #include "book_play_split.h"
-#include "extractor/comp_sys.h"
+#include "extractor/api.h"
 /**
  * Computation definition
  * It must provide the following information to describe a computation:
@@ -37,13 +37,23 @@ fm_comp_def_t book_play_split_comp_def = {
     NULL                              // closure
 };
 
+static struct extractor_api_v1 *api_ = NULL;
+
+struct extractor_api_v1 *extractor_api_v1_get() {
+  return api_;
+}
+
 /**
  * Registers the operator definition in the computational system.
- * The name of this function MUST start with FmInit_ to allow the system
+ * The name of this function MUST start with ExtractorInit_ to allow the system
  * extension loader to find the function in external modules.
  *
  * @param sys computing system
  */
-FMMODFUNC void FmInit_book_play_split(fm_comp_sys_t *sys) {
-  fm_comp_type_add(sys, &book_play_split_comp_def);
+FMMODFUNC void ExtractorInit_book_play_split(struct extractor_api_v1 *api,
+                                             fm_comp_sys_t *sys,
+                                             fmc_error_t **error) {
+  fmc_error_clear(error);
+  api_ = api;
+  api_->comp_type_add(sys, &book_play_split_comp_def);
 }

@@ -23,7 +23,9 @@
 
 #pragma once
 
+#include "fmc/alignment.h"
 #include "fmc/decimal128.h"
+#include "fmc/extension.h"
 #include "fmc/rational64.h"
 #include "fmc/rprice.h"
 #include "fmc/time.h"
@@ -228,6 +230,16 @@ typedef struct fm_call_ctx {
   const fm_call_handle_t *deps;
 } fm_call_ctx_t;
 
+struct fm_comp_sys_ext_path_list {
+  struct fm_comp_sys_ext_path_list *next, *prev;
+  char path[]; // FAM
+};
+
+struct extractor_api_v1;
+
+typedef void (*fm_comp_sys_module_init_v1)(struct extractor_api_v1 *,
+                                           fm_comp_sys_t *, fmc_error_t **);
+
 struct extractor_api_v1 {
   // Clean up system
   void (*comp_sys_cleanup)(fm_comp_sys_t *);
@@ -360,6 +372,24 @@ struct extractor_api_v1 {
                                     ...);
   fm_type_decl_cp (*type_type_get)(fm_type_sys_t *ts);
   const char *(*type_sys_errmsg)(fm_type_sys_t *ts);
+  struct fm_comp_sys_ext_path_list *(*comp_sys_ext_path_list_get)(
+      fm_comp_sys_t *s);
+  void (*comp_sys_paths_set_default)(struct fm_comp_sys *sys,
+                                     fmc_error_t **error);
+
+  void (*comp_sys_paths_set)(struct fm_comp_sys *sys, const char **paths,
+                             fmc_error_t **error);
+  void (*comp_sys_paths_add)(struct fm_comp_sys *sys, const char *path,
+                             fmc_error_t **error);
+
+  bool (*comp_sys_ext_load)(fm_comp_sys_t *s, const char *name);
+
+  void (*type_sys_err_set)(fm_type_sys_t *ts, FM_TYPE_ERROR errnum);
+  bool (*type_equal)(fm_type_decl_cp a, fm_type_decl_cp b);
+  fm_type_decl_cp (*frame_field_type)(const fm_frame_t *, const char *);
+  bool (*type_is_float)(fm_type_decl_cp td);
+  fm_type_decl_cp (*record_type_get)(fm_type_sys_t *ts, const char *name,
+                                     size_t s);
 };
 
 FMMODFUNC struct extractor_api_v1 *extractor_api_v1_get();

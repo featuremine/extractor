@@ -12,3 +12,5 @@
 
 from .extractor import *
 from .extractor import __version__
+import sys as pysys
+system.paths += pysys.path

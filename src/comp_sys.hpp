@@ -22,6 +22,8 @@
  * @see http://www.featuremine.com
  */
 
+#pragma once
+
 #include "comp.h"
 #include "comp_graph.h"
 #include "extractor/arg_stack.h"
@@ -52,6 +54,14 @@ using namespace std;
  * @note need to add errors to comp sys as well
  */
 
+struct fm_comp_sys_module {
+  struct fm_comp_sys *sys; // the system that owns the module
+  fmc_ext_t handle;        // module handle. Return of dlopen()
+  char *name;              // module name (e.g. "fmtron")
+  char *file;              // file full path of the library
+  struct fm_comp_sys_module *next, *prev;
+};
+
 struct fm_comp_sys {
   fm_type_sys_t *types = nullptr;
   vector<fm_comp_graph_t *> graphs;
@@ -61,4 +71,10 @@ struct fm_comp_sys {
   unordered_map<string, fm_module_t *> modules_;
   unsigned modules_suff_;
   fmc::counter::samples samples_;
+  struct fm_comp_sys_module *modules;
+  struct fm_comp_sys_ext_path_list *search_paths;
 };
+
+struct fm_comp_sys_module *fm_comp_sys_module_get(struct fm_comp_sys *sys,
+                                                  const char *mod,
+                                                  fmc_error_t **error);

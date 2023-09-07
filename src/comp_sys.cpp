@@ -46,13 +46,47 @@
 
 #include "fmc/extension.h"
 #include "fmc/platform.h"
+#include "fmc/string.h"
+
+#include <uthash/utarray.h>
+#include <uthash/utheap.h>
+#include <uthash/utlist.h>
+
+#if defined(FMC_SYS_UNIX)
+#define EXTRACTOR_MOD_SEARCHPATH_CUR ""
+#define EXTRACTOR_MOD_SEARCHPATH_USRLOCAL ".local/lib/extractor/modules"
+#define EXTRACTOR_MOD_SEARCHPATH_SYSLOCAL "/usr/local/lib/extractor/modules"
+#define EXTRACTOR_MOD_SEARCHPATH_ENV "EXTRACTORPATH"
+#define EXTRACTOR_MOD_SEARCHPATH_ENV_SEP ":"
+#if defined(FMC_SYS_LINUX)
+#define EXTRACTOR_LIB_SUFFIX ".so"
+#elif defined(FMC_SYS_MACH)
+#define EXTRACTOR_LIB_SUFFIX ".dylib"
+#endif
+#else
+#define EXTRACTOR_MOD_SEARCHPATH_ENV_SEP ";"
+#error "Unsupported operating system"
+#endif
+
+#define EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX "ExtractorInit_"
 
 using namespace std;
 
 fm_comp_sys_t *fm_comp_sys_new(char **errmsg) {
   auto *s = new fm_comp_sys();
   s->types = fm_type_sys_new();
+  s->modules = NULL;
+  s->search_paths = NULL;
   return s;
+}
+
+void fm_comp_sys_module_destroy(struct fm_comp_sys_module *mod) {
+  if (mod->name)
+    free(mod->name);
+  if (mod->file)
+    free(mod->file);
+  if (mod->handle)
+    fmc_ext_close(mod->handle);
 }
 
 void fm_comp_sys_cleanup(fm_comp_sys_t *s) {
@@ -64,6 +98,130 @@ void fm_comp_sys_cleanup(fm_comp_sys_t *s) {
   for (auto &destroy : s->destructors)
     destroy();
   s->destructors.clear();
+
+  fm_comp_sys_ext_path_list *phead = s->search_paths;
+  fm_comp_sys_ext_path_list *p;
+  fm_comp_sys_ext_path_list *ptmp;
+  DL_FOREACH_SAFE(phead, p, ptmp) {
+    DL_DELETE(phead, p);
+    free(p);
+  }
+  s->search_paths = NULL;
+
+  // destroy modules: also destroys components of the module
+  struct fm_comp_sys_module *modhead = s->modules;
+  struct fm_comp_sys_module *mod;
+  struct fm_comp_sys_module *modtmp;
+  DL_FOREACH_SAFE(modhead, mod, modtmp) {
+    fm_comp_sys_module_destroy(mod);
+    free(mod);
+  }
+  s->modules = NULL;
+}
+
+static struct fm_comp_sys_module *
+mod_load(struct fm_comp_sys *sys, const char *dir, const char *modstr,
+         const char *mod_lib, const char *mod_func, fmc_error_t **error,
+         bool *should_skip) {
+  fmc_error_clear(error);
+  *should_skip = false;
+  fm_comp_sys_module_init_v1 mod_init;
+  struct fm_comp_sys_module *m;
+  int psz = fmc_path_join(NULL, 0, dir, mod_lib) + 1;
+  char lib_path[psz];
+  fmc_path_join(lib_path, psz, dir, mod_lib);
+
+  struct fm_comp_sys_module mod;
+  memset(&mod, 0, sizeof(mod));
+
+  mod.handle = fmc_ext_open(lib_path, error);
+  if (*error) {
+    *should_skip = true;
+    goto cleanup;
+  }
+
+  // Check if init function is available
+  mod_init =
+      (fm_comp_sys_module_init_v1)fmc_ext_sym(mod.handle, mod_func, error);
+  if (*error) {
+    *should_skip = true;
+    goto cleanup;
+  }
+
+  // append the mod to the system
+  mod.sys = sys;
+  mod.name = fmc_cstr_new(modstr, error);
+  if (*error)
+    goto cleanup;
+  mod.file = fmc_cstr_new(lib_path, error);
+  if (*error)
+    goto cleanup;
+
+  fmc_error_clear(error);
+  mod_init(extractor_api_v1_get(), mod.sys, error);
+  if (*error) {
+    fmc_error_set(error, "failed to load module %s with error: %s", modstr,
+                  fmc_error_msg(*error));
+    goto cleanup;
+  }
+
+  m = (struct fm_comp_sys_module *)calloc(1, sizeof(mod));
+  if (!m) {
+    fmc_error_set2(error, FMC_ERROR_MEMORY);
+    goto cleanup;
+  }
+  memcpy(m, &mod, sizeof(mod));
+  DL_APPEND(sys->modules, m);
+
+  return m;
+
+cleanup:
+  fm_comp_sys_module_destroy(&mod);
+  return NULL;
+}
+
+struct fm_comp_sys_module *fm_comp_sys_module_get(struct fm_comp_sys *sys,
+                                                  const char *mod,
+                                                  fmc_error_t **error) {
+  fmc_error_clear(error);
+
+  // If the module exists, get it
+  struct fm_comp_sys_module *mhead = sys->modules;
+  struct fm_comp_sys_module *mitem;
+  DL_FOREACH(mhead, mitem) {
+    if (!strcmp(mitem->name, mod)) {
+      return mitem;
+    }
+  }
+
+  struct fm_comp_sys_module *ret = NULL;
+  char mod_lib[strlen(mod) + strlen(EXTRACTOR_LIB_SUFFIX) + 1];
+  sprintf(mod_lib, "%s%s", mod, EXTRACTOR_LIB_SUFFIX);
+
+  int pathlen = fmc_path_join(NULL, 0, mod, mod_lib) + 1;
+  char mod_lib_2[pathlen];
+  fmc_path_join(mod_lib_2, pathlen, mod, mod_lib);
+
+  char mod_func[strlen(EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX) + strlen(mod) + 1];
+  sprintf(mod_func, "%s%s", EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX, mod);
+  struct fm_comp_sys_ext_path_list *head = sys->search_paths;
+  struct fm_comp_sys_ext_path_list *item;
+  bool should_skip = true;
+  DL_FOREACH(head, item) {
+    ret =
+        mod_load(sys, item->path, mod, mod_lib, mod_func, error, &should_skip);
+    if (should_skip) {
+      ret = mod_load(sys, item->path, mod, mod_lib_2, mod_func, error,
+                     &should_skip);
+    }
+    if (!should_skip) {
+      break;
+    }
+  }
+  if (should_skip) {
+    fmc_error_set(error, "component module %s was not found", mod);
+  }
+  return ret;
 }
 
 void fm_comp_sys_del(fm_comp_sys_t *s) {
@@ -250,30 +408,111 @@ void fm_comp_sys_error_set(fm_comp_sys_t *s, const char *fmt, ...) {
   buf.append(errmsg.data(), size);
 }
 
-bool fm_comp_sys_ext_load(fm_comp_sys_t *s, const char *name,
-                          const char *path) {
-  fmc_error_t *error;
-  string mainfunc_sym = string("FmInit_") + name;
-  // TODO: Review this code, the old fmc_ext load would cause
-  // a leak because we never call dlclose
-  auto handle = fmc_ext_open(path, &error);
-  if (error) {
-    fm_comp_sys_error_set(s,
-                          "[ERROR]\t(comp_sys) failed to open "
-                          "extension library %s from %s;\n\t%s",
-                          name, path, fmc_error_msg(error));
-    return false;
+void fm_comp_sys_ext_path_list_add(struct fm_comp_sys_ext_path_list **phead,
+                                   const char *path, fmc_error_t **error) {
+  fm_comp_sys_ext_path_list *p =
+      (fm_comp_sys_ext_path_list *)calloc(1, sizeof(*p) + strlen(path) + 1);
+  if (p) {
+    strcpy(p->path, path);
+    DL_APPEND(*phead, p);
+  } else {
+    fmc_error_set2(error, FMC_ERROR_MEMORY);
+    return;
   }
-  auto *handler = fmc_ext_sym(handle, mainfunc_sym.c_str(), &error);
+}
+
+void fm_comp_sys_ext_path_list_del(struct fm_comp_sys_ext_path_list **phead) {
+  if (!*phead)
+    return;
+  fm_comp_sys_ext_path_list *p;
+  fm_comp_sys_ext_path_list *ptmp;
+  DL_FOREACH_SAFE(*phead, p, ptmp) {
+    DL_DELETE(*phead, p);
+    free(p);
+  }
+}
+
+void fm_comp_sys_ext_path_list_set(struct fm_comp_sys_ext_path_list **head,
+                                   const char **paths, fmc_error_t **error) {
+  fmc_error_clear(error);
+  struct fm_comp_sys_ext_path_list *tmp = NULL;
+  for (unsigned int i = 0; paths && paths[i]; ++i) {
+    fm_comp_sys_ext_path_list_add(&tmp, paths[i], error);
+    if (*error) {
+      fm_comp_sys_ext_path_list_del(&tmp);
+      return;
+    }
+  }
+  fm_comp_sys_ext_path_list_del(head);
+  *head = tmp;
+}
+
+struct fm_comp_sys_ext_path_list *fm_comp_sys_paths_get(fm_comp_sys_t *s) {
+  return s->search_paths;
+}
+
+void fm_comp_sys_paths_set(struct fm_comp_sys *sys, const char **paths,
+                           fmc_error_t **error) {
+  fm_comp_sys_ext_path_list_set(&sys->search_paths, paths, error);
+}
+
+void fm_comp_sys_paths_add(struct fm_comp_sys *sys, const char *path,
+                           fmc_error_t **error) {
+  fmc_error_clear(error);
+  if (path) {
+    fm_comp_sys_ext_path_list_add(&sys->search_paths, path, error);
+  }
+}
+
+void fm_comp_sys_paths_set_default(struct fm_comp_sys *sys,
+                                   fmc_error_t **error) {
+  fmc_error_clear(error);
+  fm_comp_sys_ext_path_list *tmpls2;
+  fm_comp_sys_ext_path_list *tmpls = NULL;
+
+  char *tmp = getenv("HOME");
+  int psz = fmc_path_join(NULL, 0, tmp, EXTRACTOR_MOD_SEARCHPATH_USRLOCAL) + 1;
+  char home_path[psz];
+  fmc_path_join(home_path, psz, tmp, EXTRACTOR_MOD_SEARCHPATH_USRLOCAL);
+
+  const char *defaults[] = {EXTRACTOR_MOD_SEARCHPATH_CUR, home_path,
+                            EXTRACTOR_MOD_SEARCHPATH_SYSLOCAL, NULL};
+
+  fm_comp_sys_ext_path_list_set(&tmpls, defaults, error);
+  if (*error)
+    goto cleanup;
+
+  tmp = getenv(EXTRACTOR_MOD_SEARCHPATH_ENV);
+  if (tmp) {
+    char ycpaths[strlen(tmp) + 1];
+    strcpy(ycpaths, tmp);
+    char *found;
+    tmp = ycpaths;
+    while ((found = strsep(&tmp, EXTRACTOR_MOD_SEARCHPATH_ENV_SEP))) {
+      fm_comp_sys_ext_path_list_add(&tmpls, found, error);
+      if (*error)
+        goto cleanup;
+    }
+  }
+  tmpls2 = sys->search_paths;
+  sys->search_paths = tmpls;
+  tmpls = tmpls2;
+  return;
+cleanup:
+  fm_comp_sys_ext_path_list_del(&tmpls);
+}
+
+bool fm_comp_sys_ext_load(fm_comp_sys_t *s, const char *name) {
+  fmc_error_t *error;
+  fm_comp_sys_module *mod = fm_comp_sys_module_get(s, name, &error);
   if (error) {
     fm_comp_sys_error_set(s,
                           "[ERROR]\t(comp_sys) failed to load "
-                          "extension library %s from %s;\n\t%s",
-                          name, path, fmc_error_msg(error));
+                          "extension library %s;\n\t%s",
+                          name, fmc_error_msg(error));
     return false;
   }
-  auto mainfunc = (void (*)(fm_comp_sys_t *))handler;
-  mainfunc(s);
+  DL_APPEND(s->modules, mod);
   return true;
 }
 
