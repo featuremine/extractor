@@ -42,6 +42,8 @@ using namespace std;
 using namespace fm;
 using namespace book;
 
+static struct extractor_api_v1 *api_ = NULL;
+
 struct bps_op_cl {
   string fname;
   vector<string> symbols;
@@ -82,19 +84,19 @@ bool bps_exe_cl::read_msg(fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
       }
     }
     auto *stream_ctx = (fm_stream_ctx *)ctx->exec;
-    extractor_api_v1_get()->stream_ctx_schedule(stream_ctx, ctx->handle,
+    api_->stream_ctx_schedule(stream_ctx, ctx->handle,
                                                 parser.time);
   } else if (res.is_error()) {
     auto *op_cl = (bps_op_cl *)ctx->comp;
     if (errno) {
-      extractor_api_v1_get()->exec_ctx_error_set(
+      api_->exec_ctx_error_set(
           ctx->exec,
           "error reading FM Ore file %s, parsing error (%s) "
           "and system error [%d](%s) occurred",
           op_cl->fname.c_str(), parser.get_error().c_str(), errno,
           strerror(errno));
     } else {
-      extractor_api_v1_get()->exec_ctx_error_set(
+      api_->exec_ctx_error_set(
           ctx->exec,
           "error reading FM Ore file %s, parsing error (%s) occurred.",
           op_cl->fname.c_str(), parser.get_error().c_str());
@@ -118,21 +120,21 @@ bool fm_comp_book_play_split_call_stream_init(fm_frame_t *result, size_t args,
   if (!cmp_file_init(&exe_cl->cmp, fname)) {
     auto *msg = fmc::ends_with_pipe(fname).first ? "cannot run command %s"
                                                  : "cannot open file %s";
-    extractor_api_v1_get()->exec_ctx_error_set(ctx->exec, msg, fname);
+    api_->exec_ctx_error_set(ctx->exec, msg, fname);
     return false;
   }
 
   auto *cmp_ctx = &exe_cl->cmp.ctx;
   uint16_t ver[3] = {0};
   if (!ore::read_version(cmp_ctx, ver)) {
-    extractor_api_v1_get()->exec_ctx_error_set(ctx->exec,
+    api_->exec_ctx_error_set(ctx->exec,
                                                "could not read file version");
     return false;
   }
 
   if (!ore::validate_version(ver)) {
     auto pver = ore::version;
-    extractor_api_v1_get()->exec_ctx_error_set(
+    api_->exec_ctx_error_set(
         ctx->exec,
         "FeatureMine Ore file version %d.%d.%d does not "
         "match Ore parser version %d.%d.%d",
@@ -142,7 +144,7 @@ bool fm_comp_book_play_split_call_stream_init(fm_frame_t *result, size_t args,
 
   ore::header hdr;
   if (!ore::read_hdr(cmp_ctx, hdr)) {
-    extractor_api_v1_get()->exec_ctx_error_set(
+    api_->exec_ctx_error_set(
         ctx->exec, "could not read header of the file %s", fname);
     return false;
   }
@@ -150,7 +152,7 @@ bool fm_comp_book_play_split_call_stream_init(fm_frame_t *result, size_t args,
   for (auto symbol : op_cl->symbols) {
     auto where = hdr.find(symbol);
     if (where == hdr.end()) {
-      extractor_api_v1_get()->exec_ctx_error_set(ctx->exec,
+      api_->exec_ctx_error_set(ctx->exec,
                                                  "could find symbol %s in the "
                                                  "header of file %s",
                                                  symbol.c_str(), fname);
@@ -163,7 +165,7 @@ bool fm_comp_book_play_split_call_stream_init(fm_frame_t *result, size_t args,
     imnt.index = index++;
   }
 
-  *(book::message *)extractor_api_v1_get()->frame_get_ptr1(result, 0, 0) =
+  *(book::message *)api_->frame_get_ptr1(result, 0, 0) =
       book::message(book::updates::none());
   if (!exe_cl->read_msg(ctx, cl)) {
     return false;
@@ -182,9 +184,9 @@ bool fm_comp_book_play_split_stream_exec(fm_frame_t *result, size_t args,
 
   if (exe_cl->update) {
     auto &box =
-        *(book::message *)extractor_api_v1_get()->frame_get_ptr1(result, 0, 0);
+        *(book::message *)api_->frame_get_ptr1(result, 0, 0);
     box = exe_cl->parser.msg;
-    extractor_api_v1_get()->stream_ctx_queue(
+    api_->stream_ctx_queue(
         exec_ctx, ctx->deps[exe_cl->parser.imnt->index]);
   }
 
@@ -200,12 +202,12 @@ void fm_comp_book_play_split_stream_destroy(fm_call_exec_cl cl) {
 
 fm_call_def *fm_comp_book_play_split_stream_call(fm_comp_def_cl comp_cl,
                                                  const fm_ctx_def_cl ctx_cl) {
-  auto *def = extractor_api_v1_get()->call_def_new();
-  extractor_api_v1_get()->call_def_init_set(
+  auto *def = api_->call_def_new();
+  api_->call_def_init_set(
       def, fm_comp_book_play_split_call_stream_init);
-  extractor_api_v1_get()->call_def_exec_set(
+  api_->call_def_exec_set(
       def, fm_comp_book_play_split_stream_exec);
-  extractor_api_v1_get()->call_def_destroy_set(
+  api_->call_def_destroy_set(
       def, fm_comp_book_play_split_stream_destroy);
   return def;
 }
@@ -215,10 +217,13 @@ fm_ctx_def_t *fm_comp_book_play_split_gen(fm_comp_sys_t *csys,
                                           fm_type_decl_cp argv[],
                                           fm_type_decl_cp ptype,
                                           fm_arg_stack_t plist) {
-  auto *sys = extractor_api_v1_get()->type_sys_get(csys);
+  if (!api_)
+    api_ = extractor_api_v1_get();
+
+  auto *sys = api_->type_sys_get(csys);
   if (argc != 0) {
     auto *errstr = "expect no operator arguments";
-    extractor_api_v1_get()->type_sys_err_custom(sys, FM_TYPE_ERROR_ARGS,
+    api_->type_sys_err_custom(sys, FM_TYPE_ERROR_ARGS,
                                                 errstr);
     return nullptr;
   }
@@ -226,17 +231,17 @@ fm_ctx_def_t *fm_comp_book_play_split_gen(fm_comp_sys_t *csys,
   auto param_error = [&]() {
     auto *errstr = "expect a ore file and a tuple of symbols as "
                    "parameters";
-    extractor_api_v1_get()->type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS,
+    api_->type_sys_err_custom(sys, FM_TYPE_ERROR_PARAMS,
                                                 errstr);
     return nullptr;
   };
 
-  bool good_args = extractor_api_v1_get()->type_is_tuple(ptype) &&
-                   extractor_api_v1_get()->type_tuple_size(ptype) == 2 &&
-                   extractor_api_v1_get()->type_is_cstring(
-                       extractor_api_v1_get()->type_tuple_arg(ptype, 0)) &&
-                   extractor_api_v1_get()->type_is_tuple(
-                       extractor_api_v1_get()->type_tuple_arg(ptype, 1));
+  bool good_args = api_->type_is_tuple(ptype) &&
+                   api_->type_tuple_size(ptype) == 2 &&
+                   api_->type_is_cstring(
+                       api_->type_tuple_arg(ptype, 0)) &&
+                   api_->type_is_tuple(
+                       api_->type_tuple_arg(ptype, 1));
 
   if (!good_args) {
     return param_error();
@@ -245,38 +250,38 @@ fm_ctx_def_t *fm_comp_book_play_split_gen(fm_comp_sys_t *csys,
   auto cl = make_unique<bps_op_cl>();
   cl->fname = STACK_POP(plist, const char *);
 
-  auto split_param = extractor_api_v1_get()->type_tuple_arg(ptype, 1);
-  unsigned split_count = extractor_api_v1_get()->type_tuple_size(split_param);
+  auto split_param = api_->type_tuple_arg(ptype, 1);
+  unsigned split_count = api_->type_tuple_size(split_param);
   for (unsigned i = 0; i < split_count; ++i) {
-    if (!extractor_api_v1_get()->type_is_cstring(
-            extractor_api_v1_get()->type_tuple_arg(split_param, i))) {
+    if (!api_->type_is_cstring(
+            api_->type_tuple_arg(split_param, i))) {
       return param_error();
     }
     cl->symbols.emplace_back(STACK_POP(plist, const char *));
   }
 
-  auto rec_t = extractor_api_v1_get()->record_type_get(sys, "fm::book::message",
+  auto rec_t = api_->record_type_get(sys, "fm::book::message",
                                                        sizeof(book::message));
 
   auto type =
-      extractor_api_v1_get()->frame_type_get(sys, 1, 1, "update", rec_t, 1);
+      api_->frame_type_get(sys, 1, 1, "update", rec_t, 1);
   if (!type) {
     return nullptr;
   }
 
-  auto *def = extractor_api_v1_get()->ctx_def_new();
-  extractor_api_v1_get()->ctx_def_volatile_set(def, split_count);
-  extractor_api_v1_get()->ctx_def_type_set(def, type);
-  extractor_api_v1_get()->ctx_def_closure_set(def, cl.release());
-  extractor_api_v1_get()->ctx_def_stream_call_set(
+  auto *def = api_->ctx_def_new();
+  api_->ctx_def_volatile_set(def, split_count);
+  api_->ctx_def_type_set(def, type);
+  api_->ctx_def_closure_set(def, cl.release());
+  api_->ctx_def_stream_call_set(
       def, &fm_comp_book_play_split_stream_call);
-  extractor_api_v1_get()->ctx_def_query_call_set(def, nullptr);
+  api_->ctx_def_query_call_set(def, nullptr);
   return def;
 }
 
 void fm_comp_book_play_split_destroy(fm_comp_def_cl cl, fm_ctx_def_t *def) {
 
-  if (auto *ctx_cl = (bps_op_cl *)extractor_api_v1_get()->ctx_def_closure(def);
+  if (auto *ctx_cl = (bps_op_cl *)api_->ctx_def_closure(def);
       ctx_cl) {
     delete ctx_cl;
   }
