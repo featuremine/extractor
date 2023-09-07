@@ -25,11 +25,12 @@ extern "C" {
 #include "extractor/api.h"
 #include "comp.h"
 #include "extractor/comp_sys.h"
+#include "extractor/comp_sys_capture.h"
 #include "extractor/exec_ctx.h"
+#include "extractor/frame.h"
 #include "extractor/stream_ctx.h"
 #include "extractor/type_sys.h"
-#include <extractor/comp_sys_capture.h>
-#include <extractor/frame.h>
+#include "fmc/string.h"
 }
 
 static struct extractor_api_v1 api_v1 {
@@ -56,7 +57,15 @@ static struct extractor_api_v1 api_v1 {
 
       fm_cstring_type_get, fm_tuple_type_get,
 
-      fm_comp_decl, fm_frame_type_get, fm_type_type_get, fm_type_sys_errmsg
+      fm_comp_decl, fm_frame_type_get, fm_type_type_get, fm_type_sys_errmsg,
+
+      fm_comp_sys_paths_get, fm_comp_sys_paths_set_default,
+      fm_comp_sys_paths_set, fm_comp_sys_paths_add,
+
+      fm_comp_sys_ext_load,
+
+      fm_type_sys_err_set, fm_type_equal, fm_frame_field_type, fm_type_is_float,
+      fm_record_type_get
 };
 
 struct extractor_api_v1 *extractor_api_v1_get() {
