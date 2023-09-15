@@ -24,11 +24,13 @@ graph.callback(trade, clbck)
 ```
 
   
-{\| class="wikitable" style="margin-left: 0px; margin-right: auto;"
-
-\| **Note:**
-
-  
+<table>
+<tbody>
+<tr class="odd">
+<td><p><strong>Note:</strong></p>
+<dl>
+<dt></dt>
+<dd>
 If you would like to use additional data in your call as a closure, for
 example the instrument or market, you will need to generate the call so
 the closure is persistent.
@@ -41,5 +43,8 @@ def clbck_gen(imnt, mkt):
 
 graph.callback(trade, fillmodel_trade(imnt, mkt))
 ```
-
-\|}
+</dd>
+</dl></td>
+</tr>
+</tbody>
+</table>
