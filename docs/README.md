@@ -21,6 +21,6 @@ Details about the different file format spec versions are available in the follo
 
 # Advanced Topics
 
-*[Extractor Bars Tutorial](ExtractorBarsTutorial.md)
-*[Ore file specification](#introduction-to-the-ore-file-format)
-*[Typing System](TypingSystem.md)
+* [Extractor Bars Tutorial](ExtractorBarsTutorial.md)
+* [Ore file specification](#introduction-to-the-ore-file-format)
+* [Typing System](TypingSystem.md)
