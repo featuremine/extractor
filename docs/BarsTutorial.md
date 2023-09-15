@@ -15,21 +15,14 @@ Pandas DataFrame using the builtin exporting tool.
 Before we are able to add any features, we need to setup our
 environment.
 
-We can do it importing the Extractor Python package and setting up our
-license file like this:
+We can do it importing the Extractor Python package and setting
+up a graph where we will add the features that
+will compute our bars.
 
 ``` python
 import extractor as extr
 
 if __name__ == "__main__":
-        extr.set_license("../path/to/license/test.lic")
-```
-
-  
-Now we will need to obtain a graph where we will add the features that
-will compute our bars.
-
-``` python
         graph = extr.system.comp_graph()
 ```
 
@@ -268,7 +261,6 @@ def New_York_time(year, mon, day, h=0, m=0, s=0):
         localize(datetime(year, mon, day, h, m, s)))
 
 if __name__ == "__main__":
-        extr.set_license("../test/extractor/test.lic")
         graph = extr.system.comp_graph()
         op = graph.features
         bbo_file =  "../test/extractor/data/sip_quotes_20171018.mp"
@@ -758,7 +750,6 @@ def compute_bar(nbbo, trades, ctrdt):
                 close, (("actual", "close_time"),))
 
 if __name__ == "__main__":
-        extr.set_license("../test/extractor/test.lic")
         graph = extr.system.comp_graph()
         op = graph.features
         bbo_file =  "../test/extractor/data/sip_quotes_20171018.mp"
