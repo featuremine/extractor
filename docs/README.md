@@ -17,6 +17,9 @@ More information about Extractor's callback Python API is available in the [Extr
 Ore is a binary format created to store book update message feeds in a compact and efficient way.
 
 Details about the different file format spec versions are available in the following pages:
+* [Ore 1.0.0](Ore1.0.0.md)
+* [Ore 1.1.0](Ore1.1.0.md)
+* [Ore 1.1.1](Ore1.1.1.md)
 * [Ore 1.1.2](Ore1.1.2.md)
 
 # Advanced Topics
