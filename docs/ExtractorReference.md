@@ -2897,9 +2897,9 @@ The Trade Side type is available at:
 
 extractor.**trade_side**
 
-### Methods
+## Methods
 
-#### BID
+### BID
 
   
 Trade Side BID
@@ -2916,7 +2916,7 @@ side = extractor.trade_side.BID()
 This method does not receive any arguments. The Trade Side BID singleton
 is returned.
 
-#### ASK
+### ASK
 
   
 Trade Side ASK
@@ -2933,7 +2933,7 @@ side = extractor.trade_side.ASK()
 This method does not receive any arguments. The Trade Side ASK singleton
 is returned.
 
-#### Other side
+### Other side
 
   
 Trade Side other side
