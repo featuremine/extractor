@@ -1,6 +1,3 @@
-<accesscontrol>Mtrokhim,Andres.rangel,Ekaterina.kurilova,Leonardo.bonilla,Federico.ravchina,Ivan.gonzalez,Quanttrader6477,
-Quanttrader2295,Quanttrader9335,Quanttrader4841,Quanttrader7728</accesscontrol>
-
 ## Format Description
 
 An Ore 1.1.2 file is composed of three elements: The version numbers, a
