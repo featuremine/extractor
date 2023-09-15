@@ -43,8 +43,8 @@ def compute_diff(nbbo):
 if __name__ == "__main__":
     graph = extr.system.comp_graph()
 
-    bbo_file = "test/extractor/sip_quotes_20171018.base.mp"
-    bar_file = "test/extractor/bar_20171018.test.csv"
+    bbo_file = "test/sip_quotes_20171018.base.mp"
+    bar_file = "test/bar_20171018.test.csv"
 
     markets = ["NYSEMKT", "NASDAQOMX", "NYSEArca"]
     tickers = [
