@@ -14,7 +14,6 @@ Pandas DataFrame using the builtin exporting tool.
 
 # Get market data for individual instruments
 
-  
 Before we use Extractor we need to initialize the platform.
 
 In this section we will learn how to do it and how to add the required
@@ -38,13 +37,61 @@ if __name__ == "__main__":
         graph = extr.system.comp_graph()
 ```
 
+## Running the context for your graph
+
   
-Now we will need to obtain a graph where we will add the features that
-will compute our bars.
+We will also define a few methods that will help us specify the end time
+of the simulation easily and clean quote data and convert it to the type
+that should be used in the calculations.
+
+<!-- -->
+
+  
+To specify the bar length and calculate the ending time of the
+simulation we will need to add a couple of methods, this methods will
+require the pytz dependency and an additional dependency from datetime:
 
 ``` python
-        graph = extr.system.comp_graph()
+import pytz
+from datetime import datetime, timedelta
 ```
+
+  
+The following method is defined to generate a time delta corresponding
+to a specified date
+
+``` python
+def epoch_delta(date):
+    return date - pytz.timezone("UTC").localize(datetime(1970, 1, 1))
+```
+
+  
+This method allows us to calculate the time delta of a specified date
+with the New York timezone
+
+``` python
+def New_York_time(year, mon, day, h=0, m=0, s=0):
+    return epoch_delta(pytz.timezone("America/New_York").
+        localize(datetime(year, mon, day, h, m, s)))
+```
+
+  
+Since the timers involved in the computations will not stop generating
+future events, we need to set an end to the simulation, in our scenario
+it will be at 16:00 on October 16, 2017
+
+``` python
+        graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
+```
+
+## Get market data for individual instruments
+
+  
+Now that we have created a graph and we can run the context to process
+the data we will process with our graph up to the desired time we can
+proceed to add the required computations to our graph.
+
+<!-- -->
 
   
 For conveniency we will use the following variable to easily create our
@@ -60,12 +107,12 @@ features from this point onwards:
 Now, we will proceed to add the first features to our graph that will
 load the market data into the platform.
 
-The Jubilee-Tutorial package has two files that we can use as our market
-data input:
+The Featuremine package has two files that we can use as our market data
+input:
 
 ``` python
-        bbo_file =  "../test/sip_quotes_20171018.base.mp"
-        trade_file = "../test/sip_trades_20171018.base.mp"
+        bbo_file =  "../test/extractor/data/sip_quotes_20171018.mp"
+        trade_file = "../test/extractor/data/sip_trades_20171018.mp"
 ```
 
   
@@ -214,12 +261,21 @@ streams for each instrument and our code should look close to this:
 
 ``` python
 import extractor as extr
+import pytz
+from datetime import datetime, timedelta
+
+def epoch_delta(date):
+    return date - pytz.timezone("UTC").localize(datetime(1970, 1, 1))
+
+def New_York_time(year, mon, day, h=0, m=0, s=0):
+    return epoch_delta(pytz.timezone("America/New_York").
+        localize(datetime(year, mon, day, h, m, s)))
 
 if __name__ == "__main__":
         graph = extr.system.comp_graph()
         op = graph.features
-        bbo_file =  "../test/sip_quotes_20171018.base.mp"
-        trade_file = "../test/sip_trades_20171018.base.mp"
+        bbo_file =  "../test/extractor/data/sip_quotes_20171018.mp"
+        trade_file = "../test/extractor/data/sip_trades_20171018.mp"
         markets = ["NYSEMKT", "NASDAQOMX", "NYSEArca"]
         tickers = [
           {"NYSEMKT": "A", "NASDAQOMX": "A", "NYSEArca": "A"},
@@ -268,6 +324,8 @@ if __name__ == "__main__":
         nbbos = [op.bbo_aggr(*x) for x in zip(*bbos)]
         ctrdts = [op.cum_trade_total(*x) for x in zip(*ctrds)]
         trade_imnt_split = op.split(trades_in, "ticker", tuple([x["NASDAQOMX"] for x in tickers]))
+
+        graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
 ```
 
 # Generating the bars
@@ -570,56 +628,11 @@ be later exported.
         val_aggr = op.accumulate(out_stream)
 ```
 
-# Running the simulation and exporting the result
+# Exporting the results
 
   
-We will also define a few methods that will help us specify the end time
-of the simulation easily and clean quote data and convert it to the type
-that should be used in the calculations.
-
-<!-- -->
-
-  
-To specify the bar length and calculate the ending time of the
-simulation we will need to add a couple of methods, this methods will
-require the pytz dependency and an additional dependency from datetime:
-
-``` python
-import pytz
-from datetime import datetime, timedelta
-```
-
-  
-The following method is defined to generate a time delta corresponding
-to a specified date
-
-``` python
-def epoch_delta(date):
-    return date - pytz.timezone("UTC").localize(datetime(1970, 1, 1))
-```
-
-  
-This method allows us to calculate the time delta of a specified date
-with the New York timezone
-
-``` python
-def New_York_time(year, mon, day, h=0, m=0, s=0):
-    return epoch_delta(pytz.timezone("America/New_York").
-        localize(datetime(year, mon, day, h, m, s)))
-```
-
-  
-Since the timers involved in the computations will not stop generating
-future events, we need to set an end to the simulation, in our scenario
-it will be at 16:00 on October 16, 2017
-
-``` python
-        graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
-```
-
-  
-Now that we added the required code to run our simulation we would like
-to export the accumulated data to a Pandas DataFrame so we will import
+Now that we added the required code to compute our bars we would like to
+export the accumulated data to a Pandas DataFrame so we will import
 Pandas into our script:
 
 ``` python
@@ -628,7 +641,7 @@ import pandas as pd
 
   
 To export the accumulated data we can use the **result_as_pandas**
-method like this:
+method in the extractor module like this:
 
 ``` python
         as_pd = extr.result_as_pandas(val_aggr)
@@ -750,8 +763,8 @@ def compute_bar(nbbo, trades, ctrdt):
 if __name__ == "__main__":
         graph = extr.system.comp_graph()
         op = graph.features
-        bbo_file =  "../test/sip_quotes_20171018.base.mp"
-        trade_file = "../test/sip_trades_20171018.base.mp"
+        bbo_file =  "../test/extractor/data/sip_quotes_20171018.mp"
+        trade_file = "../test/extractor/data/sip_trades_20171018.mp"
         markets = ["NYSEMKT", "NASDAQOMX", "NYSEArca"]
         tickers = [
           {"NYSEMKT": "A", "NASDAQOMX": "A", "NYSEArca": "A"},
@@ -804,7 +817,147 @@ if __name__ == "__main__":
         out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
           tuple([x["NASDAQOMX"] for x in tickers]))
         val_aggr = op.accumulate(out_stream)
+
         graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
+
         as_pd = extr.result_as_pandas(val_aggr)
         as_pd.to_csv("../test/bar_20171018.test.csv", index=False)
+```
+
+# Signals Tutorial
+
+  
+Once we have shaped the input data feed as desired we can proceed to set
+up the features that will help us calculate more useful values relevant
+to our strategy.
+
+Using our bars feed we will proceed to set up a signal that will let us
+know if a short moving average is over a long moving average for the bar
+prices.
+
+<!-- -->
+
+  
+To achieve this we will add a new method to our script that will
+calculate the desired moving averages and use them to calculate our
+alpha feed as follows:
+
+``` python
+def compute_alpha(bar):
+```
+
+## Type conversions
+
+  
+To calculate the alphas we will convert all the operands we will use to
+the same type:
+
+``` python
+    openbidsz = op.convert(bar.open_bidsz,(extr.Float64)) 
+    openasksz = op.convert(bar.open_asksz,(extr.Float64))
+    openbidpx = op.convert(bar.open_bidpx,(extr.Float64)) 
+    openaskpx = op.convert(bar.open_askpx,(extr.Float64))
+
+    highbidsz = op.convert(bar.high_bidsz,(extr.Float64)) 
+    highasksz = op.convert(bar.high_asksz,(extr.Float64))
+    highbidpx = op.convert(bar.high_bidpx,(extr.Float64)) 
+    highaskpx = op.convert(bar.high_askpx,(extr.Float64))
+
+    lowbidsz = op.convert(bar.low_bidsz,(extr.Float64)) 
+    lowasksz = op.convert(bar.low_asksz,(extr.Float64))
+    lowbidpx = op.convert(bar.low_bidpx,(extr.Float64)) 
+    lowaskpx = op.convert(bar.low_askpx,(extr.Float64))
+
+    closebidsz = op.convert(bar.close_bidsz,(extr.Float64)) 
+    closeasksz = op.convert(bar.close_asksz,(extr.Float64))
+    closebidpx = op.convert(bar.close_bidpx,(extr.Float64)) 
+    closeaskpx = op.convert(bar.close_askpx,(extr.Float64))
+```
+
+## Alpha Calculations
+
+  
+Once our operands have the same type, we can proceed to add the code
+that will calculate our alpha:
+
+``` python
+    ...
+
+    open_sig = (openaskpx * openbidsz + openbidpx * openasksz) / (openbidsz + openasksz)
+    open_ma_10 = op.sma_tick_mw(open_sig,10)
+    open_ma_50 = op.sma_tick_mw(open_sig,50)
+    open_alpha = open_ma_10 - open_ma_50
+
+    high_sig = (highaskpx * highbidsz + highbidpx * highasksz) / (highbidsz + highasksz)
+    high_ma_10 = op.sma_tick_mw(high_sig,10)
+    high_ma_50 = op.sma_tick_mw(high_sig,50)
+    high_alpha = high_ma_10 - high_ma_50
+
+    low_sig = (lowaskpx * lowbidsz + lowbidpx * lowasksz) / (lowbidsz + lowasksz)
+    low_ma_10 = op.sma_tick_mw(low_sig,10)
+    low_ma_50 = op.sma_tick_mw(low_sig,50)
+    low_alpha = low_ma_10 - low_ma_50
+
+    close_sig = (closeaskpx * closebidsz + closebidpx * closeasksz) / (closebidsz + closeasksz)
+    close_ma_10 = op.sma_tick_mw(close_sig,10)
+    close_ma_50 = op.sma_tick_mw(close_sig,50)
+    close_alpha = close_ma_10 - close_ma_50
+```
+
+## Ensembling the signal data
+
+``` python
+    return op.combine(
+                open_alpha,
+                (("open_askpx", "open"),),
+                close_alpha,
+                (("close_askpx", "close"),),
+                high_alpha,
+                (("high_askpx", "high"),),
+                low_alpha,
+                (("low_askpx", "low"),))
+```
+
+## Computing the bars
+
+  
+Now that we have a method that will generate our alphas, we use it to
+add the required nodes to our graph
+
+``` python
+        ....
+        bars = [compute_bar(nbbo, trd, ctrdt) for nbbo, trd, ctrdt in zip(nbbos, trade_imnt_split, ctrdts)]
+        out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
+          tuple([x["NASDAQOMX"] for x in tickers]))
+        val_aggr = op.accumulate(out_stream)
+        alphas = [compute_alpha(bar) for bar in bars]
+        alphas_out_stream = op.join(*alphas, "ticker", extr.Array(extr.Char, 16),
+          tuple([x["NASDAQOMX"] for x in tickers]))
+        ...
+```
+
+## Exporting the results
+
+  
+To access the values calculated in our alphas we will set up an
+accumulator to export the results obtained to a pandas dataframe and
+dump the results to a file.
+
+``` python
+        ....
+        bars = [compute_bar(nbbo, trd, ctrdt) for nbbo, trd, ctrdt in zip(nbbos, trade_imnt_split, ctrdts)]
+        out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
+          tuple([x["NASDAQOMX"] for x in tickers]))
+        val_aggr = op.accumulate(out_stream)
+        alphas = [compute_alpha(bar) for bar in bars]
+        alphas_out_stream = op.join(*alphas, "ticker", extr.Array(extr.Char, 16),
+          tuple([x["NASDAQOMX"] for x in tickers]))
+        alphas_val_aggr = op.accumulate(alphas_out_stream)
+
+        graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
+
+        as_pd = extr.result_as_pandas(val_aggr)
+        as_pd.to_csv("../test/bar_20171018.test.csv", index=False)
+        alphas_as_pd = extr.result_as_pandas(alphas_val_aggr)
+        alphas_as_pd.to_csv("../test/alphas_20171018.test.csv", index=False)
 ```
