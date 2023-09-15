@@ -1,7 +1,7 @@
 # Table of Contents
 
 <!--TOC-->
-  
+
 This tutorial will walk us through the process of building bars using
 Extractor.
 
@@ -12,7 +12,15 @@ bars with it.
 Finally We will export our newly generated bars from Extractor to a
 Pandas DataFrame using the builtin exporting tool.
 
-# Initializing the platform
+# Get market data for individual instruments
+
+Before we use Extractor we need to initialize the platform.
+
+In this section we will learn how to do it and how to add the required
+features to read the market data and shape it in a way we can compute
+bars.
+
+## Initializing the platform
 
   
 Before we are able to add any features, we need to setup our
@@ -29,7 +37,7 @@ if __name__ == "__main__":
         graph = extr.system.comp_graph()
 ```
 
-# Running the context for your graph
+## Running the context for your graph
 
   
 We will also define a few methods that will help us specify the end time
@@ -76,7 +84,7 @@ it will be at 16:00 on October 16, 2017
         graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
 ```
 
-# Get market data for individual instruments
+## Get market data for individual instruments
 
   
 Now that we have created a graph and we can run the context to process
