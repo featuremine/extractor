@@ -11,7 +11,7 @@
 """
 
 """
- @file /test/extractor/csv_play_wrong.py
+ @file /test/csv_play_wrong.py
  @author Vitaut Tryputsin
  @date 20 Jan 2020
 """

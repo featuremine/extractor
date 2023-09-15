@@ -111,8 +111,8 @@ The Featuremine package has two files that we can use as our market data
 input:
 
 ``` python
-        bbo_file =  "../test/extractor/data/sip_quotes_20171018.mp"
-        trade_file = "../test/extractor/data/sip_trades_20171018.mp"
+        bbo_file =  "../test/data/sip_quotes_20171018.mp"
+        trade_file = "../test/data/sip_trades_20171018.mp"
 ```
 
   
@@ -125,8 +125,8 @@ Since the files used are MessagePack encoded files, we will use the
               (("receive", extr.Time64, ""),
                ("ticker", extr.Array(extr.Char, 16), ""),
                ("market", extr.Array(extr.Char, 32), ""),
-               ("bidprice", extr.Decimal64, ""),
-               ("askprice", extr.Decimal64, ""),
+               ("bidprice", extr.Rprice, ""),
+               ("askprice", extr.Rprice, ""),
                ("bidqty", extr.Int32, ""),
                ("askqty", extr.Int32, "")))
         trades_in = op.mp_play(
@@ -134,7 +134,7 @@ Since the files used are MessagePack encoded files, we will use the
               (("receive", extr.Time64, ""),
                ("ticker", extr.Array(extr.Char, 16), ""),
                ("market", extr.Array(extr.Char, 32), ""),
-               ("price", extr.Decimal64, ""),
+               ("price", extr.Rprice, ""),
                ("qty", extr.Int32, ""),
                ("side", extr.Int32, "")))
 ```
@@ -169,7 +169,7 @@ Now that we have the desired market data streams we can proceed to
 generate streams by instrument for each one of them.
 
 ``` python
-        mkt_idx = 0;
+        mkt_idx = 0
         for mkt in markets:
             mkt_tickers = [x[mkt] for x in tickers]
             mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
@@ -189,7 +189,7 @@ necessary features to obtain cumulative trades for each market and
 instrument:
 
 ``` python
-        mkt_idx = 0;
+        mkt_idx = 0
         for mkt in markets:
             mkt_tickers = [x[mkt] for x in tickers]
             mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
@@ -211,7 +211,7 @@ us calculate NBBOs and Cumulative trades:
 ``` python
         bbos = []
         ctrds = []
-        mkt_idx = 0;
+        mkt_idx = 0
         for mkt in markets:
             mkt_tickers = [x[mkt] for x in tickers]
             mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
@@ -274,8 +274,8 @@ def New_York_time(year, mon, day, h=0, m=0, s=0):
 if __name__ == "__main__":
         graph = extr.system.comp_graph()
         op = graph.features
-        bbo_file =  "../test/extractor/data/sip_quotes_20171018.mp"
-        trade_file = "../test/extractor/data/sip_trades_20171018.mp"
+        bbo_file =  "../test/data/sip_quotes_20171018.mp"
+        trade_file = "../test/data/sip_trades_20171018.mp"
         markets = ["NYSEMKT", "NASDAQOMX", "NYSEArca"]
         tickers = [
           {"NYSEMKT": "A", "NASDAQOMX": "A", "NYSEArca": "A"},
@@ -287,8 +287,8 @@ if __name__ == "__main__":
               (("receive", extr.Time64, ""),
                ("ticker", extr.Array(extr.Char, 16), ""),
                ("market", extr.Array(extr.Char, 32), ""),
-               ("bidprice", extr.Decimal64, ""),
-               ("askprice", extr.Decimal64, ""),
+               ("bidprice", extr.Rprice, ""),
+               ("askprice", extr.Rprice, ""),
                ("bidqty", extr.Int32, ""),
                ("askqty", extr.Int32, "")))
         trades_in = op.mp_play(
@@ -296,7 +296,7 @@ if __name__ == "__main__":
               (("receive", extr.Time64, ""),
                ("ticker", extr.Array(extr.Char, 16), ""),
                ("market", extr.Array(extr.Char, 32), ""),
-               ("price", extr.Decimal64, ""),
+               ("price", extr.Rprice, ""),
                ("qty", extr.Int32, ""),
                ("side", extr.Int32, "")))
         bbo_split = op.split(bbos_in, "market", tuple(markets))
@@ -763,8 +763,8 @@ def compute_bar(nbbo, trades, ctrdt):
 if __name__ == "__main__":
         graph = extr.system.comp_graph()
         op = graph.features
-        bbo_file =  "../test/extractor/data/sip_quotes_20171018.mp"
-        trade_file = "../test/extractor/data/sip_trades_20171018.mp"
+        bbo_file =  "../test/data/sip_quotes_20171018.mp"
+        trade_file = "../test/data/sip_trades_20171018.mp"
         markets = ["NYSEMKT", "NASDAQOMX", "NYSEArca"]
         tickers = [
           {"NYSEMKT": "A", "NASDAQOMX": "A", "NYSEArca": "A"},
@@ -776,8 +776,8 @@ if __name__ == "__main__":
               (("receive", extr.Time64, ""),
                ("ticker", extr.Array(extr.Char, 16), ""),
                ("market", extr.Array(extr.Char, 32), ""),
-               ("bidprice", extr.Decimal64, ""),
-               ("askprice", extr.Decimal64, ""),
+               ("bidprice", extr.Rprice, ""),
+               ("askprice", extr.Rprice, ""),
                ("bidqty", extr.Int32, ""),
                ("askqty", extr.Int32, "")))
         trades_in = op.mp_play(
@@ -785,7 +785,7 @@ if __name__ == "__main__":
               (("receive", extr.Time64, ""),
                ("ticker", extr.Array(extr.Char, 16), ""),
                ("market", extr.Array(extr.Char, 32), ""),
-               ("price", extr.Decimal64, ""),
+               ("price", extr.Rprice, ""),
                ("qty", extr.Int32, ""),
                ("side", extr.Int32, "")))
         bbo_split = op.split(bbos_in, "market", tuple(markets))

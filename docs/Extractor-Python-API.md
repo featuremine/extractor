@@ -221,8 +221,8 @@ For example it can be used in the following way:
              ("market", extr.Array(extr.Char, 32), ""),
              ("ticker", extr.Array(extr.Char, 16), ""),
              ("type", extr.Char, ""),
-             ("bidprice", extr.Decimal64, ""),
-             ("askprice", extr.Decimal64, ""),
+             ("bidprice", extr.Rprice, ""),
+             ("askprice", extr.Rprice, ""),
              ("bidqty", extr.Int32, ""),
              ("askqty", extr.Int32, "")))
 ```
@@ -238,8 +238,8 @@ could pipe this output into our CSV play feature like this:
              ("market", extr.Array(extr.Char, 32), ""),
              ("ticker", extr.Array(extr.Char, 16), ""),
              ("type", extr.Char, ""),
-             ("bidprice", extr.Decimal64, ""),
-             ("askprice", extr.Decimal64, ""),
+             ("bidprice", extr.Rprice, ""),
+             ("askprice", extr.Rprice, ""),
              ("bidqty", extr.Int32, ""),
              ("askqty", extr.Int32, "")))
 ```
@@ -303,7 +303,7 @@ For example it can be used in the following way:
             (("receive", extr.Time64, ""),
              ("ticker", extr.Array(extr.Char, 16), ""),
              ("market", extr.Array(extr.Char, 32), ""),
-             ("price", extr.Decimal64, ""),
+             ("price", extr.Rprice, ""),
              ("qty", extr.Int32, ""),
              ("side", extr.Int32, "")))
 ```
@@ -319,7 +319,7 @@ we could pipe this output into our MP play feature like this:
             (("receive", extr.Time64, ""),
              ("ticker", extr.Array(extr.Char, 16), ""),
              ("market", extr.Array(extr.Char, 32), ""),
-             ("price", extr.Decimal64, ""),
+             ("price", extr.Rprice, ""),
              ("qty", extr.Int32, ""),
              ("side", extr.Int32, "")))
 ```
@@ -1409,7 +1409,7 @@ This feature will have the result frame field types and names of the
 first input operator
 
 This feature requires the type of the fields in the result frame of the
-input operators to be of numerical type, **Decimal64** and **Time64**
+input operators to be of numerical type, **Rprice** and **Time64**
 types are permitted.
 
 ### Add
@@ -1444,7 +1444,7 @@ This feature will have the result frame field types and names of the
 first input operator
 
 This feature requires the type of the fields in the result frame of the
-input operators to be of numerical type, **Decimal64** and **Time64**
+input operators to be of numerical type, **Rprice** and **Time64**
 types are permitted.
 
 ### Divide
@@ -1481,7 +1481,7 @@ This feature will have the result frame field types and names of the
 first input operator
 
 This feature requires the type of the fields in the result frame of the
-input operators to be of numerical type, **Decimal64** and **Time64**
+input operators to be of numerical type, **Rprice** and **Time64**
 types are not permitted.
 
 ### Mult
@@ -1517,7 +1517,7 @@ This feature will have the result frame field types and names of the
 first input operator
 
 This feature requires the type of the fields in the result frame of the
-input operators to be of numerical type, **Decimal64** and **Time64**
+input operators to be of numerical type, **Rprice** and **Time64**
 types are not permitted.
 
 ### Log
@@ -1650,7 +1650,7 @@ This feature will have the result frame field types and names of the
 first input operator
 
 This feature requires the type of the fields in the result frame of the
-first input operator to be of numerical type, **Decimal64** and
+first input operator to be of numerical type, **Rprice** and
 **Time64** types are permitted.
 
 ### Min
@@ -1684,7 +1684,7 @@ This feature will have the result frame field types and names of the
 first input operator
 
 This feature requires the type of the fields in the result frame of the
-first input operator to be of numerical type, **Decimal64** and
+first input operator to be of numerical type, **Rprice** and
 **Time64** types are permitted.
 
 ### Time weighted sum
@@ -1948,11 +1948,11 @@ type.
 
   
   
-**data**: a Decimal64 or floating-point input feature.
+**data**: a Rprice or floating-point input feature.
 
 **divisor**: optional argument indicating desired precision: not
 specifying any divisor will produce an Int64 output. Providing a
-floating point input along with a divisor will result in a Decimal64
+floating point input along with a divisor will result in a Rprice
 output.
 
 ### Sum
@@ -2370,9 +2370,9 @@ The following fields must be part of the frames for all the input
 features:
 
   
-"bidprice" as **Decimal64**
+"bidprice" as **Rprice**
 
-"askprice" as **Decimal64**
+"askprice" as **Rprice**
 
 "bidqty" as **Int32**
 
@@ -2407,7 +2407,7 @@ A single feature must be provided as an argument
 The following fields must be part of the frames for the input feature:
 
   
-“price” as **Decimal64**
+“price” as **Rprice**
 
 “qty” as **Int32**
 
@@ -2417,7 +2417,7 @@ The following fields must be part of the frames for the input feature:
 The result frame will have the following fields:
 
   
-“notional” as **Decimal64**
+“notional” as **Rprice**
 
 “shares” as **Int32**
 
@@ -2450,7 +2450,7 @@ A single feature must be provided as an argument
 The following fields must be a part of the frames of the input features:
 
   
-“notional” as **Decimal64**
+“notional” as **Rprice**
 
 “shares” as **Int32**
 
@@ -2625,7 +2625,7 @@ The output frame has the following fields:
 - vendor as **Time64**
 - seqn as **Uint64**
 - id as **Uint64**
-- price as **Decimal64**
+- price as **Rprice**
 - qty as **Uint64**
 - is_bid as **Uint16**
 - batch as **Uint16**
@@ -2640,7 +2640,7 @@ The output frame has the following fields:
 - seqn as **Uint64**
 - id as **Uint64**
 - prio as **Uint64**
-- price as **Decimal64**
+- price as **Rprice**
 - qty as **Uint64**
 - is_bid as **Uint16**
 - batch as **Uint16**
@@ -2654,7 +2654,7 @@ The output frame has the following fields:
 - vendor as **Time64**
 - seqn as **Uint64**
 - id as **Uint64**
-- price as **Decimal64**
+- price as **Rprice**
 - pos as **Uint32**
 - qty as **Uint64**
 - is_bid as **Uint16**
@@ -2670,7 +2670,7 @@ The output frame has the following fields:
 - vendor as **Time64**
 - seqn as **Uint64**
 - id as **Uint64**
-- price as **Decimal64**
+- price as **Rprice**
 - qty as **Uint64**
 - is_bid as **Uint16**
 - batch as **Uint16**
@@ -2684,8 +2684,8 @@ The output frame has the following fields:
 - vendor as **Time64**
 - seqn as **Uint64**
 - id as **Uint64**
-- price as **Decimal64**
-- trade_price as **Decimal64**
+- price as **Rprice**
+- trade_price as **Rprice**
 - qty as **Uint64**
 - is_bid as **Uint16**
 - batch as **Uint16**
@@ -2698,7 +2698,7 @@ The output frame has the following fields:
 
 - vendor as **Time64**
 - seqn as **Uint64**
-- trade_price as **Decimal64**
+- trade_price as **Rprice**
 - qty as **Uint64**
 - batch as **Uint16**
 - decoration as character array of 8 characters
@@ -2712,7 +2712,7 @@ The output frame has the following fields:
 - vendor as **Time64**
 - seqn as **Uint64**
 - id as **Uint64**
-- price as **Decimal64**
+- price as **Rprice**
 - state as **Uint32**
 - is_bid as **Uint16**
 - batch as **Uint16**
@@ -2737,7 +2737,7 @@ The output frame has the following fields:
 
 - vendor as **Time64**
 - seqn as **Uint64**
-- price as **Decimal64**
+- price as **Rprice**
 - qty as **Uint64**
 - is_bid as **Uint16**
 - batch as **Uint16**
@@ -2760,7 +2760,7 @@ The output frame has the following fields:
 
 - vendor as **Time64**
 - seqn as **Uint64**
-- trade_price as **Decimal64**
+- trade_price as **Rprice**
 - qty as **Uint64**
 - batch as **Uint16**
 - decoration as character array of 8 characters.
