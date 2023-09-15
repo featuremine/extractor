@@ -19,8 +19,8 @@ Ore is a binary format created to store book update message feeds in a compact a
 Details about the different file format spec versions are available in the following pages:
 * [Ore 1.1.2](Ore1.1.2.md)
 
-= Advanced Topics =
+# Advanced Topics
 
-: [Extractor Bars Tutorial](ExtractorBarsTutorial.md)
-: [Ore file specification](#introduction-to-the-ore-file-format)
-: [Typing System](TypingSystem.md)
+*[Extractor Bars Tutorial](ExtractorBarsTutorial.md)
+*[Ore file specification](#introduction-to-the-ore-file-format)
+*[Typing System](TypingSystem.md)
