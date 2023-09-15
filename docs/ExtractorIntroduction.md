@@ -59,7 +59,7 @@ Extractor offers multiple ways to access the data:
 
 To obtain access to the data in computational nodes of interest when an
 update is processed, you can take advantage of the [ callbacks
-](Featuremine_Reference#Callbacks "wikilink") mechanism.
+](ExtractorReference.md#Callbacks) mechanism.
 
 ``` python
 def clbck(frame):
@@ -71,7 +71,7 @@ graph.callback(trade, clbck)
   
 If you need to access the data on-demand and avoid the burden of
 unnecessary updates processed by the operator you can use the [ frame
-references ](Featuremine_Reference#Frame_references "wikilink").
+references ](ExtractorReference.md#frame-references).
 
 You can request the reference of any computation using the graph's
 **get_ref** method.
@@ -82,7 +82,7 @@ You can request the reference of any computation using the graph's
 
   
 And use the [ frame access API
-](Featuremine_Reference#Access "wikilink") to access the data in the
+](ExtractorReference.md#access) to access the data in the
 frame.
 
 For example, to access the price in the dimension zero of a
@@ -96,7 +96,7 @@ For example, to access the price in the dimension zero of a
 
   
 Extractor built-in features include [ performance measurement
-](Featuremine_Reference#Performance_measurement_features "wikilink")
+](ExtractorReference.md#performance-measurement-features)
 features which will allow you to measure how long it takes to execute a
 given sequence of nodes in your graph.
 
@@ -136,5 +136,4 @@ if __name__ == "__main__":
 
   
 A detailed tutorial on the process of building bars using Extractor can
-be found on the [Extractor Bars
-Tutorial](Extractor_Bars_Tutorial "wikilink") page.
+be found on the [Extractor Bars Tutorial](ExtractorBarsTutorial.md) page.
