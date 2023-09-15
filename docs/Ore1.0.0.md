@@ -1,16 +1,20 @@
-## Format Description
+# Table of Contents
+
+<!--TOC-->
+
+# Format Description
 
 An Ore 1.0.0 file is composed of three elements: The version numbers, a
 header, and the message sequence.
 
-### Version
+## Version
 
   
 The Ore 1.0.0 file includes the Ore format version numbers, they are
 written as MessagePack array in the form of the major, minor and
 sub-version numbers.
 
-#### Compatibility
+### Compatibility
 
   
 When reading an Ore 1.X.Y file:
@@ -23,7 +27,7 @@ Minor versions are backward compatible.
 
 Major versions are not compatible.
 
-### Header
+## Header
 
   
 The file header is a MessagePack array of MessagePack maps which contain
@@ -37,7 +41,7 @@ Currently, the instrument properties include the following:
 | symbol            | String   | Symbol name                  |
 | price_tick        | Integer  | Denominator for symbol price |
 
-### Message Sequence
+## Message Sequence
 
   
 The book update messages are encoded as MessagePack arrays.
@@ -49,9 +53,9 @@ Each field of the array is a message element of a prescribed type.
 
 The message sequence has to start with a **Time message**.
 
-## Message Elements
+# Message Elements
 
-### Message Header Elements
+## Message Header Elements
 
   
 To identify each message, the message type ID is set in the first
@@ -100,9 +104,9 @@ The time in nanoseconds from the time in seconds set with the last
   
 An Integer value that contains the order symbol index in the file header
 
-### Message Specific Elements
+## Message Specific Elements
 
-#### Time Message
+### Time Message
 
     [0, receive]
 
@@ -132,7 +136,7 @@ Multiple time messages can be received throughout the session.
 </tbody>
 </table>
 
-#### Order Add Message
+### Order Add Message
 
     [1, receive, vendor offset, vendor seqno, batch, imnt id, id, price, qty, is bid]
 
@@ -144,7 +148,7 @@ Integer
 
 Order Identifier
 
-#### Order Insert Message
+### Order Insert Message
 
     [2, receive, vendor offset, vendor seqno, batch, imnt id, id, priority, price, qty, is bid]
 
@@ -156,7 +160,7 @@ Integer
 
 Order Identifier
 
-#### Order Position Message
+### Order Position Message
 
     [3, receive, vendor offset, vendor seqno, batch, imnt id, id, position, price, qty, is bid]
 
@@ -195,7 +199,7 @@ the order will change.
 </tbody>
 </table>
 
-#### Order Cancel Message
+### Order Cancel Message
 
     [4, receive, vendor offset, vendor seqno, batch, imnt id, id, qty]
 
@@ -207,7 +211,7 @@ Integer
 
 Order Identifier
 
-#### Order Delete Message
+### Order Delete Message
 
     [5, receive, vendor offset, vendor seqno, batch, imnt id, id]
 
@@ -219,7 +223,7 @@ Integer
 
 Order Identifier
 
-#### Order Modify Message
+### Order Modify Message
 
     [6, receive, vendor offset, vendor seqno, batch, imnt id, id, new id, new price, new qty]
 
@@ -231,7 +235,7 @@ Integer
 
 Order Identifier of modified order
 
-#### Order Executed Whole Message
+### Order Executed Whole Message
 
     [7, receive, vendor offset, vendor seqno, batch, imnt id, id]
 
@@ -243,7 +247,7 @@ Integer
 
 Order Identifier
 
-#### Order Executed Whole at a Price Message
+### Order Executed Whole at a Price Message
 
     [8, receive, vendor offset, vendor seqno, batch, imnt id, id, trade price]
 
@@ -255,7 +259,7 @@ Integer
 
 Order Identifier
 
-#### Order Fill Message
+### Order Fill Message
 
     [9, receive, vendor offset, vendor seqno, batch, imnt id, id, qty]
 
@@ -281,7 +285,7 @@ This message contains a partial execution of a given order
 </tbody>
 </table>
 
-#### Order Fill at a Price Message
+### Order Fill at a Price Message
 
     [10, receive, vendor offset, vendor seqno, batch, imnt id, id, trade price, qty]
 
@@ -308,7 +312,7 @@ price
 </tbody>
 </table>
 
-#### Off Book Trade Message
+### Off Book Trade Message
 
     [11, receive, vendor offset, vendor seqno, batch, imnt id, trade price, qty, decorator]
 
@@ -320,7 +324,7 @@ Integer
 
 Numerator part of the traded price
 
-#### Status Message
+### Status Message
 
     [12, receive, vendor offset, vendor seqno, batch, imnt id, id, price, state id, is bid]
 
@@ -332,7 +336,7 @@ Integer
 
 Order Identifier, the value could be ignored for some states
 
-#### Book Control Message
+### Book Control Message
 
     [13, receive, vendor offset, vendor seqno, batch, imnt id, uncross]
 
@@ -344,7 +348,7 @@ Boolean
 
 Book uncrossed status
 
-#### Level Set Message
+### Level Set Message
 
     [14, receive, vendor offset, vendor seqno, batch, imnt id, price, qty, is bid]
 

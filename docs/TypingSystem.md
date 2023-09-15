@@ -1,12 +1,16 @@
+# Table of Contents
+
+<!--TOC-->
+
 The Extractor typing system supports the following types:
 
-## Python
+# Python
 
   
 The types supported by Extractor can be accessed directly from the
 module using the following objects:
 
-### Base types
+## Base types
 
   
 The base types do not require a new instance to be used, the types can
@@ -95,7 +99,7 @@ Bool:
   
 extractor.Bool
 
-### Array Types
+## Array Types
 
   
 The array types require a new instance to be used.
@@ -116,7 +120,7 @@ For example, A type that represents a character array with a length of
 
 ` extr.Array(extr.Char, 30)`
 
-## C Interface
+# C Interface
 
   
 The C interface for extractor uses the integrated typing system.
@@ -126,7 +130,7 @@ To be able to use it, you can request it from the computational system
 
 ` fm_type_sys_t *tsys = fm_type_sys_get(comp_sys_ptr);`
 
-### Base types
+## Base types
 
   
 The base types can be created using the **fm_base_type_get** method in
@@ -170,7 +174,7 @@ FM_TYPE_WCHAR
 
 FM_TYPE_BOOL
 
-### Array types
+## Array types
 
   
 The array types can be created using the **fm_array_type_get** method in
@@ -185,7 +189,7 @@ characters, we could do it in the following way:
 ` auto *char_type = fm_base_type_get(tsys, FM_TYPE_CHAR);`  
 ` auto *chararray16 = fm_array_type_get(tsys, char_type, 30);`
 
-### Method declarations
+## Method declarations
 
   
 The header where the definitions of these methods and additional details
