@@ -84,25 +84,23 @@ element of each message, the message types are enumerated as follows:
 There are also multiple elements that are used in all the messages
 **except for the Time message**, such as the following:
 
-::; receive
-
-  
-  
-The time in nanoseconds from the time in seconds set with the last
-**Time message** received.
-
+* receive
+  * The time in nanoseconds from the time in seconds set with the last '''Time message''' received.
+* vendor offset
+  * The difference between the receive time and vendor time in nanoseconds
+* vendor seqno
+  * A sequence number assigned by the vendor
+  * This value should be set to Zero if no sequence number is assigned by the vendor
+* batch
+  * A flag used to denote if the message belongs to a batch. Depending on the batch type of the message, the value of this element can be one of the following:
 |           |                |
 |-----------|----------------|
 | **Value** | **Batch Type** |
 | 0         | No Batch       |
 | 1         | Batch Begin    |
 | 2         | Batch End      |
-
-::; imnt id
-
-  
-  
-An Integer value that contains the order symbol index in the file header
+* imnt id
+  * An Integer value that contains the order symbol index in the file header
 
 ## Message Specific Elements
 
@@ -110,13 +108,9 @@ An Integer value that contains the order symbol index in the file header
 
     [0, receive]
 
-:; receive
-
-  
-  
-Long
-
-Time since epoch in seconds
+* receive
+  * Long
+  * Time since epoch in seconds
 
 <table>
 <tbody>
@@ -140,37 +134,58 @@ Multiple time messages can be received throughout the session.
 
     [1, receive, vendor offset, vendor seqno, batch, imnt id, id, price, qty, is bid]
 
-:; id
-
-  
-  
-Integer
-
-Order Identifier
+* id
+  * Integer
+  * Order Identifier
+* price
+  * Integer
+  * Numerator part of the price of the order
+* qty
+  * Integer
+  * Quantity of the order
+* is bid
+  * Boolean
+  * Represents if the order corresponds to the bid side
 
 ### Order Insert Message
 
     [2, receive, vendor offset, vendor seqno, batch, imnt id, id, priority, price, qty, is bid]
 
-:; id
-
-  
-  
-Integer
-
-Order Identifier
+* id
+  * Integer
+  * Order Identifier
+* priority
+  * Integer
+  * Priority of the order
+* price
+  * Integer
+  * Numerator part of the price of the order
+* qty
+  * Integer
+  * Quantity of the order
+* is bid
+  * Boolean
+  * Represents if the order corresponds to the bid side
 
 ### Order Position Message
 
     [3, receive, vendor offset, vendor seqno, batch, imnt id, id, position, price, qty, is bid]
 
-:; id
-
-  
-  
-Integer
-
-Order Identifier
+* id
+  * Integer
+  * Order Identifier
+* position
+  * Integer
+  * Position of the order in the order book, position values start from zero
+* price
+  * Integer
+  * Numerator part of the price of the order
+* qty
+  * Integer
+  * Quantity of the order
+* is bid
+  * Boolean
+  * Represents if the order corresponds to the bid side
 
 <table>
 <tbody>
@@ -203,73 +218,67 @@ the order will change.
 
     [4, receive, vendor offset, vendor seqno, batch, imnt id, id, qty]
 
-:; id
-
-  
-  
-Integer
-
-Order Identifier
+* id
+  * Integer
+  * Order Identifier
+* qty
+  * Integer
+  * Quantity to be canceled in the order
 
 ### Order Delete Message
 
     [5, receive, vendor offset, vendor seqno, batch, imnt id, id]
 
-:; id
-
-  
-  
-Integer
-
-Order Identifier
+* id
+  * Integer
+  * Order Identifier
 
 ### Order Modify Message
 
     [6, receive, vendor offset, vendor seqno, batch, imnt id, id, new id, new price, new qty]
 
-:; id
-
-  
-  
-Integer
-
-Order Identifier of modified order
+* id
+  * Integer
+  * Order Identifier of modified order
+* new id
+  * Integer
+  * New Order Identifier of modified order
+* new price
+  * Integer
+  * Numerator part of the new price of the order
+* new qty
+  * Integer
+  * New quantity of the order
 
 ### Order Executed Whole Message
 
     [7, receive, vendor offset, vendor seqno, batch, imnt id, id]
 
-:; id
-
-  
-  
-Integer
-
-Order Identifier
+* id
+  * Integer
+  * Order Identifier
 
 ### Order Executed Whole at a Price Message
 
     [8, receive, vendor offset, vendor seqno, batch, imnt id, id, trade price]
 
-:; id
-
-  
-  
-Integer
-
-Order Identifier
+* id
+  * Integer
+  * Order Identifier
+* trade price
+  * Integer
+  * Numerator part of the traded price of the execution
 
 ### Order Fill Message
 
     [9, receive, vendor offset, vendor seqno, batch, imnt id, id, qty]
 
-:; id
-
-  
-  
-Integer
-
-Order Identifier
+* id
+  * Integer
+  * Order Identifier
+* qty
+  * Integer
+  * Quantity filled in the order
 
 <table>
 <tbody>
@@ -289,13 +298,15 @@ This message contains a partial execution of a given order
 
     [10, receive, vendor offset, vendor seqno, batch, imnt id, id, trade price, qty]
 
-:; id
-
-  
-  
-Integer
-
-Order Identifier
+* id
+  * Integer
+  * Order Identifier
+* trade price
+  * Integer
+  * Numerator part of the traded price of the execution
+* qty
+  * Integer
+  * Quantity filled in the execution
 
 <table>
 <tbody>
@@ -316,39 +327,41 @@ price
 
     [11, receive, vendor offset, vendor seqno, batch, imnt id, trade price, qty, decorator]
 
-:; trade price
-
-  
-  
-Integer
-
-Numerator part of the traded price
+* trade price
+  * Integer
+  * Numerator part of the traded price
+* qty
+  * Integer
+  * Quantity filled in the trade
+* decorator
+  * 8 Character String
+  * Optional element to store custom decorator
 
 ### Status Message
 
     [12, receive, vendor offset, vendor seqno, batch, imnt id, id, price, state id, is bid]
 
-:; id
-
-  
-  
-Integer
-
-Order Identifier, the value could be ignored for some states
+* id
+  * Integer
+  * Order Identifier, the value could be ignored for some states
+* price
+  * Integer
+  * Numerator part of the traded price of the execution, the value could be ignored for some states
+* state id
+  * Integer
+  * Stores a custom state determined by the user
+* is bid
+  * Boolean
+  * Represents if the order corresponds to the bid side, the value could be ignored for some states
 
 ### Book Control Message
 
     [13, receive, vendor offset, vendor seqno, batch, imnt id, uncross, command]
 
-:; uncross
-
-  
-  
-Integer, zero represents uncrossed as false.
-
-Book uncrossed status
-
-Command as character
+* uncross
+  * Integer, zero represents uncrossed as false.
+  * Book uncrossed status
+  * Command as character
 
 <!-- -->
 
@@ -368,10 +381,12 @@ character directly.
 
     [14, receive, vendor offset, vendor seqno, batch, imnt id, price, qty, is bid]
 
-:; price
-
-  
-  
-Integer
-
-Numerator part of the traded price
+* price
+  * Integer
+  * Numerator part of the traded price
+* qty
+  * Integer
+  * Quantity in level
+* is bid
+  * Boolean
+  * Represents if the order corresponds to the bid side
