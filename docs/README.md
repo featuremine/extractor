@@ -12,9 +12,9 @@ You can use this component to structure your input data feeds and develop signal
 
 You could, for example, [build bars](BarsTutorial.md) from your BBO and trade feeds, or [generate signals](BarsTutorial.md#Signals_Tutorial) to make informed decisions based on any data feed that is relevant in your context.
 
-You will be able to find more details about Extractor in the [extractor introduction](ExtractorIntroduction.md)
+You will be able to find more details about Extractor in the [extractor introduction](Introduction.md)
 
-More information about Extractor's callback Python API is available in the [Extractor Python API](ExtractorPythonAPI.md) article.
+More information about Extractor's callback Python API is available in the [Extractor Python API](Reference.md#Callbacks) article.
 
 # Introduction to the Ore file format
 
@@ -28,6 +28,6 @@ Details about the different file format spec versions are available in the follo
 
 # Advanced Topics
 
-* [Extractor Bars Tutorial](ExtractorBarsTutorial.md)
+* [Extractor Bars Tutorial](BarsTutorial.md)
 * [Ore file specification](#introduction-to-the-ore-file-format)
 * [Typing System](TypingSystem.md)
