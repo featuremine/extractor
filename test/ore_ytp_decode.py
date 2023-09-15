@@ -30,7 +30,7 @@ import shutil
 
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
-ytp_file = os.path.join(src_dir, 'data', 'ytpseq_ore_bbo.ytp')
+ytp_file = 'ytpseq_ore_bbo.ytp'
 # copy the ytp file, because it is overwritten
 ytp_file_cpy = ytp_file + '.cpy'
 bbos_base_file = os.path.join(src_dir, 'data', 'ore_ytp_decode.base.txt')

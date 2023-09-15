@@ -65,9 +65,6 @@ if __name__ == "__main__":
     def book_play_split(op, in_file):
         return op.book_play_split(in_file, ("2_YEAR", "3_YEAR", "10_YEAR"))
 
-    def book_sim_split(op, in_file):
-        return op.ore_sim_split(in_file, ("2_YEAR", "3_YEAR", "10_YEAR"))
-
     def run(in_file, book_split):
         graph = extr.system.comp_graph()
         op = graph.features
@@ -98,11 +95,3 @@ if __name__ == "__main__":
 
     run(os.path.join(src_dir, "data/book.base.ore"), book_play_split)
     run(os.path.join(src_dir, "data/book.1.0.0.ore"), book_play_split)
-
-    with tempfile.NamedTemporaryFile() as yamal_file:
-        ore_to_ytp(os.path.join(src_dir, "data/book.base.ore"), yamal_file.name)
-        run(yamal_file.name, book_sim_split)
-
-    with tempfile.NamedTemporaryFile() as yamal_file:
-        ore_to_ytp(os.path.join(src_dir, "data/book.base.ore"), yamal_file.name)
-        run(yamal_file.name, book_sim_split)

@@ -30,7 +30,7 @@ import shutil
 import argparse
 
 src_dir = os.path.dirname(os.path.realpath(__file__))
-ytp_file = os.path.join(src_dir, 'data', 'coinbase_bulldozer.base.ytp')
+ytp_file = 'coinbase_bulldozer.base.ytp'
 book_base_file = os.path.join(src_dir, 'data', 'coinbase_bulldozer.base.csv')
 book_test_file = os.path.join(src_dir, 'data', 'coinbase_bulldozer.test.csv')
 

@@ -27,8 +27,6 @@
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/process.h"
-#include "fmc/time.h"
-#include "ytp/peer.h"
 #include "ytp/sequence.h"
 #include "ytp/yamal.h"
 

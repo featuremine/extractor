@@ -23,21 +23,39 @@ function(download_archive URL MD5 FILENAME OUTPUT)
 endfunction()
 
 download_archive(
-    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.1.ytp.0001.gz"
-    "2cbef2b01aa096a289be63f48613293e" "ytpseq_ore_bbo_trades.1.ytp.0001.gz"
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.2.ytp.0001.gz"
+    "82c03d684ca8bee7c63d8067d697bb2f" "ytpseq_ore_bbo_trades.2.ytp.0001.gz"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades.ytp.0001"
 )
 
 download_archive(
-    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.1.ytp.0002.gz"
-    "e270d4f51de89e97ee44551dac6d3483" "ytpseq_ore_bbo_trades.1.ytp.0002.gz"
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.2.ytp.0002.gz"
+    "9ffec2f7fadf4cea1e6f267bb22c8916" "ytpseq_ore_bbo_trades.2.ytp.0002.gz"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades.ytp.0002"
 )
 
 download_archive(
-    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.1.ytp.0002.gz"
-    "e270d4f51de89e97ee44551dac6d3483" "ytpseq_ore_bbo_trades.1.ytp.0002.gz"
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo_trades.2.ytp.0002.gz"
+    "9ffec2f7fadf4cea1e6f267bb22c8916" "ytpseq_ore_bbo_trades.2.ytp.0002.gz"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades_partial.ytp.0002"
+)
+
+download_archive(
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/coinbase_bulldozer.1.base.ytp.gz"
+    "9163c76b619f58bdbf333289f7863228" "coinbase_bulldozer.1.base.ytp.gz"
+    "${CMAKE_CURRENT_BINARY_DIR}/coinbase_bulldozer.base.ytp"
+)
+
+download_archive(
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_bbo.1.ytp.gz"
+    "ad3e5f5be3d60a707d18bc51d4d5cbb9" "ytpseq_ore_bbo.1.ytp.gz"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo.ytp"
+)
+
+download_archive(
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/ytpseq_ore_trades.1.ytp.gz"
+    "c0beeafa482e0f4df2cf990bdda96a56" "ytpseq_ore_trades.1.ytp.gz"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_trades.ytp"
 )
 
 add_custom_target(
@@ -46,6 +64,9 @@ add_custom_target(
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades.ytp.0001"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades.ytp.0002"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo_trades_partial.ytp.0002"
+    "${CMAKE_CURRENT_BINARY_DIR}/coinbase_bulldozer.base.ytp"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo.ytp"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_trades.ytp"
 )
 
 macro(extr_unit_test)
@@ -417,14 +438,8 @@ extr_py_unit_test(
 extr_py_unit_test(
     time_lag
 )
-# extr_py_unit_test(
-#     ore_sim_split
-# )
 extr_py_unit_test(
     book_play_split
-)
-extr_py_unit_test(
-    announcements_book_build
 )
 extr_py_unit_test(
     ytp_sequence
@@ -560,7 +575,7 @@ add_test(
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo.py"
     "--ytp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/data/ytpseq_ore_bbo.ytp"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo.ytp"
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
@@ -578,7 +593,7 @@ add_test(
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo.py"
     "--ytp"
-    "${CMAKE_CURRENT_SOURCE_DIR}/data/ytpseq_ore_trades.ytp"
+    "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_trades.ytp"
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
@@ -634,24 +649,6 @@ add_test(
 )
 set_tests_properties(
     extractor_python_ytp_book_bbo_trade_multi_file_partial
-    PROPERTIES
-    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_yamal_BUILD_DIR}/build/lib:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
-    TIMEOUT 100
-)
-
-add_test(
-    NAME extractor_python_custom_book_play_split COMMAND
-
-    "${PYTHON3_BIN}"
-    "${CMAKE_CURRENT_SOURCE_DIR}/custom_book_play_split.py"
-    "--input"
-    "${CMAKE_CURRENT_SOURCE_DIR}/data/coinbase_BTC-USD.ore"
-
-    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-)
-
-set_tests_properties(
-    extractor_python_custom_book_play_split
     PROPERTIES
     ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_yamal_BUILD_DIR}/build/lib:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
     TIMEOUT 100

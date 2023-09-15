@@ -77,8 +77,6 @@
 #include "nan.h"
 #include "nano.h"
 #include "not_equal.h"
-#include "ore_live_split.h"
-#include "ore_sim_split.h"
 #include "ore_ytp_decode.h"
 #include "pow.h"
 #include "remainder.h"
@@ -121,9 +119,7 @@ bool fm_comp_sys_std_comp(fm_comp_sys_t *sys) {
          fm_comp_type_add(sys, &fm_comp_identity) &&
          fm_comp_type_add(sys, &fm_comp_mp_play) &&
          fm_comp_type_add(sys, &fm_comp_mp_record) &&
-         fm_comp_type_add(sys, &fm_comp_ore_live_split) &&
          fm_comp_type_add(sys, &fm_comp_seq_ore_live_split) &&
-         fm_comp_type_add(sys, &fm_comp_ore_sim_split) &&
          fm_comp_type_add(sys, &fm_comp_book_play_split) &&
          fm_comp_type_add(sys, &fm_comp_book_msg) &&
          fm_comp_type_add(sys, &fm_comp_book_trades) &&
