@@ -24,14 +24,15 @@ bars.
 Before we are able to add any features, we need to setup our
 environment.
 
-We can do it importing the Extractor Python package and setting up our
-license file like this:
+We can do it importing the Extractor Python package and setting
+up a graph where we will add the features that
+will compute our bars.
 
 ``` python
 import extractor as extr
 
 if __name__ == "__main__":
-        extr.set_license("../path/to/license/test.lic")
+        graph = extr.system.comp_graph()
 ```
 
   
@@ -212,7 +213,6 @@ streams for each instrument and our code should look close to this:
 import extractor as extr
 
 if __name__ == "__main__":
-        extr.set_license("../subprojects/extractor/test/test.lic")
         graph = extr.system.comp_graph()
         op = graph.features
         bbo_file =  "../test/sip_quotes_20171018.base.mp"
@@ -745,7 +745,6 @@ def compute_bar(nbbo, trades, ctrdt):
                 close, (("actual", "close_time"),))
 
 if __name__ == "__main__":
-        extr.set_license("../subprojects/extractor/test/test.lic")
         graph = extr.system.comp_graph()
         op = graph.features
         bbo_file =  "../test/sip_quotes_20171018.base.mp"
