@@ -1,3 +1,6 @@
+# Table of Contents
+
+<!--TOC-->
   
 This tutorial will walk us through the process of building bars using
 Extractor.
@@ -9,7 +12,7 @@ bars with it.
 Finally We will export our newly generated bars from Extractor to a
 Pandas DataFrame using the builtin exporting tool.
 
-## Initializing the platform
+# Initializing the platform
 
   
 Before we are able to add any features, we need to setup our
@@ -26,7 +29,7 @@ if __name__ == "__main__":
         graph = extr.system.comp_graph()
 ```
 
-## Running the context for your graph
+# Running the context for your graph
 
   
 We will also define a few methods that will help us specify the end time
@@ -73,7 +76,7 @@ it will be at 16:00 on October 16, 2017
         graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
 ```
 
-## Get market data for individual instruments
+# Get market data for individual instruments
 
   
 Now that we have created a graph and we can run the context to process
@@ -90,7 +93,7 @@ features from this point onwards:
         op = graph.features
 ```
 
-### Loading the market data
+## Loading the market data
 
   
 Now, we will proceed to add the first features to our graph that will
@@ -128,7 +131,7 @@ Since the files used are MessagePack encoded files, we will use the
                ("side", extr.Int32, "")))
 ```
 
-### Preparing data for calculations
+## Preparing data for calculations
 
   
 To generate bars, we need to setup the markets and tickers we would like
@@ -317,7 +320,7 @@ if __name__ == "__main__":
         graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
 ```
 
-## Generating the bars
+# Generating the bars
 
   
 Now that our data is shaped correctly we will define a new method that
@@ -335,7 +338,7 @@ The fields we would like to have in our bars are:
 - First and last trades in the bar.
 - Shares traded during the bar.
 
-### Setting up a timer
+## Setting up a timer
 
 ``` python
     def compute_bar(nbbo, trades, ctrdt):
@@ -360,7 +363,7 @@ Now we will create the timer in the following way:
     close = op.timer(bar_period)
 ```
 
-### Computing NBBO data
+## Computing NBBO data
 
   
 Only some fields of interest are used when generating the bars, so we
@@ -474,7 +477,7 @@ Since the NaN entries are not considered in the **average_tw** feature
 we will be able to accurately calculate the time weighted average of the
 quote.
 
-### Computing trading data
+## Computing trading data
 
   
 We would also like to add some trade related information to our bars, to
@@ -534,7 +537,7 @@ using the following code:
     ctrdt_diff = op.diff(ctrdt_sampled, ctrdt_sampled_lagged)
 ```
 
-### Ensembling the bar data
+## Ensembling the bar data
 
   
 Now that we have computed the data we would like to have in our bars, we
@@ -588,7 +591,7 @@ method like this:
                 close, (("actual", "close_time"),))
 ```
 
-### Computing the bars
+## Computing the bars
 
   
 Now that we can add all the features we need to generate our bars for
@@ -617,7 +620,7 @@ be later exported.
         val_aggr = op.accumulate(out_stream)
 ```
 
-## Exporting the results
+# Exporting the results
 
   
 Now that we added the required code to compute our bars we would like to
@@ -813,7 +816,7 @@ if __name__ == "__main__":
         as_pd.to_csv("../test/bar_20171018.test.csv", index=False)
 ```
 
-## Signals Tutorial
+# Signals Tutorial
 
   
 Once we have shaped the input data feed as desired we can proceed to set
@@ -835,7 +838,7 @@ alpha feed as follows:
 def compute_alpha(bar):
 ```
 
-### Type conversions
+## Type conversions
 
   
 To calculate the alphas we will convert all the operands we will use to
@@ -863,7 +866,7 @@ the same type:
     closeaskpx = op.convert(bar.close_askpx,(extr.Float64))
 ```
 
-### Alpha Calculations
+## Alpha Calculations
 
   
 Once our operands have the same type, we can proceed to add the code
@@ -893,7 +896,7 @@ that will calculate our alpha:
     close_alpha = close_ma_10 - close_ma_50
 ```
 
-### Ensembling the signal data
+## Ensembling the signal data
 
 ``` python
     return op.combine(
@@ -907,7 +910,7 @@ that will calculate our alpha:
                 (("low_askpx", "low"),))
 ```
 
-### Computing the bars
+## Computing the bars
 
   
 Now that we have a method that will generate our alphas, we use it to
@@ -925,7 +928,7 @@ add the required nodes to our graph
         ...
 ```
 
-### Exporting the results
+## Exporting the results
 
   
 To access the values calculated in our alphas we will set up an

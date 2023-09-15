@@ -1,4 +1,8 @@
-## Callbacks
+# Table of Contents
+
+<!--TOC-->
+
+# Callbacks
 
   
 To set up callbacks for your features, you will need to use your graph's

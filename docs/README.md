@@ -1,3 +1,7 @@
+# Table of Contents
+
+<!--TOC-->
+
 # Introduction to Extractor
 
 Extractor is a high-performance real-time capable alpha research platform with an easy interface for financial analytics.
