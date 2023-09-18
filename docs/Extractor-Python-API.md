@@ -2630,7 +2630,7 @@ The output frame has the following fields:
 - is_bid as **Uint16**
 - batch as **Uint16**
 
-:\* insert - identified in ORE files as ORE 2.
+- insert - identified in ORE files as ORE 2.
 
   
   
@@ -2645,7 +2645,7 @@ The output frame has the following fields:
 - is_bid as **Uint16**
 - batch as **Uint16**
 
-:\* position - identified in ORE files as ORE 3.
+- position - identified in ORE files as ORE 3.
 
   
   
@@ -2660,7 +2660,7 @@ The output frame has the following fields:
 - is_bid as **Uint16**
 - batch as **Uint16**
 
-:\* cancel - identified in ORE files as ORE 4, ORE 5 or ORE 6 for order
+- cancel - identified in ORE files as ORE 4, ORE 5 or ORE 6 for order
 modification involving removal of an order.
 
   
@@ -2675,7 +2675,7 @@ The output frame has the following fields:
 - is_bid as **Uint16**
 - batch as **Uint16**
 
-:\* execute - identified in ORE files as ORE 7, ORE 8, ORE 9 or ORE 10.
+- execute - identified in ORE files as ORE 7, ORE 8, ORE 9 or ORE 10.
 
   
   
@@ -2690,7 +2690,7 @@ The output frame has the following fields:
 - is_bid as **Uint16**
 - batch as **Uint16**
 
-:\* trade - identified in ORE files as ORE 11.
+- trade - identified in ORE files as ORE 11.
 
   
   
@@ -2703,7 +2703,7 @@ The output frame has the following fields:
 - batch as **Uint16**
 - decoration as character array of 8 characters
 
-:\* state - identified in ORE files as ORE 12.
+- state - identified in ORE files as ORE 12.
 
   
   
@@ -2717,7 +2717,7 @@ The output frame has the following fields:
 - is_bid as **Uint16**
 - batch as **Uint16**
 
-:\* control - identified in ORE files as ORE 13.
+- control - identified in ORE files as ORE 13.
 
   
   
@@ -2729,7 +2729,7 @@ The output frame has the following fields:
 - uncross as **Uint8**
 - command as character array
 
-:\* set - identified in ORE files as ORE 14.
+- set - identified in ORE files as ORE 14.
 
   
   
