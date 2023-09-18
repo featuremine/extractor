@@ -15,8 +15,8 @@ find_package(Subproject REQUIRED)
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subproject(
     NAME yamal
-    GIT_REVISION "v7.2.37"
-    VERSION "7.2.37"
+    GIT_REVISION "v8.0.2"
+    VERSION "8.0.2"
     GIT_URL "https://github.com/featuremine/yamal.git"
     TARGETS fmc++ ytp py_yamal_dep yamal-whl
 )
@@ -26,6 +26,7 @@ option (BUILD_TOOLS "Enable build of command line tools." ON)
 option (BUILD_PACKAGE "Enable build of the self-extracting package." ON)
 option (BUILD_WHEEL "Enable build of the python package." ON)
 option (TEST_EXTENSIONS "Enable testing the extensions." ON)
+option (BUILD_DOCUMENTATION "Build documentation." ON)
 
 set(EXTRACTOR_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 set(EXTRACTOR_PYTHON_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/python/include")
@@ -37,6 +38,18 @@ set(WHEEL_extractor_BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/python" CACHE INTERNA
 set(WHEEL_extractor_SCRIPTS_DIR "scripts" CACHE INTERNAL "Wheel script path for extractor" FORCE)
 set(EXTRACTOR_API_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/api/include" CACHE INTERNAL "API include directory path for extractor" FORCE)
 set(EXTRACTOR_PYTHON_API_INC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/api/python/include" CACHE INTERNAL "Python API include directory path for extractor" FORCE)
+
+if (BUILD_DOCUMENTATION)
+    set(FmDocumentation_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+    find_package(FmDocumentation REQUIRED)
+    add_documentation(
+        NAME extractor-docs
+        BUILD_DIR "${CMAKE_CURRENT_BINARY_DIR}/docs"
+        SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/docs"
+        TITLE "Extractor Documentation"
+        VERSION "${PROJECT_VERSION}"
+    )
+endif()
 
 set(FmConfig_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(FmConfig REQUIRED)
