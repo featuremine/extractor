@@ -2,14 +2,7 @@
 
 <!--TOC-->
 
-Extractor is a high-performance real-time capable alpha research
-platform with an easy interface for financial analytics.
-
-It allows you to arrange your time series feeds and operations in a
-computational graph that optimizes how your computations are executed.
-
 # The Extractor Module
-
   
 The real-time capable alpha research platform can be used as a
 standalone utility for data treatment and analysis.
