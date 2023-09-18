@@ -49,25 +49,17 @@ graph.callback(trade, clbck)
 ```
 
   
-{\| class="wikitable" style="margin-left: 0px; margin-right: auto;"
-
-\| **Note:**
-
-  
-If you would like to use additional data in your call as a closure, for
+> **_NOTE:_**  
+> If you would like to use additional data in your call as a closure, for
 example the instrument or market, you will need to generate the call so
 the closure is persistent.
-
-For example:
-
-``` python
+> For example:
+> ``` python
 def clbck_gen(imnt, mkt):
     return lambda frame: do_something(imnt, mkt, frame._as_pandas())
 
 graph.callback(trade, fillmodel_trade(imnt, mkt))
 ```
-
-\|}
 
 ## Frame references
 
@@ -80,15 +72,9 @@ the graph's **get_ref** method.
 ```
 
   
-{\| class="wikitable" style="margin-left: 0px; margin-right: auto;"
-
-\| **Note:**
-
-  
-The obtained frame reference cannot be used before the context is
+> **_NOTE:_**  
+> The obtained frame reference cannot be used before the context is
 created and the frame is initialized.
-
-\|}
 
 ## Feature name
 

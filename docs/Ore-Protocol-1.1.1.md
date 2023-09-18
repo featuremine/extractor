@@ -113,23 +113,10 @@ There are also multiple elements that are used in all the messages
   * Long
   * Time since epoch in seconds
 
-<table>
-<tbody>
-<tr class="odd">
-<td><p><strong>Note:</strong></p>
-<dl>
-<dt></dt>
-<dd>
-All the message timestamps are offsets from the time received in the
+> **_NOTE:_**  
+> All the message timestamps are offsets from the time received in the
 time message.
-</dd>
-<dd>
-Multiple time messages can be received throughout the session.
-</dd>
-</dl></td>
-</tr>
-</tbody>
-</table>
+> Multiple time messages can be received throughout the session.
 
 ### Order Add Message
 
@@ -188,32 +175,14 @@ Multiple time messages can be received throughout the session.
   * Boolean
   * Represents if the order corresponds to the bid side
 
-<table>
-<tbody>
-<tr class="odd">
-<td><p><strong>Note:</strong></p>
-<dl>
-<dt></dt>
-<dd>
-The difference between inserting and positioning the orders is as
+> **_NOTE:_**  
+> The difference between inserting and positioning the orders is as
 follows:
-<dl>
-<dt></dt>
-<dd>
-Positioning the order places the order at the prescribed position in the
+> Positioning the order places the order at the prescribed position in the
 order queue.
-</dd>
-<dd>
-Inserting orders is based on comparing a priority property of the order
+> Inserting orders is based on comparing a priority property of the order
 which does not change with the lifetime of the order, while position of
 the order will change.
-</dd>
-</dl>
-</dd>
-</dl></td>
-</tr>
-</tbody>
-</table>
 
 ### Order Cancel Message
 
@@ -281,19 +250,8 @@ the order will change.
   * Integer
   * Quantity filled in the order
 
-<table>
-<tbody>
-<tr class="odd">
-<td><p><strong>Note:</strong></p>
-<dl>
-<dt></dt>
-<dd>
-This message contains a partial execution of a given order
-</dd>
-</dl></td>
-</tr>
-</tbody>
-</table>
+> **_NOTE:_**  
+> This message contains a partial execution of a given order
 
 ### Order Fill at a Price Message
 
@@ -309,20 +267,9 @@ This message contains a partial execution of a given order
   * Integer
   * Quantity filled in the execution
 
-<table>
-<tbody>
-<tr class="odd">
-<td><p><strong>Note:</strong></p>
-<dl>
-<dt></dt>
-<dd>
-This message contains a partial execution of a given order at a given
+> **_NOTE:_**  
+> This message contains a partial execution of a given order at a given
 price
-</dd>
-</dl></td>
-</tr>
-</tbody>
-</table>
 
 ### Off Book Trade Message
 
@@ -367,16 +314,10 @@ price
 <!-- -->
 
   
-{\| class="wikitable" style="margin-left: 0px; margin-right: auto;"
-
-\| **Note:**
-
-  
-When the message is written from python and the command is provided,
+> **_NOTE:_**  
+> When the message is written from python and the command is provided,
 ord(command_character) should be used instead of a string object of one
 character directly.
-
-\|}
 
 ### Level Set Message
 
