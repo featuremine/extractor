@@ -34,7 +34,7 @@ will compute our bars.
 import extractor as extr
 
 if __name__ == "__main__":
-        graph = extr.system.comp_graph()
+    graph = extr.system.comp_graph()
 ```
 
 ## Running the context for your graph
@@ -81,7 +81,7 @@ future events, we need to set an end to the simulation, in our scenario
 it will be at 16:00 on October 16, 2017
 
 ``` python
-        graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
+    graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
 ```
 
 ## Get market data for individual instruments
@@ -98,7 +98,7 @@ For conveniency we will use the following variable to easily create our
 features from this point onwards:
 
 ``` python
-        op = graph.features
+    op = graph.features
 ```
 
 ## Loading the market data
@@ -111,8 +111,8 @@ The Featuremine package has two files that we can use as our market data
 input:
 
 ``` python
-        bbo_file =  "../test/data/sip_quotes_20171018.mp"
-        trade_file = "../test/data/sip_trades_20171018.mp"
+    bbo_file =  "../test/data/sip_quotes_20171018.mp"
+    trade_file = "../test/data/sip_trades_20171018.mp"
 ```
 
   
@@ -120,23 +120,23 @@ Since the files used are MessagePack encoded files, we will use the
 **mp_play** feature to read them.
 
 ``` python
-        bbos_in = op.mp_play(
-              bbo_file,
-              (("receive", extr.Time64, ""),
-               ("ticker", extr.Array(extr.Char, 16), ""),
-               ("market", extr.Array(extr.Char, 32), ""),
-               ("bidprice", extr.Rprice, ""),
-               ("askprice", extr.Rprice, ""),
-               ("bidqty", extr.Int32, ""),
-               ("askqty", extr.Int32, "")))
-        trades_in = op.mp_play(
-              trade_file,
-              (("receive", extr.Time64, ""),
-               ("ticker", extr.Array(extr.Char, 16), ""),
-               ("market", extr.Array(extr.Char, 32), ""),
-               ("price", extr.Rprice, ""),
-               ("qty", extr.Int32, ""),
-               ("side", extr.Int32, "")))
+    bbos_in = op.mp_play(
+            bbo_file,
+            (("receive", extr.Time64, ""),
+            ("ticker", extr.Array(extr.Char, 16), ""),
+            ("market", extr.Array(extr.Char, 32), ""),
+            ("bidprice", extr.Rprice, ""),
+            ("askprice", extr.Rprice, ""),
+            ("bidqty", extr.Int32, ""),
+            ("askqty", extr.Int32, "")))
+    trades_in = op.mp_play(
+            trade_file,
+            (("receive", extr.Time64, ""),
+            ("ticker", extr.Array(extr.Char, 16), ""),
+            ("market", extr.Array(extr.Char, 32), ""),
+            ("price", extr.Rprice, ""),
+            ("qty", extr.Int32, ""),
+            ("side", extr.Int32, "")))
 ```
 
 ## Preparing data for calculations
@@ -147,12 +147,12 @@ to generate bars for, in this tutorial we would like to generate bars
 for instruments that are listed on three markets described as follows:
 
 ``` python
-        markets = ["NYSEMKT", "NASDAQOMX", "NYSEArca"]
-        tickers = [
-          {"NYSEMKT": "A", "NASDAQOMX": "A", "NYSEArca": "A"},
-          {"NYSEMKT": "AA", "NASDAQOMX": "AA", "NYSEArca": "AA"},
-          {"NYSEMKT": "BA", "NASDAQOMX": "BA", "NYSEArca": "BA"}
-        ]
+    markets = ["NYSEMKT", "NASDAQOMX", "NYSEArca"]
+    tickers = [
+        {"NYSEMKT": "A", "NASDAQOMX": "A", "NYSEArca": "A"},
+        {"NYSEMKT": "AA", "NASDAQOMX": "AA", "NYSEArca": "AA"},
+        {"NYSEMKT": "BA", "NASDAQOMX": "BA", "NYSEArca": "BA"}
+    ]
 ```
 
   
@@ -160,8 +160,8 @@ Now We will use the lists we just added to split the market data into
 streams for each the market like this:
 
 ``` python
-        bbo_split = op.split(bbos_in, "market", tuple(markets))
-        trade_split = op.split(trades_in, "market", tuple(markets))
+    bbo_split = op.split(bbos_in, "market", tuple(markets))
+    trade_split = op.split(trades_in, "market", tuple(markets))
 ```
 
   
@@ -169,17 +169,17 @@ Now that we have the desired market data streams we can proceed to
 generate streams by instrument for each one of them.
 
 ``` python
-        mkt_idx = 0
-        for mkt in markets:
-            mkt_tickers = [x[mkt] for x in tickers]
-            mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
-            mkt_trade_split = op.split(trade_split[mkt_idx], "ticker", tuple(mkt_tickers))
-            ticker_idx = 0
-            for _ in tickers:
-                bbo = mkt_bbo_split[ticker_idx]
-                trade = mkt_trade_split[ticker_idx]
-                ticker_idx = ticker_idx + 1
-            mkt_idx = mkt_idx + 1
+    mkt_idx = 0
+    for mkt in markets:
+        mkt_tickers = [x[mkt] for x in tickers]
+        mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
+        mkt_trade_split = op.split(trade_split[mkt_idx], "ticker", tuple(mkt_tickers))
+        ticker_idx = 0
+        for _ in tickers:
+            bbo = mkt_bbo_split[ticker_idx]
+            trade = mkt_trade_split[ticker_idx]
+            ticker_idx = ticker_idx + 1
+        mkt_idx = mkt_idx + 1
 ```
 
   
@@ -189,18 +189,18 @@ necessary features to obtain cumulative trades for each market and
 instrument:
 
 ``` python
-        mkt_idx = 0
-        for mkt in markets:
-            mkt_tickers = [x[mkt] for x in tickers]
-            mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
-            mkt_trade_split = op.split(trade_split[mkt_idx], "ticker", tuple(mkt_tickers))
-            ticker_idx = 0
-            for _ in tickers:
-                bbo = mkt_bbo_split[ticker_idx]
-                trade = mkt_trade_split[ticker_idx]
-                cum_trade = op.cum_trade(trade)
-                ticker_idx = ticker_idx + 1
-            mkt_idx = mkt_idx + 1
+    mkt_idx = 0
+    for mkt in markets:
+        mkt_tickers = [x[mkt] for x in tickers]
+        mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
+        mkt_trade_split = op.split(trade_split[mkt_idx], "ticker", tuple(mkt_tickers))
+        ticker_idx = 0
+        for _ in tickers:
+            bbo = mkt_bbo_split[ticker_idx]
+            trade = mkt_trade_split[ticker_idx]
+            cum_trade = op.cum_trade(trade)
+            ticker_idx = ticker_idx + 1
+        mkt_idx = mkt_idx + 1
 ```
 
   
@@ -209,26 +209,26 @@ that will allow us to use them as input of the features that will help
 us calculate NBBOs and Cumulative trades:
 
 ``` python
-        bbos = []
-        ctrds = []
-        mkt_idx = 0
-        for mkt in markets:
-            mkt_tickers = [x[mkt] for x in tickers]
-            mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
-            mkt_trade_split = op.split(trade_split[mkt_idx], "ticker", tuple(mkt_tickers))
-            mkt_bbos = []
-            mkt_ctrds = []
-            ticker_idx = 0
-            for _ in tickers:
-                bbo = mkt_bbo_split[ticker_idx]
-                trade = mkt_trade_split[ticker_idx]
-                cum_trade = op.cum_trade(trade)
-                mkt_bbos.append(bbo)
-                mkt_ctrds.append(cum_trade)
-                ticker_idx = ticker_idx + 1
-            bbos.append(mkt_bbos)
-            ctrds.append(mkt_ctrds)
-            mkt_idx = mkt_idx + 1
+    bbos = []
+    ctrds = []
+    mkt_idx = 0
+    for mkt in markets:
+        mkt_tickers = [x[mkt] for x in tickers]
+        mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
+        mkt_trade_split = op.split(trade_split[mkt_idx], "ticker", tuple(mkt_tickers))
+        mkt_bbos = []
+        mkt_ctrds = []
+        ticker_idx = 0
+        for _ in tickers:
+            bbo = mkt_bbo_split[ticker_idx]
+            trade = mkt_trade_split[ticker_idx]
+            cum_trade = op.cum_trade(trade)
+            mkt_bbos.append(bbo)
+            mkt_ctrds.append(cum_trade)
+            ticker_idx = ticker_idx + 1
+        bbos.append(mkt_bbos)
+        ctrds.append(mkt_ctrds)
+        mkt_idx = mkt_idx + 1
 ```
 
   
@@ -236,7 +236,7 @@ To calculate the NBBOs we will use the BBOs for each market and
 instrument as input to the **bbo_aggr** feature.
 
 ``` python
-        nbbos = [op.bbo_aggr(*x) for x in zip(*bbos)]
+    nbbos = [op.bbo_aggr(*x) for x in zip(*bbos)]
 ```
 
   
@@ -244,7 +244,7 @@ Similarly to what we did with NBBOs we will generate the Cumulative
 Trade totals using the **cum_trade_total** feature.
 
 ``` python
-        ctrdts = [op.cum_trade_total(*x) for x in zip(*ctrds)]
+    ctrdts = [op.cum_trade_total(*x) for x in zip(*ctrds)]
 ```
 
   
@@ -252,7 +252,7 @@ To add additional information related to the trades to our bars we will
 generate streams of trading data for each instrument like this:
 
 ``` python
-        trade_imnt_split = op.split(trades_in, "ticker", tuple([x["NASDAQOMX"] for x in tickers]))
+    trade_imnt_split = op.split(trades_in, "ticker", tuple([x["NASDAQOMX"] for x in tickers]))
 ```
 
   
@@ -272,60 +272,60 @@ def New_York_time(year, mon, day, h=0, m=0, s=0):
         localize(datetime(year, mon, day, h, m, s)))
 
 if __name__ == "__main__":
-        graph = extr.system.comp_graph()
-        op = graph.features
-        bbo_file =  "../test/data/sip_quotes_20171018.mp"
-        trade_file = "../test/data/sip_trades_20171018.mp"
-        markets = ["NYSEMKT", "NASDAQOMX", "NYSEArca"]
-        tickers = [
-          {"NYSEMKT": "A", "NASDAQOMX": "A", "NYSEArca": "A"},
-          {"NYSEMKT": "AA", "NASDAQOMX": "AA", "NYSEArca": "AA"},
-          {"NYSEMKT": "BA", "NASDAQOMX": "BA", "NYSEArca": "BA"}
-        ]
-        bbos_in = op.mp_play(
-              bbo_file,
-              (("receive", extr.Time64, ""),
-               ("ticker", extr.Array(extr.Char, 16), ""),
-               ("market", extr.Array(extr.Char, 32), ""),
-               ("bidprice", extr.Rprice, ""),
-               ("askprice", extr.Rprice, ""),
-               ("bidqty", extr.Int32, ""),
-               ("askqty", extr.Int32, "")))
-        trades_in = op.mp_play(
-              trade_file,
-              (("receive", extr.Time64, ""),
-               ("ticker", extr.Array(extr.Char, 16), ""),
-               ("market", extr.Array(extr.Char, 32), ""),
-               ("price", extr.Rprice, ""),
-               ("qty", extr.Int32, ""),
-               ("side", extr.Int32, "")))
-        bbo_split = op.split(bbos_in, "market", tuple(markets))
-        trade_split = op.split(trades_in, "market", tuple(markets))
-        bbos = []
-        ctrds = []
-        mkt_idx = 0;
-        for mkt in markets:
-            mkt_tickers = [x[mkt] for x in tickers]
-            mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
-            mkt_trade_split = op.split(trade_split[mkt_idx], "ticker", tuple(mkt_tickers))
-            mkt_bbos = []
-            mkt_ctrds = []
-            ticker_idx = 0
-            for _ in tickers:
-                bbo = mkt_bbo_split[ticker_idx]
-                trade = mkt_trade_split[ticker_idx]
-                cum_trade = op.cum_trade(trade)
-                mkt_bbos.append(bbo)
-                mkt_ctrds.append(cum_trade)
-                ticker_idx = ticker_idx + 1
-            bbos.append(mkt_bbos)
-            ctrds.append(mkt_ctrds)
-            mkt_idx = mkt_idx + 1
-        nbbos = [op.bbo_aggr(*x) for x in zip(*bbos)]
-        ctrdts = [op.cum_trade_total(*x) for x in zip(*ctrds)]
-        trade_imnt_split = op.split(trades_in, "ticker", tuple([x["NASDAQOMX"] for x in tickers]))
+    graph = extr.system.comp_graph()
+    op = graph.features
+    bbo_file =  "../test/data/sip_quotes_20171018.mp"
+    trade_file = "../test/data/sip_trades_20171018.mp"
+    markets = ["NYSEMKT", "NASDAQOMX", "NYSEArca"]
+    tickers = [
+        {"NYSEMKT": "A", "NASDAQOMX": "A", "NYSEArca": "A"},
+        {"NYSEMKT": "AA", "NASDAQOMX": "AA", "NYSEArca": "AA"},
+        {"NYSEMKT": "BA", "NASDAQOMX": "BA", "NYSEArca": "BA"}
+    ]
+    bbos_in = op.mp_play(
+            bbo_file,
+            (("receive", extr.Time64, ""),
+            ("ticker", extr.Array(extr.Char, 16), ""),
+            ("market", extr.Array(extr.Char, 32), ""),
+            ("bidprice", extr.Rprice, ""),
+            ("askprice", extr.Rprice, ""),
+            ("bidqty", extr.Int32, ""),
+            ("askqty", extr.Int32, "")))
+    trades_in = op.mp_play(
+            trade_file,
+            (("receive", extr.Time64, ""),
+            ("ticker", extr.Array(extr.Char, 16), ""),
+            ("market", extr.Array(extr.Char, 32), ""),
+            ("price", extr.Rprice, ""),
+            ("qty", extr.Int32, ""),
+            ("side", extr.Int32, "")))
+    bbo_split = op.split(bbos_in, "market", tuple(markets))
+    trade_split = op.split(trades_in, "market", tuple(markets))
+    bbos = []
+    ctrds = []
+    mkt_idx = 0;
+    for mkt in markets:
+        mkt_tickers = [x[mkt] for x in tickers]
+        mkt_bbo_split = op.split(bbo_split[mkt_idx], "ticker", tuple(mkt_tickers))
+        mkt_trade_split = op.split(trade_split[mkt_idx], "ticker", tuple(mkt_tickers))
+        mkt_bbos = []
+        mkt_ctrds = []
+        ticker_idx = 0
+        for _ in tickers:
+            bbo = mkt_bbo_split[ticker_idx]
+            trade = mkt_trade_split[ticker_idx]
+            cum_trade = op.cum_trade(trade)
+            mkt_bbos.append(bbo)
+            mkt_ctrds.append(cum_trade)
+            ticker_idx = ticker_idx + 1
+        bbos.append(mkt_bbos)
+        ctrds.append(mkt_ctrds)
+        mkt_idx = mkt_idx + 1
+    nbbos = [op.bbo_aggr(*x) for x in zip(*bbos)]
+    ctrdts = [op.cum_trade_total(*x) for x in zip(*ctrds)]
+    trade_imnt_split = op.split(trades_in, "ticker", tuple([x["NASDAQOMX"] for x in tickers]))
 
-        graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
+    graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
 ```
 
 # Generating the bars
@@ -349,22 +349,12 @@ The fields we would like to have in our bars are:
 ## Setting up a timer
 
 ``` python
-    def compute_bar(nbbo, trades, ctrdt):
+def compute_bar(op, nbbo, trades, ctrdt):
 ```
 
   
 To generate the event that will signal the end of the bars every five
-minutes, we will create a timer with the desired five minute bar period.
-
-Since the length of the bar period is a **timedelta** object, we will
-need an aditional dependency in our script:
-
-``` python
-from datetime import timedelta
-```
-
-  
-Now we will create the timer in the following way:
+minutes, we will create a timer with the desired five minute bar period in the following way:
 
 ``` python
     bar_period = timedelta(minutes=5)
@@ -451,7 +441,7 @@ Since the **average_tw** feature only accepts **Float32** and
 quote to return a frame with **Float64** fields
 
 ``` python
-def quote_side_float64(quote, name):
+def quote_side_float64(op, quote, name):
     return op.cond(op.is_zero(op.field(quote, name)),
                    op.nan(quote),
                    op.convert(quote, extr.Float64))
@@ -465,7 +455,7 @@ It will fill with NaN where required the entries where no trades have
 been executed so this intervals are not involved in our calculations.
 
 ``` python
-def quote_float64(quote):
+def quote_float64(op, quote):
     bid_quote = op.fields(quote, ("bidprice", "bidqty"))
     ask_quote = op.fields(quote, ("askprice", "askqty"))
     return op.combine(quote_side_float64(bid_quote, "bidqty"), tuple(),
@@ -607,7 +597,7 @@ each instrument easily we will use our new method in our main function
 like this:
 
 ``` python
-        bars = [compute_bar(nbbo, trd, ctrdt) for nbbo, trd, ctrdt in zip(nbbos, trade_imnt_split, ctrdts)]
+    bars = [compute_bar(nbbo, trd, ctrdt) for nbbo, trd, ctrdt in zip(nbbos, trade_imnt_split, ctrdts)]
 ```
 
   
@@ -616,8 +606,8 @@ later joined to generate a stream with the bars for all instruments,
 which can be performed in the following way:
 
 ``` python
-        out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
-            tuple([x["NASDAQOMX"] for x in tickers]))
+    out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
+        tuple([x["NASDAQOMX"] for x in tickers]))
 ```
 
   
@@ -625,7 +615,7 @@ We will use a feature to accumulate the output of this stream so it can
 be later exported.
 
 ``` python
-        val_aggr = op.accumulate(out_stream)
+    val_aggr = op.accumulate(out_stream)
 ```
 
 # Exporting the results
@@ -644,7 +634,7 @@ To export the accumulated data we can use the **result_as_pandas**
 method in the extractor module like this:
 
 ``` python
-        as_pd = extr.result_as_pandas(val_aggr)
+    as_pd = extr.result_as_pandas(val_aggr)
 ```
 
   
@@ -653,7 +643,7 @@ any way we would use any Pandas DataFrame. For example we can store it
 as CSV using the Pandas **to_csv** method:
 
 ``` python
-        as_pd.to_csv("../test/data/bar_20171018.test.csv", index=False)
+    as_pd.to_csv("../test/data/bar_20171018.test.csv", index=False)
 ```
 
   
@@ -683,18 +673,18 @@ def New_York_time(year, mon, day, h=0, m=0, s=0):
     return epoch_delta(pytz.timezone("America/New_York").
         localize(datetime(year, mon, day, h, m, s)))
 
-def quote_side_float64(quote, name):
+def quote_side_float64(op, quote, name):
     return op.cond(op.is_zero(op.field(quote, name)),
                    op.nan(quote),
                    op.convert(quote, extr.Float64))
 
-def quote_float64(quote):
+def quote_float64(op, quote):
     bid_quote = op.fields(quote, ("bidprice", "bidqty"))
     ask_quote = op.fields(quote, ("askprice", "askqty"))
-    return op.combine(quote_side_float64(bid_quote, "bidqty"), tuple(),
-                      quote_side_float64(ask_quote, "askqty"), tuple())
+    return op.combine(quote_side_float64(op, bid_quote, "bidqty"), tuple(),
+                      quote_side_float64(op, ask_quote, "askqty"), tuple())
 
-def compute_bar(nbbo, trades, ctrdt):
+def compute_bar(op, nbbo, trades, ctrdt):
     bar_period = timedelta(minutes=5)
     close = op.timer(bar_period)
     quote = op.fields(nbbo, ("bidprice", "askprice", "bidqty", "askqty"))
@@ -704,7 +694,7 @@ def compute_bar(nbbo, trades, ctrdt):
     close_quote = op.left_lim(quote, close)
     high_quote = op.left_lim(op.asof(quote, op.max(quote_ask, close)), close)
     low_quote = op.left_lim(op.asof(quote, op.min(quote_bid, close)), close)
-    tw_quote = op.average_tw(quote_float64(quote), close)
+    tw_quote = op.average_tw(quote_float64(op, quote), close)
     trade = op.fields(trades, ("price", "qty", "market"))
     trade_px = op.field(trade, "price")
     first_trade = op.first_after(trade, close)
@@ -813,7 +803,7 @@ if __name__ == "__main__":
         nbbos = [op.bbo_aggr(*x) for x in zip(*bbos)]
         ctrdts = [op.cum_trade_total(*x) for x in zip(*ctrds)]
         trade_imnt_split = op.split(trades_in, "ticker", tuple([x["NASDAQOMX"] for x in tickers]))
-        bars = [compute_bar(nbbo, trd, ctrdt) for nbbo, trd, ctrdt in zip(nbbos, trade_imnt_split, ctrdts)]
+        bars = [compute_bar(op, nbbo, trd, ctrdt) for nbbo, trd, ctrdt in zip(nbbos, trade_imnt_split, ctrdts)]
         out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
           tuple([x["NASDAQOMX"] for x in tickers]))
         val_aggr = op.accumulate(out_stream)
@@ -843,7 +833,7 @@ calculate the desired moving averages and use them to calculate our
 alpha feed as follows:
 
 ``` python
-def compute_alpha(bar):
+def compute_alpha(op, bar):
 ```
 
 ## Type conversions
@@ -925,15 +915,15 @@ Now that we have a method that will generate our alphas, we use it to
 add the required nodes to our graph
 
 ``` python
-        ....
-        bars = [compute_bar(nbbo, trd, ctrdt) for nbbo, trd, ctrdt in zip(nbbos, trade_imnt_split, ctrdts)]
-        out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
-          tuple([x["NASDAQOMX"] for x in tickers]))
-        val_aggr = op.accumulate(out_stream)
-        alphas = [compute_alpha(bar) for bar in bars]
-        alphas_out_stream = op.join(*alphas, "ticker", extr.Array(extr.Char, 16),
-          tuple([x["NASDAQOMX"] for x in tickers]))
-        ...
+    ....
+    bars = [compute_bar(op, nbbo, trd, ctrdt) for nbbo, trd, ctrdt in zip(nbbos, trade_imnt_split, ctrdts)]
+    out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
+        tuple([x["NASDAQOMX"] for x in tickers]))
+    val_aggr = op.accumulate(out_stream)
+    alphas = [compute_alpha(op, bar) for bar in bars]
+    alphas_out_stream = op.join(*alphas, "ticker", extr.Array(extr.Char, 16),
+        tuple([x["NASDAQOMX"] for x in tickers]))
+    ...
 ```
 
 ## Exporting the results
@@ -944,20 +934,20 @@ accumulator to export the results obtained to a pandas dataframe and
 dump the results to a file.
 
 ``` python
-        ....
-        bars = [compute_bar(nbbo, trd, ctrdt) for nbbo, trd, ctrdt in zip(nbbos, trade_imnt_split, ctrdts)]
-        out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
-          tuple([x["NASDAQOMX"] for x in tickers]))
-        val_aggr = op.accumulate(out_stream)
-        alphas = [compute_alpha(bar) for bar in bars]
-        alphas_out_stream = op.join(*alphas, "ticker", extr.Array(extr.Char, 16),
-          tuple([x["NASDAQOMX"] for x in tickers]))
-        alphas_val_aggr = op.accumulate(alphas_out_stream)
+    ....
+    bars = [compute_bar(op, nbbo, trd, ctrdt) for nbbo, trd, ctrdt in zip(nbbos, trade_imnt_split, ctrdts)]
+    out_stream = op.join(*bars, "ticker", extr.Array(extr.Char, 16),
+        tuple([x["NASDAQOMX"] for x in tickers]))
+    val_aggr = op.accumulate(out_stream)
+    alphas = [compute_alpha(op, bar) for bar in bars]
+    alphas_out_stream = op.join(*alphas, "ticker", extr.Array(extr.Char, 16),
+        tuple([x["NASDAQOMX"] for x in tickers]))
+    alphas_val_aggr = op.accumulate(alphas_out_stream)
 
-        graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
+    graph.stream_ctx().run_to(New_York_time(2017, 10, 18, 16))
 
-        as_pd = extr.result_as_pandas(val_aggr)
-        as_pd.to_csv("../test/bar_20171018.test.csv", index=False)
-        alphas_as_pd = extr.result_as_pandas(alphas_val_aggr)
-        alphas_as_pd.to_csv("../test/alphas_20171018.test.csv", index=False)
+    as_pd = extr.result_as_pandas(val_aggr)
+    as_pd.to_csv("../test/bar_20171018.test.csv", index=False)
+    alphas_as_pd = extr.result_as_pandas(alphas_val_aggr)
+    alphas_as_pd.to_csv("../test/alphas_20171018.test.csv", index=False)
 ```
