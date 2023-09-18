@@ -119,8 +119,7 @@ The Featuremine package includes a graph dumping utility,
 **graph_dump**, which will allow you to introspect the nodes in your
 graphs.
 
-This utility can be found in graph_dump.py, in the samples directory of
-your Featuremine package.
+This utility can be found in graph_dump.py, in the tools directory of the Extractor project.
 
 The **graph_dump** method receives a graph and an optional file_name
 where the graph can be dumped to.
