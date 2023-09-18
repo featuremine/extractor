@@ -35,7 +35,6 @@ the instrument properties.
 
 Currently, the instrument properties include the following:
 
-|                   |          |                                  |
 |-------------------|----------|----------------------------------|
 | **Property Name** | **Type** | **Description**                  |
 | symbol            | String   | Instrument's symbol              |
@@ -61,7 +60,6 @@ The message sequence has to start with a **Time message**.
 To identify each message, the message type ID is set in the first
 element of each message, the message types are enumerated as follows:
 
-|        |                               |
 |--------|-------------------------------|
 | **ID** | **Message Type**              |
 | 0      | Time                          |
@@ -95,7 +93,6 @@ There are also multiple elements that are used in all the messages
 * batch
   * A flag used to denote if the message belongs to a batch. Depending on the batch type of the message, the value of this element can be one of the following:
 
-|           |                |
 |-----------|----------------|
 | **Value** | **Batch Type** |
 | 0         | No Batch       |
