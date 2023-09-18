@@ -93,12 +93,14 @@ There are also multiple elements that are used in all the messages
   * This value should be set to Zero if no sequence number is assigned by the vendor
 * batch
   * A flag used to denote if the message belongs to a batch. Depending on the batch type of the message, the value of this element can be one of the following:
+
 |           |                |
 |-----------|----------------|
 | **Value** | **Batch Type** |
 | 0         | No Batch       |
 | 1         | Batch Begin    |
 | 2         | Batch End      |
+
 * imnt id
   * An Integer value that contains the order symbol index in the file header
 
