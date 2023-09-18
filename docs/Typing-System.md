@@ -50,6 +50,8 @@ be used directly.
   - extractor.Wchar
 - Bool:
   - extractor.Bool
+- Decimal128:
+  - extractor.Decimal128
 
 ## Array Types
 
@@ -112,6 +114,7 @@ The following enums can be used for base type creation:
 - FM_TYPE_CHAR
 - FM_TYPE_WCHAR
 - FM_TYPE_BOOL
+- FM_TYPE_DECIMAL128
 
 ## Array types
 
