@@ -55,11 +55,11 @@ example the instrument or market, you will need to generate the call so
 the closure is persistent.
 > For example:
 > ``` python
-def clbck_gen(imnt, mkt):
-    return lambda frame: do_something(imnt, mkt, frame._as_pandas())
-
-graph.callback(trade, fillmodel_trade(imnt, mkt))
-```
+> def clbck_gen(imnt, mkt):
+>     return lambda frame: do_something(imnt, mkt, frame._as_pandas())
+> 
+> graph.callback(trade, fillmodel_trade(imnt, mkt))
+> ```
 
 ## Frame references
 
