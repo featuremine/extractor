@@ -228,7 +228,7 @@ fm_ctx_def_t *fm_comp_round_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       is64 = fm_type_equal(restype, fm_base_type_get(sys, FM_TYPE_RPRICE));
       if (!is64 &&
           !fm_type_equal(restype, fm_base_type_get(sys, FM_TYPE_DECIMAL128))) {
-        auto *errstr = "only Decimal64 and Decimal128 types are supported";
+        auto *errstr = "only Rprice and Decimal128 types are supported";
         fm_type_sys_err_custom(sys, FM_TYPE_ERROR_ARGS, errstr);
         return nullptr;
       }
