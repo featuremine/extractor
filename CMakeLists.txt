@@ -16,7 +16,7 @@ set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 add_subproject(
     NAME yamal
     GIT_REVISION "wheel-out-dir-fix"
-    VERSION "8.0.2"
+    VERSION "8.0.3"
     GIT_URL "https://github.com/featuremine/yamal.git"
     TARGETS fmc++ ytp py_yamal_dep yamal-py
 )
