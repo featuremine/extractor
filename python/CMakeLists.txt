@@ -248,7 +248,7 @@ if(BUILD_TESTING)
 
             add_custom_target(
                 extractor_py ALL
-                DEPENDS yamal-whl
+                DEPENDS yamal-py
             )
         
         endif()

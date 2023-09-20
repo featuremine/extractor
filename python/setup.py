@@ -23,13 +23,13 @@ if sys.version_info < (3, 6, 0):
 import setuptools
 
 setuptools.setup (
-    name = 'extractor',
+    name = 'featuremine-extractor',
     version = extractor_version,
     author='Featuremine Corporation',
     author_email='support@featuremine.com',
     url='https://www.featuremine.com',
-    description='Featuremine YTP packages',
-    long_description='Featuremine YTP packages',
+    description='Featuremine Extractor package',
+    long_description='Featuremine Extractor package',
     classifiers=[
         'Programming Language :: Python :: 3 :: Only',
     ],
