@@ -190,6 +190,7 @@ else()
 endif()
 
 if(BUILD_WHEEL)
+    file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}-py")
     add_custom_command(
         OUTPUT "${CMAKE_BINARY_DIR}/output/extractor-${PROJECT_VERSION}-py3-none-manylinux_2_17_x86_64.whl"
 
@@ -197,8 +198,8 @@ if(BUILD_WHEEL)
         "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
 
         "build"
-        "--build-base=${WHEEL_extractor_BUILD_DIR}/build"
-        "--build-lib=${WHEEL_extractor_BUILD_DIR}/build/lib"
+        "--build-base=${WHEEL_extractor_BUILD_DIR}/buildwheel"
+        "--build-lib=${WHEEL_extractor_BUILD_DIR}/buildwheel/lib"
         ${DEBUG_FLAG}
 
         "egg_info"
@@ -210,11 +211,21 @@ if(BUILD_WHEEL)
 
         "--plat-name=${PYTHON_PLATFORM}"
 
+        WORKING_DIRECTORY ${WHEEL_extractor_BUILD_DIR}/dist
+
+        DEPENDS extractor extractor_module
+    )
+    add_custom_command(
+        OUTPUT "${WHEEL_extractor_BUILD_DIR}-py/featuremine_extractor.egg-info/SOURCES.txt"
+
         COMMAND
         "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
 
         "build_scripts"
         "--executable=${PYTHON3_BIN}"
+
+        "egg_info"
+        "--egg-base" "${WHEEL_extractor_BUILD_DIR}-py"
 
         "build"
         "--build-base=${WHEEL_extractor_BUILD_DIR}/build"
@@ -229,6 +240,10 @@ if(BUILD_WHEEL)
     add_custom_target(
         extractor-whl ALL
         DEPENDS "${CMAKE_BINARY_DIR}/output/extractor-${PROJECT_VERSION}-py3-none-manylinux_2_17_x86_64.whl"
+    )
+    add_custom_target(
+        extractor-py ALL
+        DEPENDS "${WHEEL_extractor_BUILD_DIR}-py/featuremine_extractor.egg-info/SOURCES.txt"
     )
 endif()
 
@@ -248,7 +263,7 @@ if(BUILD_TESTING)
 
             add_custom_target(
                 extractor_py ALL
-                DEPENDS yamal-whl
+                DEPENDS yamal-py
             )
         
         endif()
