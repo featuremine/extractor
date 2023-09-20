@@ -28,8 +28,8 @@ setuptools.setup (
     author='Featuremine Corporation',
     author_email='support@featuremine.com',
     url='https://www.featuremine.com',
-    description='Featuremine Extractor package',
-    long_description='Featuremine Extractor package',
+    description='Featuremine Extractor Package',
+    long_description='Featuremine Extractor Package',
     classifiers=[
         'Programming Language :: Python :: 3 :: Only',
     ],
@@ -39,4 +39,5 @@ setuptools.setup (
     license='COPYRIGHT (c) 2022 by Featuremine Corporation',
     packages=['extractor', 'extractor.tests'],
     scripts=['scripts/test-extractor-python'],
+    install_requires=['yamal', 'numpy', 'pandas']
 )
