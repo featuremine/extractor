@@ -51,8 +51,8 @@ jobs:
         cpack: TGZ
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
         docs: true
-        #TODO: Add test_pypi_token when extractor name is available
-        #test_pypi_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
+        wheel: true
+        test_pypi_token: ${{ secrets.TEST_PYPI_API_TOKEN }}
 
   build-macos:
     needs: utility
