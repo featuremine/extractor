@@ -166,6 +166,30 @@ configure_file(
     COPYONLY
 )
 
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tools/__init__.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tools/__init__.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tools/visualization/__init__.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tools/visualization/__init__.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tools/visualization/graph_dump_mod.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tools/visualization/graph_dump_mod.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tools/visualization/graph_viz_mod.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tools/visualization/graph_viz_mod.py"
+    COPYONLY
+)
+
 file(
     COPY "${PROJECT_SOURCE_DIR}/LICENSE"
     DESTINATION "${WHEEL_extractor_BUILD_DIR}/dist"
