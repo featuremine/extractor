@@ -37,7 +37,7 @@ setuptools.setup (
         'extractor': ['extractor.so', 'libextractor*', 'include', 'include/*', 'include/*/*', 'include/*/*/*']
     },
     license='COPYRIGHT (c) 2022 by Featuremine Corporation',
-    packages=['extractor', 'extractor.tests'],
+    packages=['extractor', 'extractor.tests', 'extractor.tools', 'extractor.tools.visualization'],
     scripts=['scripts/test-extractor-python'],
     install_requires=['yamal', 'numpy', 'pandas']
 )
