@@ -166,6 +166,30 @@ configure_file(
     COPYONLY
 )
 
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tools/__init__.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tools/__init__.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tools/visualization/__init__.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tools/visualization/__init__.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tools/visualization/graph_dump_mod.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tools/visualization/graph_dump_mod.py"
+    COPYONLY
+)
+
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/extractor/tools/visualization/graph_viz_mod.py"
+    "${WHEEL_extractor_BUILD_DIR}/dist/extractor/tools/visualization/graph_viz_mod.py"
+    COPYONLY
+)
+
 file(
     COPY "${PROJECT_SOURCE_DIR}/LICENSE"
     DESTINATION "${WHEEL_extractor_BUILD_DIR}/dist"
@@ -192,7 +216,7 @@ endif()
 if(BUILD_WHEEL)
     file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}-py")
     add_custom_command(
-        OUTPUT "${CMAKE_BINARY_DIR}/output/extractor-${PROJECT_VERSION}-py3-none-manylinux_2_17_x86_64.whl"
+        OUTPUT "${CMAKE_BINARY_DIR}/output/featuremine_extractor-${PROJECT_VERSION}-py3-none-manylinux_2_17_x86_64.whl"
 
         COMMAND
         "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
@@ -239,7 +263,7 @@ if(BUILD_WHEEL)
     )
     add_custom_target(
         extractor-whl ALL
-        DEPENDS "${CMAKE_BINARY_DIR}/output/extractor-${PROJECT_VERSION}-py3-none-manylinux_2_17_x86_64.whl"
+        DEPENDS "${CMAKE_BINARY_DIR}/output/featuremine_extractor-${PROJECT_VERSION}-py3-none-manylinux_2_17_x86_64.whl"
     )
     add_custom_target(
         extractor-py ALL
