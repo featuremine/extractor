@@ -56,7 +56,7 @@ struct fm_type_io {
       : parse([](const char *a, const char *, void *) { return a; }),
         fwrite([](FILE *, const void *) { return false; }) {}
   fm_type_io(parser &&p, fwriter &&f)
-      : parse(forward<parser>(p)), fwrite(forward<fwriter>(f)) {}
+      : parse(std::forward<parser>(p)), fwrite(std::forward<fwriter>(f)) {}
   parser parse;
   fwriter fwrite;
 };

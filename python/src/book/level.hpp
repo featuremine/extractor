@@ -34,32 +34,32 @@
 #include <datetime.h>
 #include <fmc++/python/wrapper.hpp>
 
-typedef struct {
+typedef struct Levels {
   PyObject_HEAD fm_levels_t *levels_;
   fmc::python::object book_;
   Book *book() { return (Book *)book_.get_ref(); }
 } Levels;
 
-typedef struct {
+typedef struct Level {
   PyObject_HEAD fm_level_t *level_;
   fmc::python::object levels_;
   Levels *levels() { return (Levels *)levels_.get_ref(); }
 } Level;
 
-typedef struct {
+typedef struct LevelIter {
   PyObject_HEAD;
   unsigned done_;
   fmc::python::object levels_;
   Levels *levels() { return (Levels *)levels_.get_ref(); }
 } LevelIter;
 
-typedef struct {
+typedef struct Order {
   PyObject_HEAD fm_order_t *order_;
   fmc::python::object level_;
   Level *level() { return (Level *)level_.get_ref(); }
 } Order;
 
-typedef struct {
+typedef struct OrderIter {
   PyObject_HEAD;
   unsigned done_;
   fmc::python::object level_;
