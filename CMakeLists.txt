@@ -13,6 +13,16 @@ set(Subproject_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(Subproject REQUIRED)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+
+if(BUILD_TESTING)
+    add_subproject(
+        NAME libgtest
+        GIT_REVISION "v1.14.0"
+        GIT_URL "https://github.com/google/googletest.git"
+        TARGETS gtest
+    )
+endif()
+
 add_subproject(
     NAME yamal
     GIT_REVISION "v8.0.5"
