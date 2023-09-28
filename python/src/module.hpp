@@ -132,7 +132,7 @@ static PyTypeObject ExtractorModuleComputationType = {
     0,                                              /* tp_setattr */
     0,                                              /* tp_reserved */
     0,                                              /* tp_repr */
-    &ExtractorModuleComputation_numerical_methods,   /* tp_as_number */
+    &ExtractorModuleComputation_numerical_methods,  /* tp_as_number */
     0,                                              /* tp_as_sequence */
     0,                                              /* tp_as_mapping */
     0,                                              /* tp_hash  */
