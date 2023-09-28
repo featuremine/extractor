@@ -32,6 +32,7 @@
 #include <cstdlib>
 #include <limits>
 #include <type_traits>
+#include <inttypes.h>
 
 using namespace std;
 
@@ -303,7 +304,7 @@ constexpr const char *format_str(FM_BASE_TYPE type) {
     return "%i";
     break;
   case FM_TYPE_INT64:
-    return "%li";
+    return "%" PRId64;
     break;
   case FM_TYPE_UINT8:
     return "%hhu";
@@ -315,7 +316,7 @@ constexpr const char *format_str(FM_BASE_TYPE type) {
     return "%u";
     break;
   case FM_TYPE_UINT64:
-    return "%lu";
+    return "%" PRIu64;
     break;
   case FM_TYPE_FLOAT32:
     return "%.15f";
@@ -357,7 +358,7 @@ bool type_fwrite(FILE *file, const void *val, const char *fmt) {
 
 bool nano_fwriter(FILE *file, const void *val, const char *fmt) {
   auto &time = *(fmc_time64_t *)val;
-  return fprintf(file, "%li", time.value) > 0;
+  return fprintf(file, "%" PRId64, time.value) > 0;
 }
 
 bool rational64_fwriter(FILE *file, const void *val, const char *fmt) {

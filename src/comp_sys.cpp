@@ -196,14 +196,14 @@ struct fm_comp_sys_module *fm_comp_sys_module_get(struct fm_comp_sys *sys,
 
   struct fm_comp_sys_module *ret = NULL;
   char mod_lib[strlen(mod) + strlen(EXTRACTOR_LIB_SUFFIX) + 1];
-  sprintf(mod_lib, "%s%s", mod, EXTRACTOR_LIB_SUFFIX);
+  snprintf(mod_lib, sizeof(mod_lib), "%s%s", mod, EXTRACTOR_LIB_SUFFIX);
 
   int pathlen = fmc_path_join(NULL, 0, mod, mod_lib) + 1;
   char mod_lib_2[pathlen];
   fmc_path_join(mod_lib_2, pathlen, mod, mod_lib);
 
   char mod_func[strlen(EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX) + strlen(mod) + 1];
-  sprintf(mod_func, "%s%s", EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX, mod);
+  snprintf(mod_func, sizeof(mod_func), "%s%s", EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX, mod);
   struct fm_comp_sys_ext_path_list *head = sys->search_paths;
   struct fm_comp_sys_ext_path_list *item;
   bool should_skip = true;
