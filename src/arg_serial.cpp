@@ -108,11 +108,11 @@ bool fm_arg_buffer_build(ostringstream &os, fm_type_decl_cp td,
                             os << STACK_POP(args, CHAR) << endl;
                             break;
                           case FM_TYPE_WCHAR:
-                            #ifdef FMC_SYS_MACH
+#ifdef FMC_SYS_MACH
                             return false;
-                            #else
-                              os << STACK_POP(args, WCHAR) << endl;
-                            #endif
+#else
+                            os << STACK_POP(args, WCHAR) << endl;
+#endif
                             break;
                           case FM_TYPE_BOOL:
                             os << STACK_POP(args, bool) << endl;

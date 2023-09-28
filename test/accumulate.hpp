@@ -32,9 +32,9 @@
 #include "fmc++/gtestwrap.hpp"
 #include "fmc/platform.h"
 #include <fstream>
+#include <inttypes.h>
 #include <iostream>
 #include <vector>
-#include <inttypes.h>
 
 using namespace fmc;
 

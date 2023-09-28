@@ -30,9 +30,9 @@
 #include <cerrno>
 #include <cstddef>
 #include <cstdlib>
+#include <inttypes.h>
 #include <limits>
 #include <type_traits>
-#include <inttypes.h>
 
 using namespace std;
 

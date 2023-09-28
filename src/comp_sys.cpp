@@ -203,7 +203,8 @@ struct fm_comp_sys_module *fm_comp_sys_module_get(struct fm_comp_sys *sys,
   fmc_path_join(mod_lib_2, pathlen, mod, mod_lib);
 
   char mod_func[strlen(EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX) + strlen(mod) + 1];
-  snprintf(mod_func, sizeof(mod_func), "%s%s", EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX, mod);
+  snprintf(mod_func, sizeof(mod_func), "%s%s",
+           EXTRACTOR_COMPONENT_INIT_FUNC_PREFIX, mod);
   struct fm_comp_sys_ext_path_list *head = sys->search_paths;
   struct fm_comp_sys_ext_path_list *item;
   bool should_skip = true;
