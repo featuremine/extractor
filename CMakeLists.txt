@@ -14,6 +14,8 @@ find_package(Subproject REQUIRED)
 
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
+option (BUILD_TESTING "Enable build of the unit tests and their execution." ON)
+
 if(BUILD_TESTING)
     add_subproject(
         NAME libgtest
@@ -31,7 +33,6 @@ add_subproject(
     TARGETS fmc++ ytp py_yamal_dep yamal-py
 )
 
-option (BUILD_TESTING "Enable build of the unit tests and their execution." ON)
 option (BUILD_TOOLS "Enable build of command line tools." ON)
 option (BUILD_PACKAGE "Enable build of the self-extracting package." ON)
 option (BUILD_WHEEL "Enable build of the python package." ON)
