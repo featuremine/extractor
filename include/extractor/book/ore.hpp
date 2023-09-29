@@ -510,12 +510,18 @@ inline result parser::parse_ann(cmp_ctx_t *ctx, uint32_t &left) {
   }
   book::updates::announce msg;
   msg.imnt_idx = imnt_idx;
-  if (!cmp_read_many(ctx, &left, &msg.symbol, &msg.tick))
+  if (!cmp_read_many(ctx, &left, &msg.symbol))
     return result::ERR;
   if (left > 0) {
-    int32_t qty_tick;
-    if (cmp_read_many(ctx, &left, &qty_tick)) {
-      msg.qty_tick = qty_tick;
+    int32_t px_tick;
+    if (cmp_read_many(ctx, &left, &px_tick)) {
+      msg.px_tick = px_tick;
+    }
+    if (left > 0) {
+      int32_t qty_tick;
+      if (cmp_read_many(ctx, &left, &qty_tick)) {
+        msg.qty_tick = qty_tick;
+      }
     }
   }
   this->msg = msg;
@@ -640,7 +646,7 @@ inline bool validate_version(uint16_t ver[3]) {
 }
 
 struct symbol_info {
-  int32_t px_denum;
+  int32_t px_denum = 1;
   int32_t qty_denum = 1;
   uint32_t index;
 };

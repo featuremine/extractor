@@ -76,7 +76,7 @@ struct ch_ctx_t {
     } else if (res.is_announce()) {
       auto *msg = std::get_if<fm::book::updates::announce>(&parser.msg);
       info.index = index;
-      info.px_denum = msg->tick;
+      info.px_denum = msg->px_tick;
       info.qty_denum = msg->qty_tick;
     } else if (!res.is_skip()) {
       fmc_error_set(error, "error reading FM Ore file %s, format incorrect",
@@ -218,6 +218,7 @@ struct sols_exe_cl {
   }
 
   bool proc_one(fmc_error_t **err) {
+    fmc_error_clear(err);
     while (cmp.offset < cmp.size) {
       if (current_ctx->parse_one(cmp, cfg.fname, err)) {
         return true;
@@ -296,37 +297,8 @@ bool fm_comp_seq_ore_live_split_stream_exec(fm_frame_t *fres, size_t args,
   auto *op_cl = (sols_op_cl *)ctx->comp;
 
   fmc_error_t *err = nullptr;
-  if (exe_cl->current_ctx == nullptr) {
-    bool poll = ytp_sequence_poll(exe_cl->seq, &err);
-    if (err) {
-      fm_exec_ctx_error_set(
-          ctx->exec, "Unable to poll the ytp sequence %s, error message: %s",
-          op_cl->fname.c_str(), fmc_error_msg(err));
-      return false;
-    }
-    if (!poll && !exe_cl->next_file_exists) {
-      exe_cl->next_file_exists = exe_cl->next_file_available;
-    } else if (!poll) { //  && exe_cl->next_file_exists
-      bool swaped = exe_cl->swap_seq(&err);
-      if (err) {
-        fm_exec_ctx_error_set(
-            ctx->exec,
-            "Unable to peek the next ytp sequence %s, error message: %s",
-            op_cl->fname.c_str(), fmc_error_msg(err));
-        return false;
-      }
-      if (swaped) {
-        exe_cl->next_file_exists = false;
-        exe_cl->next_file_available = false;
-      }
-    }
 
-    if (exe_cl->current_ctx == nullptr) {
-      fm_stream_ctx_schedule(exec_ctx, ctx->handle,
-                             fm_stream_ctx_now(exec_ctx));
-      return false;
-    }
-
+  auto proc_one = [&]() {
     if (!exe_cl->proc_one(&err)) {
       if (err) {
         fm_exec_ctx_error_set(exe_cl->call_ctx->exec, "%s", fmc_error_msg(err));
@@ -338,6 +310,45 @@ bool fm_comp_seq_ore_live_split_stream_exec(fm_frame_t *fres, size_t args,
         return false;
       }
     }
+    return true;
+  };
+
+  if (exe_cl->current_ctx == nullptr) {
+    bool poll = ytp_sequence_poll(exe_cl->seq, &err);
+    if (err) {
+      fm_exec_ctx_error_set(
+          ctx->exec, "Unable to poll the ytp sequence %s, error message: %s",
+          op_cl->fname.c_str(), fmc_error_msg(err));
+      return false;
+    }
+    if (exe_cl->current_ctx == nullptr) {
+      if (!poll) {
+        if (!exe_cl->next_file_exists) {
+          exe_cl->next_file_exists = exe_cl->next_file_available;
+        } else {
+          bool swaped = exe_cl->swap_seq(&err);
+          if (err) {
+            fm_exec_ctx_error_set(
+                ctx->exec,
+                "Unable to peek the next ytp sequence %s, error message: %s",
+                op_cl->fname.c_str(), fmc_error_msg(err));
+            return false;
+          }
+          if (swaped) {
+            exe_cl->next_file_exists = false;
+            exe_cl->next_file_available = false;
+          }
+        }
+      }
+
+      fm_stream_ctx_schedule(exec_ctx, ctx->handle,
+                             fm_stream_ctx_now(exec_ctx));
+      return false;
+    }
+
+    if (!proc_one()) {
+      return false;
+    }
   }
 
   auto &parser = exe_cl->current_ctx->parser;
@@ -347,20 +358,13 @@ bool fm_comp_seq_ore_live_split_stream_exec(fm_frame_t *fres, size_t args,
 
   auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
   box = parser.msg;
-  fm_stream_ctx_queue(exec_ctx, ctx->deps[parser.imnt->index]);
+  fm_stream_ctx_queue(exec_ctx, ctx->deps[exe_cl->current_ctx->index]);
 
   if (parser.expand) {
     parser.msg = parser.expanded;
     parser.expand = false;
-  } else {
-    if (!exe_cl->proc_one(&err)) {
-      if (err) {
-        fm_exec_ctx_error_set(exe_cl->call_ctx->exec, "%s", fmc_error_msg(err));
-        return false;
-      }
-
-      exe_cl->current_ctx = nullptr;
-    }
+  } else if (!proc_one()) {
+    return false;
   }
 
   fm_stream_ctx_schedule(exec_ctx, ctx->handle, fm_stream_ctx_now(exec_ctx));
