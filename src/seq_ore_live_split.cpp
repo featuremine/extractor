@@ -67,6 +67,23 @@ struct ch_ctx_t {
   fm::book::ore::parser parser;
   fm::book::ore::imnt_info info;
   int32_t index;
+
+  bool parse_one(cmp_mem_t &cmp, std::string &filename, fmc_error_t **error) {
+    fmc_error_clear(error);
+    auto res = parser.parse(&cmp.ctx, &info);
+    if (res.is_success() || res.is_time()) {
+      return true;
+    } else if (res.is_announce()) {
+      auto *msg = std::get_if<fm::book::updates::announce>(&parser.msg);
+      info.index = index;
+      info.px_denum = msg->px_tick;
+      info.qty_denum = msg->qty_tick;
+    } else if (!res.is_skip()) {
+      fmc_error_set(error, "error reading FM Ore file %s, format incorrect",
+                    filename.c_str());
+    }
+    return false;
+  }
 };
 
 struct sols_exe_cl {
@@ -74,8 +91,7 @@ struct sols_exe_cl {
   cmp_mem_t cmp;
   fm::book::ore::imnt_infos_t imnts;
   std::unordered_map<std::string, std::unique_ptr<ch_ctx_t>> ch_cl;
-  fm::book::ore::parser empty_parser;
-  fm::book::ore::parser *current_parser;
+  ch_ctx_t *current_ctx = nullptr;
   sols_op_cl &cfg;
   fm_stream_ctx *exec_ctx;
   fm_call_ctx *call_ctx;
@@ -88,8 +104,7 @@ struct sols_exe_cl {
   std::atomic<bool> next_file_available = false;
   bool next_file_exists = false;
 
-  sols_exe_cl(sols_op_cl &op_cl)
-      : empty_parser(imnts), current_parser(&empty_parser), cfg(op_cl) {
+  sols_exe_cl(sols_op_cl &op_cl) : cfg(op_cl) {
     fmc_error_t *err = nullptr;
     cmp_mem_init(&cmp);
     {
@@ -194,34 +209,25 @@ struct sols_exe_cl {
                              const char *data) {
     auto &ctx = *reinterpret_cast<
         decltype(ch_cl)::value_type::second_type::element_type *>(closure);
-    ctx.exe_cl->data_cb(std::string_view(data, sz), &ctx.info, ctx.parser,
-                        ctx.index);
+    ctx.exe_cl->data_cb(std::string_view(data, sz), ctx);
   }
 
-  void data_cb(std::string_view data, fm::book::ore::imnt_info *info,
-               fm::book::ore::parser &parser, int32_t index) {
+  void data_cb(std::string_view data, ch_ctx_t &ctx) {
+    current_ctx = &ctx;
     cmp_mem_set(&cmp, data.size(), (void *)data.data());
-    auto res = parser.parse(&cmp.ctx, info);
-    if (res.is_success()) {
-      auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
-      box = parser.msg;
-      current_parser = &parser;
-      fm_stream_ctx_queue(exec_ctx, call_ctx->deps[index]);
-    } else if (res.is_time()) {
-      auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
-      box = parser.msg;
-      current_parser = &parser;
-      fm_stream_ctx_queue(exec_ctx, call_ctx->deps[index]);
-    } else if (res.is_announce()) {
-      auto *msg = std::get_if<fm::book::updates::announce>(&parser.msg);
-      info->index = index;
-      info->px_denum = msg->tick;
-      info->qty_denum = msg->qty_tick;
-    } else if (!res.is_skip()) {
-      fm_exec_ctx_error_set(call_ctx->exec,
-                            "error reading FM Ore file %s, format incorrect",
-                            cfg.fname.c_str());
+  }
+
+  bool proc_one(fmc_error_t **err) {
+    fmc_error_clear(err);
+    while (cmp.offset < cmp.size) {
+      if (current_ctx->parse_one(cmp, cfg.fname, err)) {
+        return true;
+      }
+      if (err) {
+        return false;
+      }
     }
+    return false;
   }
 
   bool swap_seq(fmc_error_t **err) {
@@ -290,20 +296,24 @@ bool fm_comp_seq_ore_live_split_stream_exec(fm_frame_t *fres, size_t args,
   auto *exe_cl = (sols_exe_cl *)cl;
   auto *op_cl = (sols_op_cl *)ctx->comp;
 
-  auto &parser = *exe_cl->current_parser;
-  exe_cl->fres = fres;
-  exe_cl->exec_ctx = exec_ctx;
-  exe_cl->call_ctx = ctx;
+  fmc_error_t *err = nullptr;
 
-  if (parser.expand) {
-    parser.msg = parser.expanded;
-    parser.expand = false;
+  auto proc_one = [&]() {
+    if (!exe_cl->proc_one(&err)) {
+      if (err) {
+        fm_exec_ctx_error_set(exe_cl->call_ctx->exec, "%s", fmc_error_msg(err));
+        return false;
+      } else {
+        exe_cl->current_ctx = nullptr;
+        fm_stream_ctx_schedule(exec_ctx, ctx->handle,
+                               fm_stream_ctx_now(exec_ctx));
+        return false;
+      }
+    }
+    return true;
+  };
 
-    auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
-    box = parser.msg;
-    fm_stream_ctx_queue(exec_ctx, ctx->deps[parser.imnt->index]);
-  } else {
-    fmc_error_t *err = nullptr;
+  if (exe_cl->current_ctx == nullptr) {
     bool poll = ytp_sequence_poll(exe_cl->seq, &err);
     if (err) {
       fm_exec_ctx_error_set(
@@ -311,26 +321,53 @@ bool fm_comp_seq_ore_live_split_stream_exec(fm_frame_t *fres, size_t args,
           op_cl->fname.c_str(), fmc_error_msg(err));
       return false;
     }
-    if (!poll && !exe_cl->next_file_exists) {
-      exe_cl->next_file_exists = exe_cl->next_file_available;
-    } else if (!poll) { //  && exe_cl->next_file_exists
-      bool swaped = exe_cl->swap_seq(&err);
-      if (err) {
-        fm_exec_ctx_error_set(
-            ctx->exec,
-            "Unable to peek the next ytp sequence %s, error message: %s",
-            op_cl->fname.c_str(), fmc_error_msg(err));
-        return false;
+    if (exe_cl->current_ctx == nullptr) {
+      if (!poll) {
+        if (!exe_cl->next_file_exists) {
+          exe_cl->next_file_exists = exe_cl->next_file_available;
+        } else {
+          bool swaped = exe_cl->swap_seq(&err);
+          if (err) {
+            fm_exec_ctx_error_set(
+                ctx->exec,
+                "Unable to peek the next ytp sequence %s, error message: %s",
+                op_cl->fname.c_str(), fmc_error_msg(err));
+            return false;
+          }
+          if (swaped) {
+            exe_cl->next_file_exists = false;
+            exe_cl->next_file_available = false;
+          }
+        }
       }
-      if (swaped) {
-        exe_cl->next_file_exists = false;
-        exe_cl->next_file_available = false;
-      }
+
+      fm_stream_ctx_schedule(exec_ctx, ctx->handle,
+                             fm_stream_ctx_now(exec_ctx));
+      return false;
+    }
+
+    if (!proc_one()) {
+      return false;
     }
   }
 
-  fm_stream_ctx_schedule(exec_ctx, ctx->handle, fm_stream_ctx_now(exec_ctx));
+  auto &parser = exe_cl->current_ctx->parser;
+  exe_cl->fres = fres;
+  exe_cl->exec_ctx = exec_ctx;
+  exe_cl->call_ctx = ctx;
 
+  auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
+  box = parser.msg;
+  fm_stream_ctx_queue(exec_ctx, ctx->deps[exe_cl->current_ctx->index]);
+
+  if (parser.expand) {
+    parser.msg = parser.expanded;
+    parser.expand = false;
+  } else if (!proc_one()) {
+    return false;
+  }
+
+  fm_stream_ctx_schedule(exec_ctx, ctx->handle, fm_stream_ctx_now(exec_ctx));
   return false;
 }
 
