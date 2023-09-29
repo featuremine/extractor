@@ -328,15 +328,8 @@ inline result parser::parse_mod(cmp_ctx_t *ctx, uint32_t &left) {
     cancel.batch = 1;
     // add.batch is equal to the batch value of the modify message
 
-    if (left > 0) {
-      if (!cmp_read_many(ctx, &left, &add.is_bid))
-        return result::ERR;
-      process_remove(ords, it, cancel);
-    } else {
-      process_remove(ords, it, cancel);
-      add.is_bid = cancel.is_bid;
-    }
-
+    process_remove(ords, it, cancel);
+    add.is_bid = cancel.is_bid;
     msg = cancel;
     expand = true;
     expanded = add;
