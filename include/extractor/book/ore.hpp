@@ -322,22 +322,35 @@ inline result parser::parse_mod(cmp_ctx_t *ctx, uint32_t &left) {
   if (imnt->qty_denum != 1)
     add.qty = add.qty / imnt->qty_denum;
   auto &ords = imnt->orders;
-  if (auto it = ords.find(cancel.id); it == ords.end()) {
-    return result::SKIP;
-  } else {
+  if (auto it = ords.find(cancel.id); it != ords.end()) {
     // first cancel message is always inside a batch
     // we do not wan't to update the book with this 'fake' cancel
     cancel.batch = 1;
     // add.batch is equal to the batch value of the modify message
 
-    process_remove(ords, it, cancel);
-    add.is_bid = cancel.is_bid;
+    if (left > 0) {
+      if (!cmp_read_many(ctx, &left, &add.is_bid))
+        return result::ERR;
+      process_remove(ords, it, cancel);
+    } else {
+      process_remove(ords, it, cancel);
+      add.is_bid = cancel.is_bid;
+    }
+
     msg = cancel;
-    add_order(imnt, add);
     expand = true;
     expanded = add;
-    return result::SUCCESS;
+  } else {
+    if (left == 0) {
+      return result::SKIP;
+    }
+    if (!cmp_read_many(ctx, &left, &add.is_bid))
+      return result::ERR;
+
+    msg = add;
   }
+  add_order(imnt, add);
+  return result::SUCCESS;
 };
 
 inline result parser::parse_exe(cmp_ctx_t *ctx, uint32_t &left) {
