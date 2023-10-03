@@ -57,6 +57,18 @@ download_archive(
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_trades.ytp"
 )
 
+download_archive(
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/consolidated.ytp.0001.gz"
+    "f715bfbce52f70dbcd3476392028d6ae" "consolidated.ytp.0001.gz"
+    "${CMAKE_CURRENT_BINARY_DIR}/consolidated.ytp.0001"
+)
+
+download_archive(
+    "https://fm-public-resources.s3.amazonaws.com/extractor-test-files/trade_view.base.csv.gz"
+    "5ef6ea21f7d2fa100ef977505ec52a21" "trade_view.base.csv.gz"
+    "${CMAKE_CURRENT_BINARY_DIR}/trade_view.base.csv"
+)
+
 add_custom_target(
     extractor-testfiles ALL
     DEPENDS
@@ -66,6 +78,8 @@ add_custom_target(
     "${CMAKE_CURRENT_BINARY_DIR}/coinbase_bulldozer.base.ytp"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_bbo.ytp"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_trades.ytp"
+    "${CMAKE_CURRENT_BINARY_DIR}/consolidated.ytp.0001"
+    "${CMAKE_CURRENT_BINARY_DIR}/trade_view.base.csv"
 )
 
 macro(extr_unit_test)
@@ -593,6 +607,25 @@ add_test(
     "${CMAKE_CURRENT_SOURCE_DIR}/book_bbo.py"
     "--ytp"
     "${CMAKE_CURRENT_BINARY_DIR}/ytpseq_ore_trades.ytp"
+
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+set_tests_properties(
+    extractor_python_ytp_book_trade
+    PROPERTIES
+    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_yamal_BUILD_DIR}/build/lib:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
+    TIMEOUT 100
+)
+
+add_test(
+    NAME extractor_python_trade_view COMMAND
+
+    "${PYTHON3_BIN}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/trade_view.py"
+    "--ytp-file"
+    "${CMAKE_CURRENT_BINARY_DIR}/consolidated.ytp.0001"
+    "--base"
+    "${CMAKE_CURRENT_BINARY_DIR}/trade_view.{}.csv"
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
