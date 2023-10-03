@@ -199,24 +199,10 @@ if(CMAKE_BUILD_TYPE MATCHES DEBUG)
     set(DEBUG_FLAG "--debug")
 endif()
 
-if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-    set(PYTHON_PLATFORM "manylinux_2_17_${CMAKE_SYSTEM_PROCESSOR}")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Darwin")
-    execute_process(COMMAND sw_vers -productVersion
-                    OUTPUT_VARIABLE MACOS_VERSION
-                    OUTPUT_STRIP_TRAILING_WHITESPACE)
-    STRING(REGEX REPLACE "^([0-9]+)\\.?([0-9]+)\\.?([0-9]+)?$" "\\1" MACOS_VERSION_MAJOR "${MACOS_VERSION}")
-    set(PYTHON_PLATFORM "macosx_${MACOS_VERSION_MAJOR}_0_${CMAKE_SYSTEM_PROCESSOR}")
-elseif(CMAKE_SYSTEM_NAME STREQUAL "Windows")
-    set(PYTHON_PLATFORM "win_${CMAKE_SYSTEM_PROCESSOR}")
-else()
-    message(FATAL_ERROR "Platform not supported")
-endif()
-
 if(BUILD_WHEEL)
     file(MAKE_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}-py")
     add_custom_command(
-        OUTPUT "${CMAKE_BINARY_DIR}/output/featuremine_extractor-${PROJECT_VERSION}-py3-none-manylinux_2_17_x86_64.whl"
+        OUTPUT "${CMAKE_BINARY_DIR}/output/featuremine_extractor-${PROJECT_VERSION}-py3-none-${PYTHON_PLATFORM}.whl"
 
         COMMAND
         "${PYTHON3_BIN}" "${CMAKE_CURRENT_SOURCE_DIR}/setup.py"
@@ -263,7 +249,7 @@ if(BUILD_WHEEL)
     )
     add_custom_target(
         extractor-whl ALL
-        DEPENDS "${CMAKE_BINARY_DIR}/output/featuremine_extractor-${PROJECT_VERSION}-py3-none-manylinux_2_17_x86_64.whl"
+        DEPENDS "${CMAKE_BINARY_DIR}/output/featuremine_extractor-${PROJECT_VERSION}-py3-none-${PYTHON_PLATFORM}.whl"
     )
     add_custom_target(
         extractor-py ALL
