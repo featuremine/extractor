@@ -79,8 +79,8 @@ struct ch_ctx_t {
       info.px_denum = msg->px_tick;
       info.qty_denum = msg->qty_tick;
     } else if (!res.is_skip()) {
-      fmc_error_set(error, "error reading FM Ore file %s, format incorrect",
-                    filename.c_str());
+      fmc_error_set(error, "error reading FM Ore file %s: %s", filename.c_str(),
+                    parser.get_error().c_str());
     }
     return false;
   }
