@@ -72,7 +72,7 @@ struct order_info {
 };
 using orders_t = unordered_map<uint64_t, order_info>;
 struct imnt_info {
-  int32_t px_denum;
+  int32_t px_denum = 1;
   int32_t qty_denum = 1;
   int32_t index;
   orders_t orders;
