@@ -9,14 +9,14 @@ project(
     HOMEPAGE_URL "https://www.featuremine.com"
 )
 
-set(Subproject_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
-find_package(Subproject REQUIRED)
-
 set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 
 option (BUILD_TESTING "Enable build of the unit tests and their execution." ON)
 
+set(Subproject_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
 if(BUILD_TESTING)
+    find_package(Subproject REQUIRED)
     add_subproject(
         NAME libgtest
         GIT_REVISION "v1.14.0"
@@ -25,6 +25,7 @@ if(BUILD_TESTING)
     )
 endif()
 
+find_package(Subproject REQUIRED)
 add_subproject(
     NAME yamal
     VERSION_MIN "8.0.5"
@@ -68,6 +69,10 @@ set(FmConfig_DIR "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 find_package(FmConfig REQUIRED)
 fm_config()
 include(GNUInstallDirs)
+
+set(ReleaseTools_DIR "${PROJECT_SOURCE_DIR}/cmake")
+find_package(ReleaseTools REQUIRED)
+get_python_platform(PYTHON_PLATFORM)
 
 add_subdirectory(src)
 
