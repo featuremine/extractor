@@ -623,14 +623,14 @@ add_test(
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/trade_view.py"
     "--ytp-file"
-    "${CMAKE_CURRENT_BINARY_DIR}/consolidated.ytp.0001"
+    "${CMAKE_CURRENT_BINARY_DIR}/consolidated.ytp"
     "--base"
     "${CMAKE_CURRENT_BINARY_DIR}/trade_view.{}.csv"
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 set_tests_properties(
-    extractor_python_ytp_book_trade
+    extractor_python_trade_view
     PROPERTIES
     ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_yamal_BUILD_DIR}/build/lib:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
     TIMEOUT 100

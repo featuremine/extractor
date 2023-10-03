@@ -8,8 +8,6 @@
 
 import argparse
 import extractor
-import numpy as np
-import matplotlib.pyplot as plt
 from datetime import timedelta, datetime, timezone
 
 class TradePlotter:
