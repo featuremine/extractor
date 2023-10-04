@@ -33,7 +33,7 @@ struct BookStruct {
   ~BookStruct() { fm_book_shared_dec(book_); }
 };
 
-typedef struct {
+typedef struct LevelsIter {
   PyObject_HEAD;
   unsigned done_;
   fmc::python::object book_;

@@ -79,7 +79,7 @@ bool bps_exe_cl::read_msg(fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
       if (where != exe_cl->symbols.end()) {
         auto &info = exe_cl->imnts[msg->imnt_idx];
         info.index = where->second;
-        info.px_denum = msg->tick;
+        info.px_denum = msg->px_tick;
         info.qty_denum = msg->qty_tick;
       }
     }

@@ -13,9 +13,9 @@
  *****************************************************************************/
 
 /**
- * @file seq_ore_live_split.h
+ * @file seq_ore_sim_split.h
  * @date 5 Oct 2022
- * @brief File contains C definitions of the  "seq_ore_live_split" operator
+ * @brief File contains C definitions of the  "seq_ore_sim_split" operator
  *
  * @see http://www.featuremine.com
  */
@@ -29,14 +29,14 @@
 extern "C" {
 #endif
 
-fm_ctx_def_t *fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *sys, fm_comp_def_cl,
-                                             unsigned, fm_type_decl_cp[],
-                                             fm_type_decl_cp, fm_arg_stack_t);
+fm_ctx_def_t *fm_comp_seq_ore_sim_split_gen(fm_comp_sys_t *sys, fm_comp_def_cl,
+                                            unsigned, fm_type_decl_cp[],
+                                            fm_type_decl_cp, fm_arg_stack_t);
 
 void fm_comp_seq_ore_split_destroy(fm_comp_def_cl, fm_ctx_def_t *);
 
-const fm_comp_def_t fm_comp_seq_ore_live_split = {
-    "seq_ore_live_split", &fm_comp_seq_ore_live_split_gen,
+const fm_comp_def_t fm_comp_seq_ore_sim_split = {
+    "seq_ore_sim_split", &fm_comp_seq_ore_sim_split_gen,
     &fm_comp_seq_ore_split_destroy, NULL};
 
 #ifdef __cplusplus

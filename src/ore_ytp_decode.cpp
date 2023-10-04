@@ -142,7 +142,7 @@ bool fm_comp_ore_ytp_decode_stream_exec(fm_frame_t *result, size_t args,
       auto *msg = std::get_if<fm::book::updates::announce>(&parser.msg);
       exe_cl->imnts.try_emplace(msg->imnt_idx,
                                 fm::book::ore::imnt_info{
-                                    .px_denum = msg->tick,
+                                    .px_denum = msg->px_tick,
                                     .qty_denum = msg->qty_tick,
                                     .index = (int32_t)msg->imnt_idx
                                     // .orders;

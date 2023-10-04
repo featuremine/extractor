@@ -109,6 +109,7 @@ TEST(counters, avg) {
   counter::samples ss;
 
   auto &test = ss.get<counter::ewma<2>>("Test");
+  (void)test;
   auto it = ss.find("Test");
   ASSERT_NE(it, ss.end());
 

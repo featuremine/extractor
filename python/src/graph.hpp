@@ -338,9 +338,8 @@ ExtractorFeatureIter *ExtractorFeatureIter_new(ExtractorGraph *graph) {
   self->graph_ = graph;
   self->iter_ = 0;
   auto count = fm_comp_graph_nodes_size(graph->features->graph_);
-  int i = 0;
   for (auto it = fm_comp_graph_nodes_begin(graph->features->graph_);
-       it != fm_comp_graph_nodes_end(graph->features->graph_); ++i, ++it) {
+       it != fm_comp_graph_nodes_end(graph->features->graph_); ++it) {
     self->nodes_.push_back(*it);
   }
   if (count != fm_comp_subgraph_stable_top_sort(graph->features->graph_, count,

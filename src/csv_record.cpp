@@ -138,7 +138,7 @@ bool fm_comp_csv_record_call_stream_init(fm_frame_t *result, size_t args,
     return fputc('\n', file) != EOF;
   });
 
-  auto *exec_cl = new csv_record_exec_cl(file, move(writers), pipe.first);
+  auto *exec_cl = new csv_record_exec_cl(file, std::move(writers), pipe.first);
   *cl = exec_cl;
 
   return true;
