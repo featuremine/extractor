@@ -28,9 +28,9 @@ endif()
 find_package(Subproject REQUIRED)
 add_subproject(
     NAME yamal
-    VERSION_MIN "8.0.5"
+    VERSION_MIN "8.0.6"
     VERSION_MAX "8.1.0"
-    GIT_REVISION "v8.0.5"
+    GIT_REVISION "v8.0.6"
     GIT_URL "https://github.com/featuremine/yamal.git"
     TARGETS fmc++ ytp py_yamal_dep yamal-py
 )
