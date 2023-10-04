@@ -36,6 +36,7 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--ytp-file", help="ytp file name", required=True)
     parser.add_argument("--base", help="test base file name", required=True)
+    parser.add_argument("--mode", help="live or sim", required=True)
     args = parser.parse_args()
 
     base_file = args.base.format("base")
@@ -46,7 +47,12 @@ if __name__ == '__main__':
 
     securities = ["btcusdt", "ethusdt", "busdusdt", "xrpusdt"]
     channels = tuple([f"ore/binance/{sec}" for sec in securities])
-    upds = op.seq_ore_live_split(args.ytp_file, channels)
+    if args.mode == 'live':
+        upds = op.seq_ore_live_split(args.ytp_file, channels)
+    elif args.mode == 'sim':
+        upds = op.seq_ore_sim_split(args.ytp_file, channels)
+    else:
+        assert False
     headers = [op.book_header(upd) for upd in upds]
 
     levels = [op.book_build(upd, 1) for upd in upds]
@@ -86,10 +92,16 @@ if __name__ == '__main__':
     file = open(test_file, "w")
     print("channel,time,bidpx,askpx,trdpx,trdqt,isbid", file=file)
 
+    finished = False
+
     def draw_plot(data):
+        global finished
         file.close()
         extractor.assert_base(base_file, test_file)
-        exit()
+        finished = True
+        if args.mode == 'live':
+            exit()
+
     def add_callback(sec, trd, mkt):
         plotter = TradePlotter(file, sec, count, draw_plot)
         graph.callback(trd, lambda ev: plotter.trade(ev[0].receive, ev[0].price, ev[0].qty, ev[0].side))
@@ -98,5 +110,9 @@ if __name__ == '__main__':
     for security, trade, bbo in zip(securities, trades, bbos):
         add_callback(security, trade, bbo)
 
-    graph.stream_ctx().run_live()
+    if args.mode == 'live':
+        graph.stream_ctx().run_live()
+    elif args.mode == 'sim':
+        graph.stream_ctx().run()
 
+    assert finished

@@ -16,6 +16,7 @@
  * @file seq_ore_live_split.cpp
  * @date 5 Oct 2022
  * @brief File contains C++ definitions for the "seq_ore_live_split" operator
+ * and "seq_ore_sim_split" operator
  *
  * @see http://www.featuremine.com
  * This operator is intendend to stream book updates for certain ytp channels
@@ -27,42 +28,40 @@
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
 #include "fmc/process.h"
+#include "seq_ore_sim_split.h"
 #include "ytp/sequence.h"
 #include "ytp/yamal.h"
 
 #include "extractor/book/ore.hpp"
 #include "extractor/book/updates.hpp"
 #include "fmc++/mpl.hpp" // fmc_runtime_error_unless()
-#include "fmc++/rprice.hpp"
 #include "fmc++/serialization.hpp"
 #include "fmc++/time.hpp"
 #include "fmc/platform.h"
 
-#include <algorithm>
 #include <atomic>
-#include <fcntl.h>
 #include <memory>
 #include <optional>
-#include <stdlib.h>
-#include <string.h>
 #include <string>
-#include <sys/stat.h>
-#include <sys/types.h>
 #include <thread>
 #include <unordered_map>
-#include <vector>
 
 struct sols_op_cl {
   std::string fname;
   std::unordered_map<std::string, int> ytp_channels;
   fm::book::ore::imnt_infos_t info;
   std::optional<int> affinity;
+
+  std::string file_name(uint32_t idx) const {
+    char str[6];
+    snprintf(str, sizeof(str), ".%04u", idx);
+    return fname + str;
+  }
 };
 
 struct ch_ctx_t {
-  ch_ctx_t(struct sols_exe_cl *exe_cl, int32_t index)
-      : exe_cl(exe_cl), parser(imnts), index(index) {}
-  struct sols_exe_cl *exe_cl;
+  ch_ctx_t(void *cl, int32_t index) : cl(cl), parser(imnts), index(index) {}
+  void *cl;
   fm::book::ore::imnt_infos_t imnts;
   fm::book::ore::parser parser;
   fm::book::ore::imnt_info info;
@@ -86,7 +85,89 @@ struct ch_ctx_t {
   }
 };
 
-struct sols_exe_cl {
+struct sim_mode {
+  sim_mode(sols_op_cl &cfg, std::atomic<uint32_t> &fidx)
+      : cfg(cfg), fidx(fidx) {}
+
+  inline void set_msg_time(uint64_t msg_time) {
+    notify_time = fmc_time64_from_nanos(msg_time);
+  }
+  inline bool should_notify(fm_stream_ctx *exec_ctx) {
+    return fmc_time64_greater_or_equal(fm_stream_ctx_now(exec_ctx),
+                                       notify_time);
+  }
+  fmc_time64 next_schedule(fm_stream_ctx *exec_ctx) { return notify_time; }
+  bool swapped() { next_file_available = false; }
+  inline bool wait_for_new_files() { return false; }
+  inline bool should_poll_at_least_one() { return true; }
+
+  bool is_next_file_available() {
+    if (!next_file_available) {
+      std::string next_file = cfg.file_name(fidx + 1);
+
+      fmc_error_t *err;
+      next_file_available = fmc_fexists(next_file.c_str(), &err);
+      fmc_runtime_error_unless(!err)
+          << "Unable to check if file " << cfg.fname
+          << " exists, error message: " << fmc_error_msg(err);
+    }
+    return next_file_available;
+  }
+
+  sols_op_cl &cfg;
+  std::atomic<uint32_t> &fidx;
+  fmc_time64_t notify_time;
+  bool next_file_available = false;
+};
+
+struct live_mode {
+  live_mode(sols_op_cl &cfg, std::atomic<uint32_t> &fidx)
+      : cfg(cfg), fidx(fidx) {
+    thread = std::thread([&]() {
+      fmc_error_t *err;
+      if (cfg.affinity) {
+        fmc_set_cur_affinity(*cfg.affinity, &err);
+        fmc_runtime_error_unless(!err)
+            << "could not set CPU affinity in seq_ore_live_split";
+      }
+      while (!thread_done) {
+        if (!next_file_available) {
+          std::string next_file = cfg.file_name(fidx + 1);
+          next_file_available = fmc_fexists(next_file.c_str(), &err);
+          fmc_runtime_error_unless(!err)
+              << "Unable to check if file " << cfg.fname
+              << " exists, error message: " << fmc_error_msg(err);
+        }
+        std::this_thread::sleep_for(std::chrono::nanoseconds(1));
+      }
+    });
+  }
+  ~live_mode() {
+    if (thread.joinable()) {
+      thread_done = true;
+      thread.join();
+    }
+  }
+
+  inline void set_msg_time(uint64_t msg_time) {}
+  inline bool should_notify(fm_stream_ctx *exec_ctx) { return true; }
+  fmc_time64 next_schedule(fm_stream_ctx *exec_ctx) {
+    return fm_stream_ctx_now(exec_ctx);
+  }
+  void swapped() { next_file_available = false; }
+  inline bool wait_for_new_files() { return true; }
+  inline bool should_poll_at_least_one() { return false; }
+
+  bool is_next_file_available() const { return next_file_available.load(); }
+
+  sols_op_cl &cfg;
+  std::atomic<uint32_t> &fidx;
+  std::thread thread;
+  std::atomic<bool> thread_done = false;
+  std::atomic<bool> next_file_available = false;
+};
+
+template <typename mode_type> struct sols_exe_cl {
   ytp_sequence_t *seq = nullptr;
   cmp_mem_t cmp;
   fm::book::ore::imnt_infos_t imnts;
@@ -96,57 +177,38 @@ struct sols_exe_cl {
   fm_stream_ctx *exec_ctx;
   fm_call_ctx *call_ctx;
   fm_frame_t *fres;
-  std::thread thread;
   std::atomic<uint32_t> fidx = 1;
+  mode_type mode;
   fmc_fd fd = -1;
   uint32_t peek_err_cnt = 0;
-  std::atomic<bool> thread_done = false;
-  std::atomic<bool> next_file_available = false;
   bool next_file_exists = false;
 
-  sols_exe_cl(sols_op_cl &op_cl) : cfg(op_cl) {
+  sols_exe_cl(sols_op_cl &op_cl)
+      : cfg(op_cl), fidx(init_fidx()), mode(cfg, fidx) {
     fmc_error_t *err = nullptr;
     cmp_mem_init(&cmp);
-    {
-      // find first file
-      uint32_t i = 1;
-      for (; i < 10000; ++i) {
-        std::string file_new = file_name(i);
-        bool exists = fmc_fexists(file_new.c_str(), &err);
-        fmc_runtime_error_unless(!err)
-            << "Unable to check if file " << file_new
-            << " exists, error message: " << fmc_error_msg(err);
-        if (exists) {
-          fidx = i;
-          break;
-        }
-      }
-      fmc_runtime_error_unless(i < 10000)
-          << "unable to find the first ytp sequence from file " << cfg.fname;
-    }
     seq = seq_new(fidx, fd, &err);
     fmc_runtime_error_unless(!err)
         << "unable to initialize ytp sequence from file " << cfg.fname + ".0001"
         << ", error message: " << fmc_error_msg(err);
+  }
 
-    thread = std::thread([this]() {
-      fmc_error_t *err;
-      if (cfg.affinity) {
-        fmc_set_cur_affinity(*cfg.affinity, &err);
-        fmc_runtime_error_unless(!err)
-            << "could not set CPU affinity in seq_ore_live_split";
+  uint32_t init_fidx() {
+    fmc_error_t *err = nullptr;
+    // find first file
+    uint32_t i = 1;
+    for (; i < 10000; ++i) {
+      std::string file_new = cfg.file_name(i);
+      bool exists = fmc_fexists(file_new.c_str(), &err);
+      fmc_runtime_error_unless(!err)
+          << "Unable to check if file " << file_new
+          << " exists, error message: " << fmc_error_msg(err);
+      if (exists) {
+        return i;
       }
-      while (!thread_done) {
-        if (!next_file_available) {
-          std::string next_file = file_name(fidx + 1);
-          next_file_available = fmc_fexists(next_file.c_str(), &err);
-          fmc_runtime_error_unless(!err)
-              << "Unable to check if file " << cfg.fname
-              << " exists, error message: " << fmc_error_msg(err);
-        }
-        std::this_thread::sleep_for(std::chrono::nanoseconds(1));
-      }
-    });
+    }
+    fmc_runtime_error_unless(false)
+        << "unable to find the first ytp sequence from file " << cfg.fname;
   }
 
   ~sols_exe_cl() {
@@ -157,20 +219,10 @@ struct sols_exe_cl {
     if (fmc_fvalid(fd)) {
       fmc_fclose(fd, &err);
     }
-    if (thread.joinable()) {
-      thread_done = true;
-      thread.join();
-    }
-  }
-
-  std::string file_name(uint32_t idx) {
-    char str[6];
-    snprintf(str, sizeof(str), ".%04u", idx);
-    return cfg.fname + str;
   }
 
   ytp_sequence_t *seq_new(uint32_t idx, fmc_fd &f, fmc_error_t **err) {
-    std::string file_new = file_name(idx);
+    std::string file_new = cfg.file_name(idx);
     f = fmc_fopen(file_new.c_str(), fmc_fmode::READ, err);
     if (*err) {
       return nullptr;
@@ -186,8 +238,8 @@ struct sols_exe_cl {
   static void static_ch_cb(void *closure, ytp_peer_t peer,
                            ytp_channel_t channel, uint64_t time, size_t sz,
                            const char *name) {
-    reinterpret_cast<sols_exe_cl *>(closure)->ch_cb(std::string_view(name, sz),
-                                                    channel);
+    reinterpret_cast<sols_exe_cl<mode_type> *>(closure)->ch_cb(
+        std::string_view(name, sz), channel);
   }
 
   void ch_cb(std::string_view ch_name_sv, ytp_channel_t ch) {
@@ -207,14 +259,15 @@ struct sols_exe_cl {
   static void static_data_cb(void *closure, ytp_peer_t peer,
                              ytp_channel_t channel, uint64_t time, size_t sz,
                              const char *data) {
-    auto &ctx = *reinterpret_cast<
-        decltype(ch_cl)::value_type::second_type::element_type *>(closure);
-    ctx.exe_cl->data_cb(std::string_view(data, sz), ctx);
+    auto &ctx = *reinterpret_cast<ch_ctx_t *>(closure);
+    auto &self = *reinterpret_cast<sols_exe_cl<mode_type> *>(ctx.cl);
+    self.data_cb(std::string_view(data, sz), time, ctx);
   }
 
-  void data_cb(std::string_view data, ch_ctx_t &ctx) {
+  void data_cb(std::string_view data, uint64_t time, ch_ctx_t &ctx) {
     current_ctx = &ctx;
     cmp_mem_set(&cmp, data.size(), (void *)data.data());
+    mode.set_msg_time(time);
   }
 
   bool proc_one(fmc_error_t **err) {
@@ -268,18 +321,71 @@ struct sols_exe_cl {
   }
 };
 
-bool fm_comp_seq_ore_live_split_call_stream_init(fm_frame_t *result,
-                                                 size_t args,
-                                                 const fm_frame_t *const argv[],
-                                                 fm_call_ctx_t *ctx,
-                                                 fm_call_exec_cl *cl) {
+template <typename mode_type>
+bool poll_one(sols_exe_cl<mode_type> *exe_cl, fm_call_ctx_t *ctx) {
+  auto *exec_ctx = (fm_stream_ctx *)ctx->exec;
+  auto *op_cl = (sols_op_cl *)ctx->comp;
+  fmc_error_t *err;
+  do {
+    bool poll = ytp_sequence_poll(exe_cl->seq, &err);
+    if (err) {
+      fm_exec_ctx_error_set(
+          ctx->exec, "Unable to poll the ytp sequence %s, error message: %s",
+          op_cl->fname.c_str(), fmc_error_msg(err));
+      return false;
+    }
+    if (exe_cl->current_ctx != nullptr) {
+      return true;
+    }
+    if (!poll) {
+      if (!exe_cl->next_file_exists) {
+        exe_cl->next_file_exists = exe_cl->mode.is_next_file_available();
+        if (!exe_cl->mode.wait_for_new_files() && !exe_cl->next_file_exists) {
+          return false;
+        }
+      } else {
+        bool swapped = exe_cl->swap_seq(&err);
+        if (err) {
+          fm_exec_ctx_error_set(
+              ctx->exec,
+              "Unable to peek the next ytp sequence %s, error message: %s",
+              op_cl->fname.c_str(), fmc_error_msg(err));
+          return false;
+        }
+        if (swapped) {
+          exe_cl->next_file_exists = false;
+          exe_cl->mode.swapped();
+        }
+      }
+    } else if (exe_cl->mode.should_poll_at_least_one()) {
+      continue;
+    }
+
+    fm_stream_ctx_schedule(exec_ctx, ctx->handle,
+                           exe_cl->mode.next_schedule(exec_ctx));
+    return false;
+  } while (true);
+}
+
+template <typename mode_type>
+bool fm_comp_seq_ore_split_call_stream_init(fm_frame_t *result, size_t args,
+                                            const fm_frame_t *const argv[],
+                                            fm_call_ctx_t *ctx,
+                                            fm_call_exec_cl *cl) {
   sols_op_cl *op_cl = (sols_op_cl *)ctx->comp;
   try {
-    auto exe_cl = std::make_unique<sols_exe_cl>(*op_cl);
+    auto exe_cl = std::make_unique<sols_exe_cl<mode_type>>(*op_cl);
     *(fm::book::message *)fm_frame_get_ptr1(result, 0, 0) =
         fm::book::message(fm::book::updates::none());
     auto *exec_ctx = (fm_stream_ctx *)ctx->exec;
-    fm_stream_ctx_queue(exec_ctx, ctx->handle);
+    if constexpr (std::is_same_v<mode_type, live_mode>) {
+      fm_stream_ctx_queue(exec_ctx, ctx->handle);
+    } else {
+      if (poll_one(exe_cl.get(), ctx)) {
+        fm_stream_ctx_schedule(exec_ctx, ctx->handle,
+                               exe_cl->mode.next_schedule(exec_ctx));
+      }
+    }
     *cl = exe_cl.release();
   } catch (const std::exception &e) {
     fm_exec_ctx_error_set(ctx->exec, "%s", e.what());
@@ -288,16 +394,14 @@ bool fm_comp_seq_ore_live_split_call_stream_init(fm_frame_t *result,
   return true;
 }
 
-bool fm_comp_seq_ore_live_split_stream_exec(fm_frame_t *fres, size_t args,
-                                            const fm_frame_t *const argv[],
-                                            fm_call_ctx_t *ctx,
-                                            fm_call_exec_cl cl) {
+template <typename mode_type>
+bool fm_comp_seq_ore_split_stream_exec(fm_frame_t *fres, size_t args,
+                                       const fm_frame_t *const argv[],
+                                       fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
   auto *exec_ctx = (fm_stream_ctx *)ctx->exec;
-  auto *exe_cl = (sols_exe_cl *)cl;
-  auto *op_cl = (sols_op_cl *)ctx->comp;
+  auto *exe_cl = (sols_exe_cl<mode_type> *)cl;
 
   fmc_error_t *err = nullptr;
-
   auto proc_one = [&]() {
     if (!exe_cl->proc_one(&err)) {
       if (err) {
@@ -306,7 +410,7 @@ bool fm_comp_seq_ore_live_split_stream_exec(fm_frame_t *fres, size_t args,
       } else {
         exe_cl->current_ctx = nullptr;
         fm_stream_ctx_schedule(exec_ctx, ctx->handle,
-                               fm_stream_ctx_now(exec_ctx));
+                               exe_cl->mode.next_schedule(exec_ctx));
         return false;
       }
     }
@@ -314,35 +418,7 @@ bool fm_comp_seq_ore_live_split_stream_exec(fm_frame_t *fres, size_t args,
   };
 
   if (exe_cl->current_ctx == nullptr) {
-    bool poll = ytp_sequence_poll(exe_cl->seq, &err);
-    if (err) {
-      fm_exec_ctx_error_set(
-          ctx->exec, "Unable to poll the ytp sequence %s, error message: %s",
-          op_cl->fname.c_str(), fmc_error_msg(err));
-      return false;
-    }
-    if (exe_cl->current_ctx == nullptr) {
-      if (!poll) {
-        if (!exe_cl->next_file_exists) {
-          exe_cl->next_file_exists = exe_cl->next_file_available;
-        } else {
-          bool swaped = exe_cl->swap_seq(&err);
-          if (err) {
-            fm_exec_ctx_error_set(
-                ctx->exec,
-                "Unable to peek the next ytp sequence %s, error message: %s",
-                op_cl->fname.c_str(), fmc_error_msg(err));
-            return false;
-          }
-          if (swaped) {
-            exe_cl->next_file_exists = false;
-            exe_cl->next_file_available = false;
-          }
-        }
-      }
-
-      fm_stream_ctx_schedule(exec_ctx, ctx->handle,
-                             fm_stream_ctx_now(exec_ctx));
+    if (!poll_one(exe_cl, ctx)) {
       return false;
     }
 
@@ -356,41 +432,46 @@ bool fm_comp_seq_ore_live_split_stream_exec(fm_frame_t *fres, size_t args,
   exe_cl->exec_ctx = exec_ctx;
   exe_cl->call_ctx = ctx;
 
-  auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
-  box = parser.msg;
-  fm_stream_ctx_queue(exec_ctx, ctx->deps[exe_cl->current_ctx->index]);
+  if (exe_cl->mode.should_notify(exec_ctx)) {
+    auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
+    box = parser.msg;
+    fm_stream_ctx_queue(exec_ctx, ctx->deps[exe_cl->current_ctx->index]);
 
-  if (parser.expand) {
-    parser.msg = parser.expanded;
-    parser.expand = false;
-  } else if (!proc_one()) {
-    return false;
+    if (parser.expand) {
+      parser.msg = parser.expanded;
+      parser.expand = false;
+    } else if (!proc_one()) {
+      return false;
+    }
   }
 
-  fm_stream_ctx_schedule(exec_ctx, ctx->handle, fm_stream_ctx_now(exec_ctx));
+  fm_stream_ctx_schedule(exec_ctx, ctx->handle,
+                         exe_cl->mode.next_schedule(exec_ctx));
   return false;
 }
 
-void fm_comp_seq_ore_live_split_stream_destroy(fm_call_exec_cl cl) {
-  if (sols_exe_cl *exe_cl = (sols_exe_cl *)cl; exe_cl) {
+template <typename mode_type>
+void fm_comp_seq_ore_split_stream_destroy(fm_call_exec_cl cl) {
+  if (sols_exe_cl<mode_type> *exe_cl = (sols_exe_cl<mode_type> *)cl; exe_cl) {
     delete exe_cl;
   }
 }
 
-fm_call_def *
-fm_comp_seq_ore_live_split_stream_call(fm_comp_def_cl comp_cl,
-                                       const fm_ctx_def_cl ctx_cl) {
+template <typename mode_type>
+fm_call_def *fm_comp_seq_ore_split_stream_call(fm_comp_def_cl comp_cl,
+                                               const fm_ctx_def_cl ctx_cl) {
   auto *def = fm_call_def_new();
-  fm_call_def_init_set(def, fm_comp_seq_ore_live_split_call_stream_init);
-  fm_call_def_exec_set(def, fm_comp_seq_ore_live_split_stream_exec);
-  fm_call_def_destroy_set(def, fm_comp_seq_ore_live_split_stream_destroy);
+  fm_call_def_init_set(def, fm_comp_seq_ore_split_call_stream_init<mode_type>);
+  fm_call_def_exec_set(def, fm_comp_seq_ore_split_stream_exec<mode_type>);
+  fm_call_def_destroy_set(def, fm_comp_seq_ore_split_stream_destroy<mode_type>);
   return def;
 }
 
+template <typename mode_type>
 fm_ctx_def_t *
-fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
-                               unsigned argc, fm_type_decl_cp argv[],
-                               fm_type_decl_cp ptype, fm_arg_stack_t plist) {
+fm_comp_seq_ore_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
+                          unsigned argc, fm_type_decl_cp argv[],
+                          fm_type_decl_cp ptype, fm_arg_stack_t plist) {
   auto *sys = fm_type_sys_get(csys);
   if (argc != 0) {
     auto *errstr = "expect no operator arguments";
@@ -464,12 +545,29 @@ fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   fm_ctx_def_volatile_set(def, split_count + has_time);
   fm_ctx_def_type_set(def, type);
   fm_ctx_def_closure_set(def, cl.release());
-  fm_ctx_def_stream_call_set(def, &fm_comp_seq_ore_live_split_stream_call);
+  fm_ctx_def_stream_call_set(def,
+                             &fm_comp_seq_ore_split_stream_call<mode_type>);
   fm_ctx_def_query_call_set(def, nullptr);
   return def;
 }
 
-void fm_comp_seq_ore_live_split_destroy(fm_comp_def_cl cl, fm_ctx_def_t *def) {
+fm_ctx_def_t *
+fm_comp_seq_ore_live_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
+                               unsigned argc, fm_type_decl_cp argv[],
+                               fm_type_decl_cp ptype, fm_arg_stack_t plist) {
+  return fm_comp_seq_ore_split_gen<live_mode>(csys, closure, argc, argv, ptype,
+                                              plist);
+}
+
+fm_ctx_def_t *
+fm_comp_seq_ore_sim_split_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
+                              unsigned argc, fm_type_decl_cp argv[],
+                              fm_type_decl_cp ptype, fm_arg_stack_t plist) {
+  return fm_comp_seq_ore_split_gen<sim_mode>(csys, closure, argc, argv, ptype,
+                                             plist);
+}
+
+void fm_comp_seq_ore_split_destroy(fm_comp_def_cl cl, fm_ctx_def_t *def) {
 
   if (auto *ctx_cl = (sols_op_cl *)fm_ctx_def_closure(def); ctx_cl) {
     delete ctx_cl;

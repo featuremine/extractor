@@ -618,7 +618,7 @@ set_tests_properties(
 )
 
 add_test(
-    NAME extractor_python_trade_view COMMAND
+    NAME extractor_python_trade_view_sim COMMAND
 
     "${PYTHON3_BIN}"
     "${CMAKE_CURRENT_SOURCE_DIR}/trade_view.py"
@@ -626,11 +626,34 @@ add_test(
     "${CMAKE_CURRENT_BINARY_DIR}/consolidated.ytp"
     "--base"
     "${CMAKE_CURRENT_BINARY_DIR}/trade_view.{}.csv"
+    "--mode"
+    "sim"
 
     WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
 )
 set_tests_properties(
-    extractor_python_trade_view
+    extractor_python_trade_view_sim
+    PROPERTIES
+    ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_yamal_BUILD_DIR}/build/lib:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
+    TIMEOUT 100
+)
+
+add_test(
+    NAME extractor_python_trade_view_live COMMAND
+
+    "${PYTHON3_BIN}"
+    "${CMAKE_CURRENT_SOURCE_DIR}/trade_view.py"
+    "--ytp-file"
+    "${CMAKE_CURRENT_BINARY_DIR}/consolidated.ytp"
+    "--base"
+    "${CMAKE_CURRENT_BINARY_DIR}/trade_view.{}.csv"
+    "--mode"
+    "live"
+
+    WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+)
+set_tests_properties(
+    extractor_python_trade_view_live
     PROPERTIES
     ENVIRONMENT "PYTHONPATH=${PROJECT_SOURCE_DIR}/tools:${WHEEL_yamal_BUILD_DIR}/build/lib:${WHEEL_extractor_BUILD_DIR}/build/lib:$ENV{PYTHONPATH};PYTHONUNBUFFERED=1;PATH=${WHEEL_extractor_BUILD_DIR}/build/scripts:$ENV{PATH}"
     TIMEOUT 100
