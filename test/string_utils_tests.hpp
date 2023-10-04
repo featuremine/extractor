@@ -130,9 +130,9 @@ TEST(string_utils, to_string_view_int) {
 
     char otherbuf[20] = {0};
     if (int_val >= 0) {
-      sprintf(otherbuf, "%.9i", int_val);
+      snprintf(otherbuf, sizeof(otherbuf), "%.9i", int_val);
     } else {
-      sprintf(otherbuf, "%.8i", int_val);
+      snprintf(otherbuf, sizeof(otherbuf), "%.8i", int_val);
     }
 
     auto res = to_string_view_signed_fixed_length(str_buf, int_val);

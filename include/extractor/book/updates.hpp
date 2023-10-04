@@ -137,7 +137,7 @@ struct set {
 struct announce {
   string symbol;
   uint32_t imnt_idx;
-  int32_t tick;
+  int32_t px_tick = 1;
   int32_t qty_tick = 1;
   uint16_t batch;
 };

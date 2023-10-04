@@ -32,6 +32,7 @@
 #include "fmc++/gtestwrap.hpp"
 #include "fmc/platform.h"
 #include <fstream>
+#include <inttypes.h>
 #include <iostream>
 #include <vector>
 
@@ -120,7 +121,7 @@ TEST(accumulate, accumulate_data) {
     fmc_rprice_to_double(
         &dap, (fmc_rprice_t *)fm_frame_get_cptr1(result, ap_field, i));
     fprintf(
-        f, "%ld,%s,%s,%c,%g,%g,%d,%d\n",
+        f, "%" PRId64 ",%s,%s,%c,%g,%g,%d,%d\n",
         fmc_time64_to_nanos(
             *(fmc_time64_t *)fm_frame_get_cptr1(result, r_field, i)),
         string((char *)fm_frame_get_cptr1(result, tick_field, i), 16).c_str(),

@@ -72,7 +72,7 @@ struct order_info {
 };
 using orders_t = unordered_map<uint64_t, order_info>;
 struct imnt_info {
-  int32_t px_denum;
+  int32_t px_denum = 1;
   int32_t qty_denum = 1;
   int32_t index;
   orders_t orders;
@@ -322,9 +322,7 @@ inline result parser::parse_mod(cmp_ctx_t *ctx, uint32_t &left) {
   if (imnt->qty_denum != 1)
     add.qty = add.qty / imnt->qty_denum;
   auto &ords = imnt->orders;
-  if (auto it = ords.find(cancel.id); it == ords.end()) {
-    return result::SKIP;
-  } else {
+  if (auto it = ords.find(cancel.id); it != ords.end()) {
     // first cancel message is always inside a batch
     // we do not wan't to update the book with this 'fake' cancel
     cancel.batch = 1;
@@ -333,11 +331,19 @@ inline result parser::parse_mod(cmp_ctx_t *ctx, uint32_t &left) {
     process_remove(ords, it, cancel);
     add.is_bid = cancel.is_bid;
     msg = cancel;
-    add_order(imnt, add);
     expand = true;
     expanded = add;
-    return result::SUCCESS;
+  } else {
+    if (left == 0) {
+      return result::SKIP;
+    }
+    if (!cmp_read_many(ctx, &left, &add.is_bid))
+      return result::ERR;
+
+    msg = add;
   }
+  add_order(imnt, add);
+  return result::SUCCESS;
 };
 
 inline result parser::parse_exe(cmp_ctx_t *ctx, uint32_t &left) {
@@ -510,12 +516,18 @@ inline result parser::parse_ann(cmp_ctx_t *ctx, uint32_t &left) {
   }
   book::updates::announce msg;
   msg.imnt_idx = imnt_idx;
-  if (!cmp_read_many(ctx, &left, &msg.symbol, &msg.tick))
+  if (!cmp_read_many(ctx, &left, &msg.symbol))
     return result::ERR;
   if (left > 0) {
-    int32_t qty_tick;
-    if (cmp_read_many(ctx, &left, &qty_tick)) {
-      msg.qty_tick = qty_tick;
+    int32_t px_tick;
+    if (cmp_read_many(ctx, &left, &px_tick)) {
+      msg.px_tick = px_tick;
+    }
+    if (left > 0) {
+      int32_t qty_tick;
+      if (cmp_read_many(ctx, &left, &qty_tick)) {
+        msg.qty_tick = qty_tick;
+      }
     }
   }
   this->msg = msg;
@@ -640,7 +652,7 @@ inline bool validate_version(uint16_t ver[3]) {
 }
 
 struct symbol_info {
-  int32_t px_denum;
+  int32_t px_denum = 1;
   int32_t qty_denum = 1;
   uint32_t index;
 };

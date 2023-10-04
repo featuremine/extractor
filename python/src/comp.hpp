@@ -215,7 +215,7 @@ static PyObject *ExtractorComputation_getattr(PyObject *obj, char *name) {
 static PyObject *ExtractorComputation_richcompare(PyObject *obj1,
                                                   PyObject *obj2, int op);
 
-static PyNumberMethods ExtractorComputation_numerical_methods[] = {
+static PyNumberMethods ExtractorComputation_numerical_methods = {
     ExtractorComputation_add,       /*nb_add*/
     ExtractorComputation_substract, /*nb_substract*/
     ExtractorComputation_multiply,  /*nb_multiply*/
@@ -269,7 +269,7 @@ static PyTypeObject ExtractorComputationType = {
     0,                                                      /* tp_setattr */
     0,                                                      /* tp_reserved */
     0,                                                      /* tp_repr */
-    ExtractorComputation_numerical_methods,                 /* tp_as_number */
+    &ExtractorComputation_numerical_methods,                /* tp_as_number */
     0,                                                      /* tp_as_sequence */
     0,                                                      /* tp_as_mapping */
     0,                                                      /* tp_hash  */
