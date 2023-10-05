@@ -97,7 +97,7 @@ struct sim_mode {
                                        notify_time);
   }
   fmc_time64 next_schedule(fm_stream_ctx *exec_ctx) { return notify_time; }
-  bool swapped() { next_file_available = false; }
+  void swapped() { next_file_available = false; }
   inline bool wait_for_new_files() { return false; }
   inline bool should_poll_at_least_one() { return true; }
 
@@ -209,6 +209,7 @@ template <typename mode_type> struct sols_exe_cl {
     }
     fmc_runtime_error_unless(false)
         << "unable to find the first ytp sequence from file " << cfg.fname;
+    return i;
   }
 
   ~sols_exe_cl() {
