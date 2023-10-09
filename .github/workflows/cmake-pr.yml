@@ -55,7 +55,40 @@ jobs:
 
   build-macos:
     needs: utility
+    if: needs.utility.outputs.release-check == 'release'
     runs-on: macos-11
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: Install dependencies
+      run: brew install pkg-config cmake googletest python
+
+    - name: Install numdiff
+      working-directory: /tmp
+      run: |
+        wget http://mirror.cedia.org.ec/nongnu/numdiff/numdiff-5.9.0.tar.gz
+        tar -xvzf numdiff-5.9.0.tar.gz
+        cd numdiff-5.9.0
+        ./configure
+        make
+        make install
+        cd ..
+        rm -rf numdiff-5.9.0*
+      shell: bash
+
+    - name: Build ${{ github.event.repository.name }} with fm gcc
+      uses: featuremine/actions/package/build@v2
+      with:
+        gh_token: ${{ secrets.GITHUB_TOKEN }}
+        upload: ${{ needs.utility.outputs.release-check == 'release' }}
+
+  build-macos-13-arm:
+    needs: utility
+    if: needs.utility.outputs.release-check == 'release'
+    runs-on: macos-13-xlarge
 
     steps:
     - uses: actions/checkout@v3
