@@ -98,7 +98,7 @@ jobs:
     - name: Install dependencies
       run: |
         brew install pkg-config cmake googletest python gettext
-        brew link --force gettext
+        brew unlink gettext && brew link --force gettext
 
     - name: Install numdiff
       working-directory: /tmp
