@@ -97,21 +97,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        brew install pkg-config cmake googletest python gettext
-        brew unlink gettext && brew link --force gettext
-
-    - name: Install numdiff
-      working-directory: /tmp
-      run: |
-        wget http://mirror.cedia.org.ec/nongnu/numdiff/numdiff-5.9.0.tar.gz
-        tar -xvzf numdiff-5.9.0.tar.gz
-        cd numdiff-5.9.0
-        ./configure
-        make
-        make install
-        cd ..
-        rm -rf numdiff-5.9.0*
-      shell: bash
+        brew install pkg-config cmake googletest python numdiff
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
       uses: featuremine/actions/package/build@v2
