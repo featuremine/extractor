@@ -31,7 +31,6 @@
 
 #include <Python.h>
 #include <comp_base.hpp>
-#include <datetime.h>
 #include <fmc++/python/wrapper.hpp>
 #include <limits>
 #include <type_traits>
@@ -232,7 +231,12 @@ static PyObject *ExtractorBaseTypeTime64_as_timedelta(PyObject *self) {
   int64_t us = ns / 1000;
   int64_t sec = us / 1000000;
   us = us - sec * 1000000;
-  return fmc::python::datetime::timedelta(0, sec, us).steal_ref();
+  try {
+    return fmc::python::datetime::timedelta(0, sec, us).steal_ref();
+  } catch (const std::exception &e) {
+    PyErr_SetString(PyExc_RuntimeError, e.what());
+    return nullptr;
+  }
 }
 
 static PyObject *ExtractorBaseTypeTime64_from_nanos(PyObject *self,

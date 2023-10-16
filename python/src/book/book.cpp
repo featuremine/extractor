@@ -220,7 +220,6 @@ fm_book_shared_t *PyBook_SharedBook(PyObject *obj) {
 }
 
 bool PyBook_AddTypes(PyObject *m) {
-  PyDateTime_IMPORT;
   if (PyType_Ready(&BookType) < 0)
     return false;
   if (PyType_Ready(&LevelsType) < 0)
