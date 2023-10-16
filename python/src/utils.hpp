@@ -47,7 +47,6 @@
 
 #include "fmc++/time.hpp"
 #include <Python.h>
-#include <datetime.h>
 #include <variant>
 
 char *strclone(const char *s) {

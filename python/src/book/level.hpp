@@ -31,7 +31,6 @@
 #include "fmc++/decimal128.hpp"
 #include "fmc++/python/wrapper.hpp"
 #include "fmc++/side.hpp"
-#include <datetime.h>
 #include <fmc++/python/wrapper.hpp>
 
 typedef struct Levels {
