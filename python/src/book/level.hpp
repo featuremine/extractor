@@ -88,12 +88,10 @@ static PyObject *Order_rec(Order *self, void *) {
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
   auto rem = us - tmp;
-  try
-  {
-    return fmc::python::datetime::timedelta(0, sec.count(), rem.count()).steal_ref();
-  }
-  catch(const std::exception& e)
-  {
+  try {
+    return fmc::python::datetime::timedelta(0, sec.count(), rem.count())
+        .steal_ref();
+  } catch (const std::exception &e) {
     PyErr_SetString(PyExc_RuntimeError, e.what());
     return nullptr;
   }
@@ -107,12 +105,10 @@ static PyObject *Order_ven(Order *self, void *) {
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
   auto rem = us - tmp;
-  try
-  {
-    return fmc::python::datetime::timedelta(0, sec.count(), rem.count()).steal_ref();
-  }
-  catch(const std::exception& e)
-  {
+  try {
+    return fmc::python::datetime::timedelta(0, sec.count(), rem.count())
+        .steal_ref();
+  } catch (const std::exception &e) {
     PyErr_SetString(PyExc_RuntimeError, e.what());
     return nullptr;
   }

@@ -231,12 +231,9 @@ static PyObject *ExtractorBaseTypeTime64_as_timedelta(PyObject *self) {
   int64_t us = ns / 1000;
   int64_t sec = us / 1000000;
   us = us - sec * 1000000;
-  try
-  {
+  try {
     return fmc::python::datetime::timedelta(0, sec, us).steal_ref();
-  }
-  catch(const std::exception& e)
-  {
+  } catch (const std::exception &e) {
     PyErr_SetString(PyExc_RuntimeError, e.what());
     return nullptr;
   }
