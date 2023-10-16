@@ -413,9 +413,17 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
       auto sec = duration_cast<seconds>(us);
       auto tmp = duration_cast<microseconds>(sec);
       auto rem = us - tmp;
-      return fmc::python::datetime::timedelta(d.count(), sec.count(),
-                                              rem.count())
-          .steal_ref();
+      try
+      {
+        return fmc::python::datetime::timedelta(d.count(), sec.count(),
+                                                rem.count())
+            .steal_ref();
+      }
+      catch(const std::exception& e)
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+        return nullptr;
+      }
     } break;
     case FM_TYPE_BOOL:
       if (*(BOOL *)ptr)
@@ -503,9 +511,17 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       auto sec = duration_cast<seconds>(us);
       auto tmp = duration_cast<microseconds>(sec);
       auto rem = us - tmp;
-      return fmc::python::datetime::timedelta(d.count(), sec.count(),
-                                              rem.count())
-          .steal_ref();
+      try
+      {
+        return fmc::python::datetime::timedelta(d.count(), sec.count(),
+                                                rem.count())
+            .steal_ref();
+      }
+      catch(const std::exception& e)
+      {
+        PyErr_SetString(PyExc_RuntimeError, e.what());
+        return nullptr;
+      }
     } break;
     case FM_TYPE_BOOL:
       if (STACK_POP(plist, BOOL))
