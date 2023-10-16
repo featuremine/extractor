@@ -36,7 +36,6 @@
 #include "utils.hpp"
 
 #include <Python.h>
-#include <datetime.h>
 #include <vector>
 
 typedef struct {

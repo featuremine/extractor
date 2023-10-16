@@ -382,8 +382,6 @@ PyMODINIT_FUNC fm_extractor_py_init(void) {
   set_ytp_api_v1(typed_ytp_->api);
   ytp_ = typed_ytp_->py_api;
 
-  PyDateTime_IMPORT;
-
   PyObject *m;
 
   m = PyModule_Create(&extractormodule);

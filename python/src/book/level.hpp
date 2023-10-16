@@ -31,7 +31,6 @@
 #include "fmc++/decimal128.hpp"
 #include "fmc++/python/wrapper.hpp"
 #include "fmc++/side.hpp"
-#include <datetime.h>
 #include <fmc++/python/wrapper.hpp>
 
 typedef struct Levels {
@@ -89,8 +88,13 @@ static PyObject *Order_rec(Order *self, void *) {
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
   auto rem = us - tmp;
-  return fmc::python::datetime::timedelta(0, sec.count(), rem.count())
-      .steal_ref();
+  try {
+    return fmc::python::datetime::timedelta(0, sec.count(), rem.count())
+        .steal_ref();
+  } catch (const std::exception &e) {
+    PyErr_SetString(PyExc_RuntimeError, e.what());
+    return nullptr;
+  }
 }
 
 static PyObject *Order_ven(Order *self, void *) {
@@ -101,8 +105,13 @@ static PyObject *Order_ven(Order *self, void *) {
   auto sec = duration_cast<seconds>(us);
   auto tmp = duration_cast<microseconds>(sec);
   auto rem = us - tmp;
-  return fmc::python::datetime::timedelta(0, sec.count(), rem.count())
-      .steal_ref();
+  try {
+    return fmc::python::datetime::timedelta(0, sec.count(), rem.count())
+        .steal_ref();
+  } catch (const std::exception &e) {
+    PyErr_SetString(PyExc_RuntimeError, e.what());
+    return nullptr;
+  }
 }
 
 static PyObject *Order_seq(Order *self, void *) {
