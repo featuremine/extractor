@@ -121,7 +121,7 @@ TEST(string_utils, to_string_view_double) {
 
 TEST(string_utils, to_string_view_int) {
 
-  char buf[9];
+  char buf[9] = {0};
   string_view str_buf(buf, 9);
 
   for (int int_val = -100000; int_val < 100000; ++int_val) {
