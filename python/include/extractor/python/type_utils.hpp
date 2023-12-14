@@ -21,9 +21,11 @@
 #pragma once
 
 #include <fmc/decimal128.h>
+#include <fmc/fxpt128.h>
 
 #include <Python.h>
 #include <extractor/python/decimal128.h>
+#include <extractor/python/fxpt128.h>
 #include <extractor/python/rational64.h>
 #include <extractor/python/rprice.h>
 #include <fenv.h>
@@ -62,6 +64,42 @@ template <class T> struct py_type_convert {
       }
       val = temp;
       return true;
+    } else if constexpr (is_same_v<T, FIXEDPOINT128>) {
+      PyObject *temp;
+      if (!PyArg_ParseTuple(args, "O", &temp)) {
+        PyErr_SetString(PyExc_TypeError, "Expect single argument");
+        return false;
+      }
+      if (FixedPoint128_Check(temp)) {
+        val = FixedPoint128_val(temp);
+        return !PyErr_Occurred();
+      } else if (PyFloat_Check(temp)) {
+        fmc_fxpt128_from_double(&val, PyFloat_AsDouble(temp));
+        return true;
+      } else if (PyUnicode_Check(temp)) {
+        Py_ssize_t sz = 0;
+        const char *str = PyUnicode_AsUTF8AndSize(temp, &sz);
+        if (sz > FMC_FXPT128_STR_SIZE) {
+          PyErr_SetString(PyExc_TypeError, "expecting a valid string value");
+          return false;
+        }
+        const char *end = nullptr;
+        fmc_fxpt128_from_string(&val, str, &end);
+        if (str + strlen(str) != end) {
+          PyErr_SetString(PyExc_TypeError, "error converting from string");
+          return false;
+        }
+        return true;
+      } else if (PyLong_Check(temp)) {
+        PyErr_Clear();
+        int64_t i = PyLong_AsLongLong(temp);
+        if (PyErr_Occurred()) {
+          return false;
+        } else {
+          fmc_fxpt128_from_int(&val, i);
+          return true;
+        }
+      }
     } else if constexpr (is_same_v<T, DECIMAL128>) {
       PyObject *temp;
       if (!PyArg_ParseTuple(args, "O", &temp)) {

@@ -798,6 +798,10 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
         type = NPY_OBJECT;
         elem_size = sizeof(PyObject *);
         break;
+      case FM_TYPE_FIXEDPOINT128:
+        type = NPY_OBJECT;
+        elem_size = sizeof(PyObject *);
+        break;
       case FM_TYPE_TIME64:
         type = NPY_DATETIME;
         elem_size = sizeof(int64_t);

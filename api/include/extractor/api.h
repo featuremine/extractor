@@ -25,6 +25,7 @@
 
 #include "fmc/alignment.h"
 #include "fmc/decimal128.h"
+#include "fmc/fxpt128.h"
 #include "fmc/extension.h"
 #include "fmc/rational64.h"
 #include "fmc/rprice.h"
@@ -165,6 +166,7 @@ typedef double FLOAT64;
 typedef fmc_rational64_t RATIONAL64;
 typedef fmc_rprice_t RPRICE;
 typedef fmc_decimal128_t DECIMAL128;
+typedef struct fmc_fxpt128_t FIXEDPOINT128;
 typedef fmc_time64_t TIME64;
 typedef char CHAR;
 typedef wchar_t WCHAR;
@@ -188,6 +190,7 @@ typedef enum {
   FM_TYPE_RATIONAL64,
   FM_TYPE_RPRICE,
   FM_TYPE_DECIMAL128,
+  FM_TYPE_FIXEDPOINT128,
   FM_TYPE_TIME64,
   FM_TYPE_CHAR,
   FM_TYPE_WCHAR,

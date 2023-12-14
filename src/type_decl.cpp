@@ -155,6 +155,13 @@ const char *decimal128_parser(const char *begin, const char *end, void *data,
   return fmc_decimal128_parse((fmc_decimal128_t *)data, begin);
 }
 
+
+const char *fxpt128_parser(const char *begin, const char *end, void *data, const char *fmt) {
+  const char *endptr = end;
+  fmc_fxpt128_from_string((fmc_fxpt128_t *)data, begin, &endptr);
+  return endptr;
+}
+
 template <class T>
 const char *char_parser(const char *begin, const char *end, void *data,
                         const char *fmt) {
@@ -212,6 +219,9 @@ fm_base_type_parser fm_base_type_parser_get(FM_BASE_TYPE t) {
     break;
   case FM_TYPE_DECIMAL128:
     return &decimal128_parser;
+    break;
+  case FM_TYPE_FIXEDPOINT128:
+    return &fxpt128_parser;
     break;
   case FM_TYPE_TIME64:
     return &nano_parser;
@@ -273,6 +283,9 @@ size_t fm_base_type_sizeof(FM_BASE_TYPE t) {
   case FM_TYPE_DECIMAL128:
     return sizeof(DECIMAL128);
     break;
+  case FM_TYPE_FIXEDPOINT128:
+    return sizeof(FIXEDPOINT128);
+    break;
   case FM_TYPE_TIME64:
     return sizeof(TIME64);
     break;
@@ -333,6 +346,9 @@ constexpr const char *format_str(FM_BASE_TYPE type) {
   case FM_TYPE_DECIMAL128:
     return "";
     break;
+  case FM_TYPE_FIXEDPOINT128:
+    return "";
+    break;
   case FM_TYPE_TIME64:
     return "";
     break;
@@ -375,6 +391,12 @@ bool decimal64_fwriter(FILE *file, const void *val, const char *fmt) {
 bool decimal128_fwriter(FILE *file, const void *val, const char *fmt) {
   char buf[FMC_DECIMAL128_STR_SIZE];
   fmc_decimal128_to_str(buf, (fmc_decimal128_t *)val);
+  return fprintf(file, "%s", buf) > 0;
+}
+
+bool fxpt128_fwriter(FILE *file, const void *val, const char *fmt) {
+  char buf[FMC_FXPT128_STR_SIZE];
+  fmc_fxpt128_to_string(buf, FMC_FXPT128_STR_SIZE, (fmc_fxpt128_t *)val);
   return fprintf(file, "%s", buf) > 0;
 }
 
@@ -424,6 +446,9 @@ fm_base_type_fwriter fm_base_type_fwriter_get(FM_BASE_TYPE t) {
   case FM_TYPE_DECIMAL128:
     return &decimal128_fwriter;
     break;
+  case FM_TYPE_FIXEDPOINT128:
+    return &fxpt128_fwriter;
+    break;
   case FM_TYPE_TIME64:
     return &nano_fwriter;
     break;
@@ -471,6 +496,8 @@ const char *fm_base_type_name(FM_BASE_TYPE t) {
     return "RPRICE";
   case FM_TYPE_DECIMAL128:
     return "DECIMAL128";
+  case FM_TYPE_FIXEDPOINT128:
+    return "FIXEDPOINT128";
   case FM_TYPE_TIME64:
     return "TIME64";
   case FM_TYPE_CHAR:

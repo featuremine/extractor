@@ -163,7 +163,7 @@ static bool add_column_parser(fm_exec_ctx_t *ctx, fm_frame_t *frame,
       type = 10;
       break;
     case FM_TYPE_CHAR:
-      if (fdtype != NPY_CHAR && fdtype != NPY_STRING && fdtype != NPY_OBJECT)
+      if (fdtype != NPY_STRING && fdtype != NPY_STRING && fdtype != NPY_OBJECT)
         return error("char");
       type = 15;
       break;
