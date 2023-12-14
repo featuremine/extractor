@@ -319,6 +319,8 @@ PyMethodDef ExtractorBaseTypeFixedPoint128::tp_methods[] = {
     // /* Miscellaneous */
     {"from_float", ExtractorBaseTypeFixedPoint128::from_float, METH_O | METH_CLASS,
      NULL},
+    {"hi", ExtractorBaseTypeFixedPoint128::hi, METH_NOARGS, NULL},
+    {"lo", ExtractorBaseTypeFixedPoint128::lo, METH_NOARGS, NULL},
     // { "as_tuple", PyDec_AsTuple, METH_NOARGS, doc_as_tuple },
     // { "as_integer_ratio", dec_as_integer_ratio, METH_NOARGS,
     // doc_as_integer_ratio },
@@ -518,6 +520,17 @@ PyObject *ExtractorBaseTypeFixedPoint128::is_zero(PyObject *self, PyObject *args
     return PyBool_FromLong(((ExtractorBaseTypeFixedPoint128 *)self)->val ==
                            fmc::fxpt128());
 }
+
+PyObject *ExtractorBaseTypeFixedPoint128::hi(PyObject *self)
+{
+    return PyLong_FromLongLong(((ExtractorBaseTypeFixedPoint128 *)self)->val.hi);
+}
+
+PyObject *ExtractorBaseTypeFixedPoint128::lo(PyObject *self)
+{
+    return PyLong_FromLongLong(((ExtractorBaseTypeFixedPoint128 *)self)->val.lo);
+}
+
 PyObject *ExtractorBaseTypeFixedPoint128::compare(PyObject *self, PyObject *args)
 {
     PyObject *lhs, *rhs;
