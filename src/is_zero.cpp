@@ -50,7 +50,7 @@ template <class T> struct the_is_zero_field_exec_2_0 : op_field_exec {
   void exec(fm_frame_t *result, size_t args,
             const fm_frame_t *const argv[]) override {
     bool res = fmc::almost_equal<T>(
-        *(const T *)fm_frame_get_cptr1(argv[0], field_, 0), 0.0);
+        *(const T *)fm_frame_get_cptr1(argv[0], field_, 0), T());
 
     *(bool *)fm_frame_get_ptr1(result, field_, 0) = res;
   }

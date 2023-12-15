@@ -49,6 +49,8 @@ struct ExtractorBaseTypeFixedPoint128
     static PyObject *is_snan(PyObject *self, PyObject *args);
     static PyObject *is_signed(PyObject *self, PyObject *args);
     static PyObject *is_zero(PyObject *self, PyObject *args);
+    static PyObject *hi(PyObject *self, PyObject *args);
+    static PyObject *lo(PyObject *self, PyObject *args);
     static PyObject *compare(PyObject *self, PyObject *args);
     static PyObject *max(PyObject *self, PyObject *args);
     static PyObject *min(PyObject *self, PyObject *args);
@@ -108,7 +110,7 @@ PyObject *ExtractorBaseTypeFixedPoint128::nb_true_divide(PyObject *self,
 PyObject *ExtractorBaseTypeFixedPoint128::nb_inplace_add(PyObject *self,
                                                          PyObject *rhs)
 {
-    fmc::fxpt128::upcast(((ExtractorBaseTypeFixedPoint128 *)self)->val) +=
+    ((ExtractorBaseTypeFixedPoint128 *)self)->val +=
         ((ExtractorBaseTypeFixedPoint128 *)rhs)->val;
     Py_INCREF(self);
     return self;
@@ -117,7 +119,7 @@ PyObject *ExtractorBaseTypeFixedPoint128::nb_inplace_add(PyObject *self,
 PyObject *ExtractorBaseTypeFixedPoint128::nb_inplace_substract(PyObject *self,
                                                                PyObject *rhs)
 {
-    fmc::fxpt128::upcast(((ExtractorBaseTypeFixedPoint128 *)self)->val) -=
+    ((ExtractorBaseTypeFixedPoint128 *)self)->val -=
         ((ExtractorBaseTypeFixedPoint128 *)rhs)->val;
     Py_INCREF(self);
     return self;
@@ -521,12 +523,12 @@ PyObject *ExtractorBaseTypeFixedPoint128::is_zero(PyObject *self, PyObject *args
                            fmc::fxpt128());
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::hi(PyObject *self)
+PyObject *ExtractorBaseTypeFixedPoint128::hi(PyObject *self, PyObject *args)
 {
     return PyLong_FromLongLong(((ExtractorBaseTypeFixedPoint128 *)self)->val.hi);
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::lo(PyObject *self)
+PyObject *ExtractorBaseTypeFixedPoint128::lo(PyObject *self, PyObject *args)
 {
     return PyLong_FromLongLong(((ExtractorBaseTypeFixedPoint128 *)self)->val.lo);
 }

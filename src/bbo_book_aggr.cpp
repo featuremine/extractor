@@ -134,8 +134,8 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
 
       if (fm_book_levels_size(lvls) != 0) {
         fm_level_t *lvl = fm_book_level(lvls, 0);
-        qty = (Quantity)fmc::fxpt128::upcast(fm_book_level_shr(lvl));
-        px = (Price)fmc::fxpt128::upcast(fm_book_level_prx(lvl));
+        qty = (Quantity)fxpt128(fm_book_level_shr(lvl));
+        px = (Price)fxpt128(fm_book_level_prx(lvl));
       }
 
       *(fmc_time64_t *)fm_frame_get_ptr1(result, rec_, 0) = now;

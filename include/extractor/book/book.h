@@ -26,7 +26,7 @@
 
 #include "fmc/platform.h"
 
-#include "fmc/fxpt28.h"
+#include "fmc/fxpt128.h"
 #include "fmc/time.h"
 
 #ifdef __cplusplus

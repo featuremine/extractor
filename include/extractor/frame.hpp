@@ -28,6 +28,7 @@
 #include "extractor/type_sys.h"
 
 #include "fmc++/mpl.hpp"
+#include "fmc++/fxpt128.hpp"
 #include <array>
 
 namespace fm {
@@ -81,6 +82,7 @@ FRAME_FIELD_TYPE_ENUM(fmc_rational64_t, FM_TYPE_RATIONAL64);
 FRAME_FIELD_TYPE_ENUM(fmc_rprice_t, FM_TYPE_RPRICE);
 FRAME_FIELD_TYPE_ENUM(fmc_decimal128_t, FM_TYPE_DECIMAL128);
 FRAME_FIELD_TYPE_ENUM(fmc_fxpt128_t, FM_TYPE_FIXEDPOINT128);
+FRAME_FIELD_TYPE_ENUM(fmc::fxpt128, FM_TYPE_FIXEDPOINT128);
 FRAME_FIELD_TYPE_ENUM(fmc_time64_t, FM_TYPE_TIME64);
 FRAME_FIELD_TYPE_ENUM(wchar_t, FM_TYPE_WCHAR);
 FRAME_FIELD_TYPE_ENUM(char, FM_TYPE_CHAR);

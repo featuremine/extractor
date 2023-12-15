@@ -106,7 +106,7 @@ fm_call_def *fm_comp_skip_unless_stream_call(fm_comp_def_cl comp_cl,
 
 void fm_comp_skip_unless_queuer(size_t idx, fm_call_ctx_t *ctx) {
   auto *comp_cl = (skip_unless_comp_cl *)ctx->comp;
-  if (comp_cl->idx == idx) {
+  if (comp_cl->idx == (int)idx) {
     comp_cl->updated = true;
   }
 }
