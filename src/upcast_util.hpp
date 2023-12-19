@@ -21,6 +21,7 @@
  */
 
 #include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/rational64.hpp"
 #include "fmc++/rprice.hpp"
 
@@ -28,6 +29,10 @@ template <class T> struct upcast { using type = T; };
 
 template <> struct upcast<fmc_decimal128_t> {
   using type = typename fmc::decimal128;
+};
+
+template <> struct upcast<fmc_fxpt128_t> {
+  using type = typename fmc::fxpt128;
 };
 
 template <> struct upcast<fmc_rprice_t> { using type = typename fmc::rprice; };
