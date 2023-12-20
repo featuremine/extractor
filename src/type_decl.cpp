@@ -395,7 +395,7 @@ bool decimal128_fwriter(FILE *file, const void *val, const char *fmt) {
 }
 
 bool fxpt128_fwriter(FILE *file, const void *val, const char *fmt) {
-  char buf[FMC_FXPT128_STR_SIZE];
+  char buf[FMC_FXPT128_STR_SIZE] = {0};
   struct fmc_fxpt128_format_t format = {.precision = 15};
   fmc_fxpt128_to_string_opt(buf, FMC_FXPT128_STR_SIZE, (FIXEDPOINT128 *)val, &format);
   return fprintf(file, "%s", buf) > 0;

@@ -1132,7 +1132,7 @@ std::string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
       return std::string(str);
     } break;
     case FM_TYPE_FIXEDPOINT128: {
-      char str[FMC_FXPT128_STR_SIZE];
+      char str[FMC_FXPT128_STR_SIZE] = {0};
       struct fmc_fxpt128_format_t format = {.precision = 15};
       fmc_fxpt128_to_string_opt(str, FMC_FXPT128_STR_SIZE, (FIXEDPOINT128 *)ptr, &format);
       return std::string(str);
