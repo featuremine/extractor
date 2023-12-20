@@ -416,8 +416,11 @@ Py_hash_t ExtractorBaseTypeFixedPoint128::tp_hash(PyObject *self)
 
 PyObject *ExtractorBaseTypeFixedPoint128::tp_str(PyObject *self)
 {
-    std::string str = std::to_string(((ExtractorBaseTypeFixedPoint128 *)self)->val);
-    return PyUnicode_FromString(str.c_str());
+    auto &val = ((ExtractorBaseTypeFixedPoint128 *)self)->val;
+    char str[FMC_FXPT128_STR_SIZE];
+    struct fmc_fxpt128_format_t format = {.precision = 15};
+    fmc_fxpt128_to_string_opt(str, FMC_FXPT128_STR_SIZE, (const FIXEDPOINT128 *)&val, &format);
+    return PyUnicode_FromString(str);
 }
 
 bool ExtractorBaseTypeFixedPoint128::init(PyObject *m)
