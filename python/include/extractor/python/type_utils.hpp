@@ -73,6 +73,10 @@ template <class T> struct py_type_convert {
       if (FixedPoint128_Check(temp)) {
         val = FixedPoint128_val(temp);
         return !PyErr_Occurred();
+      } else if (Rprice_Check(temp)) {
+        fmc_rprice_t x = Rprice_val(temp);
+        fmc_fxpt128_from_rprice(&val, &x);
+        return true;
       } else if (PyFloat_Check(temp)) {
         fmc_fxpt128_from_double(&val, PyFloat_AsDouble(temp));
         return true;

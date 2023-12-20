@@ -111,12 +111,16 @@ TEST(string_utils, to_string_view_double) {
               string_view(std::to_string(double_val)));
     double_val += 0.000001;
   }
-  EXPECT_EQ(to_string_view_double(&buf[0], 0.9999999999, 9),
-            string_view("1.0"));
-  EXPECT_EQ(to_string_view_double(&buf[0], 0.0, 9), string_view("0.0"));
+  EXPECT_EQ(to_string_view_double(&buf[0], 0.9999999999, 9), string_view("1"));
+  EXPECT_EQ(to_string_view_double(&buf[0], 0.999999999, 9), string_view("0.999999999"));
+  EXPECT_EQ(to_string_view_double(&buf[0], 0.99999999999, 10), string_view("1"));
+  EXPECT_EQ(to_string_view_double(&buf[0], 0.9999999999, 10), string_view("0.9999999999"));
+  EXPECT_EQ(to_string_view_double(&buf[0], 0.9999999999999999, 15), string_view("1"));
+  EXPECT_EQ(to_string_view_double(&buf[0], 0.999999999999999, 15), string_view("0.999999999999999"));
+  EXPECT_EQ(to_string_view_double(&buf[0], 0.0, 9), string_view("0"));
   EXPECT_EQ(to_string_view_double(&buf[0], 0.00001, 9), string_view("0.00001"));
-  EXPECT_EQ(to_string_view_double(&buf[0], 10.0, 9), string_view("10.0"));
-  EXPECT_EQ(to_string_view_double(&buf[0], 1.0, 9), string_view("1.0"));
+  EXPECT_EQ(to_string_view_double(&buf[0], 10.0, 9), string_view("10"));
+  EXPECT_EQ(to_string_view_double(&buf[0], 1.0, 9), string_view("1"));
 }
 
 TEST(string_utils, to_string_view_int) {

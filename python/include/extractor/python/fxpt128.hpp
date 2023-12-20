@@ -350,7 +350,7 @@ static PyTypeObject ExtractorBaseTypeFixedPoint128Type = {
     0,                                                        /* tp_getattr */
     0,                                                        /* tp_setattr */
     0,                                                        /* tp_reserved */
-    0,                                                        /* tp_repr */
+    (reprfunc)ExtractorBaseTypeFixedPoint128::tp_str,         /* tp_repr */
     &ExtractorBaseTypeFixedPoint128::tp_as_number,            /* tp_as_number */
     0,                                                        /* tp_as_sequence */
     0,                                                        /* tp_as_mapping */
@@ -399,8 +399,8 @@ PyObject *ExtractorBaseTypeFixedPoint128::tp_new(PyTypeObject *subtype,
     if (PyArg_ParseTuple(args, "O", &input) &&
         ExtractorComputation_type_check(input))
         return create(subtype, args, kwds);
-    fmc_fxpt128_t val;
-    if (py_type_convert<fmc_fxpt128_t>::convert(val, args))
+    FIXEDPOINT128 val;
+    if (py_type_convert<FIXEDPOINT128>::convert(val, args))
     {
         return py_new(val);
     }

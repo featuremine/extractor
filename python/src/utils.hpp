@@ -257,9 +257,11 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
       break;
     case FM_TYPE_RPRICE:
       return [](void *ptr, PyObject *obj) {
-        fmc_rprice_from_double((RPRICE *)ptr, PyFloat_AsDouble(obj));
-        if (PyErr_Occurred())
+        if (!PyObject_IsInstance(obj,
+                                 (PyObject *)&ExtractorBaseTypeRpriceType))
           return false;
+        ExtractorBaseTypeRprice *dec = (ExtractorBaseTypeRprice *)obj;
+        *(RPRICE *)ptr = dec->val;
         return true;
       };
       break;
@@ -406,11 +408,9 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
     case FM_TYPE_FLOAT64:
       return PyFloat_FromDouble(*(FLOAT64 *)ptr);
       break;
-    case FM_TYPE_RPRICE: {
-      double val;
-      fmc_rprice_to_double(&val, (RPRICE *)ptr);
-      return PyFloat_FromDouble(val);
-    } break;
+    case FM_TYPE_RPRICE:
+      return ExtractorBaseTypeRprice::py_new(*(RPRICE *)ptr);
+      break;
     case FM_TYPE_DECIMAL128:
       return ExtractorDecimal128_new(*(DECIMAL128 *)ptr);
       break;
@@ -511,9 +511,7 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       return PyUnicode_FromWideChar(&STACK_POP(plist, WCHAR), 1);
       break;
     case FM_TYPE_RPRICE: {
-      double val;
-      fmc_rprice_to_double(&val, &STACK_POP(plist, RPRICE));
-      return PyFloat_FromDouble(val);
+      return ExtractorBaseTypeRprice::py_new(STACK_POP(plist, RPRICE));
     } break;
     case FM_TYPE_DECIMAL128: {
       return ExtractorDecimal128_new(STACK_POP(plist, DECIMAL128));
@@ -1121,13 +1119,14 @@ std::string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
     } break;
     case FM_TYPE_RPRICE: {
       double val;
-      fmc_rprice_to_double(&val, (RPRICE *)ptr);
-      char buf[20];
+      RPRICE *rval = (RPRICE *)ptr;
+      fmc_rprice_to_double(&val, rval);
+      char buf[25] = {0};
       auto view = fmc::to_string_view_double(buf, val, 9);
       return std::string(view.data(), view.size());
     } break;
     case FM_TYPE_DECIMAL128: {
-      char str[FMC_DECIMAL128_STR_SIZE];
+      char str[FMC_DECIMAL128_STR_SIZE] = {0};
       fmc_decimal128_to_str(str, (DECIMAL128 *)ptr);
       return std::string(str);
     } break;

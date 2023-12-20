@@ -46,10 +46,10 @@ class ValidationBook:
         self.oldaskpx = {}
 
     def proc_bbo(self, bbo, idx):
-        bidqty = extr.FixedPoint128(str(bbo[0].bidqty))
-        askqty = extr.FixedPoint128(str(bbo[0].askqty))
-        bidprice = extr.FixedPoint128(str(bbo[0].bidprice))
-        askprice = extr.FixedPoint128(str(bbo[0].askprice))
+        bidqty = extr.FixedPoint128(bbo[0].bidqty)
+        askqty = extr.FixedPoint128(bbo[0].askqty)
+        bidprice = extr.FixedPoint128(bbo[0].bidprice)
+        askprice = extr.FixedPoint128(bbo[0].askprice)
 
         if (idx in self.oldbidpx) and (bidprice != self.oldbidpx[idx][0]):
             if self.oldbidpx[idx][1] != ZERO:
@@ -85,7 +85,7 @@ class ValidationBook:
 
         for price, level in bookside:
             #Adjust the price for the hash
-            assert price in validationside
+            assert price in validationside, f"price {price} is not in {validationside}"
             validationlevel = validationside[price]
 
             assert len(validationlevel) == len(level)
