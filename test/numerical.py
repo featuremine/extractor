@@ -492,6 +492,67 @@ class NumericalTests(unittest.TestCase):
         v1 = extr.Rational64.from_float(2.35)
         self.assertAlmostEqual(float(v1), 2.35)
 
+    def test_fixedpoint128(self):
+        from_int = extr.FixedPoint128(0)
+        self.assertTrue(isinstance(from_int, extr.FixedPoint128))
+        self.assertEqual(int(from_int), 0)
+        self.assertAlmostEqual(float(from_int), 0.0)
+        self.assertEqual(str(from_int), "0.000000")
+        self.assertFalse(from_int.is_signed())
+        self.assertTrue(from_int.is_zero())
+        self.assertFalse(math.isnan(from_int))
+        self.assertFalse(math.isinf(from_int))
+        self.assertTrue(math.isfinite(from_int))
+
+        from_double = extr.FixedPoint128(-5.442)
+        self.assertTrue(isinstance(from_double, extr.FixedPoint128))
+        self.assertEqual(int(from_double), -5)
+        self.assertAlmostEqual(float(from_double), -5.442)
+        self.assertEqual(str(from_double), "-5.442000")
+        self.assertTrue(from_double.is_signed())
+        self.assertFalse(from_double.is_zero())
+        self.assertFalse(math.isnan(from_double))
+        self.assertFalse(math.isinf(from_double))
+        self.assertTrue(math.isfinite(from_double))
+
+        from_decimal = extr.FixedPoint128(from_double)
+        self.assertTrue(isinstance(from_decimal, extr.FixedPoint128))
+        self.assertEqual(int(from_decimal), -5)
+        self.assertAlmostEqual(float(from_decimal), -5.442)
+        self.assertEqual(str(from_decimal), "-5.442000")
+        self.assertTrue(from_decimal.is_signed())
+        self.assertFalse(from_decimal.is_zero())
+        self.assertFalse(math.isnan(from_decimal))
+        self.assertFalse(math.isinf(from_decimal))
+        self.assertTrue(math.isfinite(from_decimal))
+
+        self.assertEqual(abs(extr.FixedPoint128(5)), extr.FixedPoint128(5))
+        self.assertEqual(abs(extr.FixedPoint128(-5)), extr.FixedPoint128(5))
+
+        self.assertEqual(extr.FixedPoint128(5) + extr.FixedPoint128(5), extr.FixedPoint128(10))
+        self.assertEqual(extr.FixedPoint128(5) - extr.FixedPoint128(10), extr.FixedPoint128(-5))
+        self.assertEqual(extr.FixedPoint128(5) * extr.FixedPoint128(2), extr.FixedPoint128(10))
+        self.assertEqual(extr.FixedPoint128(10) / extr.FixedPoint128(2), extr.FixedPoint128(5))
+
+        v1 = extr.FixedPoint128(5)
+        v1 += extr.FixedPoint128(5)
+        self.assertTrue(v1 == extr.FixedPoint128(10))
+        v1 = extr.FixedPoint128(5)
+        v1 -= extr.FixedPoint128(10)
+        self.assertTrue(v1 == extr.FixedPoint128(-5))
+        v1 = extr.FixedPoint128(5)
+        v1 *= extr.FixedPoint128(5)
+        self.assertTrue(v1 == extr.FixedPoint128(25))
+        v1 = extr.FixedPoint128(10)
+        v1 /= extr.FixedPoint128(2)
+        self.assertTrue(v1 == extr.FixedPoint128(5))
+
+        self.assertEqual(max(extr.FixedPoint128(10), extr.FixedPoint128(2), extr.FixedPoint128(5)), extr.FixedPoint128(10))
+        self.assertEqual(min(extr.FixedPoint128(10), extr.FixedPoint128(2), extr.FixedPoint128(5)), extr.FixedPoint128(2))
+
+        v1 = extr.FixedPoint128.from_float(2.35)
+        self.assertAlmostEqual(float(v1), 2.35)
+
 if __name__ == "__main__":
     suite = unittest.defaultTestLoader.loadTestsFromTestCase(NumericalTests)
     assert unittest.TextTestRunner().run(suite).wasSuccessful(), 'Test runner failed'

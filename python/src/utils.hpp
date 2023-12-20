@@ -31,6 +31,7 @@
 
 #include "extractor/type_sys.h"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/mpl.hpp"
 #include <cassert>
 #include <errno.h>
@@ -111,6 +112,10 @@ df_type_check get_df_type_checker(fm_type_decl_cp decl) {
       };
       break;
     case FM_TYPE_DECIMAL128:
+      return [](int fdtype) { return fdtype == NPY_OBJECT; };
+      break;
+      break;
+    case FM_TYPE_FIXEDPOINT128:
       return [](int fdtype) { return fdtype == NPY_OBJECT; };
       break;
     case FM_TYPE_TIME64:
@@ -268,6 +273,16 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
         return true;
       };
       break;
+    case FM_TYPE_FIXEDPOINT128:
+      return [](void *ptr, PyObject *obj) {
+        if (!PyObject_IsInstance(obj,
+                                 (PyObject *)&ExtractorBaseTypeFixedPoint128Type))
+          return false;
+        ExtractorBaseTypeFixedPoint128 *dec = (ExtractorBaseTypeFixedPoint128 *)obj;
+        *(FIXEDPOINT128 *)ptr = dec->val;
+        return true;
+      };
+      break;
 
     case FM_TYPE_CHAR:
       return [](void *ptr, PyObject *obj) {
@@ -399,6 +414,9 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
     case FM_TYPE_DECIMAL128:
       return ExtractorDecimal128_new(*(DECIMAL128 *)ptr);
       break;
+    case FM_TYPE_FIXEDPOINT128:
+      return ExtractorFixedPoint128_new(*(FIXEDPOINT128 *)ptr);
+      break;
     case FM_TYPE_CHAR:
       return PyUnicode_FromStringAndSize((const char *)ptr, 1);
       break;
@@ -499,6 +517,9 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
     } break;
     case FM_TYPE_DECIMAL128: {
       return ExtractorDecimal128_new(STACK_POP(plist, DECIMAL128));
+    } break;
+    case FM_TYPE_FIXEDPOINT128: {
+      return ExtractorFixedPoint128_new(STACK_POP(plist, FIXEDPOINT128));
     } break;
     case FM_TYPE_TIME64: {
       using days = typename chrono::duration<long int, std::ratio<86400>>;
@@ -862,6 +883,15 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
                         val);
         Py_XDECREF(val);
       }
+    } else if (fm_type_base_enum(decl) == FM_TYPE_FIXEDPOINT128) {
+      for (int item = 0; item < f_dims[0]; ++item) {
+        auto *val = ExtractorFixedPoint128_new(
+            *(FIXEDPOINT128 *)fm_frame_get_cptr1(frame, i, item));
+        PyArray_SETITEM((PyArrayObject *)array,
+                        (char *)PyArray_GETPTR1((PyArrayObject *)array, item),
+                        val);
+        Py_XDECREF(val);
+      }
     } else {
       memcpy(PyArray_GETPTR1((PyArrayObject *)array, 0),
              fm_frame_get_cptr1(frame, i, 0), elem_size * f_dims[0]);
@@ -1024,6 +1054,9 @@ inline short type_size(fm_type_decl_cp decl) {
     case FM_TYPE_DECIMAL128:
       return 20;
       break;
+    case FM_TYPE_FIXEDPOINT128:
+      return 20;
+      break;
     case FM_TYPE_CHAR:
       return 1;
       break;
@@ -1096,6 +1129,11 @@ std::string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
     case FM_TYPE_DECIMAL128: {
       char str[FMC_DECIMAL128_STR_SIZE];
       fmc_decimal128_to_str(str, (DECIMAL128 *)ptr);
+      return std::string(str);
+    } break;
+    case FM_TYPE_FIXEDPOINT128: {
+      char str[FMC_FIXEDPOINT128_STR_SIZE];
+      fmc_fxpt128_to_str(str, (FIXEDPOINT128 *)ptr);
       return std::string(str);
     } break;
     case FM_TYPE_CHAR:

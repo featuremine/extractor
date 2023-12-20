@@ -32,6 +32,7 @@
 #include "extractor/comp_def.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/rprice.hpp"
 #include "fmc++/strings.hpp"
@@ -259,6 +260,11 @@ fm_ctx_def_t *fm_comp_convert_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
       pair<INT16, DECIMAL128>, pair<INT32, DECIMAL128>, pair<INT64, DECIMAL128>,
       pair<DECIMAL128, RATIONAL64>, pair<RPRICE, DECIMAL128>,
       pair<DECIMAL128, RPRICE>, pair<DECIMAL128, INT32>,
+      pair<INT64, FIXEDPOINT128>, pair<FLOAT32, FIXEDPOINT128>,
+      pair<FIXEDPOINT128, FLOAT32>, pair<FIXEDPOINT128, FLOAT64>, 
+      pair<FLOAT64, FIXEDPOINT128>, pair<INT8, FIXEDPOINT128>,
+      pair<INT16, FIXEDPOINT128>, pair<INT32, FIXEDPOINT128>,
+      pair<FIXEDPOINT128, RPRICE>, pair<FIXEDPOINT128, INT32>,
       pair<RATIONAL64, FLOAT64>, pair<INT8, RATIONAL64>,
       pair<INT16, RATIONAL64>, pair<INT32, RATIONAL64>, pair<INT64, RATIONAL64>,
       pair<UINT8, RATIONAL64>, pair<UINT16, RATIONAL64>,

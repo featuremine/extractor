@@ -25,7 +25,7 @@
 
 #include "extractor/book/book.h"
 
-#include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/time.hpp"
 
 #include <optional>
@@ -41,8 +41,8 @@ struct add {
   fmc_time64_t receive;
   uint64_t seqn;
   uint64_t id;
-  fmc::decimal128 price;
-  fmc::decimal128 qty;
+  fmc::fxpt128 price;
+  fmc::fxpt128 qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -53,8 +53,8 @@ struct insert {
   uint64_t seqn;
   uint64_t id;
   uint64_t prio;
-  fmc::decimal128 price;
-  fmc::decimal128 qty;
+  fmc::fxpt128 price;
+  fmc::fxpt128 qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -64,9 +64,9 @@ struct position {
   fmc_time64_t receive;
   uint64_t seqn;
   uint64_t id;
-  fmc::decimal128 price;
+  fmc::fxpt128 price;
   uint32_t pos;
-  fmc::decimal128 qty;
+  fmc::fxpt128 qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -76,8 +76,8 @@ struct cancel {
   fmc_time64_t receive;
   uint64_t seqn;
   uint64_t id;
-  fmc::decimal128 price;
-  fmc::decimal128 qty;
+  fmc::fxpt128 price;
+  fmc::fxpt128 qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -87,9 +87,9 @@ struct execute {
   fmc_time64_t receive;
   uint64_t seqn;
   uint64_t id;
-  fmc::decimal128 price;
-  fmc::decimal128 trade_price;
-  fmc::decimal128 qty;
+  fmc::fxpt128 price;
+  fmc::fxpt128 trade_price;
+  fmc::fxpt128 qty;
   uint16_t is_bid;
   uint16_t batch;
 };
@@ -98,8 +98,8 @@ struct trade {
   fmc_time64_t vendor;
   fmc_time64_t receive;
   uint64_t seqn;
-  fmc::decimal128 trade_price;
-  fmc::decimal128 qty;
+  fmc::fxpt128 trade_price;
+  fmc::fxpt128 qty;
   uint16_t batch;
   char decoration[8] = {0, 0, 0, 0, 0, 0, 0, 0};
 };
@@ -109,7 +109,7 @@ struct state {
   fmc_time64_t receive;
   uint64_t seqn;
   uint64_t id;
-  fmc::decimal128 price;
+  fmc::fxpt128 price;
   uint32_t state;
   uint16_t is_bid;
   uint16_t batch;
@@ -128,8 +128,8 @@ struct set {
   fmc_time64_t vendor;
   fmc_time64_t receive;
   uint64_t seqn;
-  fmc::decimal128 price;
-  fmc::decimal128 qty;
+  fmc::fxpt128 price;
+  fmc::fxpt128 qty;
   uint16_t is_bid;
   uint16_t batch;
 };

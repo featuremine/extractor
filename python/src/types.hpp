@@ -24,6 +24,7 @@
 #include "extractor/comp_def.hpp"
 #include "extractor/type_decl.h"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/python/wrapper.hpp"
 #include "fmc++/rational64.hpp"
 #include "fmc++/rprice.hpp"
@@ -37,6 +38,7 @@
 
 #include "upcast_util.hpp"
 #include <extractor/python/decimal128.hpp>
+#include <extractor/python/fxpt128.hpp>
 #include <extractor/python/rational64.hpp>
 #include <extractor/python/rprice.hpp>
 #include <extractor/python/type_utils.hpp>
@@ -554,6 +556,10 @@ PyObject *ExtractorDecimal128_new(fmc_decimal128_t val) {
   return ExtractorBaseTypeDecimal128::py_new(val);
 }
 
+PyObject *ExtractorFixedPoint128_new(fmc_fxpt128_t val) {
+  return ExtractorBaseTypeFixedPoint128::py_new(val);
+}
+
 fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj) {
   if (PyObject_TypeCheck(obj, &ExtractorArrayTypeType)) {
     auto *py_obj = (ExtractorArrayType *)obj;
@@ -602,6 +608,9 @@ fm_type_decl_cp fm_type_from_py_type(fm_type_sys_t *tsys, PyObject *obj) {
   } else if (PyType_IsSubtype((PyTypeObject *)obj,
                               &ExtractorBaseTypeDecimal128Type)) {
     return fm_base_type_get(tsys, FM_TYPE_DECIMAL128);
+  } else if (PyType_IsSubtype((PyTypeObject *)obj,
+                              &ExtractorBaseTypeFixedPoint128Type)) {
+    return fm_base_type_get(tsys, FM_TYPE_FIXEDPOINT128);
   } else if (PyType_IsSubtype((PyTypeObject *)obj,
                               &ExtractorBaseTypeTime64Type)) {
     return fm_base_type_get(tsys, FM_TYPE_TIME64);
@@ -717,6 +726,10 @@ PyTypeObject *py_type_from_fm_type(fm_type_decl_cp decl) {
       Py_INCREF(&ExtractorBaseTypeDecimal128Type);
       return &ExtractorBaseTypeDecimal128Type;
       break;
+    case FM_TYPE_FIXEDPOINT128:
+      Py_INCREF(&ExtractorBaseTypeFixedPoint128Type);
+      return &ExtractorBaseTypeFixedPoint128Type;
+      break;
     case FM_TYPE_RATIONAL64:
       Py_INCREF(&ExtractorBaseTypeRational64Type);
       return &ExtractorBaseTypeRational64Type;
@@ -754,6 +767,7 @@ bool init_type_wrappers(PyObject *m) {
          ExtractorBaseTypeRational64::init(m) &&
          ExtractorBaseTypeRprice::init(m) &&
          ExtractorBaseTypeDecimal128::init(m) &&
+         ExtractorBaseTypeFixedPoint128::init(m) &&
          ExtractorBaseTypeChar::init(m) && ExtractorBaseTypeWchar::init(m) &&
          ExtractorArrayType::init(m) && ExtractorBaseTypeBool::init(m);
   return false;

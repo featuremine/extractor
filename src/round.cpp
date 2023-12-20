@@ -32,6 +32,7 @@
 #include "extractor/comp_def.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
@@ -85,6 +86,24 @@ struct the_round_field_exec_2_0<fmc_decimal128_t, T> : round_field_exec {
   fm_field_t field_;
   int64_t divisor_;
   fmc_decimal128_t factor_;
+};
+
+template <class T>
+struct the_round_field_exec_2_0<fmc_fxpt128_t, T> : round_field_exec {
+  the_round_field_exec_2_0(fm_field_t field, int64_t divisor)
+      : field_(field), divisor_(divisor),
+        factor_(fmc::fxpt128(1) / fmc::fxpt128(divisor_)) {}
+  void exec(fm_frame_t *result, size_t,
+            const fm_frame_t *const argv[]) override {
+    const T &val0 = *(const T *)fm_frame_get_cptr1(argv[0], field_, 0);
+    fmc_fxpt128_t &res =
+        *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, field_, 0);
+    fmc_fxpt128_from_int(&res, llround(val0 * divisor_));
+    res = res * factor_;
+  }
+  fm_field_t field_;
+  int64_t divisor_;
+  fmc_fxpt128_t factor_;
 };
 
 template <class T>

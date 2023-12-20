@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 
 struct exec_cl {
   virtual void exec(fmc_time64_t t_d) = 0;
@@ -74,7 +75,7 @@ template <template <class> class Comp> struct fm_comp_tw : fm_comp_sample_2_0 {
              fm_arg_stack_t plist)
       : fm_comp_sample_2_0(csys, closure, argc, argv, ptype, plist),
         last_time_(fmc_time64_start()) {
-    using supported_types = fmc::type_list<FLOAT32, FLOAT64, DECIMAL128>;
+    using supported_types = fmc::type_list<FLOAT32, FLOAT64, DECIMAL128, FIXEDPOINT128>;
 
     int nf = fm_type_frame_nfields(argv[0]);
     vector<const char *> names(nf);

@@ -24,7 +24,7 @@
 #pragma once
 
 #include "extractor/book/updates.hpp"
-#include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/serialization.hpp"
 #include "fmc++/time.hpp"
 
@@ -66,8 +66,8 @@ struct result {
   result_enum value;
 };
 struct order_info {
-  fmc::decimal128 price;
-  fmc::decimal128 qty;
+  fmc::fxpt128 price;
+  fmc::fxpt128 qty;
   bool is_bid = 0;
 };
 using orders_t = unordered_map<uint64_t, order_info>;

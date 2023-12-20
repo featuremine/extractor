@@ -26,7 +26,7 @@
 
 #include "fmc/platform.h"
 
-#include "fmc/decimal128.h"
+#include "fmc/fxpt28.h"
 #include "fmc/time.h"
 
 #ifdef __cplusplus
@@ -47,41 +47,41 @@ FMMODFUNC void fm_book_del(fm_book_t *book);
 FMMODFUNC void fm_book_uncross_set(fm_book_t *book, bool set);
 
 FMMODFUNC void fm_book_add(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
-                           uint64_t seq, uint64_t id, fmc_decimal128_t price,
-                           fmc_decimal128_t qty, bool is_bid);
+                           uint64_t seq, uint64_t id, fmc_fxpt128_t price,
+                           fmc_fxpt128_t qty, bool is_bid);
 
 FMMODFUNC void fm_book_ins(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
                            uint64_t seq, uint64_t id, uint64_t prio,
-                           fmc_decimal128_t price, fmc_decimal128_t qty,
+                           fmc_fxpt128_t price, fmc_fxpt128_t qty,
                            bool is_bid);
 
 FMMODFUNC void fm_book_pos(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
                            uint64_t seq, uint64_t id, uint32_t pos,
-                           fmc_decimal128_t price, fmc_decimal128_t qty,
+                           fmc_fxpt128_t price, fmc_fxpt128_t qty,
                            bool is_bid);
 
-FMMODFUNC bool fm_book_mod(fm_book_t *book, uint64_t id, fmc_decimal128_t price,
-                           fmc_decimal128_t qty, bool is_bid);
+FMMODFUNC bool fm_book_mod(fm_book_t *book, uint64_t id, fmc_fxpt128_t price,
+                           fmc_fxpt128_t qty, bool is_bid);
 
-FMMODFUNC bool fm_book_exe(fm_book_t *book, uint64_t id, fmc_decimal128_t price,
-                           fmc_decimal128_t qty, bool is_bid);
+FMMODFUNC bool fm_book_exe(fm_book_t *book, uint64_t id, fmc_fxpt128_t price,
+                           fmc_fxpt128_t qty, bool is_bid);
 
 FMMODFUNC bool fm_book_pla(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
-                           uint64_t seq, fmc_decimal128_t price,
-                           fmc_decimal128_t qty, bool is_bid);
+                           uint64_t seq, fmc_fxpt128_t price,
+                           fmc_fxpt128_t qty, bool is_bid);
 
 FMMODFUNC void fm_book_clr(fm_book_t *book);
 
 FMMODFUNC fm_levels_t *fm_book_levels(fm_book_t *book, bool is_bid);
 FMMODFUNC unsigned fm_book_levels_size(fm_levels_t *lvls);
 FMMODFUNC fm_level_t *fm_book_level(fm_levels_t *lvls, unsigned idx);
-FMMODFUNC fmc_decimal128_t fm_book_level_prx(fm_level_t *lvl);
-FMMODFUNC fmc_decimal128_t fm_book_level_shr(fm_level_t *lvl);
+FMMODFUNC fmc_fxpt128_t fm_book_level_prx(fm_level_t *lvl);
+FMMODFUNC fmc_fxpt128_t fm_book_level_shr(fm_level_t *lvl);
 FMMODFUNC uint32_t fm_book_level_ord(fm_level_t *lvl);
 FMMODFUNC fm_order_t *fm_book_level_order(fm_level_t *lvl, unsigned idx);
 FMMODFUNC uint64_t fm_book_order_prio(fm_order_t *lvl);
 FMMODFUNC uint64_t fm_book_order_id(fm_order_t *lvl);
-FMMODFUNC fmc_decimal128_t fm_book_order_qty(fm_order_t *lvl);
+FMMODFUNC fmc_fxpt128_t fm_book_order_qty(fm_order_t *lvl);
 FMMODFUNC fmc_time64_t fm_book_order_rec(fm_order_t *lvl);
 FMMODFUNC fmc_time64_t fm_book_order_ven(fm_order_t *lvl);
 FMMODFUNC uint64_t fm_book_order_seq(fm_order_t *lvl);

@@ -32,7 +32,7 @@
 #include "fmc/time.h"
 
 #include "extractor/book/updates.hpp"
-#include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/time.hpp"
 
@@ -72,13 +72,13 @@ bool fm_comp_book_build_call_stream_init(fm_frame_t *result, size_t args,
   for (unsigned i = 0; i < exe_cl->lvl_cnt; ++i) {
     snprintf(buf, strsz, "bid_prx_%u", i);
     fields.push_back(fm_frame_field(result, buf));
-    *(fmc_decimal128_t *)fm_frame_get_ptr1(result, fields.back(), 0) =
-        fmc::decimal128();
+    *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, fields.back(), 0) =
+        fmc::fxpt128();
 
     snprintf(buf, strsz, "bid_shr_%u", i);
     fields.push_back(fm_frame_field(result, buf));
-    *(fmc_decimal128_t *)fm_frame_get_ptr1(result, fields.back(), 0) =
-        fmc::decimal128();
+    *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, fields.back(), 0) =
+        fmc::fxpt128();
 
     snprintf(buf, strsz, "bid_ord_%u", i);
     fields.push_back(fm_frame_field(result, buf));
@@ -87,13 +87,13 @@ bool fm_comp_book_build_call_stream_init(fm_frame_t *result, size_t args,
   for (unsigned i = 0; i < exe_cl->lvl_cnt; ++i) {
     snprintf(buf, strsz, "ask_prx_%u", i);
     fields.push_back(fm_frame_field(result, buf));
-    *(fmc_decimal128_t *)fm_frame_get_ptr1(result, fields.back(), 0) =
-        fmc::decimal128();
+    *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, fields.back(), 0) =
+        fmc::fxpt128();
 
     snprintf(buf, strsz, "ask_shr_%u", i);
     fields.push_back(fm_frame_field(result, buf));
-    *(fmc_decimal128_t *)fm_frame_get_ptr1(result, fields.back(), 0) =
-        fmc::decimal128();
+    *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, fields.back(), 0) =
+        fmc::fxpt128();
 
     snprintf(buf, strsz, "ask_ord_%u", i);
     fields.push_back(fm_frame_field(result, buf));
@@ -119,7 +119,7 @@ bool fm_comp_book_build_stream_exec(fm_frame_t *result, size_t args,
   //                     << msg.vendor << ','
   //                     << msg.seqn << ','
   //                     << msg.id << ','
-  //                     << fmc_decimal128_to_double(msg.price) << ','
+  //                     << fmc_fxpt128_to_double(msg.price) << ','
   //                     << msg.qty << ','
   //                     << msg.is_bid << ','
   //                     << msg.batch << endl;
@@ -130,7 +130,7 @@ bool fm_comp_book_build_stream_exec(fm_frame_t *result, size_t args,
   //                     << msg.seqn << ','
   //                     << msg.id << ','
   //                     << msg.prio << ','
-  //                     << fmc_decimal128_to_double(msg.price) << ','
+  //                     << fmc_fxpt128_to_double(msg.price) << ','
   //                     << msg.qty << ','
   //                     << msg.is_bid << ','
   //                     << msg.batch << endl;
@@ -140,7 +140,7 @@ bool fm_comp_book_build_stream_exec(fm_frame_t *result, size_t args,
   //                     << msg.vendor << ','
   //                     << msg.seqn << ','
   //                     << msg.id << ','
-  //                     << fmc_decimal128_to_double(msg.price) << ','
+  //                     << fmc_fxpt128_to_double(msg.price) << ','
   //                     << msg.qty << ','
   //                     << msg.is_bid << ','
   //                     << msg.batch << endl;
@@ -150,8 +150,8 @@ bool fm_comp_book_build_stream_exec(fm_frame_t *result, size_t args,
   //                     << msg.vendor << ','
   //                     << msg.seqn << ','
   //                     << msg.id << ','
-  //                     << fmc_decimal128_to_double(msg.price) << ','
-  //                     << fmc_decimal128_to_double(msg.trade_price) << ','
+  //                     << fmc_fxpt128_to_double(msg.price) << ','
+  //                     << fmc_fxpt128_to_double(msg.trade_price) << ','
   //                     << msg.qty << ','
   //                     << msg.is_bid << ','
   //                     << msg.batch << endl;
@@ -160,7 +160,7 @@ bool fm_comp_book_build_stream_exec(fm_frame_t *result, size_t args,
   //                cout << "trade" << ',' << setprecision(15)
   //                     << msg.vendor << ','
   //                     << msg.seqn << ','
-  //                     << fmc_decimal128_to_double(msg.trade_price) << ','
+  //                     << fmc_fxpt128_to_double(msg.trade_price) << ','
   //                     << msg.qty << ','
   //                     << msg.batch << endl;
   //            },
@@ -179,18 +179,18 @@ bool fm_comp_book_build_stream_exec(fm_frame_t *result, size_t args,
     unsigned idx = 0;
     for (; idx < size && idx < lvl_cnt; ++idx) {
       auto *level = fm_book_level(levels, idx);
-      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, *(it++), 0) =
+      *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, *(it++), 0) =
           fm_book_level_prx(level);
-      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, *(it++), 0) =
+      *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, *(it++), 0) =
           fm_book_level_shr(level);
       *(uint32_t *)fm_frame_get_ptr1(result, *(it++), 0) =
           fm_book_level_ord(level);
     }
     for (; idx < lvl_cnt; ++idx) {
-      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, *(it++), 0) =
-          fmc::decimal128();
-      *(fmc_decimal128_t *)fm_frame_get_ptr1(result, *(it++), 0) =
-          fmc::decimal128();
+      *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, *(it++), 0) =
+          fmc::fxpt128();
+      *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, *(it++), 0) =
+          fmc::fxpt128();
       *(uint32_t *)fm_frame_get_ptr1(result, *(it++), 0) = 0;
     }
   }
@@ -278,17 +278,17 @@ fm_ctx_def_t *fm_comp_book_build_gen(fm_comp_sys_t *csys,
 
   unsigned idx = 0;
   for (unsigned i = 0; i < lvl_cnt; ++i) {
-    types[idx] = fm_base_type_get(sys, FM_TYPE_DECIMAL128);
+    types[idx] = fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128);
     snprintf(buf[idx++].data(), strsz, "bid_prx_%u", i);
-    types[idx] = fm_base_type_get(sys, FM_TYPE_DECIMAL128);
+    types[idx] = fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128);
     snprintf(buf[idx++].data(), strsz, "bid_shr_%u", i);
     types[idx] = fm_base_type_get(sys, FM_TYPE_UINT32);
     snprintf(buf[idx++].data(), strsz, "bid_ord_%u", i);
   }
   for (unsigned i = 0; i < lvl_cnt; ++i) {
-    types[idx] = fm_base_type_get(sys, FM_TYPE_DECIMAL128);
+    types[idx] = fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128);
     snprintf(buf[idx++].data(), strsz, "ask_prx_%u", i);
-    types[idx] = fm_base_type_get(sys, FM_TYPE_DECIMAL128);
+    types[idx] = fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128);
     snprintf(buf[idx++].data(), strsz, "ask_shr_%u", i);
     types[idx] = fm_base_type_get(sys, FM_TYPE_UINT32);
     snprintf(buf[idx++].data(), strsz, "ask_ord_%u", i);
