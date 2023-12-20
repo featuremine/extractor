@@ -85,8 +85,6 @@ class ValidationBook:
 
         for price, level in bookside:
             #Adjust the price for the hash
-            print (price)
-            print (validationside)
             assert price in validationside
             validationlevel = validationside[price]
 
