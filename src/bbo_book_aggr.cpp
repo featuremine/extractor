@@ -53,10 +53,8 @@ template <typename Price, typename Quantity>
 struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
 
   bbo_book_aggr_exec_cl_impl(fm_book_shared_t *book, unsigned argc)
-      : book_(book),
-        data_(argc, {make_pair(Price(), Quantity()),
-                     make_pair(Price(), Quantity())})
-  {
+      : book_(book), data_(argc, {make_pair(Price(), Quantity()),
+                                  make_pair(Price(), Quantity())}) {
     fm_book_shared_inc(book_);
   }
 

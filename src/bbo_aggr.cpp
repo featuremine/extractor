@@ -69,8 +69,10 @@ struct bbo_aggr_exec_cl_impl : bbo_aggr_exec_cl {
 
     *(Price *)fm_frame_get_ptr1(result, out_pxs[trade_side::BID], 0) = Price();
     *(Price *)fm_frame_get_ptr1(result, out_pxs[trade_side::ASK], 0) = Price();
-    *(Quantity *)fm_frame_get_ptr1(result, out_qts[trade_side::BID], 0) = Quantity();
-    *(Quantity *)fm_frame_get_ptr1(result, out_qts[trade_side::ASK], 0) = Quantity();
+    *(Quantity *)fm_frame_get_ptr1(result, out_qts[trade_side::BID], 0) =
+        Quantity();
+    *(Quantity *)fm_frame_get_ptr1(result, out_qts[trade_side::ASK], 0) =
+        Quantity();
   }
 
   void exec(fm_frame_t *result, size_t argc, const fm_frame_t *const argv[],
@@ -100,7 +102,8 @@ struct bbo_aggr_exec_cl_impl : bbo_aggr_exec_cl {
         if (best_px == px)
           qt_tot += *(Quantity *)fm_frame_get_cptr1(argv[i], qt_idx, 0);
       }
-      *(Price *)fm_frame_get_ptr1(result, out_pxs[side], 0) = qt_tot == Quantity() ? Price() : best_px;
+      *(Price *)fm_frame_get_ptr1(result, out_pxs[side], 0) =
+          qt_tot == Quantity() ? Price() : best_px;
       *(Quantity *)fm_frame_get_ptr1(result, out_qts[side], 0) = qt_tot;
     }
   }
