@@ -187,7 +187,7 @@ if __name__ == "__main__":
 
     for book_nbbo, nbbo in zip(book_nbbo_refs, nbbo_refs):
         assert book_nbbo[0].receive == nbbo[0].receive
-        assert book_nbbo[0].askprice == nbbo[0].askprice
+        assert book_nbbo[0].askprice == nbbo[0].askprice, f"book_nbbo[0].askprice ({book_nbbo[0].askprice}) != nbbo[0].askprice ({nbbo[0].askprice})"
         assert book_nbbo[0].askqty == nbbo[0].askqty
         assert book_nbbo[0].bidprice == nbbo[0].bidprice
         assert book_nbbo[0].bidqty == nbbo[0].bidqty
