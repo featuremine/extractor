@@ -54,9 +54,9 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
 
   bbo_book_aggr_exec_cl_impl(fm_book_shared_t *book, unsigned argc)
       : book_(book),
-        data_(argc, {make_pair(sided<Price>()[trade_side::BID], 0),
-                     make_pair(sided<Price>()[trade_side::ASK], 0)}),
-        zero_(0) {
+        data_(argc, {make_pair(Price(), Quantity()),
+                     make_pair(Price(), Quantity())})
+  {
     fm_book_shared_inc(book_);
   }
 
@@ -96,7 +96,7 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
       auto &oldpx = sided_data.first;
       auto &oldqty = sided_data.second;
       auto isbid = is_bid(side);
-      if (oldqty != zero_) {
+      if (oldqty != Quantity()) {
         if constexpr (is_same_v<Price, fmc::decimal128> &&
                       is_same_v<Quantity, fmc::decimal128>) {
           fm_book_mod(book, idx, oldpx, oldqty, isbid);
@@ -108,7 +108,7 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
 
       auto px = *(Price *)fm_frame_get_cptr1(frame, pxs_idx, 0);
       auto qty = *(Quantity *)fm_frame_get_cptr1(frame, qts_idx, 0);
-      if (qty != zero_) {
+      if (qty != Quantity()) {
         auto ven = *(fmc_time64_t *)fm_frame_get_cptr1(frame, recv_idx, 0);
         if constexpr (is_same_v<Price, fmc::decimal128> &&
                       is_same_v<Quantity, fmc::decimal128>) {
@@ -131,8 +131,8 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
     for (auto side : trade_side::all()) {
       fm_levels_t *lvls = fm_book_levels(book, is_bid(side));
 
-      Quantity qty(0);
-      Price px = sided<Price>()[side];
+      Quantity qty{};
+      Price px{};
 
       if (fm_book_levels_size(lvls) != 0) {
         fm_level_t *lvl = fm_book_level(lvls, 0);
@@ -155,7 +155,6 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
   sided<fm_field_t> out_qts_;
   vector<sided<pair<Price, Quantity>>> data_;
   vector<const fm_frame_t *> inps_;
-  Quantity zero_;
 };
 
 bool fm_comp_bbo_book_aggr_call_stream_init(fm_frame_t *result, size_t args,
