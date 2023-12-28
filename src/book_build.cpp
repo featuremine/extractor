@@ -187,10 +187,8 @@ bool fm_comp_book_build_stream_exec(fm_frame_t *result, size_t args,
           fm_book_level_ord(level);
     }
     for (; idx < lvl_cnt; ++idx) {
-      *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, *(it++), 0) =
-          fmc::fxpt128();
-      *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, *(it++), 0) =
-          fmc::fxpt128();
+      *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, *(it++), 0) = fmc::fxpt128();
+      *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, *(it++), 0) = fmc::fxpt128();
       *(uint32_t *)fm_frame_get_ptr1(result, *(it++), 0) = 0;
     }
   }

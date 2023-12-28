@@ -96,8 +96,7 @@ struct the_round_field_exec_2_0<fmc_fxpt128_t, T> : round_field_exec {
   void exec(fm_frame_t *result, size_t,
             const fm_frame_t *const argv[]) override {
     const T &val0 = *(const T *)fm_frame_get_cptr1(argv[0], field_, 0);
-    fmc_fxpt128_t &res =
-        *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, field_, 0);
+    fmc_fxpt128_t &res = *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, field_, 0);
     fmc_fxpt128_from_int(&res, llround(val0 * divisor_));
     res = res * factor_;
   }

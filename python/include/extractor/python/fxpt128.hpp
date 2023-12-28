@@ -26,142 +26,132 @@
 #include <Python.h>
 #include <extractor/python/type_utils.hpp>
 
-struct ExtractorBaseTypeFixedPoint128
-{
-    PyObject_HEAD;
-    fmc::fxpt128 val;
-    static void py_dealloc(ExtractorBaseTypeFixedPoint128 *self)
-    {
-        Py_TYPE(self)->tp_free((PyObject *)self);
-    }
-    static PyObject *py_richcmp(PyObject *obj1, PyObject *obj2, int op);
-    static PyObject *tp_new(PyTypeObject *subtype, PyObject *args,
-                            PyObject *kwds);
-    static PyObject *py_new(fmc_fxpt128_t t);
-    static Py_hash_t tp_hash(PyObject *);
-    static PyObject *tp_str(PyObject *self);
-    static bool init(PyObject *m);
+struct ExtractorBaseTypeFixedPoint128 {
+  PyObject_HEAD;
+  fmc::fxpt128 val;
+  static void py_dealloc(ExtractorBaseTypeFixedPoint128 *self) {
+    Py_TYPE(self)->tp_free((PyObject *)self);
+  }
+  static PyObject *py_richcmp(PyObject *obj1, PyObject *obj2, int op);
+  static PyObject *tp_new(PyTypeObject *subtype, PyObject *args,
+                          PyObject *kwds);
+  static PyObject *py_new(fmc_fxpt128_t t);
+  static Py_hash_t tp_hash(PyObject *);
+  static PyObject *tp_str(PyObject *self);
+  static bool init(PyObject *m);
 
-    static PyObject *is_finite(PyObject *self, PyObject *args);
-    static PyObject *is_infinite(PyObject *self, PyObject *args);
-    static PyObject *is_nan(PyObject *self, PyObject *args);
-    static PyObject *is_qnan(PyObject *self, PyObject *args);
-    static PyObject *is_snan(PyObject *self, PyObject *args);
-    static PyObject *is_signed(PyObject *self, PyObject *args);
-    static PyObject *is_zero(PyObject *self, PyObject *args);
-    static PyObject *hi(PyObject *self, PyObject *args);
-    static PyObject *lo(PyObject *self, PyObject *args);
-    static PyObject *compare(PyObject *self, PyObject *args);
-    static PyObject *max(PyObject *self, PyObject *args);
-    static PyObject *min(PyObject *self, PyObject *args);
-    static PyObject *from_float(PyObject *self, PyObject *args);
+  static PyObject *is_finite(PyObject *self, PyObject *args);
+  static PyObject *is_infinite(PyObject *self, PyObject *args);
+  static PyObject *is_nan(PyObject *self, PyObject *args);
+  static PyObject *is_qnan(PyObject *self, PyObject *args);
+  static PyObject *is_snan(PyObject *self, PyObject *args);
+  static PyObject *is_signed(PyObject *self, PyObject *args);
+  static PyObject *is_zero(PyObject *self, PyObject *args);
+  static PyObject *hi(PyObject *self, PyObject *args);
+  static PyObject *lo(PyObject *self, PyObject *args);
+  static PyObject *compare(PyObject *self, PyObject *args);
+  static PyObject *max(PyObject *self, PyObject *args);
+  static PyObject *min(PyObject *self, PyObject *args);
+  static PyObject *from_float(PyObject *self, PyObject *args);
 
-    static PyObject *nb_add(PyObject *lhs, PyObject *rhs);
-    static PyObject *nb_substract(PyObject *lhs, PyObject *rhs);
-    static PyObject *nb_multiply(PyObject *lhs, PyObject *rhs);
+  static PyObject *nb_add(PyObject *lhs, PyObject *rhs);
+  static PyObject *nb_substract(PyObject *lhs, PyObject *rhs);
+  static PyObject *nb_multiply(PyObject *lhs, PyObject *rhs);
 
-    static PyObject *nb_absolute(PyObject *self);
+  static PyObject *nb_absolute(PyObject *self);
 
-    static PyObject *nb_int(PyObject *self);
-    static PyObject *nb_float(PyObject *self);
+  static PyObject *nb_int(PyObject *self);
+  static PyObject *nb_float(PyObject *self);
 
-    static PyObject *nb_inplace_add(PyObject *self, PyObject *rhs);
-    static PyObject *nb_inplace_substract(PyObject *self, PyObject *rhs);
-    static PyObject *nb_inplace_multiply(PyObject *self, PyObject *rhs);
+  static PyObject *nb_inplace_add(PyObject *self, PyObject *rhs);
+  static PyObject *nb_inplace_substract(PyObject *self, PyObject *rhs);
+  static PyObject *nb_inplace_multiply(PyObject *self, PyObject *rhs);
 
-    static PyObject *nb_true_divide(PyObject *lhs, PyObject *rhs);
-    static PyObject *nb_inplace_true_divide(PyObject *self, PyObject *rhs);
+  static PyObject *nb_true_divide(PyObject *lhs, PyObject *rhs);
+  static PyObject *nb_inplace_true_divide(PyObject *self, PyObject *rhs);
 
-    static PyNumberMethods tp_as_number;
-    static PyMethodDef tp_methods[];
+  static PyNumberMethods tp_as_number;
+  static PyMethodDef tp_methods[];
 };
 
-PyObject *ExtractorBaseTypeFixedPoint128::nb_add(PyObject *lhs, PyObject *rhs)
-{
-    return ExtractorBaseTypeFixedPoint128::py_new(
-        ((ExtractorBaseTypeFixedPoint128 *)lhs)->val +
-        ((ExtractorBaseTypeFixedPoint128 *)rhs)->val);
+PyObject *ExtractorBaseTypeFixedPoint128::nb_add(PyObject *lhs, PyObject *rhs) {
+  return ExtractorBaseTypeFixedPoint128::py_new(
+      ((ExtractorBaseTypeFixedPoint128 *)lhs)->val +
+      ((ExtractorBaseTypeFixedPoint128 *)rhs)->val);
 }
 
 PyObject *ExtractorBaseTypeFixedPoint128::nb_substract(PyObject *lhs,
-                                                       PyObject *rhs)
-{
-    return ExtractorBaseTypeFixedPoint128::py_new(
-        ((ExtractorBaseTypeFixedPoint128 *)lhs)->val -
-        ((ExtractorBaseTypeFixedPoint128 *)rhs)->val);
+                                                       PyObject *rhs) {
+  return ExtractorBaseTypeFixedPoint128::py_new(
+      ((ExtractorBaseTypeFixedPoint128 *)lhs)->val -
+      ((ExtractorBaseTypeFixedPoint128 *)rhs)->val);
 }
 
 PyObject *ExtractorBaseTypeFixedPoint128::nb_multiply(PyObject *lhs,
-                                                      PyObject *rhs)
-{
-    return ExtractorBaseTypeFixedPoint128::py_new(
-        ((ExtractorBaseTypeFixedPoint128 *)lhs)->val *
-        ((ExtractorBaseTypeFixedPoint128 *)rhs)->val);
+                                                      PyObject *rhs) {
+  return ExtractorBaseTypeFixedPoint128::py_new(
+      ((ExtractorBaseTypeFixedPoint128 *)lhs)->val *
+      ((ExtractorBaseTypeFixedPoint128 *)rhs)->val);
 }
 
 PyObject *ExtractorBaseTypeFixedPoint128::nb_true_divide(PyObject *self,
-                                                         PyObject *rhs)
-{
-    return ExtractorBaseTypeFixedPoint128::py_new(
-        ((ExtractorBaseTypeFixedPoint128 *)self)->val /
-        ((ExtractorBaseTypeFixedPoint128 *)rhs)->val);
+                                                         PyObject *rhs) {
+  return ExtractorBaseTypeFixedPoint128::py_new(
+      ((ExtractorBaseTypeFixedPoint128 *)self)->val /
+      ((ExtractorBaseTypeFixedPoint128 *)rhs)->val);
 }
 
 PyObject *ExtractorBaseTypeFixedPoint128::nb_inplace_add(PyObject *self,
-                                                         PyObject *rhs)
-{
-    ((ExtractorBaseTypeFixedPoint128 *)self)->val +=
-        ((ExtractorBaseTypeFixedPoint128 *)rhs)->val;
-    Py_INCREF(self);
-    return self;
+                                                         PyObject *rhs) {
+  ((ExtractorBaseTypeFixedPoint128 *)self)->val +=
+      ((ExtractorBaseTypeFixedPoint128 *)rhs)->val;
+  Py_INCREF(self);
+  return self;
 }
 
 PyObject *ExtractorBaseTypeFixedPoint128::nb_inplace_substract(PyObject *self,
-                                                               PyObject *rhs)
-{
-    ((ExtractorBaseTypeFixedPoint128 *)self)->val -=
-        ((ExtractorBaseTypeFixedPoint128 *)rhs)->val;
-    Py_INCREF(self);
-    return self;
+                                                               PyObject *rhs) {
+  ((ExtractorBaseTypeFixedPoint128 *)self)->val -=
+      ((ExtractorBaseTypeFixedPoint128 *)rhs)->val;
+  Py_INCREF(self);
+  return self;
 }
 
 PyObject *ExtractorBaseTypeFixedPoint128::nb_inplace_multiply(PyObject *self,
-                                                              PyObject *rhs)
-{
-    ((ExtractorBaseTypeFixedPoint128 *)self)->val =
-        ((ExtractorBaseTypeFixedPoint128 *)self)->val *
-        ((ExtractorBaseTypeFixedPoint128 *)rhs)->val;
-    Py_INCREF(self);
-    return self;
+                                                              PyObject *rhs) {
+  ((ExtractorBaseTypeFixedPoint128 *)self)->val =
+      ((ExtractorBaseTypeFixedPoint128 *)self)->val *
+      ((ExtractorBaseTypeFixedPoint128 *)rhs)->val;
+  Py_INCREF(self);
+  return self;
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::nb_inplace_true_divide(PyObject *self,
-                                                                 PyObject *rhs)
-{
-    ((ExtractorBaseTypeFixedPoint128 *)self)->val =
-        ((ExtractorBaseTypeFixedPoint128 *)self)->val /
-        ((ExtractorBaseTypeFixedPoint128 *)rhs)->val;
-    Py_INCREF(self);
-    return self;
+PyObject *
+ExtractorBaseTypeFixedPoint128::nb_inplace_true_divide(PyObject *self,
+                                                       PyObject *rhs) {
+  ((ExtractorBaseTypeFixedPoint128 *)self)->val =
+      ((ExtractorBaseTypeFixedPoint128 *)self)->val /
+      ((ExtractorBaseTypeFixedPoint128 *)rhs)->val;
+  Py_INCREF(self);
+  return self;
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::nb_absolute(PyObject *self)
-{
-    fmc_fxpt128_t absval;
-    fmc_fxpt128_abs(&absval, &((ExtractorBaseTypeFixedPoint128 *)self)->val);
-    return ExtractorBaseTypeFixedPoint128::py_new(absval);
+PyObject *ExtractorBaseTypeFixedPoint128::nb_absolute(PyObject *self) {
+  fmc_fxpt128_t absval;
+  fmc_fxpt128_abs(&absval, &((ExtractorBaseTypeFixedPoint128 *)self)->val);
+  return ExtractorBaseTypeFixedPoint128::py_new(absval);
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::nb_float(PyObject *self)
-{
-    double dbl = fmc_fxpt128_to_double(&((ExtractorBaseTypeFixedPoint128 *)self)->val);
-    return PyFloat_FromDouble(dbl);
+PyObject *ExtractorBaseTypeFixedPoint128::nb_float(PyObject *self) {
+  double dbl =
+      fmc_fxpt128_to_double(&((ExtractorBaseTypeFixedPoint128 *)self)->val);
+  return PyFloat_FromDouble(dbl);
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::nb_int(PyObject *self)
-{
-    int64_t res = fmc_fxpt128_to_int(&((ExtractorBaseTypeFixedPoint128 *)self)->val);
-    return PyLong_FromLongLong(res);
+PyObject *ExtractorBaseTypeFixedPoint128::nb_int(PyObject *self) {
+  int64_t res =
+      fmc_fxpt128_to_int(&((ExtractorBaseTypeFixedPoint128 *)self)->val);
+  return PyLong_FromLongLong(res);
 }
 
 PyNumberMethods ExtractorBaseTypeFixedPoint128::tp_as_number = {
@@ -185,22 +175,26 @@ PyNumberMethods ExtractorBaseTypeFixedPoint128::tp_as_number = {
     0,                                            //  void *nb_reserved;
     ExtractorBaseTypeFixedPoint128::nb_float,     //  unaryfunc nb_float;
 
-    ExtractorBaseTypeFixedPoint128::nb_inplace_add,       //  binaryfunc nb_inplace_add;
-    ExtractorBaseTypeFixedPoint128::nb_inplace_substract, //  binaryfunc
-                                                          //  nb_inplace_subtract;
-    ExtractorBaseTypeFixedPoint128::nb_inplace_multiply,  //  binaryfunc
-                                                          //  nb_inplace_multiply;
-    0,                                                    //  binaryfunc nb_inplace_remainder;
-    0,                                                    //  ternaryfunc nb_inplace_power;
-    0,                                                    //  binaryfunc nb_inplace_lshift;
-    0,                                                    //  binaryfunc nb_inplace_rshift;
-    0,                                                    //  binaryfunc nb_inplace_and;
-    0,                                                    //  binaryfunc nb_inplace_xor;
-    0,                                                    //  binaryfunc nb_inplace_or;
+    ExtractorBaseTypeFixedPoint128::nb_inplace_add, //  binaryfunc
+                                                    //  nb_inplace_add;
+    ExtractorBaseTypeFixedPoint128::
+        nb_inplace_substract, //  binaryfunc
+                              //  nb_inplace_subtract;
+    ExtractorBaseTypeFixedPoint128::
+        nb_inplace_multiply, //  binaryfunc
+                             //  nb_inplace_multiply;
+    0,                       //  binaryfunc nb_inplace_remainder;
+    0,                       //  ternaryfunc nb_inplace_power;
+    0,                       //  binaryfunc nb_inplace_lshift;
+    0,                       //  binaryfunc nb_inplace_rshift;
+    0,                       //  binaryfunc nb_inplace_and;
+    0,                       //  binaryfunc nb_inplace_xor;
+    0,                       //  binaryfunc nb_inplace_or;
 
-    0,                                              //  binaryfunc nb_floor_divide;
-    ExtractorBaseTypeFixedPoint128::nb_true_divide, //  binaryfunc nb_true_divide;
-    0,                                              //  binaryfunc nb_inplace_floor_divide;
+    0, //  binaryfunc nb_floor_divide;
+    ExtractorBaseTypeFixedPoint128::nb_true_divide, //  binaryfunc
+                                                    //  nb_true_divide;
+    0, //  binaryfunc nb_inplace_floor_divide;
     ExtractorBaseTypeFixedPoint128::
         nb_inplace_true_divide, //  binaryfunc nb_inplace_true_divide;
 
@@ -319,8 +313,8 @@ PyMethodDef ExtractorBaseTypeFixedPoint128::tp_methods[] = {
     // doc_shift },
 
     // /* Miscellaneous */
-    {"from_float", ExtractorBaseTypeFixedPoint128::from_float, METH_O | METH_CLASS,
-     NULL},
+    {"from_float", ExtractorBaseTypeFixedPoint128::from_float,
+     METH_O | METH_CLASS, NULL},
     {"hi", ExtractorBaseTypeFixedPoint128::hi, METH_NOARGS, NULL},
     {"lo", ExtractorBaseTypeFixedPoint128::lo, METH_NOARGS, NULL},
     // { "as_tuple", PyDec_AsTuple, METH_NOARGS, doc_as_tuple },
@@ -352,295 +346,266 @@ static PyTypeObject ExtractorBaseTypeFixedPoint128Type = {
     0,                                                        /* tp_reserved */
     (reprfunc)ExtractorBaseTypeFixedPoint128::tp_str,         /* tp_repr */
     &ExtractorBaseTypeFixedPoint128::tp_as_number,            /* tp_as_number */
-    0,                                                        /* tp_as_sequence */
-    0,                                                        /* tp_as_mapping */
-    ExtractorBaseTypeFixedPoint128::tp_hash,                  /* tp_hash  */
-    0,                                                        /* tp_call */
-    (reprfunc)ExtractorBaseTypeFixedPoint128::tp_str,         /* tp_str */
-    0,                                                        /* tp_getattro */
-    0,                                                        /* tp_setattro */
-    0,                                                        /* tp_as_buffer */
-    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,                 /* tp_flags */
-    "Extractor system base type object",                      /* tp_doc */
-    0,                                                        /* tp_traverse */
-    0,                                                        /* tp_clear */
-    (richcmpfunc)ExtractorBaseTypeFixedPoint128::py_richcmp,  /* tp_richcompare */
-    0,                                                        /* tp_weaklistoffset */
-    0,                                                        /* tp_iter */
-    0,                                                        /* tp_iternext */
-    ExtractorBaseTypeFixedPoint128::tp_methods,               /* tp_methods */
-    0,                                                        /* tp_members */
-    0,                                                        /* tp_getset */
-    0,                                                        /* tp_base */
-    0,                                                        /* tp_dict */
-    0,                                                        /* tp_descr_get */
-    0,                                                        /* tp_descr_set */
-    0,                                                        /* tp_dictoffset */
-    0,                                                        /* tp_init */
-    0,                                                        /* tp_alloc */
-    ExtractorBaseTypeFixedPoint128::tp_new,                   /* tp_new */
+    0,                                                /* tp_as_sequence */
+    0,                                                /* tp_as_mapping */
+    ExtractorBaseTypeFixedPoint128::tp_hash,          /* tp_hash  */
+    0,                                                /* tp_call */
+    (reprfunc)ExtractorBaseTypeFixedPoint128::tp_str, /* tp_str */
+    0,                                                /* tp_getattro */
+    0,                                                /* tp_setattro */
+    0,                                                /* tp_as_buffer */
+    Py_TPFLAGS_DEFAULT | Py_TPFLAGS_BASETYPE,         /* tp_flags */
+    "Extractor system base type object",              /* tp_doc */
+    0,                                                /* tp_traverse */
+    0,                                                /* tp_clear */
+    (richcmpfunc)
+        ExtractorBaseTypeFixedPoint128::py_richcmp, /* tp_richcompare */
+    0,                                              /* tp_weaklistoffset */
+    0,                                              /* tp_iter */
+    0,                                              /* tp_iternext */
+    ExtractorBaseTypeFixedPoint128::tp_methods,     /* tp_methods */
+    0,                                              /* tp_members */
+    0,                                              /* tp_getset */
+    0,                                              /* tp_base */
+    0,                                              /* tp_dict */
+    0,                                              /* tp_descr_get */
+    0,                                              /* tp_descr_set */
+    0,                                              /* tp_dictoffset */
+    0,                                              /* tp_init */
+    0,                                              /* tp_alloc */
+    ExtractorBaseTypeFixedPoint128::tp_new,         /* tp_new */
 };
-PyObject *ExtractorBaseTypeFixedPoint128::py_new(fmc_fxpt128_t t)
-{
-    PyTypeObject *type = (PyTypeObject *)&ExtractorBaseTypeFixedPoint128Type;
-    ExtractorBaseTypeFixedPoint128 *self;
+PyObject *ExtractorBaseTypeFixedPoint128::py_new(fmc_fxpt128_t t) {
+  PyTypeObject *type = (PyTypeObject *)&ExtractorBaseTypeFixedPoint128Type;
+  ExtractorBaseTypeFixedPoint128 *self;
 
-    self = (ExtractorBaseTypeFixedPoint128 *)type->tp_alloc(type, 0);
-    if (self == nullptr)
-        return nullptr;
+  self = (ExtractorBaseTypeFixedPoint128 *)type->tp_alloc(type, 0);
+  if (self == nullptr)
+    return nullptr;
 
-    self->val = t;
-    return (PyObject *)self;
+  self->val = t;
+  return (PyObject *)self;
 }
 PyObject *ExtractorBaseTypeFixedPoint128::tp_new(PyTypeObject *subtype,
-                                                 PyObject *args, PyObject *kwds)
-{
-    PyObject *input = NULL;
-    if (PyArg_ParseTuple(args, "O", &input) &&
-        ExtractorComputation_type_check(input))
-        return create(subtype, args, kwds);
-    FIXEDPOINT128 val;
-    if (py_type_convert<FIXEDPOINT128>::convert(val, args))
-    {
-        return py_new(val);
-    }
-    PyErr_SetString(PyExc_RuntimeError, "Could not convert to type FixedPoint128");
-    return nullptr;
+                                                 PyObject *args,
+                                                 PyObject *kwds) {
+  PyObject *input = NULL;
+  if (PyArg_ParseTuple(args, "O", &input) &&
+      ExtractorComputation_type_check(input))
+    return create(subtype, args, kwds);
+  FIXEDPOINT128 val;
+  if (py_type_convert<FIXEDPOINT128>::convert(val, args)) {
+    return py_new(val);
+  }
+  PyErr_SetString(PyExc_RuntimeError,
+                  "Could not convert to type FixedPoint128");
+  return nullptr;
 }
 
-Py_hash_t ExtractorBaseTypeFixedPoint128::tp_hash(PyObject *self)
-{
-    return std::hash<fmc::fxpt128>{}(
-        ((ExtractorBaseTypeFixedPoint128 *)self)->val);
+Py_hash_t ExtractorBaseTypeFixedPoint128::tp_hash(PyObject *self) {
+  return std::hash<fmc::fxpt128>{}(
+      ((ExtractorBaseTypeFixedPoint128 *)self)->val);
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::tp_str(PyObject *self)
-{
-    auto &val = ((ExtractorBaseTypeFixedPoint128 *)self)->val;
-    char str[FMC_FXPT128_STR_SIZE] = {0};
-    struct fmc_fxpt128_format_t format = {.precision = 15};
-    fmc_fxpt128_to_string_opt(str, FMC_FXPT128_STR_SIZE, (const FIXEDPOINT128 *)&val, &format);
-    return PyUnicode_FromString(str);
+PyObject *ExtractorBaseTypeFixedPoint128::tp_str(PyObject *self) {
+  auto &val = ((ExtractorBaseTypeFixedPoint128 *)self)->val;
+  char str[FMC_FXPT128_STR_SIZE] = {0};
+  struct fmc_fxpt128_format_t format = {.precision = 15};
+  fmc_fxpt128_to_string_opt(str, FMC_FXPT128_STR_SIZE,
+                            (const FIXEDPOINT128 *)&val, &format);
+  return PyUnicode_FromString(str);
 }
 
-bool ExtractorBaseTypeFixedPoint128::init(PyObject *m)
-{
-    if (PyType_Ready(&ExtractorBaseTypeFixedPoint128Type) < 0)
-        return false;
+bool ExtractorBaseTypeFixedPoint128::init(PyObject *m) {
+  if (PyType_Ready(&ExtractorBaseTypeFixedPoint128Type) < 0)
+    return false;
 
-    /* Numeric abstract base classes */
-    PyObject *numbers = PyImport_ImportModule("numbers");
-    if (!numbers)
-        return false;
-    PyObject *Number = PyObject_GetAttrString(numbers, "Number");
-    if (!Number)
-        return false;
-    /* Register Decimal with the Number abstract base class */
-    PyObject *obj = PyObject_CallMethod(
-        Number, "register", "(O)", (PyObject *)&ExtractorBaseTypeFixedPoint128Type);
-    if (!obj)
-        return false;
+  /* Numeric abstract base classes */
+  PyObject *numbers = PyImport_ImportModule("numbers");
+  if (!numbers)
+    return false;
+  PyObject *Number = PyObject_GetAttrString(numbers, "Number");
+  if (!Number)
+    return false;
+  /* Register Decimal with the Number abstract base class */
+  PyObject *obj =
+      PyObject_CallMethod(Number, "register", "(O)",
+                          (PyObject *)&ExtractorBaseTypeFixedPoint128Type);
+  if (!obj)
+    return false;
 
-    Py_CLEAR(obj);
-    Py_CLEAR(numbers);
-    Py_CLEAR(Number);
+  Py_CLEAR(obj);
+  Py_CLEAR(numbers);
+  Py_CLEAR(Number);
 
-    Py_INCREF(&ExtractorBaseTypeFixedPoint128Type);
-    PyModule_AddObject(m, "FixedPoint128",
-                       (PyObject *)&ExtractorBaseTypeFixedPoint128Type);
+  Py_INCREF(&ExtractorBaseTypeFixedPoint128Type);
+  PyModule_AddObject(m, "FixedPoint128",
+                     (PyObject *)&ExtractorBaseTypeFixedPoint128Type);
 
-    return true;
+  return true;
 }
 
 PyObject *ExtractorBaseTypeFixedPoint128::py_richcmp(PyObject *obj1,
-                                                     PyObject *obj2, int op)
-{
-    if (!FixedPoint128_Check(obj1) || !FixedPoint128_Check(obj2))
-    {
-        return PyBool_FromLong(op == Py_NE);
-    }
-    int c = 0;
-    auto &t1 = ((ExtractorBaseTypeFixedPoint128 *)obj1)->val;
-    auto &t2 = ((ExtractorBaseTypeFixedPoint128 *)obj2)->val;
-    switch (op)
-    {
-    case Py_LT:
-        c = t1 < t2;
-        break;
-    case Py_LE:
-        c = t1 <= t2;
-        break;
-    case Py_EQ:
-        c = t1 == t2;
-        break;
-    case Py_NE:
-        c = t1 != t2;
-        break;
-    case Py_GT:
-        c = t1 > t2;
-        break;
-    case Py_GE:
-        c = t1 >= t2;
-        break;
-    }
-    return PyBool_FromLong(c);
+                                                     PyObject *obj2, int op) {
+  if (!FixedPoint128_Check(obj1) || !FixedPoint128_Check(obj2)) {
+    return PyBool_FromLong(op == Py_NE);
+  }
+  int c = 0;
+  auto &t1 = ((ExtractorBaseTypeFixedPoint128 *)obj1)->val;
+  auto &t2 = ((ExtractorBaseTypeFixedPoint128 *)obj2)->val;
+  switch (op) {
+  case Py_LT:
+    c = t1 < t2;
+    break;
+  case Py_LE:
+    c = t1 <= t2;
+    break;
+  case Py_EQ:
+    c = t1 == t2;
+    break;
+  case Py_NE:
+    c = t1 != t2;
+    break;
+  case Py_GT:
+    c = t1 > t2;
+    break;
+  case Py_GE:
+    c = t1 >= t2;
+    break;
+  }
+  return PyBool_FromLong(c);
 }
 
 PyObject *ExtractorBaseTypeFixedPoint128::is_finite(PyObject *self,
-                                                    PyObject *args)
-{
-    return PyBool_FromLong(true);
+                                                    PyObject *args) {
+  return PyBool_FromLong(true);
 }
 
 PyObject *ExtractorBaseTypeFixedPoint128::is_infinite(PyObject *self,
-                                                      PyObject *args)
-{
-    return PyBool_FromLong(false);
+                                                      PyObject *args) {
+  return PyBool_FromLong(false);
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::is_nan(PyObject *self, PyObject *args)
-{
-    return PyBool_FromLong(false);
+PyObject *ExtractorBaseTypeFixedPoint128::is_nan(PyObject *self,
+                                                 PyObject *args) {
+  return PyBool_FromLong(false);
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::is_qnan(PyObject *self, PyObject *args)
-{
-    return PyBool_FromLong(false);
+PyObject *ExtractorBaseTypeFixedPoint128::is_qnan(PyObject *self,
+                                                  PyObject *args) {
+  return PyBool_FromLong(false);
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::is_snan(PyObject *self, PyObject *args)
-{
-    return PyBool_FromLong(false);
+PyObject *ExtractorBaseTypeFixedPoint128::is_snan(PyObject *self,
+                                                  PyObject *args) {
+  return PyBool_FromLong(false);
 }
 
 PyObject *ExtractorBaseTypeFixedPoint128::is_signed(PyObject *self,
-                                                    PyObject *args)
-{
-    return PyBool_FromLong(((ExtractorBaseTypeFixedPoint128 *)self)->val <
-                           fmc::fxpt128());
+                                                    PyObject *args) {
+  return PyBool_FromLong(((ExtractorBaseTypeFixedPoint128 *)self)->val <
+                         fmc::fxpt128());
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::is_zero(PyObject *self, PyObject *args)
-{
-    return PyBool_FromLong(((ExtractorBaseTypeFixedPoint128 *)self)->val ==
-                           fmc::fxpt128());
+PyObject *ExtractorBaseTypeFixedPoint128::is_zero(PyObject *self,
+                                                  PyObject *args) {
+  return PyBool_FromLong(((ExtractorBaseTypeFixedPoint128 *)self)->val ==
+                         fmc::fxpt128());
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::hi(PyObject *self, PyObject *args)
-{
-    return PyLong_FromLongLong(((ExtractorBaseTypeFixedPoint128 *)self)->val.hi);
+PyObject *ExtractorBaseTypeFixedPoint128::hi(PyObject *self, PyObject *args) {
+  return PyLong_FromLongLong(((ExtractorBaseTypeFixedPoint128 *)self)->val.hi);
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::lo(PyObject *self, PyObject *args)
-{
-    return PyLong_FromLongLong(((ExtractorBaseTypeFixedPoint128 *)self)->val.lo);
+PyObject *ExtractorBaseTypeFixedPoint128::lo(PyObject *self, PyObject *args) {
+  return PyLong_FromLongLong(((ExtractorBaseTypeFixedPoint128 *)self)->val.lo);
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::compare(PyObject *self, PyObject *args)
-{
-    PyObject *lhs, *rhs;
-    if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs))
-    {
-        return nullptr;
-    }
-    fmc_fxpt128_t dlhs;
-    if (py_type_convert<fmc_fxpt128_t>::convert(dlhs, lhs))
-    {
-        return nullptr;
-    }
-    fmc_fxpt128_t drhs;
-    if (py_type_convert<fmc_fxpt128_t>::convert(drhs, rhs))
-    {
-        return nullptr;
-    }
-    if (dlhs < drhs)
-    {
-        return PyLong_FromLong(-1);
-    }
-    return PyLong_FromLong(dlhs > drhs);
+PyObject *ExtractorBaseTypeFixedPoint128::compare(PyObject *self,
+                                                  PyObject *args) {
+  PyObject *lhs, *rhs;
+  if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
+    return nullptr;
+  }
+  fmc_fxpt128_t dlhs;
+  if (py_type_convert<fmc_fxpt128_t>::convert(dlhs, lhs)) {
+    return nullptr;
+  }
+  fmc_fxpt128_t drhs;
+  if (py_type_convert<fmc_fxpt128_t>::convert(drhs, rhs)) {
+    return nullptr;
+  }
+  if (dlhs < drhs) {
+    return PyLong_FromLong(-1);
+  }
+  return PyLong_FromLong(dlhs > drhs);
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::max(PyObject *self, PyObject *args)
-{
-    PyObject *lhs, *rhs;
-    if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs))
-    {
-        return nullptr;
-    }
-    fmc_fxpt128_t dlhs;
-    if (py_type_convert<fmc_fxpt128_t>::convert(dlhs, lhs))
-    {
-        return nullptr;
-    }
-    fmc_fxpt128_t drhs;
-    if (py_type_convert<fmc_fxpt128_t>::convert(drhs, rhs))
-    {
-        return nullptr;
-    }
-    if (dlhs > drhs)
-    {
-        Py_INCREF(lhs);
-        return lhs;
-    }
-    Py_INCREF(rhs);
-    return rhs;
+PyObject *ExtractorBaseTypeFixedPoint128::max(PyObject *self, PyObject *args) {
+  PyObject *lhs, *rhs;
+  if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
+    return nullptr;
+  }
+  fmc_fxpt128_t dlhs;
+  if (py_type_convert<fmc_fxpt128_t>::convert(dlhs, lhs)) {
+    return nullptr;
+  }
+  fmc_fxpt128_t drhs;
+  if (py_type_convert<fmc_fxpt128_t>::convert(drhs, rhs)) {
+    return nullptr;
+  }
+  if (dlhs > drhs) {
+    Py_INCREF(lhs);
+    return lhs;
+  }
+  Py_INCREF(rhs);
+  return rhs;
 }
 
-PyObject *ExtractorBaseTypeFixedPoint128::min(PyObject *self, PyObject *args)
-{
-    PyObject *lhs, *rhs;
-    if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs))
-    {
-        return nullptr;
-    }
-    fmc_fxpt128_t dlhs;
-    if (py_type_convert<fmc_fxpt128_t>::convert(dlhs, lhs))
-    {
-        return nullptr;
-    }
-    fmc_fxpt128_t drhs;
-    if (py_type_convert<fmc_fxpt128_t>::convert(drhs, rhs))
-    {
-        return nullptr;
-    }
-    if (dlhs < drhs)
-    {
-        Py_INCREF(lhs);
-        return lhs;
-    }
-    Py_INCREF(rhs);
-    return rhs;
+PyObject *ExtractorBaseTypeFixedPoint128::min(PyObject *self, PyObject *args) {
+  PyObject *lhs, *rhs;
+  if (!PyArg_ParseTuple(args, "OO", &lhs, &rhs)) {
+    return nullptr;
+  }
+  fmc_fxpt128_t dlhs;
+  if (py_type_convert<fmc_fxpt128_t>::convert(dlhs, lhs)) {
+    return nullptr;
+  }
+  fmc_fxpt128_t drhs;
+  if (py_type_convert<fmc_fxpt128_t>::convert(drhs, rhs)) {
+    return nullptr;
+  }
+  if (dlhs < drhs) {
+    Py_INCREF(lhs);
+    return lhs;
+  }
+  Py_INCREF(rhs);
+  return rhs;
 }
 
 PyObject *ExtractorBaseTypeFixedPoint128::from_float(PyObject *type,
-                                                     PyObject *fval)
-{
-    double src = PyFloat_AsDouble(fval);
-    if (PyErr_Occurred())
-    {
-        return nullptr;
-    }
-    fmc_fxpt128_t res;
-    fmc_fxpt128_from_double(&res, src);
-    return ExtractorBaseTypeFixedPoint128::py_new(res);
+                                                     PyObject *fval) {
+  double src = PyFloat_AsDouble(fval);
+  if (PyErr_Occurred()) {
+    return nullptr;
+  }
+  fmc_fxpt128_t res;
+  fmc_fxpt128_from_double(&res, src);
+  return ExtractorBaseTypeFixedPoint128::py_new(res);
 }
 
-bool FixedPoint128_Check(PyObject *obj)
-{
-    return PyObject_TypeCheck(obj, &ExtractorBaseTypeFixedPoint128Type);
+bool FixedPoint128_Check(PyObject *obj) {
+  return PyObject_TypeCheck(obj, &ExtractorBaseTypeFixedPoint128Type);
 }
 
-fmc_fxpt128_t FixedPoint128_val(PyObject *obj)
-{
-    if (!FixedPoint128_Check(obj))
-    {
-        PyErr_SetString(PyExc_RuntimeError, "Object not of type FixedPoint128");
-        return {};
-    }
-    return ((ExtractorBaseTypeFixedPoint128 *)obj)->val;
+fmc_fxpt128_t FixedPoint128_val(PyObject *obj) {
+  if (!FixedPoint128_Check(obj)) {
+    PyErr_SetString(PyExc_RuntimeError, "Object not of type FixedPoint128");
+    return {};
+  }
+  return ((ExtractorBaseTypeFixedPoint128 *)obj)->val;
 }
 
-PyObject *FixedPoint128_new(fmc_fxpt128_t obj)
-{
-    return ExtractorBaseTypeFixedPoint128::py_new(obj);
+PyObject *FixedPoint128_new(fmc_fxpt128_t obj) {
+  return ExtractorBaseTypeFixedPoint128::py_new(obj);
 }

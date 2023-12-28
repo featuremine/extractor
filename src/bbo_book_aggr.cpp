@@ -99,8 +99,8 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
                       is_same_v<Quantity, fmc::fxpt128>) {
           fm_book_mod(book, idx, oldpx, oldqty, isbid);
         } else {
-          fm_book_mod(book, idx, fmc::fxpt128(oldpx),
-                      fmc::fxpt128(oldqty), isbid);
+          fm_book_mod(book, idx, fmc::fxpt128(oldpx), fmc::fxpt128(oldqty),
+                      isbid);
         }
       }
 
@@ -112,8 +112,7 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
                       is_same_v<Quantity, fmc::fxpt128>) {
           fm_book_add(book, now, ven, 0, idx, px, qty, isbid);
         } else {
-          fm_book_add(book, now, ven, 0, idx, fxpt128(px), fxpt128(qty),
-                      isbid);
+          fm_book_add(book, now, ven, 0, idx, fxpt128(px), fxpt128(qty), isbid);
         }
       }
 
@@ -311,8 +310,7 @@ fm_ctx_def_t *fm_comp_bbo_book_aggr_gen(fm_comp_sys_t *csys,
   if (fm_type_equal(used_type, compatibility_type)) {
     cl = new bbo_book_aggr_exec_cl_impl<fmc::rprice, int32_t>(book, argc);
   } else {
-    cl = new bbo_book_aggr_exec_cl_impl<fmc::fxpt128, fmc::fxpt128>(book,
-                                                                          argc);
+    cl = new bbo_book_aggr_exec_cl_impl<fmc::fxpt128, fmc::fxpt128>(book, argc);
   }
 
   auto *def = fm_ctx_def_new();

@@ -131,7 +131,8 @@ fm_ctx_def_t *fm_comp_is_inf_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   auto ctx_cl = make_unique<is_inf_comp_cl>();
   auto &calls = ctx_cl->calls;
 
-  using supported_types = fmc::type_list<FLOAT32, FLOAT64, DECIMAL128, FIXEDPOINT128>;
+  using supported_types =
+      fmc::type_list<FLOAT32, FLOAT64, DECIMAL128, FIXEDPOINT128>;
 
   auto inp = argv[0];
 

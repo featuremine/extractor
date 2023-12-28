@@ -75,7 +75,8 @@ template <template <class> class Comp> struct fm_comp_tw : fm_comp_sample_2_0 {
              fm_arg_stack_t plist)
       : fm_comp_sample_2_0(csys, closure, argc, argv, ptype, plist),
         last_time_(fmc_time64_start()) {
-    using supported_types = fmc::type_list<FLOAT32, FLOAT64, DECIMAL128, fmc::fxpt128>;
+    using supported_types =
+        fmc::type_list<FLOAT32, FLOAT64, DECIMAL128, fmc::fxpt128>;
 
     int nf = fm_type_frame_nfields(argv[0]);
     vector<const char *> names(nf);
@@ -184,8 +185,7 @@ template <class T> struct average_tw_exec_cl : public exec_cl {
 template <class T> struct elapsed_exec_cl : public exec_cl {
   using result = fmc_time64_t;
   using S = typename upcast<T>::type;
-  elapsed_exec_cl(fm_field_t field)
-      : field_(field), last_val_(), denom_() {}
+  elapsed_exec_cl(fm_field_t field) : field_(field), last_val_(), denom_() {}
   void exec(fmc_time64_t t_d) override {
     if (t_d == fmc_time64_end()) {
       if (!isnan(last_val_)) {

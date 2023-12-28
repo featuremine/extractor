@@ -138,21 +138,20 @@ fm_level &find_or_add(fm_book_t *book, fmc_fxpt128_t price, bool is_bid) {
              : *where;
 }
 
-vector_levels::iterator find_level(vector_levels &levels,
-                                   fmc_fxpt128_t price, bool is_bid) {
+vector_levels::iterator find_level(vector_levels &levels, fmc_fxpt128_t price,
+                                   bool is_bid) {
   compare_levels better(is_bid);
   auto where = bounding_level(levels, better, price);
   return where == levels.end() || better(where->price, price) ? levels.end()
                                                               : where;
 }
 
-vector_levels::iterator front_level(vector_levels &levels,
-                                    fmc_fxpt128_t price, bool is_bid,
-                                    bool uncross, uint64_t &uncrossed) {
+vector_levels::iterator front_level(vector_levels &levels, fmc_fxpt128_t price,
+                                    bool is_bid, bool uncross,
+                                    uint64_t &uncrossed) {
   compare_levels better(is_bid);
   auto where = levels.end();
-  if (where != levels.begin() &&
-      (where - 1)->price == fmc::fxpt128(price)) {
+  if (where != levels.begin() && (where - 1)->price == fmc::fxpt128(price)) {
     return where - 1;
   }
   if (uncross) {
@@ -218,8 +217,8 @@ void fm_book_add(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
 }
 
 void fm_book_ins(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
-                 uint64_t seq, uint64_t id, uint64_t prio,
-                 fmc_fxpt128_t price, fmc_fxpt128_t qty, bool is_bid) {
+                 uint64_t seq, uint64_t id, uint64_t prio, fmc_fxpt128_t price,
+                 fmc_fxpt128_t qty, bool is_bid) {
   auto &level = find_or_add(book, price, is_bid);
   level.qty += qty;
   auto &order = insert_order(level.orders, prio);
@@ -232,8 +231,8 @@ void fm_book_ins(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
 }
 
 void fm_book_pos(fm_book_t *book, fmc_time64_t rec, fmc_time64_t ven,
-                 uint64_t seq, uint64_t id, uint32_t pos,
-                 fmc_fxpt128_t price, fmc_fxpt128_t qty, bool is_bid) {
+                 uint64_t seq, uint64_t id, uint32_t pos, fmc_fxpt128_t price,
+                 fmc_fxpt128_t qty, bool is_bid) {
   auto &level = find_or_add(book, price, is_bid);
   level.qty += qty;
   auto &order = position_order(level.orders, pos);

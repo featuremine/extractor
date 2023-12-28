@@ -27,8 +27,8 @@
 #include "extractor/frame.h"
 #include "extractor/type_sys.h"
 
-#include "fmc++/mpl.hpp"
 #include "fmc++/fxpt128.hpp"
+#include "fmc++/mpl.hpp"
 #include <array>
 
 namespace fm {

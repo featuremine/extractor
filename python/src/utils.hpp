@@ -257,8 +257,7 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
       break;
     case FM_TYPE_RPRICE:
       return [](void *ptr, PyObject *obj) {
-        if (!PyObject_IsInstance(obj,
-                                 (PyObject *)&ExtractorBaseTypeRpriceType))
+        if (!PyObject_IsInstance(obj, (PyObject *)&ExtractorBaseTypeRpriceType))
           return false;
         ExtractorBaseTypeRprice *dec = (ExtractorBaseTypeRprice *)obj;
         *(RPRICE *)ptr = dec->val;
@@ -277,10 +276,11 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
       break;
     case FM_TYPE_FIXEDPOINT128:
       return [](void *ptr, PyObject *obj) {
-        if (!PyObject_IsInstance(obj,
-                                 (PyObject *)&ExtractorBaseTypeFixedPoint128Type))
+        if (!PyObject_IsInstance(
+                obj, (PyObject *)&ExtractorBaseTypeFixedPoint128Type))
           return false;
-        ExtractorBaseTypeFixedPoint128 *dec = (ExtractorBaseTypeFixedPoint128 *)obj;
+        ExtractorBaseTypeFixedPoint128 *dec =
+            (ExtractorBaseTypeFixedPoint128 *)obj;
         *(FIXEDPOINT128 *)ptr = dec->val;
         return true;
       };
@@ -1133,7 +1133,8 @@ std::string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
     case FM_TYPE_FIXEDPOINT128: {
       char str[FMC_FXPT128_STR_SIZE] = {0};
       struct fmc_fxpt128_format_t format = {.precision = 15};
-      fmc_fxpt128_to_string_opt(str, FMC_FXPT128_STR_SIZE, (FIXEDPOINT128 *)ptr, &format);
+      fmc_fxpt128_to_string_opt(str, FMC_FXPT128_STR_SIZE, (FIXEDPOINT128 *)ptr,
+                                &format);
       return std::string(str);
     } break;
     case FM_TYPE_CHAR:

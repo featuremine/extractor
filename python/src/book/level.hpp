@@ -461,8 +461,7 @@ static int Levels_mp_length(Levels *ref) {
 static PyObject *Levels_mp_subscript(Levels *ref, PyObject *key) {
   long sz = fm_book_levels_size(ref->levels_);
   if (PyFloat_Check(key)) {
-    auto px =
-        fmc::conversion<double, fmc::fxpt128>()(PyFloat_AsDouble(key));
+    auto px = fmc::conversion<double, fmc::fxpt128>()(PyFloat_AsDouble(key));
     for (auto i = 0U; i < sz; ++i) {
       auto *lvl = fm_book_level(ref->levels_, i);
       if (fmc::fxpt128(fm_book_level_prx(lvl)) == px) {

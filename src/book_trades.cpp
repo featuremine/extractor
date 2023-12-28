@@ -67,8 +67,7 @@ public:
         fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
     fmc_fxpt128_from_int(
-        (fmc_fxpt128_t *)fm_frame_get_ptr1(result, trade_price_field_, 0),
-        0);
+        (fmc_fxpt128_t *)fm_frame_get_ptr1(result, trade_price_field_, 0), 0);
     fmc_fxpt128_from_int(
         (fmc_fxpt128_t *)fm_frame_get_ptr1(result, qty_field_, 0), 0);
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
@@ -89,7 +88,7 @@ public:
                   m.receive;
               *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = m.seqn;
               *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, trade_price_field_,
-                                                     0) = m.trade_price;
+                                                  0) = m.trade_price;
               *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
                   m.qty;
               *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = m.batch;
@@ -112,7 +111,7 @@ public:
                   m.receive;
               *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = m.seqn;
               *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, trade_price_field_,
-                                                     0) = m.trade_price;
+                                                  0) = m.trade_price;
               *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
                   m.qty;
               *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = m.batch;
