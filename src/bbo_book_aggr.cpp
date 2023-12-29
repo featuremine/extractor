@@ -28,10 +28,10 @@
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "fmc/decimal128.h"
+#include "fmc/fxpt128.h"
 #include "fmc/time.h"
 
-#include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/rprice.hpp"
 #include "fmc++/side.hpp"
 
@@ -95,12 +95,12 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
       auto &oldqty = sided_data.second;
       auto isbid = is_bid(side);
       if (oldqty != Quantity()) {
-        if constexpr (is_same_v<Price, fmc::decimal128> &&
-                      is_same_v<Quantity, fmc::decimal128>) {
+        if constexpr (is_same_v<Price, fmc::fxpt128> &&
+                      is_same_v<Quantity, fmc::fxpt128>) {
           fm_book_mod(book, idx, oldpx, oldqty, isbid);
         } else {
-          fm_book_mod(book, idx, fmc::decimal128(oldpx),
-                      fmc::decimal128(oldqty), isbid);
+          fm_book_mod(book, idx, fmc::fxpt128(oldpx), fmc::fxpt128(oldqty),
+                      isbid);
         }
       }
 
@@ -108,12 +108,11 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
       auto qty = *(Quantity *)fm_frame_get_cptr1(frame, qts_idx, 0);
       if (qty != Quantity()) {
         auto ven = *(fmc_time64_t *)fm_frame_get_cptr1(frame, recv_idx, 0);
-        if constexpr (is_same_v<Price, fmc::decimal128> &&
-                      is_same_v<Quantity, fmc::decimal128>) {
+        if constexpr (is_same_v<Price, fmc::fxpt128> &&
+                      is_same_v<Quantity, fmc::fxpt128>) {
           fm_book_add(book, now, ven, 0, idx, px, qty, isbid);
         } else {
-          fm_book_add(book, now, ven, 0, idx, decimal128(px), decimal128(qty),
-                      isbid);
+          fm_book_add(book, now, ven, 0, idx, fxpt128(px), fxpt128(qty), isbid);
         }
       }
 
@@ -134,8 +133,8 @@ struct bbo_book_aggr_exec_cl_impl : bbo_book_aggr_exec_cl {
 
       if (fm_book_levels_size(lvls) != 0) {
         fm_level_t *lvl = fm_book_level(lvls, 0);
-        qty = (Quantity)fmc::decimal128::upcast(fm_book_level_shr(lvl));
-        px = (Price)fmc::decimal128::upcast(fm_book_level_prx(lvl));
+        qty = (Quantity)fxpt128(fm_book_level_shr(lvl));
+        px = (Price)fxpt128(fm_book_level_prx(lvl));
       }
 
       *(fmc_time64_t *)fm_frame_get_ptr1(result, rec_, 0) = now;
@@ -207,10 +206,10 @@ fm_ctx_def_t *fm_comp_bbo_book_aggr_gen(fm_comp_sys_t *csys,
 
   auto *type = fm_frame_type_get(
       sys, 5, 1, "receive", fm_base_type_get(sys, FM_TYPE_TIME64), "bidprice",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "askprice",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "bidqty",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "askqty",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL128), 1);
+      fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128), "askprice",
+      fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128), "bidqty",
+      fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128), "askqty",
+      fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128), 1);
 
   fm_type_decl_cp input = argv[0];
 
@@ -311,8 +310,7 @@ fm_ctx_def_t *fm_comp_bbo_book_aggr_gen(fm_comp_sys_t *csys,
   if (fm_type_equal(used_type, compatibility_type)) {
     cl = new bbo_book_aggr_exec_cl_impl<fmc::rprice, int32_t>(book, argc);
   } else {
-    cl = new bbo_book_aggr_exec_cl_impl<fmc::decimal128, fmc::decimal128>(book,
-                                                                          argc);
+    cl = new bbo_book_aggr_exec_cl_impl<fmc::fxpt128, fmc::fxpt128>(book, argc);
   }
 
   auto *def = fm_ctx_def_new();

@@ -32,6 +32,7 @@
 #include "extractor/comp_def.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/rational64.hpp"
 #include "fmc++/rprice.hpp"
@@ -154,7 +155,7 @@ fm_ctx_def_t *fm_comp_divide_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   auto &calls = ctx_cl->calls;
 
   using supported_types =
-      fmc::type_list<RATIONAL64, FLOAT32, FLOAT64, DECIMAL128>;
+      fmc::type_list<RATIONAL64, FLOAT32, FLOAT64, DECIMAL128, FIXEDPOINT128>;
 
   auto inp = argv[0];
   int nf = fm_type_frame_nfields(inp);

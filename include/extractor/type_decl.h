@@ -32,6 +32,7 @@
 #include <stdlib.h>
 
 #include "fmc/decimal128.h"
+#include "fmc/fxpt128.h"
 #include "fmc/rational64.h"
 #include "fmc/rprice.h"
 #include "fmc/time.h"

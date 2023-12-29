@@ -2,6 +2,7 @@
 #include "extractor/frame.h"
 #include "extractor/type_sys.h"
 #include "fmc/decimal128.h"
+#include "fmc/fxpt128.h"
 #include "fmc/time.h"
 
 #include "fmc++/serialization.hpp"
@@ -72,6 +73,13 @@ inline bool msgpack_writer(cmp_ctx_t &cmp, fmc_decimal128_t val) {
   fmc_decimal128_to_str(buf, &val);
   return cmp_write_str(&cmp, buf, strlen(buf));
 }
+inline bool msgpack_writer(cmp_ctx_t &cmp, fmc_fxpt128_t val) {
+  if (!cmp_write_array(&cmp, 2))
+    return false;
+  if (!cmp_write_integer(&cmp, val.lo))
+    return false;
+  return cmp_write_integer(&cmp, val.hi);
+}
 
 template <class T> auto base_writer(fm_field_t offset) {
   return [offset](cmp_ctx_t &cmp, const fm_frame_t *frame, int row) {
@@ -123,6 +131,9 @@ inline fm_frame_writer_p fm_type_to_mp_writer(fm_type_decl_cp decl,
       break;
     case FM_TYPE_DECIMAL128:
       return base_writer<DECIMAL128>(offset);
+      break;
+    case FM_TYPE_FIXEDPOINT128:
+      return base_writer<FIXEDPOINT128>(offset);
       break;
     case FM_TYPE_TIME64:
       return base_writer<TIME64>(offset);
@@ -233,6 +244,16 @@ inline bool msgpack_parser(cmp_ctx_t &cmp, fmc_decimal128_t &val) {
   fmc_decimal128_from_str(&val, buf, &err);
   return !bool(err);
 }
+inline bool msgpack_parser(cmp_ctx_t &cmp, fmc_fxpt128_t &val) {
+  uint32_t arr_len;
+  if (!cmp_read_array(&cmp, &arr_len))
+    return false;
+  if (arr_len != 2)
+    return false;
+  if (!cmp_read_ulong(&cmp, (uint64_t *)&val.lo))
+    return false;
+  return cmp_read_ulong(&cmp, (uint64_t *)&val.hi);
+}
 
 template <class T> auto base_reader(fm_field_t offset) {
   return [offset](cmp_ctx_t &cmp, fm_frame_t *frame, int row) -> bool {
@@ -285,6 +306,9 @@ inline fm_frame_reader_p fm_type_to_mp_reader(fm_type_decl_cp decl,
       break;
     case FM_TYPE_DECIMAL128:
       return base_reader<DECIMAL128>(offset);
+      break;
+    case FM_TYPE_FIXEDPOINT128:
+      return base_reader<FIXEDPOINT128>(offset);
       break;
     case FM_TYPE_TIME64:
       return base_reader<TIME64>(offset);

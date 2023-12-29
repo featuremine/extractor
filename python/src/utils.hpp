@@ -31,6 +31,7 @@
 
 #include "extractor/type_sys.h"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/mpl.hpp"
 #include <cassert>
 #include <errno.h>
@@ -111,6 +112,10 @@ df_type_check get_df_type_checker(fm_type_decl_cp decl) {
       };
       break;
     case FM_TYPE_DECIMAL128:
+      return [](int fdtype) { return fdtype == NPY_OBJECT; };
+      break;
+      break;
+    case FM_TYPE_FIXEDPOINT128:
       return [](int fdtype) { return fdtype == NPY_OBJECT; };
       break;
     case FM_TYPE_TIME64:
@@ -252,9 +257,10 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
       break;
     case FM_TYPE_RPRICE:
       return [](void *ptr, PyObject *obj) {
-        fmc_rprice_from_double((RPRICE *)ptr, PyFloat_AsDouble(obj));
-        if (PyErr_Occurred())
+        if (!PyObject_IsInstance(obj, (PyObject *)&ExtractorBaseTypeRpriceType))
           return false;
+        ExtractorBaseTypeRprice *dec = (ExtractorBaseTypeRprice *)obj;
+        *(RPRICE *)ptr = dec->val;
         return true;
       };
       break;
@@ -265,6 +271,17 @@ py_field_conv get_py_field_converter(fm_type_decl_cp decl) {
           return false;
         ExtractorBaseTypeDecimal128 *dec = (ExtractorBaseTypeDecimal128 *)obj;
         *(DECIMAL128 *)ptr = dec->val;
+        return true;
+      };
+      break;
+    case FM_TYPE_FIXEDPOINT128:
+      return [](void *ptr, PyObject *obj) {
+        if (!PyObject_IsInstance(
+                obj, (PyObject *)&ExtractorBaseTypeFixedPoint128Type))
+          return false;
+        ExtractorBaseTypeFixedPoint128 *dec =
+            (ExtractorBaseTypeFixedPoint128 *)obj;
+        *(FIXEDPOINT128 *)ptr = dec->val;
         return true;
       };
       break;
@@ -391,13 +408,14 @@ PyObject *get_py_obj_from_ptr(fm_type_decl_cp decl, const void *ptr) {
     case FM_TYPE_FLOAT64:
       return PyFloat_FromDouble(*(FLOAT64 *)ptr);
       break;
-    case FM_TYPE_RPRICE: {
-      double val;
-      fmc_rprice_to_double(&val, (RPRICE *)ptr);
-      return PyFloat_FromDouble(val);
-    } break;
+    case FM_TYPE_RPRICE:
+      return ExtractorBaseTypeRprice::py_new(*(RPRICE *)ptr);
+      break;
     case FM_TYPE_DECIMAL128:
       return ExtractorDecimal128_new(*(DECIMAL128 *)ptr);
+      break;
+    case FM_TYPE_FIXEDPOINT128:
+      return ExtractorFixedPoint128_new(*(FIXEDPOINT128 *)ptr);
       break;
     case FM_TYPE_CHAR:
       return PyUnicode_FromStringAndSize((const char *)ptr, 1);
@@ -493,12 +511,13 @@ PyObject *get_py_obj_from_arg_stack(fm_type_decl_cp decl,
       return PyUnicode_FromWideChar(&STACK_POP(plist, WCHAR), 1);
       break;
     case FM_TYPE_RPRICE: {
-      double val;
-      fmc_rprice_to_double(&val, &STACK_POP(plist, RPRICE));
-      return PyFloat_FromDouble(val);
+      return ExtractorBaseTypeRprice::py_new(STACK_POP(plist, RPRICE));
     } break;
     case FM_TYPE_DECIMAL128: {
       return ExtractorDecimal128_new(STACK_POP(plist, DECIMAL128));
+    } break;
+    case FM_TYPE_FIXEDPOINT128: {
+      return ExtractorFixedPoint128_new(STACK_POP(plist, FIXEDPOINT128));
     } break;
     case FM_TYPE_TIME64: {
       using days = typename chrono::duration<long int, std::ratio<86400>>;
@@ -798,6 +817,10 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
         type = NPY_OBJECT;
         elem_size = sizeof(PyObject *);
         break;
+      case FM_TYPE_FIXEDPOINT128:
+        type = NPY_OBJECT;
+        elem_size = sizeof(PyObject *);
+        break;
       case FM_TYPE_TIME64:
         type = NPY_DATETIME;
         elem_size = sizeof(int64_t);
@@ -853,6 +876,15 @@ PyObject *result_as_pandas(const fm_frame_t *frame,
       for (int item = 0; item < f_dims[0]; ++item) {
         auto *val = ExtractorDecimal128_new(
             *(DECIMAL128 *)fm_frame_get_cptr1(frame, i, item));
+        PyArray_SETITEM((PyArrayObject *)array,
+                        (char *)PyArray_GETPTR1((PyArrayObject *)array, item),
+                        val);
+        Py_XDECREF(val);
+      }
+    } else if (fm_type_base_enum(decl) == FM_TYPE_FIXEDPOINT128) {
+      for (int item = 0; item < f_dims[0]; ++item) {
+        auto *val = ExtractorFixedPoint128_new(
+            *(FIXEDPOINT128 *)fm_frame_get_cptr1(frame, i, item));
         PyArray_SETITEM((PyArrayObject *)array,
                         (char *)PyArray_GETPTR1((PyArrayObject *)array, item),
                         val);
@@ -1020,6 +1052,9 @@ inline short type_size(fm_type_decl_cp decl) {
     case FM_TYPE_DECIMAL128:
       return 20;
       break;
+    case FM_TYPE_FIXEDPOINT128:
+      return 20;
+      break;
     case FM_TYPE_CHAR:
       return 1;
       break;
@@ -1084,14 +1119,22 @@ std::string ptr_to_str(fm_type_decl_cp decl, const void *ptr) {
     } break;
     case FM_TYPE_RPRICE: {
       double val;
-      fmc_rprice_to_double(&val, (RPRICE *)ptr);
-      char buf[20];
+      RPRICE *rval = (RPRICE *)ptr;
+      fmc_rprice_to_double(&val, rval);
+      char buf[25] = {0};
       auto view = fmc::to_string_view_double(buf, val, 9);
       return std::string(view.data(), view.size());
     } break;
     case FM_TYPE_DECIMAL128: {
-      char str[FMC_DECIMAL128_STR_SIZE];
+      char str[FMC_DECIMAL128_STR_SIZE] = {0};
       fmc_decimal128_to_str(str, (DECIMAL128 *)ptr);
+      return std::string(str);
+    } break;
+    case FM_TYPE_FIXEDPOINT128: {
+      char str[FMC_FXPT128_STR_SIZE] = {0};
+      struct fmc_fxpt128_format_t format = {.precision = 15};
+      fmc_fxpt128_to_string_opt(str, FMC_FXPT128_STR_SIZE, (FIXEDPOINT128 *)ptr,
+                                &format);
       return std::string(str);
     } break;
     case FM_TYPE_CHAR:

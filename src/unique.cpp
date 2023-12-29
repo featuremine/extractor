@@ -149,7 +149,8 @@ fm_ctx_def_t *fm_comp_unique_gen(fm_comp_sys_t *sys, fm_comp_def_cl closure,
 
   using supported_types =
       fmc::type_list<INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64,
-                     FLOAT32, FLOAT64, RPRICE, DECIMAL128, TIME64>;
+                     FLOAT32, FLOAT64, RPRICE, DECIMAL128, FIXEDPOINT128,
+                     TIME64>;
 
   auto inp = argv[0];
 
@@ -163,7 +164,7 @@ fm_ctx_def_t *fm_comp_unique_gen(fm_comp_sys_t *sys, fm_comp_def_cl closure,
       if (!call) {
         ostringstream os;
         auto *str = fm_type_to_str(f_type);
-        os << "type " << str << "is not supported in unique feature";
+        os << "type " << str << " is not supported in unique feature";
         free(str);
         fm_type_sys_err_custom(tsys, FM_TYPE_ERROR_ARGS, os.str().c_str());
         return nullptr;

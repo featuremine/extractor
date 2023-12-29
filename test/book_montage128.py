@@ -37,7 +37,7 @@ def New_York_time(year, mon, day, h=0, m=0, s=0):
                        localize(datetime(year, mon, day, h, m, s)))
 
 
-ZERO = extr.Decimal128(0)
+ZERO = extr.FixedPoint128(0)
 
 class ValidationBook:
     def __init__(self):
@@ -132,10 +132,10 @@ if __name__ == "__main__":
     bbos_in = op.combine(bbos_in.receive, tuple(),
                          bbos_in.ticker, tuple(),
                          bbos_in.market, tuple(),
-                         op.convert(bbos_in.bidprice, extr.Decimal128), tuple(),
-                         op.convert(bbos_in.askprice, extr.Decimal128), tuple(),
-                         op.convert(bbos_in.bidqty, extr.Decimal128), tuple(),
-                         op.convert(bbos_in.askqty, extr.Decimal128), tuple());
+                         op.convert(bbos_in.bidprice, extr.FixedPoint128), tuple(),
+                         op.convert(bbos_in.askprice, extr.FixedPoint128), tuple(),
+                         op.convert(bbos_in.bidqty, extr.FixedPoint128), tuple(),
+                         op.convert(bbos_in.askqty, extr.FixedPoint128), tuple());
 
     bbo_split = op.split(bbos_in, "market", tuple(markets))
 

@@ -27,10 +27,10 @@
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
-#include "fmc/decimal128.h"
+#include "fmc/fxpt128.h"
 #include "fmc/time.h"
 
-#include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/rprice.hpp"
 #include "fmc++/side.hpp"
 
@@ -162,10 +162,10 @@ fm_ctx_def_t *fm_comp_bbo_aggr_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   auto *type = fm_frame_type_get(
       sys, 5, 1, "receive", fm_base_type_get(sys, FM_TYPE_TIME64), "bidprice",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "askprice",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "bidqty",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL128), "askqty",
-      fm_base_type_get(sys, FM_TYPE_DECIMAL128), 1);
+      fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128), "askprice",
+      fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128), "bidqty",
+      fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128), "askqty",
+      fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128), 1);
 
   fm_type_decl_cp input = argv[0];
 
@@ -240,7 +240,7 @@ fm_ctx_def_t *fm_comp_bbo_aggr_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
   if (fm_type_equal(used_type, compatibility_type)) {
     cl = new bbo_aggr_exec_cl_impl<fmc::rprice, int32_t>();
   } else {
-    cl = new bbo_aggr_exec_cl_impl<fmc::decimal128, fmc::decimal128>();
+    cl = new bbo_aggr_exec_cl_impl<fmc::fxpt128, fmc::fxpt128>();
   }
 
   auto *def = fm_ctx_def_new();

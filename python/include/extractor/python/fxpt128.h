@@ -13,30 +13,31 @@
  *****************************************************************************/
 
 /**
- * @file upcast_util.hpp
- * @date 7 Nov 2022
- * @brief File contains upcast type helpers
+ * @file fxpt128.h
+ * @date 13 Nov 2023
+ * @brief File contains C Python api for FixedPoint128 Type
  *
+ * This file contains C Python api for FixedPoint128 Type
  * @see http://www.featuremine.com
  */
 
-#include "fmc++/decimal128.hpp"
-#include "fmc++/fxpt128.hpp"
-#include "fmc++/rational64.hpp"
-#include "fmc++/rprice.hpp"
+#pragma once
 
-template <class T> struct upcast { using type = T; };
+#include <Python.h>
 
-template <> struct upcast<fmc_decimal128_t> {
-  using type = typename fmc::decimal128;
-};
+#include "fmc/fxpt128.h"
+#include "fmc/platform.h"
 
-template <> struct upcast<fmc_fxpt128_t> {
-  using type = typename fmc::fxpt128;
-};
+#ifdef __cplusplus
+extern "C" {
+#endif
 
-template <> struct upcast<fmc_rprice_t> { using type = typename fmc::rprice; };
+FMMODFUNC bool FixedPoint128_Check(PyObject *obj);
 
-template <> struct upcast<fmc_rational64_t> {
-  using type = typename fmc::rational64;
-};
+FMMODFUNC fmc_fxpt128_t FixedPoint128_val(PyObject *obj);
+
+FMMODFUNC PyObject *FixedPoint128_new(fmc_fxpt128_t obj);
+
+#ifdef __cplusplus
+}
+#endif

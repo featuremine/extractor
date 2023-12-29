@@ -79,8 +79,8 @@ bool fm_comp_mp_record_call_stream_init(fm_frame_t *result, size_t args,
 
   FILE *file = nullptr;
   auto pipe = fmc::begins_with_pipe(info->file);
-  string name_str = pipe.second;
-  auto *name = pipe.second.c_str();
+  string name_str = std::string(pipe.second);
+  auto *name = name_str.c_str();
   if (pipe.first) {
     fmc_error_t *err = nullptr;
     file = fmc_popen(name, "w", &err);
