@@ -199,7 +199,8 @@ bool fm_comp_csv_tail_stream_init(fm_frame_t *result, size_t args,
   auto *info = (csv_tail_info *)ctx->comp;
 
   FILE *file = nullptr;
-  auto [is_pipe, name] = fmc::ends_with_pipe(info->file);
+  auto [is_pipe, name_sv] = fmc::ends_with_pipe(info->file);
+  auto name = std::string(name_sv);
 
   if (is_pipe) {
     fmc_error_t *err = nullptr;

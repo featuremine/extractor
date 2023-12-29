@@ -32,7 +32,7 @@
 #include "fmc/time.h"
 
 #include "extractor/book/updates.hpp"
-#include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/time.hpp"
 
@@ -66,11 +66,10 @@ public:
     *(fmc_time64_t *)fm_frame_get_ptr1(result, receive_field_, 0) =
         fmc_time64_start();
     *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = 0UL;
-    fmc_decimal128_from_int(
-        (fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_, 0),
-        0);
-    fmc_decimal128_from_int(
-        (fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0), 0);
+    fmc_fxpt128_from_int(
+        (fmc_fxpt128_t *)fm_frame_get_ptr1(result, trade_price_field_, 0), 0);
+    fmc_fxpt128_from_int(
+        (fmc_fxpt128_t *)fm_frame_get_ptr1(result, qty_field_, 0), 0);
     *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = 0;
     memset((char *)fm_frame_get_ptr1(result, decoration_field_, 0), 0,
            sizeof(char) * 4);
@@ -88,9 +87,9 @@ public:
               *(fmc_time64_t *)fm_frame_get_ptr1(result, receive_field_, 0) =
                   m.receive;
               *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = m.seqn;
-              *(fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_,
-                                                     0) = m.trade_price;
-              *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
+              *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, trade_price_field_,
+                                                  0) = m.trade_price;
+              *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
                   m.qty;
               *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = m.batch;
               memcpy((char *)fm_frame_get_ptr1(result, decoration_field_, 0),
@@ -111,9 +110,9 @@ public:
               *(fmc_time64_t *)fm_frame_get_ptr1(result, receive_field_, 0) =
                   m.receive;
               *(uint64_t *)fm_frame_get_ptr1(result, seqn_field_, 0) = m.seqn;
-              *(fmc_decimal128_t *)fm_frame_get_ptr1(result, trade_price_field_,
-                                                     0) = m.trade_price;
-              *(fmc_decimal128_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
+              *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, trade_price_field_,
+                                                  0) = m.trade_price;
+              *(fmc_fxpt128_t *)fm_frame_get_ptr1(result, qty_field_, 0) =
                   m.qty;
               *(uint16_t *)fm_frame_get_ptr1(result, batch_field_, 0) = m.batch;
               memset((char *)fm_frame_get_ptr1(result, decoration_field_, 0), 0,
@@ -204,8 +203,8 @@ fm_ctx_def_t *fm_comp_book_trades_gen(fm_comp_sys_t *csys,
       fm_base_type_get(sys, FM_TYPE_TIME64),
       fm_base_type_get(sys, FM_TYPE_TIME64),
       fm_base_type_get(sys, FM_TYPE_UINT64),
-      fm_base_type_get(sys, FM_TYPE_DECIMAL128),
-      fm_base_type_get(sys, FM_TYPE_DECIMAL128),
+      fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128),
+      fm_base_type_get(sys, FM_TYPE_FIXEDPOINT128),
       fm_base_type_get(sys, FM_TYPE_UINT16),
       fm_array_type_get(sys, fm_base_type_get(sys, FM_TYPE_CHAR), 4),
       fm_base_type_get(sys, FM_TYPE_UINT8),

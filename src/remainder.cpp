@@ -32,6 +32,7 @@
 #include "extractor/comp_def.hpp"
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/rational64.hpp"
 #include "fmc++/rprice.hpp"

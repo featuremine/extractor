@@ -30,6 +30,7 @@
 
 #include "extractor/frame.hpp"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/rprice.hpp"
 #include "fmc++/time.hpp"
@@ -49,7 +50,7 @@ template <class T> struct the_is_zero_field_exec_2_0 : op_field_exec {
   void exec(fm_frame_t *result, size_t args,
             const fm_frame_t *const argv[]) override {
     bool res = fmc::almost_equal<T>(
-        *(const T *)fm_frame_get_cptr1(argv[0], field_, 0), 0.0);
+        *(const T *)fm_frame_get_cptr1(argv[0], field_, 0), T());
 
     *(bool *)fm_frame_get_ptr1(result, field_, 0) = res;
   }
@@ -180,7 +181,8 @@ fm_ctx_def_t *fm_comp_is_zero_gen(fm_comp_sys_t *csys, fm_comp_def_cl closure,
 
   using supported_types =
       fmc::type_list<INT8, INT16, INT32, INT64, UINT8, UINT16, UINT32, UINT64,
-                     FLOAT32, FLOAT64, TIME64, RPRICE, DECIMAL128>;
+                     FLOAT32, FLOAT64, TIME64, RPRICE, DECIMAL128,
+                     FIXEDPOINT128>;
 
   auto inp = argv[0];
 
