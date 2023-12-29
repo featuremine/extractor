@@ -45,6 +45,7 @@
 #include "fmc++/python/wrapper.hpp"
 #include "fmc++/strings.hpp"
 #include <extractor/python/decimal128.hpp>
+#include <extractor/python/fxpt128.hpp>
 #include <fmc++/python/wrapper.hpp>
 #include <numpy/arrayobject.h>
 
@@ -163,7 +164,7 @@ static bool add_column_parser(fm_exec_ctx_t *ctx, fm_frame_t *frame,
       type = 10;
       break;
     case FM_TYPE_CHAR:
-      if (fdtype != NPY_CHAR && fdtype != NPY_STRING && fdtype != NPY_OBJECT)
+      if (fdtype != NPY_STRING && fdtype != NPY_STRING && fdtype != NPY_OBJECT)
         return error("char");
       type = 15;
       break;
@@ -176,6 +177,11 @@ static bool add_column_parser(fm_exec_ctx_t *ctx, fm_frame_t *frame,
       if (fdtype != NPY_OBJECT)
         return error("object.");
       type = 16;
+      break;
+    case FM_TYPE_FIXEDPOINT128:
+      if (fdtype != NPY_OBJECT)
+        return error("object.");
+      type = 17;
       break;
     case FM_TYPE_TIME64:
       if (fdtype != NPY_DATETIME)
@@ -410,6 +416,20 @@ bool pandas_parse_one(fm_exec_ctx_t *ctx, pandas_play_exec_cl *cl,
       ExtractorBaseTypeDecimal128 *dec =
           (ExtractorBaseTypeDecimal128 *)item.get_ref();
       *(DECIMAL128 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row) =
+          dec->val;
+      p_off += 3;
+    } break;
+    case 17: {
+      auto item = object::from_borrowed(
+          PyTuple_GetItem(cl->curr.get_ref(), cl->parsers[p_off + 2] + 1));
+      if (!bool(item))
+        return field_error();
+      if (!PyObject_IsInstance(item.get_ref(),
+                               (PyObject *)&ExtractorBaseTypeFixedPoint128Type))
+        return field_error();
+      ExtractorBaseTypeFixedPoint128 *dec =
+          (ExtractorBaseTypeFixedPoint128 *)item.get_ref();
+      *(FIXEDPOINT128 *)fm_frame_get_ptr1(frame, cl->parsers[p_off + 1], row) =
           dec->val;
       p_off += 3;
     } break;

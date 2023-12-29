@@ -36,7 +36,7 @@ def New_York_time(year, mon, day, h=0, m=0, s=0):
     return epoch_delta(pytz.timezone("America/New_York").
                        localize(datetime(year, mon, day, h, m, s)))
 
-ZERO = extr.Decimal128(0)
+ZERO = extr.FixedPoint128(0)
 
 class ValidationBook:
     def __init__(self):
@@ -46,10 +46,10 @@ class ValidationBook:
         self.oldaskpx = {}
 
     def proc_bbo(self, bbo, idx):
-        bidqty = extr.Decimal128(bbo[0].bidqty)
-        askqty = extr.Decimal128(bbo[0].askqty)
-        bidprice = extr.Decimal128.significant(extr.Decimal128(bbo[0].bidprice), 15)
-        askprice = extr.Decimal128.significant(extr.Decimal128(bbo[0].askprice), 15)
+        bidqty = extr.FixedPoint128(bbo[0].bidqty)
+        askqty = extr.FixedPoint128(bbo[0].askqty)
+        bidprice = extr.FixedPoint128(bbo[0].bidprice)
+        askprice = extr.FixedPoint128(bbo[0].askprice)
 
         if (idx in self.oldbidpx) and (bidprice != self.oldbidpx[idx][0]):
             if self.oldbidpx[idx][1] != ZERO:
@@ -81,31 +81,22 @@ class ValidationBook:
         self.oldaskpx[idx] = [askprice, askqty]
 
     def validate_side(self, validationside, bookside):
-        if len(bookside) != len(validationside):
-            return False
+        assert len(bookside) == len(validationside)
 
         for price, level in bookside:
             #Adjust the price for the hash
-            adjusted_price = extr.Decimal128.significant(price, 15)
-            assert price == adjusted_price
-            if adjusted_price not in validationside:
-                return False
-            validationlevel = validationside[adjusted_price]
+            assert price in validationside, f"price {price} is not in {validationside}"
+            validationlevel = validationside[price]
 
-            if len(validationlevel) != len(level):
-                return False
+            assert len(validationlevel) == len(level)
 
             for order in level:
-                if order.id not in validationlevel:
-                    return False
-                if validationlevel[order.id] != order.qty:
-                    return False
-
-        return True
+                assert order.id in validationlevel
+                assert validationlevel[order.id] == order.qty
 
     def validate_book(self, book):
-        return self.validate_side(self.bids, book[extr.trade_side.BID()]) and \
-            self.validate_side(self.asks, book[extr.trade_side.ASK()])
+        self.validate_side(self.bids, book[extr.trade_side.BID()])
+        self.validate_side(self.asks, book[extr.trade_side.ASK()])
 
 
 if __name__ == "__main__":
@@ -167,7 +158,7 @@ if __name__ == "__main__":
     for valbook, book_nbbo, book in zip(validation_books, book_nbbos, books):
         def gen_clbck(v, b):
             def clbck(frame):
-                assert v.validate_book(b)
+                v.validate_book(b)
             return clbck
         graph.callback(book_nbbo, gen_clbck(valbook, book))
 
@@ -187,7 +178,7 @@ if __name__ == "__main__":
 
     for book_nbbo, nbbo in zip(book_nbbo_refs, nbbo_refs):
         assert book_nbbo[0].receive == nbbo[0].receive
-        assert book_nbbo[0].askprice == nbbo[0].askprice
+        assert book_nbbo[0].askprice == nbbo[0].askprice, f"book_nbbo[0].askprice ({book_nbbo[0].askprice}) != nbbo[0].askprice ({nbbo[0].askprice})"
         assert book_nbbo[0].askqty == nbbo[0].askqty
         assert book_nbbo[0].bidprice == nbbo[0].bidprice
         assert book_nbbo[0].bidqty == nbbo[0].bidqty

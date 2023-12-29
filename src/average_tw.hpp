@@ -29,6 +29,7 @@
 #include <vector>
 
 #include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 
 struct exec_cl {
   virtual void exec(fmc_time64_t t_d) = 0;
@@ -74,7 +75,8 @@ template <template <class> class Comp> struct fm_comp_tw : fm_comp_sample_2_0 {
              fm_arg_stack_t plist)
       : fm_comp_sample_2_0(csys, closure, argc, argv, ptype, plist),
         last_time_(fmc_time64_start()) {
-    using supported_types = fmc::type_list<FLOAT32, FLOAT64, DECIMAL128>;
+    using supported_types =
+        fmc::type_list<FLOAT32, FLOAT64, DECIMAL128, fmc::fxpt128>;
 
     int nf = fm_type_frame_nfields(argv[0]);
     vector<const char *> names(nf);
@@ -145,9 +147,10 @@ template <class T> struct average_tw_exec_cl : public exec_cl {
   using result = T;
   using S = typename upcast<T>::type;
   average_tw_exec_cl(fm_field_t field)
-      : field_(field), last_val_(0), num_(0), denom_({0}) {}
+      : field_(field), last_val_(), num_(), denom_() {}
   void exec(fmc_time64_t t_d) override {
     if (t_d == fmc_time64_end()) {
+      // Uses stdlib isnan unless floating_point<T>::value == false
       if (!isnan(last_val_)) {
         denom_ = t_d;
       }
@@ -183,8 +186,7 @@ template <class T> struct average_tw_exec_cl : public exec_cl {
 template <class T> struct elapsed_exec_cl : public exec_cl {
   using result = fmc_time64_t;
   using S = typename upcast<T>::type;
-  elapsed_exec_cl(fm_field_t field)
-      : field_(field), last_val_(0), denom_({0}) {}
+  elapsed_exec_cl(fm_field_t field) : field_(field), last_val_(), denom_() {}
   void exec(fmc_time64_t t_d) override {
     if (t_d == fmc_time64_end()) {
       if (!isnan(last_val_)) {
@@ -214,7 +216,7 @@ template <class T> struct elapsed_exec_cl : public exec_cl {
 template <class T> struct sum_tw_exec_cl : public exec_cl {
   using result = T;
   using S = typename upcast<T>::type;
-  sum_tw_exec_cl(fm_field_t field) : field_(field), last_val_(0), num_(0) {}
+  sum_tw_exec_cl(fm_field_t field) : field_(field), last_val_(), num_() {}
   void exec(fmc_time64_t t_d) override {
     if (t_d == fmc_time64_end()) {
       if (!isnan(last_val_)) {
@@ -223,7 +225,7 @@ template <class T> struct sum_tw_exec_cl : public exec_cl {
         } else if (last_val_ < -std::numeric_limits<S>::epsilon()) {
           num_ = -numeric_limits<S>::infinity();
         } else {
-          num_ = 0;
+          num_ = S();
         }
       }
       return;
@@ -235,7 +237,7 @@ template <class T> struct sum_tw_exec_cl : public exec_cl {
   }
   void set(fm_frame_t *result) override {
     *(T *)fm_frame_get_ptr1(result, field_, 0) = num_;
-    num_ = S(0);
+    num_ = S();
   }
   void reset(const fm_frame_t *argv) override {
     last_val_ = *(const T *)fm_frame_get_cptr1(argv, field_, 0);

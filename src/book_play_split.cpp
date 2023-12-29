@@ -28,7 +28,7 @@
 
 #include "extractor/book/ore.hpp"
 #include "extractor/book/updates.hpp"
-#include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/serialization.hpp"
 #include "fmc++/time.hpp"
 

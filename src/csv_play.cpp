@@ -146,7 +146,8 @@ bool fm_comp_csv_play_call_init(fm_frame_t *result, size_t args,
 
   FILE *file = nullptr;
   auto pipe = fmc::ends_with_pipe(info->file);
-  const char *name = pipe.second.c_str();
+  auto name_str = string(pipe.second);
+  const char *name = name_str.c_str();
   if (pipe.first) {
     fmc_error_t *err = nullptr;
     file = fmc_popen(name, "r", &err);

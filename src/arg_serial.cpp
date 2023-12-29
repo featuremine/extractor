@@ -32,6 +32,7 @@
 
 #include "extractor/comp_def.hpp"
 #include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/mpl.hpp"
 #include "fmc++/rational64.hpp"
 #include "fmc++/rprice.hpp"
@@ -100,6 +101,9 @@ bool fm_arg_buffer_build(ostringstream &os, fm_type_decl_cp td,
                             break;
                           case FM_TYPE_DECIMAL128:
                             os << STACK_POP(args, DECIMAL128) << endl;
+                            break;
+                          case FM_TYPE_FIXEDPOINT128:
+                            os << STACK_POP(args, FIXEDPOINT128) << endl;
                             break;
                           case FM_TYPE_TIME64:
                             os << STACK_POP(args, TIME64) << endl;
@@ -231,6 +235,9 @@ bool fm_arg_stack_read(fm_arg_buffer_t *arg_buf, fm_type_sys_t *ts,
               break;
             case FM_TYPE_DECIMAL128:
               return fm_arg_item_read<DECIMAL128>(buf, s, reader, closure);
+              break;
+            case FM_TYPE_FIXEDPOINT128:
+              return fm_arg_item_read<FIXEDPOINT128>(buf, s, reader, closure);
               break;
             case FM_TYPE_TIME64:
               return fm_arg_item_read<TIME64>(buf, s, reader, closure);

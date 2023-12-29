@@ -25,10 +25,10 @@
 
 #include "extractor/book/book.h"
 #include "extractor/python/book.h"
-#include "extractor/python/decimal128.h"
+#include "extractor/python/fxpt128.h"
 #include "extractor/python/py_api.h"
 
-#include "fmc++/decimal128.hpp"
+#include "fmc++/fxpt128.hpp"
 #include "fmc++/python/wrapper.hpp"
 #include "fmc++/side.hpp"
 #include <fmc++/python/wrapper.hpp>
@@ -77,7 +77,7 @@ static PyObject *Order_id(Order *self, void *) {
 }
 
 static PyObject *Order_qty(Order *self, void *) {
-  return Decimal128_new(fm_book_order_qty(self->order_));
+  return FixedPoint128_new(fm_book_order_qty(self->order_));
 }
 
 static PyObject *Order_rec(Order *self, void *) {
@@ -299,11 +299,11 @@ static PyMappingMethods Level_as_mapping = {
 };
 
 static PyObject *Level_px(Level *self, void *) {
-  return Decimal128_new(fm_book_level_prx(self->level_));
+  return FixedPoint128_new(fm_book_level_prx(self->level_));
 }
 
 static PyObject *Level_shr(Level *self, void *) {
-  return Decimal128_new(fm_book_level_shr(self->level_));
+  return FixedPoint128_new(fm_book_level_shr(self->level_));
 }
 
 static PyObject *Level_ord(Level *self, void *) {
@@ -391,7 +391,7 @@ PyObject *LevelIter_iternext(PyObject *self) {
   }
   auto *ret = PyTuple_New(2);
   auto *level = fm_book_level(p->levels()->levels_, p->done_++);
-  PyTuple_SET_ITEM(ret, 0, Decimal128_new(fm_book_level_prx(level)));
+  PyTuple_SET_ITEM(ret, 0, FixedPoint128_new(fm_book_level_prx(level)));
   PyTuple_SET_ITEM(ret, 1, Level_new(level, p->levels()));
   return ret;
 }
@@ -461,11 +461,10 @@ static int Levels_mp_length(Levels *ref) {
 static PyObject *Levels_mp_subscript(Levels *ref, PyObject *key) {
   long sz = fm_book_levels_size(ref->levels_);
   if (PyFloat_Check(key)) {
-    auto px =
-        fmc::conversion<double, fmc_decimal128_t>()(PyFloat_AsDouble(key));
+    auto px = fmc::conversion<double, fmc::fxpt128>()(PyFloat_AsDouble(key));
     for (auto i = 0U; i < sz; ++i) {
       auto *lvl = fm_book_level(ref->levels_, i);
-      if (fm_book_level_prx(lvl) == px) {
+      if (fmc::fxpt128(fm_book_level_prx(lvl)) == px) {
         return Level_new(lvl, ref);
       }
     }

@@ -124,53 +124,53 @@ if __name__ == "__main__":
 
         assert askside[0].orders == lvl_ref.ask_ord_0
         assert len(askside[0]) == lvl_ref.ask_ord_0
-        assert extr.Decimal128(str(askside[0].shares)) == lvl_ref.ask_shr_0
-        assert extr.Decimal128(str(askside[0].px)) == lvl_ref.ask_prx_0
+        assert extr.FixedPoint128(str(askside[0].shares)) == lvl_ref.ask_shr_0
+        assert extr.FixedPoint128(str(askside[0].px)) == lvl_ref.ask_prx_0
 
         assert askside[1].orders == lvl_ref.ask_ord_1
         assert len(askside[1]) == lvl_ref.ask_ord_1
-        assert extr.Decimal128(str(askside[1].shares)) == lvl_ref.ask_shr_1
-        assert extr.Decimal128(str(askside[1].px)) == lvl_ref.ask_prx_1
+        assert extr.FixedPoint128(str(askside[1].shares)) == lvl_ref.ask_shr_1
+        assert extr.FixedPoint128(str(askside[1].px)) == lvl_ref.ask_prx_1
 
         assert askside[2].orders == lvl_ref.ask_ord_2
         assert len(askside[2]) == lvl_ref.ask_ord_2
-        assert extr.Decimal128(str(askside[2].shares)) == lvl_ref.ask_shr_2
-        assert extr.Decimal128(str(askside[2].px)) == lvl_ref.ask_prx_2
+        assert extr.FixedPoint128(str(askside[2].shares)) == lvl_ref.ask_shr_2
+        assert extr.FixedPoint128(str(askside[2].px)) == lvl_ref.ask_prx_2
 
         assert askside[3].orders == lvl_ref.ask_ord_3
         assert len(askside[3]) == lvl_ref.ask_ord_3
-        assert extr.Decimal128(str(askside[3].shares)) == lvl_ref.ask_shr_3
-        assert extr.Decimal128(str(askside[3].px)) == lvl_ref.ask_prx_3
+        assert extr.FixedPoint128(str(askside[3].shares)) == lvl_ref.ask_shr_3
+        assert extr.FixedPoint128(str(askside[3].px)) == lvl_ref.ask_prx_3
 
         assert askside[4].orders == lvl_ref.ask_ord_4
         assert len(askside[4]) == lvl_ref.ask_ord_4
-        assert extr.Decimal128(str(askside[4].shares)) == lvl_ref.ask_shr_4
-        assert extr.Decimal128(str(askside[4].px)) == lvl_ref.ask_prx_4
+        assert extr.FixedPoint128(str(askside[4].shares)) == lvl_ref.ask_shr_4
+        assert extr.FixedPoint128(str(askside[4].px)) == lvl_ref.ask_prx_4
 
         assert bidside[0].orders == lvl_ref.bid_ord_0
         assert len(bidside[0]) == lvl_ref.bid_ord_0
-        assert extr.Decimal128(str(bidside[0].shares)) == lvl_ref.bid_shr_0
-        assert extr.Decimal128(str(bidside[0].px)) == lvl_ref.bid_prx_0
+        assert extr.FixedPoint128(str(bidside[0].shares)) == lvl_ref.bid_shr_0
+        assert extr.FixedPoint128(str(bidside[0].px)) == lvl_ref.bid_prx_0
 
         assert bidside[1].orders == lvl_ref.bid_ord_1
         assert len(bidside[1]) == lvl_ref.bid_ord_1
-        assert extr.Decimal128(str(bidside[1].shares)) == lvl_ref.bid_shr_1
-        assert extr.Decimal128(str(bidside[1].px)) == lvl_ref.bid_prx_1
+        assert extr.FixedPoint128(str(bidside[1].shares)) == lvl_ref.bid_shr_1
+        assert extr.FixedPoint128(str(bidside[1].px)) == lvl_ref.bid_prx_1
 
         assert bidside[2].orders == lvl_ref.bid_ord_2
         assert len(bidside[2]) == lvl_ref.bid_ord_2
-        assert extr.Decimal128(str(bidside[2].shares)) == lvl_ref.bid_shr_2
-        assert extr.Decimal128(str(bidside[2].px)) == lvl_ref.bid_prx_2
+        assert extr.FixedPoint128(str(bidside[2].shares)) == lvl_ref.bid_shr_2
+        assert extr.FixedPoint128(str(bidside[2].px)) == lvl_ref.bid_prx_2
 
         assert bidside[3].orders == lvl_ref.bid_ord_3
         assert len(bidside[3]) == lvl_ref.bid_ord_3
-        assert extr.Decimal128(str(bidside[3].shares)) == lvl_ref.bid_shr_3
-        assert extr.Decimal128(str(bidside[3].px)) == lvl_ref.bid_prx_3
+        assert extr.FixedPoint128(str(bidside[3].shares)) == lvl_ref.bid_shr_3
+        assert extr.FixedPoint128(str(bidside[3].px)) == lvl_ref.bid_prx_3
 
         assert bidside[4].orders == lvl_ref.bid_ord_4
         assert len(bidside[4]) == lvl_ref.bid_ord_4
-        assert extr.Decimal128(str(bidside[4].shares)) == lvl_ref.bid_shr_4
-        assert extr.Decimal128(str(bidside[4].px)) == lvl_ref.bid_prx_4
+        assert extr.FixedPoint128(str(bidside[4].shares)) == lvl_ref.bid_shr_4
+        assert extr.FixedPoint128(str(bidside[4].px)) == lvl_ref.bid_prx_4
 
         ordaccum.append(
             lvl_ref.ask_ord_0 +
