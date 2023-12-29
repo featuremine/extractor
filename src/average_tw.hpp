@@ -150,6 +150,7 @@ template <class T> struct average_tw_exec_cl : public exec_cl {
       : field_(field), last_val_(), num_(), denom_() {}
   void exec(fmc_time64_t t_d) override {
     if (t_d == fmc_time64_end()) {
+      // Uses stdlib isnan unless floating_point<T>::value == false
       if (!isnan(last_val_)) {
         denom_ = t_d;
       }
