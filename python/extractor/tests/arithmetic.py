@@ -73,7 +73,7 @@ class TestExtractorArithmetic(unittest.TestCase):
         run_tests(comps, "float32", extr.Float32, *inps)
         run_tests(comps, "float64", extr.Float64, *inps)
         run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="object")
-        run_tests(comps, "object", extr.FixedPoint128, *inps, conv = lambda x: extr.FixedPoint128(x), outdtype="object")
+        run_tests(comps, "object", extr.FixedPoint128, *inps, conv = lambda x: extr.FixedPoint128(str(x)), outdtype="object")
 
         comps = [
             ("divide",[0.5,2.4,6.0]),
@@ -82,7 +82,7 @@ class TestExtractorArithmetic(unittest.TestCase):
         run_tests(comps, "float32", extr.Float32, *inps)
         run_tests(comps, "float64", extr.Float64, *inps)
         run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="object")
-        run_tests(comps, "object", extr.FixedPoint128, *inps, conv = lambda x: extr.FixedPoint128(x), outdtype="object")
+        run_tests(comps, "object", extr.FixedPoint128, *inps, conv = lambda x: extr.FixedPoint128(str(x)), outdtype="object")
 
         comps = [
             ("cumulative",[1.0,13.0,19.0,25.0,27.0]),
@@ -96,7 +96,7 @@ class TestExtractorArithmetic(unittest.TestCase):
         run_tests(comps, "float64", extr.Float64, *inps)
         run_tests(comps, "float64", extr.Rprice, *inps)
         run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype="object")
-        run_tests(comps, "object", extr.FixedPoint128, *inps, conv = lambda x: extr.FixedPoint128(x), outdtype="object")
+        run_tests(comps, "object", extr.FixedPoint128, *inps, conv = lambda x: extr.FixedPoint128(str(x)), outdtype="object")
 
     def test_logic_operations(self):
 
@@ -124,7 +124,12 @@ class TestExtractorArithmetic(unittest.TestCase):
         run_tests(comps, "float32", extr.Float32, *inps, outdtype='bool')
         run_tests(comps, "float64", extr.Float64, *inps, outdtype='bool')
         run_tests(comps, "object", extr.Decimal128, *inps, conv = lambda x: extr.Decimal128(str(x)), outdtype='bool')
-        run_tests(comps, "object", extr.FixedPoint128, *inps, conv = lambda x: extr.FixedPoint128(x), outdtype='bool')
+    
+        comps = [
+            ("is_zero",[False, True, False]),
+        ]
+        inps = [[1.0,0,25.33],]
+        run_tests(comps, "object", extr.FixedPoint128, *inps, conv = lambda x: extr.FixedPoint128(str(x)), outdtype='bool')
 
         comps = [
             ("is_zero",[False, True, False]),
