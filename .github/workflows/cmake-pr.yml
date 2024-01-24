@@ -14,7 +14,7 @@ jobs:
     steps:
     - name: Utility tasks
       id: release-check
-      uses: featuremine/actions/utility@v2
+      uses: featuremine/actions/utility@v3
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         utility_token: ${{ secrets.UTILITY_COMMIT_TOKEN }}
@@ -45,7 +45,7 @@ jobs:
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@v2
+      uses: featuremine/actions/package/build@v3
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
@@ -80,7 +80,7 @@ jobs:
       shell: bash
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@v2
+      uses: featuremine/actions/package/build@v3
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
@@ -100,7 +100,7 @@ jobs:
         brew install pkg-config cmake googletest python numdiff
 
     - name: Build ${{ github.event.repository.name }} with fm gcc
-      uses: featuremine/actions/package/build@v2
+      uses: featuremine/actions/package/build@v3
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         upload: ${{ needs.utility.outputs.release-check == 'release' }}
@@ -114,7 +114,7 @@ jobs:
     
     steps:
     - name: Test ${{ github.event.repository.name }} release
-      uses: featuremine/actions/package/test@v2
+      uses: featuremine/actions/package/test@v3
       with:
         gh_token: ${{ secrets.GITHUB_TOKEN }}
         yamal_version: '7.2.33'
@@ -138,7 +138,7 @@ jobs:
           python-version: ${{ matrix.python_version }}
 
       - name: Test ${{ github.event.repository.name }} release for python version ${{ matrix.python_version }}
-        uses: featuremine/actions/package/test@v2
+        uses: featuremine/actions/package/test@v3
         with:
           gh_token: ${{ secrets.GITHUB_TOKEN }}
           yamal_version: '7.2.33'
