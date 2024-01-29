@@ -28,15 +28,15 @@
 template <class T> struct upcast { using type = T; };
 
 template <> struct upcast<fmc_decimal128_t> {
-  using type = typename fmc::decimal128;
+  using type = fmc::decimal128;
 };
 
 template <> struct upcast<fmc_fxpt128_t> {
-  using type = typename fmc::fxpt128;
+  using type = fmc::fxpt128;
 };
 
-template <> struct upcast<fmc_rprice_t> { using type = typename fmc::rprice; };
+template <> struct upcast<fmc_rprice_t> { using type = fmc::rprice; };
 
 template <> struct upcast<fmc_rational64_t> {
-  using type = typename fmc::rational64;
+  using type = fmc::rational64;
 };
