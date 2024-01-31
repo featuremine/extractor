@@ -173,6 +173,7 @@ template <typename mode_type> struct sols_exe_cl {
   fm::book::ore::imnt_infos_t imnts;
   std::unordered_map<std::string, std::unique_ptr<ch_ctx_t>> ch_cl;
   ch_ctx_t *current_ctx = nullptr;
+  size_t data_size;
   sols_op_cl &cfg;
   fm_stream_ctx *exec_ctx;
   fm_call_ctx *call_ctx;
@@ -267,6 +268,7 @@ template <typename mode_type> struct sols_exe_cl {
 
   void data_cb(std::string_view data, uint64_t time, ch_ctx_t &ctx) {
     current_ctx = &ctx;
+    data_size = data.size();
     cmp_mem_set(&cmp, data.size(), (void *)data.data());
     mode.set_msg_time(time);
   }
@@ -434,6 +436,16 @@ bool fm_comp_seq_ore_split_stream_exec(fm_frame_t *fres, size_t args,
   exe_cl->call_ctx = ctx;
 
   if (exe_cl->mode.should_notify(exec_ctx)) {
+    std::visit(
+      fmc::overloaded{
+        [&](auto &m) {
+          bool is_last = exe_cl->cmp.offset == exe_cl->data_size;
+          m.batch = is_last ? m.batch : true;
+        },
+        [&](fm::book::updates::time &m) { },
+        [&](fm::book::updates::heartbeat &m) { },
+        [&](fm::book::updates::none &m) { }
+      }, parser.msg);
     auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
     box = parser.msg;
     fm_stream_ctx_queue(exec_ctx, ctx->deps[exe_cl->current_ctx->index]);
