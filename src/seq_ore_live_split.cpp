@@ -436,16 +436,15 @@ bool fm_comp_seq_ore_split_stream_exec(fm_frame_t *fres, size_t args,
   exe_cl->call_ctx = ctx;
 
   if (exe_cl->mode.should_notify(exec_ctx)) {
-    std::visit(
-      fmc::overloaded{
-        [&](auto &m) {
-          bool is_last = exe_cl->cmp.offset == exe_cl->data_size;
-          m.batch = is_last ? m.batch : true;
-        },
-        [&](fm::book::updates::time &m) { },
-        [&](fm::book::updates::heartbeat &m) { },
-        [&](fm::book::updates::none &m) { }
-      }, parser.msg);
+    std::visit(fmc::overloaded{[&](auto &m) {
+                                 bool is_last =
+                                     exe_cl->cmp.offset == exe_cl->data_size;
+                                 m.batch = is_last ? m.batch : true;
+                               },
+                               [&](fm::book::updates::time &m) {},
+                               [&](fm::book::updates::heartbeat &m) {},
+                               [&](fm::book::updates::none &m) {}},
+               parser.msg);
     auto &box = *(fm::book::message *)fm_frame_get_ptr1(fres, 0, 0);
     box = parser.msg;
     fm_stream_ctx_queue(exec_ctx, ctx->deps[exe_cl->current_ctx->index]);
