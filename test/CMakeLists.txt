@@ -481,6 +481,9 @@ extr_py_unit_test(
 extr_py_unit_test(
     error_reporting
 )
+extr_py_unit_test(
+    ore_split
+)
 
 add_library(
     ext_lib
