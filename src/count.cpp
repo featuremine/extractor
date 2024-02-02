@@ -51,9 +51,13 @@ bool fm_comp_count_call_stream_init(fm_frame_t *result, size_t args,
 bool fm_comp_count_stream_exec(fm_frame_t *result, size_t,
                                const fm_frame_t *const argv[],
                                fm_call_ctx_t *ctx, fm_call_exec_cl cl) {
+
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wstrict-aliasing"
   auto &exec_cl = reinterpret_cast<int64_t &>(ctx->comp);
   ++exec_cl;
   *(int64_t *)fm_frame_get_ptr1(result, 0, 0) = exec_cl;
+#pragma GCC diagnostic pop
   return true;
 }
 
