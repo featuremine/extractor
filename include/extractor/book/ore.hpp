@@ -84,8 +84,8 @@ struct parser {
   fmc_time64_t time = {0};
   imnt_info *imnt = nullptr;
   imnt_infos_t &imnts;
-  book::message msg;
-  book::message expanded;
+  book::message msg = book::updates::none();
+  book::message expanded = book::updates::none();
   bool expand = false;
   std::string error;
   result parse(cmp_ctx_t *ctx, imnt_info *ii = nullptr);
