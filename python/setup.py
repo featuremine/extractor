@@ -40,5 +40,10 @@ setuptools.setup (
     license='COPYRIGHT (c) 2022 by Featuremine Corporation',
     packages=['extractor', 'extractor.tests', 'extractor.tools', 'extractor.tools.visualization'],
     scripts=['scripts/test-extractor-python'],
-    install_requires=['yamal', 'numpy', 'pandas']
+    install_requires=[
+        'yamal==8.0.14',
+        'numpy==1.24.4',
+        'pandas==2.0.3',
+        'graphviz==0.20.1'
+    ]
 )
