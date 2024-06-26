@@ -1,5 +1,5 @@
 setuptools==56.0.0
-pkgconfig==1.5.5
+pkgconfig~=1.5.5
 numpy==1.24.4
 pandas==2.0.3
 msgpack==1.0.3
