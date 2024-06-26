@@ -43,7 +43,7 @@ setuptools.setup (
     install_requires=[
         'yamal~=8.0.0',
         'numpy~=1.19',
-        'pandas~=2.0.3',
-        'graphviz~=0.20.1'
+        'pandas',
+        'graphviz'
     ]
 )

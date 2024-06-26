@@ -1,8 +1,8 @@
 setuptools==56.0.0
 pkgconfig~=1.5.5
-numpy~=1.19
-pandas~=2.0.3
-msgpack==1.0.3
 psutil==5.8.0
-graphviz~=0.20.1
 wheel==0.37.1
+msgpack==1.0.3
+numpy~=1.19
+pandas
+graphviz
