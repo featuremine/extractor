@@ -42,7 +42,7 @@ setuptools.setup (
     scripts=['scripts/test-extractor-python'],
     install_requires=[
         'yamal~=8.0.0',
-        'numpy~=1.24.4',
+        'numpy~=1.19',
         'pandas~=2.0.3',
         'graphviz~=0.20.1'
     ]
