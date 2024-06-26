@@ -4,3 +4,4 @@ wheel
 numpy
 msgpack
 pandas
+psutil
