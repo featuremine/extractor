@@ -120,20 +120,19 @@ inline std::string_view::size_type parse_column(std::string_view str) {
   }
   std::string_view::size_type curr = 1;
   str = str.substr(1);
-  while (str.size()) {
+  do {
     auto pos = str.find_first_of('"');
     if (pos == str.npos)
       return str.npos;
     curr += pos + 1;
-    if (pos == str.size() - 1)
+    if (pos + 1 == str.size() || str[pos + 1] == ',')
       break;
-    if (str[pos + 1] == '"') {
-      ++curr;
-      ++pos;
-    } else if (str[pos + 1] == ',')
-      break;
+    if (str[pos + 1] != '"')
+      return str.npos;
+    ++curr;
+    ++pos;
     str = str.substr(pos + 1);
-  }
+  } while (str.size());
   return curr;
 }
 
