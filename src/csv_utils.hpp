@@ -123,15 +123,18 @@ inline std::string_view::size_type parse_column(std::string_view str) {
   while (str.size()) {
     auto pos = str.find_first_of('"');
     if (pos == str.npos)
-      break;
+      return str.npos;
     curr += pos + 1;
     if (pos == str.size() - 1)
-      return curr;
-    if (str[pos + 1] == ',')
-      return curr;
+      break;
+    if (str[pos + 1] == '"') {
+      ++curr;
+      ++pos;
+    } else if (str[pos + 1] == ',')
+      break;
     str = str.substr(pos + 1);
   }
-  return str.npos;
+  return curr;
 }
 
 struct csv_column_info {
