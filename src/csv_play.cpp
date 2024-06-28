@@ -223,8 +223,7 @@ bool fm_comp_csv_play_call_init(fm_frame_t *result, size_t args,
       return error();
     }
     if (pos == std::string_view::npos) {
-      fm_exec_ctx_error_set(ctx->exec, "invalid header in %s",
-                            name);
+      fm_exec_ctx_error_set(ctx->exec, "invalid header in %s", name);
       return error();
     }
     auto header_name = view.substr(0, pos);
@@ -330,8 +329,10 @@ bool fm_comp_csv_play_stream_exec(fm_frame_t *result, size_t,
     if (fmc_time64_less(next, prev)) {
       csv_play_error_set(
           (fm_exec_ctx *)exec_ctx, (csv_play_info *)ctx->comp,
-          (std::string("next timestamp provided is lower than last timestamp in row ") +
-           to_string(exec_cl->row) + ".").c_str());
+          (std::string(
+               "next timestamp provided is lower than last timestamp in row ") +
+           to_string(exec_cl->row) + ".")
+              .c_str());
       return false;
     }
     fm_stream_ctx_schedule(exec_ctx, ctx->handle, next);

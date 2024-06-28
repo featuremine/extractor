@@ -120,7 +120,7 @@ inline std::string_view::size_type parse_column(std::string_view str) {
   }
   std::string_view::size_type curr = 1;
   str = str.substr(1);
-  while(str.size()) {
+  while (str.size()) {
     auto pos = str.find_first_of('"');
     if (pos == str.npos)
       break;

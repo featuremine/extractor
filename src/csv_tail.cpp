@@ -148,8 +148,7 @@ int try_init_columns(fm_frame_t *result, fm_call_ctx_t *ctx,
       return -1;
     }
     if (pos == std::string_view::npos) {
-      fm_exec_ctx_error_set(ctx->exec, "invalid header in %s",
-                            name);
+      fm_exec_ctx_error_set(ctx->exec, "invalid header in %s", name);
       return -1;
     }
     auto header_name = view.substr(0, pos);
