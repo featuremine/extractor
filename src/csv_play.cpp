@@ -26,6 +26,7 @@
 #include "extractor/arg_stack.h"
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
+#include "extractor/frame.hpp"
 #include "extractor/stream_ctx.h"
 #include "fmc/time.h"
 
@@ -127,11 +128,21 @@ int csv_parse_one(fm_call_ctx *ctx, csv_play_exec_cl *cl, fm_frame_t *frame) {
     }
     first = false;
     auto pos = parser(view, frame, 0);
-    if (pos == -1)
+    if (pos == std::string_view::npos) {
+      std::string typeinfo = " with type ";
+      fm_type_decl_cp tp =
+          fm_frame_field_type(frame, cl->header[column - 1].c_str());
+      if (tp)
+        typeinfo += fm::fm_type_to_string(tp);
+      else
+        typeinfo += "unknown";
+
       return error((string("unable to parse value in row ") +
                     to_string(cl->row) + " in column " + to_string(column) +
-                    " with the name " + cl->header[column - 1])
+                    " with the name " + cl->header[column - 1] + typeinfo)
                        .c_str());
+    }
+
     view = view.substr(pos);
   }
   return cl->buf.view().size();
@@ -220,6 +231,10 @@ bool fm_comp_csv_play_call_init(fm_frame_t *result, size_t args,
     if (!pos) {
       fm_exec_ctx_error_set(ctx->exec, "expecting non-empty header in %s",
                             name);
+      return error();
+    }
+    if (pos == std::string_view::npos) {
+      fm_exec_ctx_error_set(ctx->exec, "invalid header in %s", name);
       return error();
     }
     auto header_name = view.substr(0, pos);
@@ -325,7 +340,10 @@ bool fm_comp_csv_play_stream_exec(fm_frame_t *result, size_t,
     if (fmc_time64_less(next, prev)) {
       csv_play_error_set(
           (fm_exec_ctx *)exec_ctx, (csv_play_info *)ctx->comp,
-          "next timestamp provided is lower than last timestamp.");
+          (std::string(
+               "next timestamp provided is lower than last timestamp in row ") +
+           to_string(exec_cl->row) + ".")
+              .c_str());
       return false;
     }
     fm_stream_ctx_schedule(exec_ctx, ctx->handle, next);

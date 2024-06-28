@@ -254,6 +254,9 @@ extr_py_unit_test(
     csv_play_pipe_empty_fail
 )
 extr_py_unit_test(
+    csv_play_string_fail
+)
+extr_py_unit_test(
     csv_tail
 )
 extr_py_unit_test(

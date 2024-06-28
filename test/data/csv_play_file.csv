@@ -2,3 +2,16 @@ timestamp,text,val1,val2,unicode
 10,row1,21,34,™вгджзклмн
 34,row2,-12,32,Mayb♥True
 43,ro,1,9,Maybeзклмн
+60,pp,3,5,"quoted value, with commas"
+72,sa,14,22,"quoted value without commas"
+81,"pp",3,5,Someunicodestring
+95,",a",14,22,Unicode string with spaces
+99,r,14,22,
+100,some,14,22,""""
+103,"""",22,22,value
+105,",a",22,22,value
+106,,22,22,value
+107,,22,22,"quotes "", and comma"
+108,""",",22,22,"unicode string"
+109,""", "" escaped "" ",22,22,""","
+110,""",",22,22,""", "" escaped "" "
