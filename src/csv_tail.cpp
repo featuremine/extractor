@@ -88,7 +88,7 @@ int process_row(fm_frame_t *frame, fm_call_ctx_t *ctx,
     }
     first = false;
     auto pos = parser(view, frame, 0);
-    if (pos == -1 || pos == std::string_view::npos)
+    if (pos == -1)
       return error("unable to parse value in row %d in column %d with "
                    "the name %s",
                    exec_cl->row + 1, column,

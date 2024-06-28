@@ -127,7 +127,7 @@ int csv_parse_one(fm_call_ctx *ctx, csv_play_exec_cl *cl, fm_frame_t *frame) {
     }
     first = false;
     auto pos = parser(view, frame, 0);
-    if (pos == -1 || pos == std::string_view::npos)
+    if (pos == -1)
       return error((string("unable to parse value in row ") +
                     to_string(cl->row) + " in column " + to_string(column) +
                     " with the name " + cl->header[column - 1])
