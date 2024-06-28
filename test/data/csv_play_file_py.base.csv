@@ -13,3 +13,5 @@ timestamp,unicode,val1,val2
 106,value,22,22
 107,"quotes "", and comma",22,22
 108,"unicode string",22,22
+109,""",",22,22
+110,""", "" escaped "" ",22,22
