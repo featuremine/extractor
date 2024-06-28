@@ -27,6 +27,7 @@
 #include "extractor/comp_def.h"
 #include "extractor/comp_sys.h"
 #include "extractor/stream_ctx.h"
+#include "extractor/frame.hpp"
 #include "fmc/time.h"
 
 #include "csv_utils.hpp"
@@ -127,11 +128,20 @@ int csv_parse_one(fm_call_ctx *ctx, csv_play_exec_cl *cl, fm_frame_t *frame) {
     }
     first = false;
     auto pos = parser(view, frame, 0);
-    if (pos == -1)
+    if (pos == -1) {
+      std::string typeinfo = " with type ";
+      fm_type_decl_cp tp = fm_frame_field_type(frame, cl->header[column - 1].c_str());
+      if (tp)
+        typeinfo += fm::fm_type_to_string(tp);
+      else
+        typeinfo += "unknown";
+
       return error((string("unable to parse value in row ") +
                     to_string(cl->row) + " in column " + to_string(column) +
-                    " with the name " + cl->header[column - 1])
+                    " with the name " + cl->header[column - 1] + typeinfo)
                        .c_str());
+    }
+
     view = view.substr(pos);
   }
   return cl->buf.view().size();
