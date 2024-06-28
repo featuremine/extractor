@@ -2,3 +2,12 @@ timestamp,unicode,val1,val2
 10,™вгджзклмн,21,34
 34,Mayb♥True,-12,32
 43,Maybeзклмн,1,9
+60,"quoted value, with commas",3,5
+72,"quoted value without commas",14,22
+81,Someunicodestring,3,5
+95,Unicode string with spaces,14,22
+99,,14,22
+100,"""",14,22
+103,value,22,22
+105,value,22,22
+106,value,22,22

@@ -112,8 +112,26 @@ private:
 inline std::string_view::size_type parse_column(std::string_view str) {
   // @todo need to adhere to
   // https://en.wikipedia.org/wiki/Comma-separated_values
-  auto pos = str.find_first_of(',');
-  return pos == str.npos ? str.size() : pos;
+  if (!str.size())
+    return 0;
+  if (str[0] != '"') {
+    auto pos = str.find_first_of(',');
+    return pos == str.npos ? str.size() : pos;
+  }
+  std::string_view::size_type curr = 1;
+  str = str.substr(1);
+  while(str.size()) {
+    auto pos = str.find_first_of('"');
+    if (pos == str.npos)
+      break;
+    curr += pos + 1;
+    if (pos == str.size() - 1)
+      return curr;
+    if (str[pos + 1] == ',')
+      return curr;
+    str = str.substr(pos + 1);
+  }
+  return str.npos;
 }
 
 struct csv_column_info {
@@ -131,14 +149,14 @@ static csv_parser get_column_parser(fm_type_sys_t *ts, fm_frame_t *frame,
   auto *type_parser = fm_type_io_get(ts, info->type);
   return [=](std::string_view str, fm_frame_t *f, int row) -> int {
     auto result = parse_column(str);
-    if (result >= 0) {
-      auto *first = str.data();
-      auto *last = first + result;
-      void *slot = fm_frame_get_ptr1(f, offset, row);
-      auto *res = fm_type_io_parse(type_parser, first, last, slot);
-      if (res != last)
-        return -1;
-    }
+    if (result == std::string_view::npos)
+      return -1;
+    auto *first = str.data();
+    auto *last = first + result;
+    void *slot = fm_frame_get_ptr1(f, offset, row);
+    auto *res = fm_type_io_parse(type_parser, first, last, slot);
+    if (res != last)
+      return -1;
     return result;
   };
 }
@@ -159,5 +177,8 @@ inline std::string_view::size_type parse_header(std::string_view str) {
 
 inline std::string_view::size_type
 skip_parser(std::string_view str, fm_frame_t * /* frame */, int /* row */) {
-  return parse_column(str);
+  auto result = parse_column(str);
+  if (result == std::string_view::npos)
+    return -1;
+  return result;
 }
