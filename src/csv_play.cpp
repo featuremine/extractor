@@ -128,7 +128,7 @@ int csv_parse_one(fm_call_ctx *ctx, csv_play_exec_cl *cl, fm_frame_t *frame) {
     }
     first = false;
     auto pos = parser(view, frame, 0);
-    if (pos == -1) {
+    if (pos == std::string_view::npos) {
       std::string typeinfo = " with type ";
       fm_type_decl_cp tp = fm_frame_field_type(frame, cl->header[column - 1].c_str());
       if (tp)
