@@ -132,7 +132,7 @@ inline std::string_view::size_type parse_column(std::string_view str) {
     ++curr;
     ++pos;
     str = str.substr(pos + 1);
-  } while (str.size());
+  } while (true);
   return curr;
 }
 
