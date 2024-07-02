@@ -24,7 +24,6 @@
 #include "extractor/api.h"
 #include <stdlib.h>
 
-
 typedef struct {
   double alpha;
   double result;
