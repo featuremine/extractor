@@ -222,7 +222,6 @@ add_library(
 target_include_directories(
     ema_ext
     PUBLIC
-    "${EXTRACTOR_INC_DIR}"
     "${EXTRACTOR_API_INC_DIR}"
 )
 target_link_libraries(
