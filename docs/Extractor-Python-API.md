@@ -3046,3 +3046,21 @@ ven: Time difference between order received time and time reported by
 broker.
 
 seqnum: Order sequence number
+
+# Operator overloads
+
+The following operators can be replaced with their corresponding native Python operator counterparts to operate with the nodes in your graph:
+
+* op.add: +
+* op.diff: -
+* op.mult: *
+* op.divide: /
+* op.pow: **
+* op.logical_and: &
+* op.logical_or: |
+* op.equal: ==
+* op.less: <
+* op.less_equal: <=
+* op.not_equal: !=
+* op.greater: >
+* op.greater_equal: >=

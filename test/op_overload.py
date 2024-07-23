@@ -30,13 +30,42 @@ import os
 src_dir = os.path.dirname(os.path.realpath(__file__))
 
 
-def validate(op, string_op, op_one):
+def validate(op, string_op, op_one, op_two):
+    print("validating", string_op)
     ops = {
         '+': [operator.add, op.add],
         '-': [operator.sub, op.diff],
         '*': [operator.mul, op.mult],
         '/': [operator.truediv, op.divide],
-        '**': [operator.pow, op.pow]
+        '**': [operator.pow, op.pow],
+        '==': [operator.eq, op.equal],
+        '!=': [operator.ne, op.not_equal],
+        '>': [operator.gt, op.greater],
+        '>=': [operator.ge, op.greater_equal],
+        '<': [operator.lt, op.less],
+        '<=': [operator.le, op.less_equal]
+    }
+
+    if string_op != '==' and string_op != '!=':
+        try:
+            ops[string_op][0](op_one, "String")
+            exit(1)
+        except TypeError:
+            pass
+
+    print("building streams", string_op)
+    overloaded_stream = ops[string_op][0](op_one, op_two)
+    standard_stream = ops[string_op][1](op_one, op_two)
+    overloaded_stream = op.accumulate(overloaded_stream)
+    standard_stream = op.accumulate(standard_stream)
+
+    return [overloaded_stream, standard_stream]
+
+
+def validate_cond(op, string_op, op_one, op_two):
+    ops = {
+        '&': [operator.and_, op.logical_and],
+        '|': [operator.or_, op.logical_or]
     }
 
     try:
@@ -45,8 +74,8 @@ def validate(op, string_op, op_one):
     except TypeError:
         pass
 
-    overloaded_stream = ops[string_op][0](op_one, op_one)
-    standard_stream = ops[string_op][1](op_one, op_one)
+    overloaded_stream = ops[string_op][0](op_one, op_two)
+    standard_stream = ops[string_op][1](op_one, op_two)
     overloaded_stream = op.accumulate(overloaded_stream)
     standard_stream = op.accumulate(standard_stream)
 
@@ -69,12 +98,26 @@ if __name__ == "__main__":
 
     val_one = data_in_one.val1
 
-    ops_test = ["+", "-", "*", "/", "**"]
+    ops_test = ["+", "-", "*", "/", "**", "==", "!=", ">", ">=", "<", "<="]
+
+    cond_ops_test = ["&", "|"]
 
     out_streams = []
 
     for test in ops_test:
-        test_stream = validate(op, test, val_one)
+        test_stream = validate(op, test, val_one, val_one)
+        out_streams.append(test_stream)
+
+    for test in ops_test:
+        test_stream = validate(op, test, val_one, val_one - val_one)
+        out_streams.append(test_stream)
+
+    for test in cond_ops_test:
+        test_stream = validate_cond(op, test, op.convert(val_one, extr.Bool), op.convert(val_one, extr.Bool))
+        out_streams.append(test_stream)
+
+    for test in cond_ops_test:
+        test_stream = validate_cond(op, test, op.convert(val_one, extr.Bool), op.logical_not(op.convert(val_one, extr.Bool)))
         out_streams.append(test_stream)
 
     try:
@@ -105,20 +148,7 @@ if __name__ == "__main__":
     except TypeError:
         pass
 
-    and_stream = op.logical_and(op.convert(val_one, extr.Bool), op.convert(val_one, extr.Bool))
-    overloaded_and_stream = op.convert(val_one, extr.Bool) and op.convert(val_one, extr.Bool)
-    and_stream = op.accumulate(and_stream)
-    overloaded_and_stream = op.accumulate(overloaded_and_stream)
-
-    or_stream = op.logical_or(op.convert(val_one, extr.Bool), op.convert(val_one, extr.Bool))
-    overloaded_or_stream = op.convert(val_one, extr.Bool) or op.convert(val_one, extr.Bool)
-    or_stream = op.accumulate(or_stream)
-    overloaded_or_stream = op.accumulate(overloaded_or_stream)
-
     graph.stream_ctx().run()
 
     for out in out_streams:
         assert_frame_equal(result_as_pandas(out[0]), result_as_pandas(out[1]))
-
-    assert_frame_equal(result_as_pandas(and_stream), result_as_pandas(overloaded_and_stream))
-    assert_frame_equal(result_as_pandas(or_stream), result_as_pandas(overloaded_or_stream))
